@@ -1,10 +1,11 @@
 const express = require('express'),
+      stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
       router  = express.Router();
 
-//Models
-const Experience = require('../models/experience'),
-      Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
+// //Models
+// const Experience = require('../models/experience'),
+//       Occurrence = require('../models/occurrence'),
+//       Booking = require('../models/booking');
 
 //Fetch cities stored in database
 router.get('/api/cities', (req, res) => {
@@ -37,8 +38,8 @@ router.get('/api/exp/:id', (req, res) => {
     });
 });
 
-//Show bookings for a certain date 
-router.get('/api/exp/:id/bookings', (req, res) => {
+//Show occurrences for a certain date 
+router.get('/api/exp/:id/occ', (req, res) => {
     const requiredFields = 'timeslot bookings spotsLeft';
     const reqDay = new Date(req.query.date);
     const day = (60 * 60 * 24 * 1000) - 1;
@@ -47,11 +48,53 @@ router.get('/api/exp/:id/bookings', (req, res) => {
                      date: {$gte: reqDay, $lt: endDay}}, 
     requiredFields).populate('bookings').exec((err, occ) => {
         if(err || !occ) {
-            res.status(404).send({err: "Couldn't find bookings."})
+            res.status(404).send({err: "Couldn't find occurrences."});
         } else {
             res.status(200).send({ occ });
         }
     });
+});
+
+//For adding a booking to an occurrence
+router.post('/api/exp/:id/occ', async (req, res) => {
+    try {
+        const experience = await Experience.findById(req.params.id);
+        const reqDay = new Date(req.body.date);
+        const day = (60 * 60 * 24 * 1000) - 1;
+        const endDay = new Date(reqDay.getTime() + day);
+        let occ = await Occurrence.findOne({
+                            expId: req.params.id,
+                            date: {$gte: reqDay, $lt: endDay},
+                            timeslot: req.body.timeslot
+                        });
+        if(!occ) {
+            occ = new Occurrence({
+                expId: req.params.id,
+                date: reqDay,
+                timeslot: req.body.timeslot,
+                spotsLeft: experience.capacity
+            });
+        }
+        const booking = new Booking({
+            occId: occ._id,
+            numPeople: req.body.numGuests,
+            stripe: {
+                id: req.body.stripeId,
+                status: 'pending' //Will be switched to confirmed in webhook
+            }
+        });
+        await booking.save();
+        occ.spotsLeft -= booking.numPeople;
+        occ.bookings.push(booking);
+        await occ.save();
+        await stripe.paymentIntents.capture(req.body.stripeId);
+        return res.status(200).send({bookingId: booking._id});
+    }
+    catch(err) {
+        console.log(err, err._message);
+        await stripe.paymentIntents.cancel(req.body.stripeId);
+        return res.status(500).send({err: err._message});
+    }
 });
 
 module.exports = router;

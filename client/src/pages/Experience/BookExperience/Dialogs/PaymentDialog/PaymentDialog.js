@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
 //Components and icons
-import ExperienceSummary from '../ExperienceSummary';
-import Dialog from '@material-ui/core/Dialog';
+import Template from '../Template';
+import ExperienceSummary from '../../ExperienceSummary';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CardInput from './StripeCardInput';
@@ -21,9 +21,10 @@ const PaymentDialog = ({open, form, exp, controls}) => {
     }
 
     return (
-        <Dialog open={open} onClose={controls.goBack}
-        classes={{ paper: classes.paper }}
-        maxWidth="xs" fullWidth disableBackdropClick>
+        <Template 
+        open={open} 
+        controls={controls} 
+        continueDisabled={!enableSubmit}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
                 <h5 className="title">Payment</h5>
@@ -57,17 +58,12 @@ const PaymentDialog = ({open, form, exp, controls}) => {
                 {/* TODO: Replace this link with real one */}
                 <p className={classes.policyMessage}>
                     By confirming this purchase you agree to the 
-                    <a href="#"> User Conditions and Policies </a> 
-                    regarding booking.
+                    User Conditions and Policies regarding booking.
+                    {/* <a href="#"> User Conditions and Policies </a> 
+                    regarding booking. */}
                 </p>
-                <button 
-                disabled={!enableSubmit}
-                onClick={controls.next}
-                className={classes.continueButton}>
-                    Confirm booking &bull; ${totalPrice}
-                </button>
             </DialogContent>
-        </Dialog>
+        </Template>
     );
 }
 

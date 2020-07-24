@@ -10,8 +10,14 @@ const BookingSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 1
+    },
+    stripe: { //TODO: Make these fields required
+        id: String,
+        status: {
+            type: String,
+            enum: ['pending', 'confirmed']
+        }
     }
 });
-//TODO: Add stripe info here
   
 module.exports = mongoose.model('Booking', BookingSchema);

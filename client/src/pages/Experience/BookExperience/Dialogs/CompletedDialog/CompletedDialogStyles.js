@@ -6,6 +6,10 @@ const styles = () => ({
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
         letterSpacing: '-0.05rem'
+    },
+
+    message: {
+        color: '#FFF'
     }
 });
 

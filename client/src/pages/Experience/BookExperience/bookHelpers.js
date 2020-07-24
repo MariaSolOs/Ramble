@@ -21,13 +21,13 @@ export const getWeekdayKey = (date) => {
     return days[new Date(date).getDay()];
 }
 //For timeslots
-export const getSlotsInfo = (slots, bookings, expCapacity) => {
+export const getSlotsInfo = (slots, occurrences, expCapacity) => {
     const info = [];
     if(!slots) { //When the creator is not available on this weekday
         return null;
     }
     slots.forEach(slot => {
-        const reserved = bookings.filter(book => book.timeslot === slot);
+        const reserved = occurrences.filter(occ => occ.timeslot === slot);
         const spotsLeft = reserved.length > 0? reserved[0].spotsLeft :
                                                expCapacity;
         info.push({slot, spotsLeft});

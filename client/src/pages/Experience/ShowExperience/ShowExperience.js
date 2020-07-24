@@ -49,12 +49,12 @@ const ShowExperience = (props) => {
     }
 
     //For booking an experience
-    const [openBooking, setOpenBooking] = useState(false);
+    const [showBooking, setShowBooking] = useState(false);
     const handleBooking = () => {
-        if(props.isAuth) { setOpenBooking(true); }
+        if(props.isAuth) { setShowBooking(true); }
         else { props.dialogActions.openSignUpDialog(); }
     }
-    const handleCloseBooking = () => setOpenBooking(false);
+    const closeBooking = () => { setShowBooking(false); }
 
     //Go back button
     const handleGoBack = () => history.goBack();
@@ -96,11 +96,10 @@ const ShowExperience = (props) => {
                 images={images}/>
                 <Footer price={exp.price.perPerson} onBooking={handleBooking}/>
                 </>}
-            {openBooking && 
-                <BookExperience 
-                exp={exp} 
-                user={props.user}
-                closeBooking={handleCloseBooking}/>}
+            {showBooking && <BookExperience 
+                            exp={exp}
+                            user={props.user}
+                            closeBooking={closeBooking}/>}
         </div>
     );
 }

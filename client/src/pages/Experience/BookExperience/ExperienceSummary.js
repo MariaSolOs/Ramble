@@ -56,7 +56,7 @@ const ExperienceSummary = ({date, timeslot, exp}) => {
     //To format the occurrence
     const format = {year: 'numeric', month: 'short', day: 'numeric'};
     const occString = `${new Date(date)
-                        .toLocaleDateString('en-US', format)}, ${timeslot.slot.split('-')[0]}`;
+                        .toLocaleDateString('en-US', format)}, ${timeslot.split('-')[0]}`;
 
     return (
         <div className={classes.root}>

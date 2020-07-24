@@ -27,14 +27,13 @@ router.get('/api/stripe/oauth', helpers.matchStripeState, (req, res) => {
 });
 
 router.post('/api/stripe/payment-intent', async (req, res) => {
-    console.log('RECEIVED', req.body)
     const {expId, bookType, numGuests, transferId} = req.body;
     const payInfo = await helpers.calculatePaymentAmount(expId, bookType, +numGuests);
-    console.log('PAYINFO', payInfo)
     await stripe.paymentIntents.create({
         amount: payInfo.amount,
         currency: payInfo.currency,
         application_fee_amount: payInfo.rambleFee,
+        capture_method: 'manual',
         transfer_data: {
             destination: transferId
         }

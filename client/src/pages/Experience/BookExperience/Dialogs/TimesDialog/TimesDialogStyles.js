@@ -1,10 +1,4 @@
 const styles = () => ({
-    paper: {
-        backgroundColor: '#151515',
-        borderRadius: '1.1rem',
-        padding: '1rem 0.7rem',
-    },
-
     header: {
         display: 'flex',
         flexDirection: 'column',
@@ -44,7 +38,7 @@ const styles = () => ({
         width: '100%',
         minWidth: 380,
         flexWrap: 'wrap',
-        margin: '1.5rem 0',
+        margin: '1.5rem 0 0',
         padding: 0
     },
     timeslot: {
@@ -99,29 +93,6 @@ const styles = () => ({
     disabledIcon: { 
         position: 'absolute',
         top: 12, right: 12,
-    },
-
-    continueButton: {
-        display: 'block',
-        width: '85%',
-        margin: '0 auto',
-        padding: '0.6rem 0.75rem',
-        borderRadius: '0.4rem',
-        border: 'none',
-        background: 'radial-gradient(circle at -21.27%, #2BB282, #2D73EA)',
-        fontFamily: 'Helvetica, sans-serif',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        letterSpacing: '-0.04rem',
-        color: '#ECEBE5',
-        cursor: 'pointer',
-        transition: 'filter 200ms ease-in',
-        '&:focus': { outline: 'none' },
-        '&:hover': { outline: 'none' },
-        '&.disabled': { 
-            filter: 'brightness(40%)',
-            cursor: 'not-allowed'
-        }
     }
 });
 export default styles;

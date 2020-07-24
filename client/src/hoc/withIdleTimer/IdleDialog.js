@@ -9,14 +9,14 @@ import clockImg from './idleClock.svg';
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
     //Containers
-    dialog_paper: {
+    paper: {
         backgroundColor: 'rgba(30, 30, 30, 0.95)',
         borderRadius: '1.1rem',
         padding: '1%',
     },
     actions_root: { padding: 0 },
 
-    dialog_title: {
+    title: {
         fontFamily: 'Helvetica, sans-serif',
         fontSize: '1.1rem',
         fontWeight: 'bold',
@@ -58,12 +58,12 @@ const IdleModal = ({open, handleClose}) => {
         aria-labelledby="idle-modal-title"
         aria-describedby="idle-modal"
         maxWidth="xs"
-        classes={{ paper: classes.dialog_paper }}>
+        classes={{ paper: classes.paper }}>
             <img src={clockImg} alt="clock" className={classes.clock}/>
             <DialogTitle 
             id="idle-modal-title"
             disableTypography
-            classes={{ root: classes.dialog_title }}>
+            classes={{ root: classes.title }}>
                 Are you still there?
             </DialogTitle>
             <DialogActions classes={{ root: classes.actions_root }}>

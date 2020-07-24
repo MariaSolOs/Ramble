@@ -1,8 +1,8 @@
 import React from 'react';
-import {getWeekdayKey} from '../bookHelpers';
+import {getWeekdayKey} from '../../bookHelpers';
 
 //Components
-import Dialog from '@material-ui/core/Dialog';
+import Template from '../Template';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -33,9 +33,10 @@ const CalendarDialog = ({open, date, onChange, controls, availDays}) => {
     }
 
     return (
-        <Dialog open={open} onClose={controls.goBack} 
-        classes={{ paper: classes.paper }}
-        maxWidth="xs" fullWidth disableBackdropClick>
+        <Template 
+        open={open}
+        controls={controls}
+        continueDisabled={!date.selec}>
             <div className={classes.header}>
                 <CloseIcon onClick={controls.goBack} className="closeIcon"/>
                 <h5 className="title">We know why.<br/>Question is when?</h5>
@@ -51,14 +52,9 @@ const CalendarDialog = ({open, date, onChange, controls, availDays}) => {
                 minDate={date.min}
                 maxDate={date.max}
                 tileDisabled={getDisabledTiles}/> 
-            <button onClick={controls.nextStep}
-            className={`${classes.continueButton} ${!date.selec && 'disabled'}`}
-            disabled={!date.selec}>
-                Continue
-            </button>
             </DialogContent>
-        </Dialog>
+        </Template>
     );
 }
 
-export default React.memo(CalendarDialog);
+export default CalendarDialog;

@@ -13,7 +13,7 @@ const setQuery = (location, numPeople) => ({
 });
 
 export const fetchCities = () => {
-    return dispatch => {
+    return (dispatch) => {
         axios.get('/api/cities')
         .then(res => {
             if(res.status === 200) {
@@ -26,7 +26,7 @@ export const fetchCities = () => {
 }
 
 export const fetchExperiences = (location, numPeople) => {
-    return dispatch => {
+    return (dispatch) => {
         dispatch(setQuery(location, numPeople));
         axios.get('/api/exps', { params: { location, numPeople }})
         .then(res => {

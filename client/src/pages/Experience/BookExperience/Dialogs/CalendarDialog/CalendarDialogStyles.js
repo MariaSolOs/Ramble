@@ -1,10 +1,4 @@
 const styles = () => ({
-    paper: {
-        backgroundColor: '#151515',
-        borderRadius: '1.1rem',
-        padding: '1rem',
-    },
-
     header: {
         display: 'flex',
         flexDirection: 'column',
@@ -89,29 +83,6 @@ const styles = () => ({
                 background: 'radial-gradient(circle at center, #C4C4C5 0, transparent 60%)'
             }
         },
-    },
-
-    continueButton: {
-        display: 'block',
-        width: '85%',
-        margin: '0 auto',
-        padding: '0.6rem 0.75rem',
-        borderRadius: '0.4rem',
-        border: 'none',
-        background: 'radial-gradient(circle at -21.27%, #2BB282, #2D73EA)',
-        fontFamily: 'Helvetica, sans-serif',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        letterSpacing: '-0.04rem',
-        color: '#ECEBE5',
-        cursor: 'pointer',
-        transition: 'filter 200ms ease-in',
-        '&:focus': { outline: 'none' },
-        '&:hover': { outline: 'none' },
-        '&.disabled': { 
-            filter: 'brightness(40%)',
-            cursor: 'not-allowed'
-        }
     }
 });
 export default styles;

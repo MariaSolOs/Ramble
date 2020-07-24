@@ -1,13 +1,4 @@
 const styles = () => ({
-    paper: {
-        backgroundColor: '#151515',
-        borderRadius: '1.1rem',
-        padding: '1rem 0.7rem',
-        fontFamily: 'Helvetica, sans-serif',
-        fontWeight: 'bold',
-        letterSpacing: '-0.05rem',
-    },
-
     header: {
         display: 'flex',
         flexDirection: 'column',
@@ -38,7 +29,7 @@ const styles = () => ({
     bookButton: {
         borderRadius: '1rem',
         width: '100%',
-        marginBottom: '1.5rem',
+        marginBottom: '0.5rem',
         boxSizing: 'border-box',
         border: 'none',
         padding: 12,
@@ -64,6 +55,7 @@ const styles = () => ({
                 color: '#9A9A9A'
             }
         },
+        '&.private': { margin: '1rem 0 0' },
         '&:focus': { outline: 'none' }
     },
     bookTitle: {
@@ -100,7 +92,7 @@ const styles = () => ({
     
     numGuests: {
         width: '90%',
-        margin: '0 auto 1.5rem',
+        margin: '0.5rem auto 1.5rem',
         '& .input': {
             display: 'flex',
             width: '45%',
@@ -110,29 +102,8 @@ const styles = () => ({
             color: '#C8C8C8',
             font: 'inherit',
             fontSize: '0.9rem'
-        }
-    },
-
-    continueButton: {
-        display: 'block',
-        width: '85%',
-        margin: '0 auto',
-        padding: '0.6rem 0.75rem',
-        borderRadius: '0.4rem',
-        border: 'none',
-        background: 'radial-gradient(circle at -21.27%, #2BB282, #2D73EA)',
-        font: 'inherit',
-        fontSize: '0.9rem',
-        letterSpacing: '-0.04rem',
-        color: '#ECEBE5',
-        cursor: 'pointer',
-        transition: 'filter 200ms ease-in',
-        '&:focus': { outline: 'none' },
-        '&:hover': { outline: 'none' },
-        '&.disabled': { 
-            filter: 'brightness(40%)',
-            cursor: 'not-allowed'
-        }
+        },
+        '&.private': { margin: '0.5rem auto 0.5rem' }
     }
 });
 export default styles;

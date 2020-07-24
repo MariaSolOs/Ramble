@@ -3,15 +3,15 @@ import {useDispatch} from 'react-redux';
 import {logout} from '../../store/actions/user';
 import IdleTimer from 'react-idle-timer';
 
-import IdleModal from './IdleModal';
+import IdleDialog from './IdleDialog';
 
 const withIdleTimer = (App) => (props) => {
     //Only used when the user is logged in
     if(!props.isAuth) { return <App {...props}/>; }
 
     //Manage idle modal
-    const [showModal, setShowModal] = useState(false);
-    const handleClose = () => { setShowModal(false); }
+    const [showDialog, setShowDialog] = useState(false);
+    const handleClose = () => { setShowDialog(false); }
 
     const [isTimedOut, setIsTimedOut] = useState(false);
     const idleTimer = useRef();
@@ -21,7 +21,7 @@ const withIdleTimer = (App) => (props) => {
     //Function to call on user action
     const onAction = (e) => { 
         setIsTimedOut(false); 
-        setShowModal(false);
+        setShowDialog(false);
     }
 
     const onIdle = (e) => {
@@ -29,7 +29,7 @@ const withIdleTimer = (App) => (props) => {
             idleTimer.current.reset();
             setIsTimedOut(true);
         } else {
-            setShowModal(true);
+            setShowDialog(true);
             //Wait 1 minute
             setTimeout(() => {
                 //If still idle, logout
@@ -50,8 +50,8 @@ const withIdleTimer = (App) => (props) => {
             onAction={onAction}
             debounce={250}
             timeout={1000 * 60 * 10}/>
-            <IdleModal
-            open={showModal}
+            <IdleDialog
+            open={showDialog}
             handleClose={handleClose}/>
             <App {...props}/>
         </>

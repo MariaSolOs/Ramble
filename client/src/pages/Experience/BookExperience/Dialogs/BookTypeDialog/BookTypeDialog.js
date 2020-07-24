@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import useNumberField from '../../../../hooks/useNumberField';
+import useNumberField from '../../../../../hooks/useNumberField';
 
 //Components and icons
-import ExperienceSummary from '../ExperienceSummary';
+import Template from '../Template';
+import ExperienceSummary from '../../ExperienceSummary';
 import Collapse from '@material-ui/core/Collapse';
-import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -20,7 +20,7 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
     //Use my pretty +-
     const [numGuests, NumGuests] = useNumberField({
         min: 1,
-        max: exp.capacity,
+        max: form.spotsLeft,
         initval: 1,
         step: 1,
         getlabel: (num) => num > 1? 'Guests' : 'Guest'
@@ -35,10 +35,10 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
     }, [onChange, numGuests])
 
     const privateEnabled = exp.price.private && 
-                          (exp.capacity === form.timeslot.spotsLeft);
+                          (exp.capacity === form.spotsLeft);
 
     const privateBooking = privateEnabled && 
-        <button className={`${classes.bookButton} 
+        <button className={`${classes.bookButton} private
                             ${form.bookType === 'private' && 'selected'}`}
         onClick={handleBookTypeChange('private')}>
             <h3 className={classes.bookTitle}>Book entire experience</h3>
@@ -53,9 +53,10 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
         </button>;
 
     return (
-        <Dialog open={open} onClose={controls.goBack}
-        classes={{ paper: classes.paper }} 
-        maxWidth="xs" fullWidth disableBackdropClick>
+        <Template 
+        open={open} 
+        controls={controls} 
+        continueDisabled={(!form.bookType || !form.numGuests)}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
                 <h5 className="title">Complete booking</h5>
@@ -68,11 +69,13 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
                     exp={exp}/>
                 </div>
                 {privateBooking}
-                <Collapse in={form.bookType === 'private'} className={classes.numGuests}>
+                <Collapse in={form.bookType === 'private'} 
+                className={`${classes.numGuests} private`}>
                     <p className="text">Number of guests</p>
                     <div className="input">{NumGuests}</div>
                 </Collapse>
                 <button className={`${classes.bookButton}
+                                    ${privateEnabled && 'private'}
                                     ${form.bookType === 'public' && 'selected'}`} 
                 value="public" onClick={handleBookTypeChange('public')}>
                     <h3 className={classes.bookTitle}>Book per person</h3>
@@ -80,26 +83,21 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
                     <div className={classes.bookCapacity}>
                         <FontAwesomeIcon icon={faUsers}/>
                         <p>
-                            Join {form.timeslot.spotsLeft} 
-                            {form.timeslot.spotsLeft > 1? ' guests' : ' guest'}
+                            Join {form.spotsLeft} 
+                            {form.spotsLeft > 1? ' guests' : ' guest'}
                         </p>
                     </div>
                     <div className={classes.bookPrice}>
                         $<span>{exp.price.perPerson}</span> per person
                     </div>
                 </button>
-                <Collapse in={form.bookType === 'public'} className={classes.numGuests}>
+                <Collapse in={form.bookType === 'public'} 
+                className={`${classes.numGuests} ${privateEnabled && 'private'}`}>
                     <p className="text">Number of guests</p>
                     <div className="input">{NumGuests}</div>
                 </Collapse>
-                <button onClick={controls.nextStep}
-                className={`${classes.continueButton} 
-                            ${(!form.bookType || !form.numGuests) && 'disabled'}`}
-                disabled={(!form.bookType || !form.numGuests)}>
-                    Continue
-                </button>
             </DialogContent>
-        </Dialog>
+        </Template>
     );
 }
 

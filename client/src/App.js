@@ -21,7 +21,6 @@ const App = (props) => {
     useEffect(() => {
         const storedToken = window.localStorage.getItem('token');
         if(cookieToken && (cookieToken !== storedToken)) {
-            console.log('here')
             window.localStorage.setItem('token', cookieToken);
             Cookies.remove('token');
         }

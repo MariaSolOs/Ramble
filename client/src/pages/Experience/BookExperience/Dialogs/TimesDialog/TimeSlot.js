@@ -1,5 +1,5 @@
 import React from 'react';
-import {getTimePieces} from '../bookHelpers';
+import {getTimePieces} from '../../bookHelpers';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock} from '@fortawesome/free-regular-svg-icons/faClock';

@@ -9,7 +9,7 @@ import CloudinaryProvider from './context/cloudinaryContext';
 import Spinner from './components/Spinner';
 import Layout from './pages/MainLayout';
 import Home from './pages/Home/Home';
-import ExperienceRouter from './pages/Experience/Router';
+const ExperienceRouter = lazy(() => import('./pages/Experience/Router'));
 const ProfileRouter = lazy(() => import('./pages/Profile/Router'));
 const Creators = lazy(() => import('./pages/Creators/Creators'));
 

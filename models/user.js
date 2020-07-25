@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],
-    creatorId: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Creator'
     },

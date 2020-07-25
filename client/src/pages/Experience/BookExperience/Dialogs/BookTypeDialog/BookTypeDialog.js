@@ -14,19 +14,20 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './BookTypeDialogStyles';
 const useStyles = makeStyles(styles);
 
-const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
+const BookTypeDialog = (props) => {
     const classes = useStyles();
 
     //Use my pretty +-
     const [numGuests, NumGuests] = useNumberField({
         min: 1,
-        max: form.spotsLeft,
+        max: props.form.spotsLeft,
         initval: 1,
         step: 1,
         getlabel: (num) => num > 1? 'Guests' : 'Guest'
     });
 
     //For updating form values
+    const {onChange} = props;
     const handleBookTypeChange = (type) => (e) => {
         onChange('bookType', type);
     }
@@ -34,65 +35,66 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
         onChange('numGuests', numGuests);
     }, [onChange, numGuests])
 
-    const privateEnabled = exp.price.private && 
-                          (exp.capacity === form.spotsLeft);
+    const privateEnabled = props.exp.price.private && 
+                          (props.exp.capacity === props.form.spotsLeft);
 
     const privateBooking = privateEnabled && 
         <button className={`${classes.bookButton} private
-                            ${form.bookType === 'private' && 'selected'}`}
+                            ${props.form.bookType === 'private' && 'selected'}`}
         onClick={handleBookTypeChange('private')}>
             <h3 className={classes.bookTitle}>Book entire experience</h3>
             <p>Be the only guest(s) at this experience</p>
             <div className={classes.bookCapacity}>
                 <FontAwesomeIcon icon={faUsers}/>
-                <p>Up to {exp.capacity} people</p>
+                <p>Up to {props.exp.capacity} people</p>
             </div>
             <div className={classes.bookPrice}>
-                $<span>{exp.price.private}</span>
+                $<span>{props.exp.price.private}</span>
             </div>
         </button>;
 
     return (
         <Template 
-        open={open} 
-        controls={controls} 
+        open={props.open} 
+        nextStep={props.controls.nextStep} 
         showContinue
-        continueDisabled={(!form.bookType || !form.numGuests)}>
+        continueDisabled={(!props.form.bookType || !props.form.numGuests)}>
             <div className={classes.header}>
-                <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
+                <ChevronLeftIcon onClick={props.controls.goBack} 
+                className="goBackIcon"/>
                 <h5 className="title">Complete booking</h5>
             </div>
             <DialogContent>
                 <div className={classes.expWrapper}>
                     <ExperienceSummary 
-                    date={form.date} 
-                    timeslot={form.timeslot} 
-                    exp={exp}/>
+                    date={props.form.date} 
+                    timeslot={props.form.timeslot} 
+                    exp={props.exp}/>
                 </div>
                 {privateBooking}
-                <Collapse in={form.bookType === 'private'} 
+                <Collapse in={props.form.bookType === 'private'} 
                 className={`${classes.numGuests} private`}>
                     <p className="text">Number of guests</p>
                     <div className="input">{NumGuests}</div>
                 </Collapse>
                 <button className={`${classes.bookButton}
                                     ${privateEnabled && 'private'}
-                                    ${form.bookType === 'public' && 'selected'}`} 
+                                    ${props.form.bookType === 'public' && 'selected'}`} 
                 value="public" onClick={handleBookTypeChange('public')}>
                     <h3 className={classes.bookTitle}>Book per person</h3>
                     <p>Join other guests</p>
                     <div className={classes.bookCapacity}>
                         <FontAwesomeIcon icon={faUsers}/>
                         <p>
-                            Join {form.spotsLeft} 
-                            {form.spotsLeft > 1? ' guests' : ' guest'}
+                            Join {props.form.spotsLeft} 
+                            {props.form.spotsLeft > 1? ' guests' : ' guest'}
                         </p>
                     </div>
                     <div className={classes.bookPrice}>
-                        $<span>{exp.price.perPerson}</span> per person
+                        $<span>{props.exp.price.perPerson}</span> per person
                     </div>
                 </button>
-                <Collapse in={form.bookType === 'public'} 
+                <Collapse in={props.form.bookType === 'public'} 
                 className={`${classes.numGuests} ${privateEnabled && 'private'}`}>
                     <p className="text">Number of guests</p>
                     <div className="input">{NumGuests}</div>

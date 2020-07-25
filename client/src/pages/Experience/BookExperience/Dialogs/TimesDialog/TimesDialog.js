@@ -12,25 +12,25 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './TimesDialogStyles';
 const useStyles = makeStyles(styles);
 
-const TimesDialog = ({open, date, timeslot, onChange, slotsInfo, exp, controls}) => {
+const TimesDialog = (props) => {
     const classes = useStyles();
 
-    const [weekday, month, day, year] = getDatePieces(date);
+    const [weekday, month, day, year] = getDatePieces(props.date);
 
     //For updating selection
     const handleSelection = (slot, spotsLeft) => (e) => {
-        onChange('timeslot', slot);
-        onChange('spotsLeft', spotsLeft);
+        props.onChange('timeslot', slot);
+        props.onChange('spotsLeft', spotsLeft);
     }
 
     return (
         <Template 
-        open={open} 
-        controls={controls} 
+        open={props.open} 
+        nextStep={props.controls.nextStep} 
         showContinue
-        continueDisabled={!timeslot}>
+        continueDisabled={!props.timeslot}>
             <div className={classes.header}>
-                <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
+                <ChevronLeftIcon onClick={props.controls.goBack} className="goBackIcon"/>
                 <h5 className="title">What time would suit you best?</h5>
                 <h5 className="date">
                     {`${weekday}, ${month} ${day}`}<span>{year}</span>
@@ -38,13 +38,13 @@ const TimesDialog = ({open, date, timeslot, onChange, slotsInfo, exp, controls})
             </div>
             <DialogContent>
                 <div className={classes.timeTable}>
-                    {slotsInfo.map(({slot, spotsLeft}) => (
+                    {props.slotsInfo.map(({slot, spotsLeft}) => (
                         <TimeSlot 
                         key={uuid()} 
                         slot={slot} 
                         spotsLeft={spotsLeft}
-                        capacity={exp.capacity}
-                        selected={slot === timeslot}
+                        capacity={props.expCapacity}
+                        selected={slot === props.timeslot}
                         onClick={handleSelection(slot, spotsLeft)}/>
                     ))}
                 </div>

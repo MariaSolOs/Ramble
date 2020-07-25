@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 /**
  * Template for booking dialogs
  * @param {Boolean} open - When should the dialog open 
- * @param {Object} controls - Callbacks for switching dialogs 
+ * @param {Function} nextStep - Callback for switching dialogs 
  * @param {Boolean} showContinue - If true, display continue button
  * @param {Boolean} continueDisabled - If false, the user cannot continue
  */
@@ -50,13 +50,12 @@ const Template = (props) => {
     return (
         <Dialog 
         open={props.open} 
-        onClose={props.controls && props.controls.goBack} 
         disableBackdropClick
         classes={{ paper: classes.paper }}
         maxWidth="xs" fullWidth>
             {props.children}
             {props.showContinue &&
-                <button onClick={props.controls.nextStep}
+                <button onClick={props.nextStep}
                 className={classes.continueButton}
                 disabled={props.continueDisabled}>
                     Continue

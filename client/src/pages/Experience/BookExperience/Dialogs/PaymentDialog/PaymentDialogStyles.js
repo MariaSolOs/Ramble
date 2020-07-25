@@ -27,7 +27,7 @@ const styles = () => ({
         marginBottom: '1.5rem'
     },
 
-    formSummary: {
+    payInfo: {
         width: '90%',
         margin: '0 auto'
     },
@@ -39,13 +39,6 @@ const styles = () => ({
         fontSize: '0.95rem',
     },
 
-    numGuests: {
-        color: '#FFF',
-        fontSize: '1.1rem',
-        margin: '0 0 1rem',
-        '& span': { fontSize: '1.25rem' }
-    },
-
     priceRow: {
         display: 'flex',
         width: '100%',
@@ -55,8 +48,7 @@ const styles = () => ({
             margin: 0,
             font: 'inherit',
             color: '#FFF',
-            fontSize: '1.2rem',
-            '&.total': { fontSize: '1.3rem' },
+            fontSize: '1.3rem',
         },
         '& span': { fontSize: '0.9rem' }
     },
@@ -66,7 +58,7 @@ const styles = () => ({
         fontWeight: 400,
         color: '#C8C8C8',
         fontSize: '0.9rem',
-        margin: '1rem auto 1.5rem',
+        margin: '1.2rem auto 1rem',
         width: '80%',
         '& a': {
             textDecoration: 'none',

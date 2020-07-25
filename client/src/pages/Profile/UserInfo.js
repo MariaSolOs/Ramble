@@ -83,7 +83,7 @@ const UserInfo = (props) => {
 
     const handleUpdate = (updatedInfo) => {
         //Save changes in database
-        props.editProfile(updatedInfo, user.id);
+        props.editProfile(updatedInfo);
         //Display notification
         props.displaySnackbar(`Hey ${getValues('fstName')}! Your profile has been updated.`);
     }
@@ -163,7 +163,7 @@ const mapStateToProps = (state) => ({
     user: state.user.data
 });
 const mapDispatchToProps = (dispatch) => ({
-    editProfile: (updatedInfo, id) => dispatch(editProfile(updatedInfo, id))
+    editProfile: (updatedInfo) => dispatch(editProfile(updatedInfo))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(UserInfo, Snackbar));

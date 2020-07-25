@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {connect} from 'react-redux';
-import {saveExperience} from '../../../store/actions/user';
+import {saveExperience, unsaveExperience} from '../../../store/actions/user';
 import axios from 'axios';
 import {useParams, useHistory} from 'react-router-dom';
 import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
+import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 import {CloudinaryContext} from '../../../context/cloudinaryContext';
 
 //Components and icons
@@ -20,33 +21,44 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);
 
+//TODO: Add a reducer here
 const ShowExperience = (props) => {
     const classes = useStyles();
-    const history = useHistory();
-    const cloudinary = useContext(CloudinaryContext);
 
     //Fetch the requested experience
+    const history = useHistory();
     const {id} = useParams();
     const [exp, setExp] = useState(null);
+    const {userExps, displayError} = props;
     useEffect(() => {
         let mounted = true;
-        if(id !== 'new') {
-            axios.get(`/api/exp/${id}`)
-            .then(res => { 
-                if(res.status === 200 && mounted) { setExp(res.data.exp) }
-            }).catch(err => {
-                console.log(err);
+        axios.get(`/api/exp/${id}`)
+        .then(res => { 
+            if(res.status === 200 && mounted) { 
+                setExp(res.data.exp);
+            }
+        }).catch(err => {
+            displayError('We cannot find this experience right now.');
+            setTimeout(() => {
                 history.push('/');
-            });
-        } else { history.push('/'); }
+            }, 3000);
+        });
         return () => mounted = false;
-        //TODO: Handle error here
-    }, [id, history]);
+    }, [id, history, displayError]);
 
-    //TODO: Add unsave too
-    //For saving an experience
-    const handleSave = () => {
-        if(props.isAuth) { props.saveExp(exp._id); }
+    //For saving/unsaving an experience
+    const [saved, setSaved] = useState(false);
+    useEffect(() => {
+        if(exp) {
+            setSaved(userExps.includes(exp._id));
+        }
+    }, [userExps, exp]);
+    const heartAction = saved? props.unsaveExp : props.saveExp;
+    const handleHeartClick = (e) => {
+        //Don't show the experience page
+        e.stopPropagation();
+        heartAction(exp._id);
+        setSaved(!saved);
     }
 
     //For booking an experience
@@ -67,6 +79,7 @@ const ShowExperience = (props) => {
     }, []);
 
     //Carousel images
+    const cloudinary = useContext(CloudinaryContext);
     const images = exp && 
         exp.images.map(img => {
             const original =
@@ -75,7 +88,7 @@ const ShowExperience = (props) => {
             );
             const thumbnail =
             cloudinary.url(img, 
-                {height: 150, width: 100, crop: 'thumb', quality: 30, secure: true},
+                {height: 200, width: 150, crop: 'thumb', quality: 30, secure: true},
             );
             return { original, thumbnail }
     });
@@ -92,8 +105,8 @@ const ShowExperience = (props) => {
                 floatButtons={
                     <FloatButtons 
                     showSave={props.isAuth}
-                    saved={props.userExps.includes(exp._id)}
-                    handleSave={handleSave}/>}
+                    saved={saved}
+                    handleSave={handleHeartClick}/>}
                 images={images}/>
                 <Footer price={exp.price.perPerson} onBooking={handleBooking}/>
                 </>}
@@ -111,7 +124,8 @@ const mapStateToProps = (state) => ({
     userExps: state.user.savedExps.map(exp => exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({
-    saveExp: (expId) => dispatch(saveExperience(expId))
+    saveExp: (expId) => dispatch(saveExperience(expId)),
+    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(ShowExperience));
+export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(withErrorDialog(ShowExperience)));

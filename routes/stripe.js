@@ -1,94 +1,21 @@
 const express = require('express'),
       router = express.Router(),
-      stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
-      helpers = require('../middleware/stripe');
+      {validateStripeState} = require('../middleware/JWTMiddleware'),
+      controllers = require('../controllers/stripeController');
 
-router.get('/api/stripe/oauth', helpers.matchStripeState, (req, res) => {
-    const {state, code} = req.query;
-    //Verify that the token was authenticated
-    if(!req.match) {
-        return res.status(403).json({error: `Incorrect state parameter: ${state}`});
-    }
-    // Send the authorization code to Stripe's API
-    stripe.oauth.token({grant_type: 'authorization_code', code})
-    .then(async (response) => {
-        //User is now a creator
-        await helpers.updateUserToCreator(response.stripe_user_id, req.user);
-        //TODO: Redirect to creator platform here
-        return res.status(200).redirect(`${process.env.CLIENT_URL}`);
-        }, (err) => {
-            if (err.type === 'StripeInvalidGrantError') {
-                return res.status(400).json({error: `Invalid authorization code: ${code}`});
-            } else {
-                return res.status(500).json({error: 'An unknown error occurred.'});
-            }
-        }
-    );
-});
+//After creator signs up with stripe they get redirected here
+router.get('/api/stripe/oauth', 
+            validateStripeState, 
+            controllers.upgradeToCreator);
 
-//Called once bookings are (tried to be) saved to DB
-router.post('/stripe/payment-intent/capture', async (req, res) => {
-    stripe.paymentIntents.capture(req.body.stripeId, (err, intent) => {
-        if(err) {
-            res.status(500).send({err: "Couldn't capture intent."});
-        } else {
-            res.status(200).send({intentId: intent.id, status: intent.status})
-        }
-    });
-});
-router.post('/stripe/payment-intent/cancel', async (req, res) => {
-    stripe.paymentIntents.cancel(req.body.stripeId, (err, intent) => {
-        if(err) {
-            res.status(500).send({err: "Couldn't cancel intent."});
-        } else {
-            res.status(200).send({intentId: intent.id, status: intent.status})
-        }
-    });
-});
+//Server routes called once bookings are (tried to be) saved to DB
+router.post('/stripe/payment-intent/capture', controllers.capturePaymentIntent);
+router.post('/stripe/payment-intent/cancel', controllers.cancelPaymentIntent);
 
-router.post('/api/stripe/payment-intent', async (req, res) => {
-    const {expId, bookType, numGuests, transferId} = req.body;
-    const payInfo = await helpers.calculatePaymentAmount(expId, bookType, +numGuests);
-    await stripe.paymentIntents.create({
-        amount: payInfo.amount,
-        currency: payInfo.currency,
-        application_fee_amount: payInfo.rambleFee,
-        capture_method: 'manual',
-        transfer_data: {
-            destination: transferId
-        }
-    }).then((payIntent) => {
-        try {
-            return res.send({ clientSecret: payIntent.client_secret })
-        } catch(err) {
-            return res.status(500).send({ err })
-        }
-    });
-});
+router.post('/api/stripe/payment-intent', controllers.createPaymentIntent);
 
-//const webhook_secret = process.env.STRIPE_WEBHOOK_SECRET;
-const webhook_secret = 'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx';
-router.post('/stripe/webhook', (req, res) => {
-    const sign = req.headers['stripe-signature'];
-    let event;
-
-    try {
-        event = stripe.webhooks.constructEvent(req.rawBody, sign, webhook_secret);
-    } catch (err) {
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    if(event.type === 'payment_intent.succeeded') {
-        const paymentIntent = event.data.object;
-        handleSuccessfulPaymentIntent(paymentIntent);
-    }
-    res.json({received: true});
-});
-
-const handleSuccessfulPaymentIntent = (paymentIntent) => {
-    //TODO: Add occurrence to booking here
-    console.log('SUCESS PAYMENT', JSON.stringify(paymentIntent));
-}
+//Webhook
+router.post('/stripe/webhook', controllers.stripeWebhook);
 
 module.exports = router;
 

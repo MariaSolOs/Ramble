@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
             margin: '0 auto 2% auto'
         },
 
+        '& .image-gallery-slide:focus': { outline: 'none' },
+
         //Main images
         '& .image-gallery-image': {
             height: 500,
@@ -26,12 +28,13 @@ const useStyles = makeStyles((theme) => ({
         //Thumbnails
         '& .image-gallery-thumbnail': {
             transform: 'none',
-            border: 'none',
+            border: 'none !important',
             marginBottom: 10,
             '& .image-gallery-thumbnail-image': { 
                 borderRadius: '1rem',
                 maxHeight: 120,
-                width: 'auto'
+                width: 'auto',
+                maxWidth: 80
             }
         },
 

@@ -11,7 +11,9 @@ const CreatorSchema = new mongoose.Schema({
     },
     bio: String,
     stripe: {
-        id: String
+        id: { 
+            type: String, required: true
+        }
     }
 });
   

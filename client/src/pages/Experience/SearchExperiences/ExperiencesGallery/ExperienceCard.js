@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '1.5rem',
         display: 'inline-block',
         overflow: 'hidden',
-        width: '23%',
+        width: '21%',
         minWidth: 170,
         height: 300,
         position: 'relative',
@@ -65,7 +65,7 @@ const SearchExperienceCard = (props) => {
         history.push(`/experience/${props.exp._id}`);
     }
 
-    //For saving an experience
+    //For saving/unsaving an experience
     const heartAction = props.saved? props.unsaveExp : props.saveExp;
     const handleHeartClick = (e) => {
         //Don't show the experience page

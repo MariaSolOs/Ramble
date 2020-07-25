@@ -12,15 +12,10 @@ const userAxios = () => {
     return instance;
 }
 
-//TODO: Create an error dialog with ERR_MSG
-
 //Clean actions
 const setProfile = (userData) => ({ 
     type: types.SET_PROFILE, userData 
 });
-// const setErrorMsg = (msg) => ({
-//     type: types.SET_USER_ERR_MSG, msg
-// });
 const setUserExps = (pastExps, savedExps) => ({
     type: types.SET_USER_EXPS, pastExps, savedExps
 });

@@ -22,24 +22,25 @@ const styles = () => ({
     },
 
     calendar: {
-        backgroundColor: 'transparent',
-        border: 'none',
-        width: 270,
-        margin: '15px auto 30px',
+        '&.react-calendar': {
+            width: 270,
+            margin: '15px auto 30px',
+            '& button': {
+                border: 'none',
+                backgroundColor: 'transparent',
+                '&:focus': { outline: 'none' }
+            }
+        },
         //Month and arrows
         '& .react-calendar__navigation': {
-            marginBottom: 0,
-            width: '100%',
+            height: 42,
             '& button': {
                 fontFamily: 'Helvetica, sans-serif',
                 color: '#C4C4C5',
                 letterSpacing: '-0.05rem',
                 fontWeight: 'bold',
                 fontSize: '1.2rem',
-                backgroundColor: 'transparent',
                 '&:disabled': { opacity: 0 },
-                '&:hover': { backgroundColor: 'transparent' },
-                '&:focus': { backgroundColor: 'transparent' },
                 '&.react-calendar__navigation__arrow svg': {
                     fontSize: '2rem'
                 }
@@ -50,10 +51,12 @@ const styles = () => ({
             width: '85%',
             margin: '0 auto'
         },
-        '& .react-calendar__month-view__weekdays': {
+        '& .react-calendar__month-view__weekdays__weekday': {
             fontFamily: 'Helvetica, sans-serif',
             fontSize: '1rem',
             color: '#C4C4C5',
+            padding: 8,
+            textAlign: 'center',
             '& abbr': { textDecoration: 'none' }
         },
         '& .react-calendar__tile, & .react-calendar__tile--now': {
@@ -63,26 +66,23 @@ const styles = () => ({
             background: 'none',
             transition: 'color 200ms ease-in-out',
             fontSize: '1rem',
+            padding: '0.75em 0.5em',
             '&:disabled': { 
                 fontSize: '0.7rem',
                 color: 'rgba(196, 196, 197, 0.4)',
+                padding: '8.4px 5.6px',
                 '&:hover': { 
                     background: 'none', 
                     color: 'rgba(196, 196, 197, 0.4)'
                 }
              },
-            '&:hover': {
-                borderRadius: '100%',
-                color: '#151515',
-                background: 'radial-gradient(circle at center, #C4C4C5 0, transparent 60%)'
-            },
             '&:focus': { background: 'none' },
-            '&.react-calendar__tile--active': { 
+            '&:hover, &.react-calendar__tile--active': {
                 borderRadius: '100%',
                 color: '#151515',
                 background: 'radial-gradient(circle at center, #C4C4C5 0, transparent 60%)'
             }
-        },
+        }
     }
 });
 export default styles;

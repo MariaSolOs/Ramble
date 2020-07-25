@@ -6,57 +6,60 @@ import ExperienceSummary from '../../ExperienceSummary';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CardInput from './StripeCardInput';
+import EmailForm from './EmailForm';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';
 const useStyles = makeStyles(styles);
 
-const PaymentDialog = ({openForm, openStatus, payMessage, form, exp, controls}) => {
+const PaymentDialog = (props) => {
     const classes = useStyles();
-    const totalPrice = (form.numGuests * +exp.price.perPerson);
+    const totalPrice = (props.form.numGuests * +props.exp.price.perPerson);
 
+    //Can submit form once the card input is valid
     const [enableSubmit, setEnableSubmit] = useState(false);
     const handleCardInputChange = (e) => {
         if(e.complete) { setEnableSubmit(true); }
     }
 
+    //In case the user wants to use a different email
+    const handleChangeEmail = (e) => { 
+        props.onChange('email', e.target.value); 
+    }
+
     return (
         <>
         <Template 
-        open={openForm} 
-        controls={controls} 
+        open={props.openForm} 
+        nextStep={props.controls.nextStep} 
         showContinue
         continueDisabled={!enableSubmit}>
             <div className={classes.header}>
-                <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
+                <ChevronLeftIcon onClick={props.controls.goBack} className="goBackIcon"/>
                 <h5 className="title">Payment</h5>
             </div>
             <DialogContent>
                 <div className={classes.expWrapper}>
                     <ExperienceSummary 
-                    date={form.date} 
-                    timeslot={form.timeslot} 
-                    exp={exp}/>
+                    date={props.form.date} 
+                    timeslot={props.form.timeslot} 
+                    exp={props.exp}/>
                 </div>
-                <div className={classes.formSummary}>
+                <div className={classes.payInfo}>
                     <p className={classes.label}>Payment method</p>
                     <CardInput onChange={handleCardInputChange}/>
-                    <p className={classes.label}>Number of guests</p>
-                    <p className={classes.numGuests}>
-                        <span>{form.numGuests}</span>
-                        {form.numGuests > 1? ' Guests' : ' Guest'}
-                    </p>
                     <div className={classes.priceRow}>
+                        <p>Total ({props.exp.price.currency})</p>
                         <p>
-                            {form.numGuests} <span>x</span> ${(+exp.price.perPerson).toFixed(2)}
+                            {props.form.numGuests} <span>x</span> ${(+props.exp.price.perPerson).toFixed(2)} =
+                            ${totalPrice.toFixed(2)}
                         </p>
-                        <p>${totalPrice.toFixed(2)}</p>
-                    </div>
-                    <div className={classes.priceRow}>
-                        <p className="total">Total ({exp.price.currency})</p>
-                        <p className="total">${totalPrice.toFixed(2)}</p>
                     </div>
                 </div>
+                <EmailForm 
+                userEmail={props.userEmail} 
+                newEmail={props.newEmail} 
+                onChange={handleChangeEmail}/>
                 {/* TODO: Replace this link with real one */}
                 <p className={classes.policyMessage}>
                     By confirming this purchase you agree to the 
@@ -66,8 +69,8 @@ const PaymentDialog = ({openForm, openStatus, payMessage, form, exp, controls}) 
                 </p>
             </DialogContent>
         </Template>
-        <Template open={openStatus}>
-            <h3 style={{ color: '#FFF' }}>{payMessage}</h3>
+        <Template open={props.openStatus}>
+            <h3 style={{ color: '#FFF' }}>{props.payMessage}</h3>
         </Template>
         </>
     );

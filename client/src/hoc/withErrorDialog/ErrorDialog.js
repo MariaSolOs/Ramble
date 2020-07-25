@@ -37,13 +37,13 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const ErrorDialog = ({open, handleClose, message}) => {
+const ErrorDialog = ({open, onClose, message}) => {
     const classes = useStyles();
 
     return (
         <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         aria-labelledby="idle-modal-title"
         aria-describedby="idle-modal"
         maxWidth="sm"

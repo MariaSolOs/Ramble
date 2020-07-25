@@ -13,19 +13,20 @@ const initForm = {
     timeslot: null,
     spotsLeft: null,
     bookType: null,
-    numGuests: null
+    numGuests: null,
+    email: null
 }
 
 const BookExperience = ({exp, user, onClose, displayError}) => {
     //For handling booking details
     const [values, setValues] = useState(initForm);
-    useEffect(() => {
-        //Always reset the form when closing
-        return () => { setValues(initForm); }
-    }, []);
     const handleChange = useCallback((name, newVal) => {
         setValues(values => ({...values, [name]: newVal}));
     }, []);
+    useEffect(() => {
+        //Always reset the form when closing
+        return () => { setValues(initForm); }
+    }, []); 
 
     //Managing dialog switching and payment steps
     const [state, actions] = useBookingReducer();
@@ -56,7 +57,7 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
                 }
             })
             .catch(err => {
-                cancelBooking('We cannot find experience for this date.');
+                cancelBooking('This date is not available.');
             });
         }
     }, [values.date, exp._id, exp.avail.schedule, 
@@ -78,7 +79,7 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
             }
-            if (!stripe || !elements) { 
+            if (!stripe || !elements || payIntent.status !== 200) { 
                 cancelBooking('Your booking cannot be completed right now.');
                 return; 
             } 
@@ -87,9 +88,10 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
                 payment_method: {
                     card: elements.getElement(CardElement),
                     billing_details: {
-                        name: `${user.fstName} ${user.lstName}`
+                        name: `${user.fstName} ${user.lstName}`,
                     }
-                }
+                },
+                receipt_email: values.email || user.email
             });
             if(payConfirm.error) {
                 cancelBooking(payConfirm.error.message);
@@ -99,10 +101,10 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
                     stripeId: payConfirm.paymentIntent.id
                 })
                 .then(res => {
-                    console.log(res)
                     if(res.data.status === 'succeeded') {
                         actions.payComplete(`Congrats ${user.fstName}! 
                         Your booking was successfully completed.`);
+                        setTimeout(() => { onClose(); }, 4000);
                     } else { cancelBooking('Please contact us.'); }
                 })
                 .catch(err => { cancelBooking('Please contact us.'); });
@@ -134,10 +136,7 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
                     timeslot={values.timeslot}
                     onChange={handleChange}
                     slotsInfo={state.slotsInfo}
-                    exp={{
-                        availDays: Object.keys(exp.avail.schedule),
-                        capacity: exp.capacity
-                    }}
+                    expCapacity={exp.capacity}
                     controls={{
                         goBack: actions.setStep(steps.CALENDAR),
                         nextStep: actions.setStep(steps.BOOK_TYPE)
@@ -170,6 +169,9 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
                         img: exp.images[0],
                         price: exp.price
                     }}
+                    userEmail={user.email}
+                    newEmail={values.email}
+                    onChange={handleChange}
                     controls={{
                         goBack: actions.setStep(steps.BOOK_TYPE),
                         nextStep: handlePayment

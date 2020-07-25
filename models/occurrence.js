@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const OccurrenceSchema = new mongoose.Schema({
-    expId: {
+    experience: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience',
         required: true

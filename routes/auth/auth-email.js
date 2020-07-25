@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
-      {generateAccessToken} = require('../../middleware/JWT'),
+      {generateAccessToken} = require('../../middleware/JWTMiddleware'),
       User = require('../../models/user');
 
 router.post('/api/register/email', (req, res, next) => {

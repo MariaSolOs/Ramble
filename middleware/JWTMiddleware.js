@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const generateAccessToken = (userId) => {
+exports.generateAccessToken = (userId) => {
     //Expires in 12 hours
     return jwt.sign({userId}, process.env.JWT_SECRET, {expiresIn: '12h'});
 }
 
-const authenticateToken = (req, res, next) => {
+exports.authenticateToken = (req, res, next) => {
     //Gather the jwt access token from the request header
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -29,5 +29,13 @@ const authenticateToken = (req, res, next) => {
     });
 }
 
-exports.generateAccessToken = generateAccessToken;
-exports.authenticateToken = authenticateToken;
+exports.validateStripeState = (req, res, next) => {
+    const stripeToken = req.query.state;
+    jwt.verify(stripeToken, process.env.JWT_SECRET, (err, decoded) => {
+        if(err) { 
+            return res.status(403).json({error: `Incorrect state parameter: ${state}`});
+        } 
+        req.userId = decoded.userId;
+        next(); 
+    });
+}

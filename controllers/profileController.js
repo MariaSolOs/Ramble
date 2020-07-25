@@ -1,85 +1,59 @@
 //Models
-const Experience = require('../models/experience'),
-      User = require('../models/user');   
+const Experience = require('../models/experience');
 
-//Helpers
-const getUserData = (user) => ({
-    id: user._id,
-    fstName: user.fstName,
-    lstName: user.lstName,
-    photo: user.photo,
-    city: user.city,
-    email: user.email,
-    phoneNumber: user.phoneNumber,
-    birthday: user.birthday
-});
-const getUserExps = (user) => ({
-    pastExps: user.pastExperiences,
-    savedExps: user.savedExperiences
-});
+const helpers = require('../helpers/profileHelpers');
 
 //For fetching profile information
 exports.getProfile = (req, res) => {
-    User.findById(req.userId).populate('savedExperiences pastExperiences')
-    .exec((err, user) => {
-        if(err || !user) { 
-            return res.status(404).send({error: "Couldn't find user."}) ;
-        }
+    req.user.populate('savedExperiences pastExperiences').execPopulate()
+    .then(user => {
         res.status(200).send({
-            userData: getUserData(user),
-            ...getUserExps(user)
+            userData: helpers.getUserData(user),
+            ...helpers.getUserExps(user)
         });
     });
 }
 
 //Editing user info
-exports.editProfile = (req, res) => {
-    User.findByIdAndUpdate(req.userId, 
-        {'fstName': req.body.fstName, 
-         'lstName': req.body.lstName,
-         'city': req.body.city,
-         'email': req.body.email,
-         'phoneNumber': req.body.phoneNumber,
-         'birthday': req.body.birthday,
-        }, {new: true}, (err, user) => {
-        if(err || !user){
-            res.status(409).send({error: "Couldn't update user"});
-        } else {
-            res.status(200).send({ userData: getUserData(user) });
-        }
-    });
+exports.editProfile = async (req, res) => {
+    try {
+        req.user.fstName = req.body.fstName;
+        req.user.lstName = req.body.lstName;
+        req.user.city = req.body.city;
+        req.user.email = req.body.email;
+        req.user.phoneNumber = req.body.phoneNumber;
+        req.user.birthday = req.body.birthday;
+        await req.user.save();
+        return res.status(200).send({ userData: helpers.getUserData(req.user) });
+    } catch(err) {
+        return res.status(409).send({error: "Couldn't update user"});
+    }
 }
 
 //For saving/unsaving an experience
-exports.saveExperience = (req, res) => {
-    Experience.findById(req.body.expId, (err, exp) => {
-        if(err) { 
-            return res.status(409).send({error: "Couldn't find experience"}); 
+exports.saveExperience = async (req, res) => {
+    try {
+        const exp = await Experience.findById(req.body.expId);
+        if(!req.user.savedExperiences.includes(exp._id)){
+            req.user.savedExperiences.push(exp._id);
+            await req.user.save();
         }
-        User.findById(req.userId, (err, user) => {
-            if(err){ return res.status(404).send({error: "Couldn't find user"}); }
-            if(!user.savedExperiences.includes(exp._id)){
-                user.savedExperiences.push(exp._id);
-                user.save();
-            }
-            user.populate('pastExperiences savedExperiences').execPopulate()
-            .then(user => {
-                res.status(200).send({ ...getUserExps(user) });
-            });
+        req.user.populate('pastExperiences savedExperiences').execPopulate()
+        .then(user => {
+            res.status(200).send({ ...helpers.getUserExps(user) });
         });
-    });
+    }catch (err) {
+        res.status(409).send({err: `Couldn't save experience: ${err}`});
+    }
 }
-exports.unsaveExperience = (req, res) => {
-    User.findById(req.userId, (err, user) => {
-        if(err){ 
-            return res.status(404).send({error: "Couldn't find user"}); 
-        }
-        const newExps = user.savedExperiences.filter(id => !id.equals(req.body.expId));
-        user.savedExperiences = newExps;
-        user.save();
-        user.populate('pastExperiences savedExperiences').execPopulate()
-        .then(user => { res.status(200).send({ ...getUserExps(user) }); });
-    });
+exports.unsaveExperience = async (req, res) => {
+    const newExps = req.user.savedExperiences.filter(id => 
+                        !id.equals(req.body.expId)
+                    );
+    req.user.savedExperiences = newExps;
+    await req.user.save();
+    req.user.populate('pastExperiences savedExperiences').execPopulate()
+    .then(user => { res.status(200).send({ ...helpers.getUserExps(user) }); });
 }
 
 //Logout route

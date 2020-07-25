@@ -10,36 +10,35 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Calendar from 'react-calendar';
 
 //Styles
-import 'react-calendar/dist/Calendar.css';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './CalendarDialogStyles';
 const useStyles = makeStyles(styles);
 
-const CalendarDialog = ({open, date, onChange, controls, availDays}) => {
+const CalendarDialog = (props) => {
     const classes = useStyles();
 
     //Update date in form
     const handleDateChange = (newDate) => { 
-        onChange('date', newDate.toISOString()); 
+        props.onChange('date', newDate.toISOString()); 
     }
 
     //For calendar formatting
     const getWeekdays = (locale, date) => (
         ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()]
     );
-    const getDisabledTiles = ({activeStartDate, date, view}) => {
+    const getDisabledTiles = ({date}) => {
         const currDay = getWeekdayKey(date);
-        return !availDays.includes(currDay);
+        return !props.availDays.includes(currDay);
     }
 
     return (
         <Template 
-        open={open}
-        controls={controls}
+        open={props.open}
+        nextStep={props.controls.nextStep}
         showContinue
-        continueDisabled={!date.selec}>
+        continueDisabled={!props.date.selec}>
             <div className={classes.header}>
-                <CloseIcon onClick={controls.goBack} className="closeIcon"/>
+                <CloseIcon onClick={props.controls.goBack} className="closeIcon"/>
                 <h5 className="title">We know why.<br/>Question is when?</h5>
             </div>
             <DialogContent>
@@ -50,8 +49,8 @@ const CalendarDialog = ({open, date, onChange, controls, availDays}) => {
                 nextLabel={<ChevronRightIcon/>}
                 prev2Label={null}
                 next2Label={null}
-                minDate={date.min}
-                maxDate={date.max}
+                minDate={props.date.min}
+                maxDate={props.date.max}
                 tileDisabled={getDisabledTiles}/> 
             </DialogContent>
         </Template>

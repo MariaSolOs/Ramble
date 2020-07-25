@@ -2,14 +2,8 @@
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking');
-  
-//Helpers
-const extractDayFrame = (date) => {
-    const dayStart = new Date(date);
-    const day = (60 * 60 * 24 * 1000) - 1;
-    const dayEnd = new Date(dayStart.getTime() + day);
-    return [dayStart, dayEnd];
-}
+
+const helpers = require('../helpers/experienceHelpers');
 
 //Fetch cities stored in database
 exports.getCities = (req, res) => {
@@ -25,7 +19,7 @@ exports.getExps = (req, res) => {
     //We only need this for the gallery card
     const displayFields = 'title location.displayLocation images price rating';
     Experience.find({'location.displayLocation': req.query.location, 
-                    capacity: {$gte: req.query.numPeople}},
+                      capacity: {$gte: req.query.numPeople}},
     displayFields, (err, exps) => {
         if(err) { 
             res.status(404).send({err: "Couldn't fetch experiences."});
@@ -45,7 +39,7 @@ exports.getExp = (req, res) => {
 
 //Show occurrences for a certain date 
 exports.getExpOcurrences = (req, res) => {
-    const [dayStart, dayEnd] = extractDayFrame(req.query.date);
+    const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
     const requiredFields = 'timeslot bookings spotsLeft';
     Occurrence.find({expId: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
@@ -62,23 +56,24 @@ exports.getExpOcurrences = (req, res) => {
 exports.addBookingToOcurrence = async (req, res) => {
     try {
         const experience = await Experience.findById(req.params.id, 'capacity');
-        const [dayStart, dayEnd] = extractDayFrame(req.body.date);
+        const [dayStart, dayEnd] = helpers.extractDayFrame(req.body.date);
         let occ = await Occurrence.findOne({
-                            expId: req.params.id,
+                            experience: req.params.id,
                             date: {$gte: dayStart, $lt: dayEnd},
                             timeslot: req.body.timeslot
                         });
         //No ocurrence yet, must create one
         if(!occ) {
             occ = new Occurrence({
-                expId: req.params.id,
+                experience: req.params.id,
                 date: dayStart,
                 timeslot: req.body.timeslot,
                 spotsLeft: experience.capacity
             });
         }
+        await occ.save();
         const booking = new Booking({
-            occId: occ._id,
+            occurrence: occ._id,
             numPeople: req.body.numGuests,
             stripe: {
                 id: req.body.stripeId,
@@ -86,9 +81,6 @@ exports.addBookingToOcurrence = async (req, res) => {
             }
         });
         await booking.save();
-        occ.spotsLeft -= booking.numPeople;
-        occ.bookings.push(booking);
-        await occ.save();
         //Once saved to database, capture payment intent
         res.redirect(307, '/stripe/payment-intent/capture');
     }

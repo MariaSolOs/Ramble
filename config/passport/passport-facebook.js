@@ -7,16 +7,14 @@ passport.use(new FacebookStrategy({
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     profileFields: ['name', 'email', 'picture.type(large)'],
-  },
-    function(accessToken, refreshToken, profile, done) {
+  }, function(accessToken, refreshToken, profile, done) {
         User.findOne({membershipProviderId: profile.id}, (err, user) => {
             if(err) { return done(err); }
             if(!user) {
                 const newUser = new User({
                     fstName: profile._json.first_name,
                     lstName: profile._json.last_name,
-                    email: profile._json.email ? 
-                              profile._json.email : profile._json.first_name,
+                    email: profile._json.email && profile._json.email,
                     photo: profile.photos && profile.photos[0].value,
                     membershipProvider: 'facebook',
                     membershipProviderId: profile.id
@@ -27,4 +25,5 @@ passport.use(new FacebookStrategy({
                 });
             } else { return done(err, user); }
         });
-}));
+    }
+));

@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
-      {generateAccessToken} = require('../../middleware/JWT');
+      {generateAccessToken} = require('../../middleware/JWTMiddleware');
       
 router.get('/api/auth/google', (req, res, next) => {
     passport.authenticate('google', {

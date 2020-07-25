@@ -16,6 +16,7 @@ export const fetchCities = () => {
     return (dispatch) => {
         axios.get('/api/cities')
         .then(res => {
+            console.log(res)
             if(res.status === 200) {
                 dispatch(setCities(res.data.cities));
             }

@@ -55,6 +55,10 @@ app.use(passportFacebook);
 app.use(passportEmail);
 app.use(passportGoogle);
 
+//Stripe API:
+const stripeRoutes = require('./routes/stripe');
+app.use(stripeRoutes);
+
 //Experiences API:
 const experienceRoutes = require('./routes/experience');
 app.use(experienceRoutes);
@@ -62,10 +66,6 @@ app.use(experienceRoutes);
 //Profile API:
 const profileRoutes = require('./routes/profile');
 app.use(profileRoutes);
-
-//Stripe API:
-const stripeRoutes = require('./routes/stripe');
-app.use(stripeRoutes);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

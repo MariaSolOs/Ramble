@@ -12,7 +12,7 @@ import styles from './TimesDialogStyles';
 const useStyles = makeStyles(styles);
 
 const TimeSlot = ({slot, spotsLeft, capacity, selected, onClick}) => {
-    const classes = useStyles();
+    const classes = useStyles({selected});
 
     const [fromHour, fromTime, toHour, toTime] = getTimePieces(slot);
 
@@ -21,17 +21,16 @@ const TimeSlot = ({slot, spotsLeft, capacity, selected, onClick}) => {
                         `Join ${spotsLeft} ${spotsLeft > 1? 'guests' : 'guest'}`;
 
     return (
-        <button className={`${classes.timeslot} 
-                            ${selected && 'selected'}
-                            ${spotsLeft === 0 && 'disabled'}`}
+        <button 
+        className={classes.timeslot}
         onClick={onClick}
         disabled={spotsLeft === 0}>
             <div>
-                <FontAwesomeIcon icon={faClock}/> 
+                {spotsLeft > 0 ? <FontAwesomeIcon icon={faClock}/> :
+                                 <NotInterestedOutlinedIcon className={classes.disabledIcon}/>}
                 <p className={classes.time}>
                     {fromHour}<span>{fromTime}</span>&nbsp;-&nbsp;{toHour}<span>{toTime}</span>
                 </p>
-                {spotsLeft === 0 && <NotInterestedOutlinedIcon className={classes.disabledIcon}/>}
             </div>
             {spotsLeft > 0 &&
                 <div>

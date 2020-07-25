@@ -51,15 +51,13 @@ const styles = () => ({
         border: 'none',
         padding: 12,
         marginBottom: '1.4rem',
-        color: '#ECEBE5', 
-        backgroundColor: '#2A2A2A',
-        '&.selected': {
-            backgroundColor: '#ECEBE5',
-            color: '#2B2B2B'
-        },
-        '&.disabled': {
+        //Switch colors on selection
+        color: props => props.selected? '#2B2B2B' : '#ECEBE5',
+        backgroundColor: props => props.selected? '#ECEBE5' : '#2A2A2A',
+        '&:disabled': {
             filter: 'brightness(70%)',
-            cursor: 'not-allowed'
+            cursor: 'not-allowed',
+            '& $time': { margin: 0 }
         },
         '& > div': { //Rows
             display: 'flex',

@@ -36,6 +36,7 @@ const CalendarDialog = ({open, date, onChange, controls, availDays}) => {
         <Template 
         open={open}
         controls={controls}
+        showContinue
         continueDisabled={!date.selec}>
             <div className={classes.header}>
                 <CloseIcon onClick={controls.goBack} className="closeIcon"/>

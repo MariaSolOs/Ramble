@@ -27,6 +27,7 @@ const TimesDialog = ({open, date, timeslot, onChange, slotsInfo, exp, controls})
         <Template 
         open={open} 
         controls={controls} 
+        showContinue
         continueDisabled={!timeslot}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>

@@ -43,6 +43,7 @@ const ShowExperience = (props) => {
         //TODO: Handle error here
     }, [id, history]);
 
+    //TODO: Add unsave too
     //For saving an experience
     const handleSave = () => {
         if(props.isAuth) { props.saveExp(exp._id); }
@@ -99,7 +100,7 @@ const ShowExperience = (props) => {
             {showBooking && <BookExperience 
                             exp={exp}
                             user={props.user}
-                            closeBooking={closeBooking}/>}
+                            onClose={closeBooking}/>}
         </div>
     );
 }

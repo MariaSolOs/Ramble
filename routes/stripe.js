@@ -26,6 +26,26 @@ router.get('/api/stripe/oauth', helpers.matchStripeState, (req, res) => {
     );
 });
 
+//Called once bookings are (tried to be) saved to DB
+router.post('/stripe/payment-intent/capture', async (req, res) => {
+    stripe.paymentIntents.capture(req.body.stripeId, (err, intent) => {
+        if(err) {
+            res.status(500).send({err: "Couldn't capture intent."});
+        } else {
+            res.status(200).send({intentId: intent.id, status: intent.status})
+        }
+    });
+});
+router.post('/stripe/payment-intent/cancel', async (req, res) => {
+    stripe.paymentIntents.cancel(req.body.stripeId, (err, intent) => {
+        if(err) {
+            res.status(500).send({err: "Couldn't cancel intent."});
+        } else {
+            res.status(200).send({intentId: intent.id, status: intent.status})
+        }
+    });
+});
+
 router.post('/api/stripe/payment-intent', async (req, res) => {
     const {expId, bookType, numGuests, transferId} = req.body;
     const payInfo = await helpers.calculatePaymentAmount(expId, bookType, +numGuests);

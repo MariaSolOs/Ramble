@@ -7,7 +7,7 @@ const withErrorDialog = (Component) => (props) => {
     const [errMsg, setErrMsg] = useState('');
     const displayError = (msg) => {
         setErrMsg(msg);
-        openErrDialog(true);
+        setOpenErrDialog(true);
     }
     const handleClose = () => setOpenErrDialog(false);
 

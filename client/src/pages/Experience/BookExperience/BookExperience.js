@@ -3,29 +3,38 @@ import axios from 'axios';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import {getWeekdayKey, getSlotsInfo} from './bookHelpers';
 import useBookingReducer from './bookingReducer';
+import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 
 import * as steps from './steps';
 import * as dialogs from './Dialogs';
 
-const BookExperience = ({exp, user, closeBooking}) => {
-    //Managing dialog switching and payment steps
-    const [state, actions] = useBookingReducer();
-    const cancelBooking = () => {
-        actions.setStep();
-        closeBooking();
-    }
+const initForm = {
+    date: null,
+    timeslot: null,
+    spotsLeft: null,
+    bookType: null,
+    numGuests: null
+}
 
+const BookExperience = ({exp, user, onClose, displayError}) => {
     //For handling booking details
-    const [values, setValues] = useState({
-        date: null,
-        timeslot: null,
-        spotsLeft: null,
-        bookType: null,
-        numGuests: null
-    });
+    const [values, setValues] = useState(initForm);
+    useEffect(() => {
+        //Always reset the form when closing
+        return () => { setValues(initForm); }
+    }, []);
     const handleChange = useCallback((name, newVal) => {
         setValues(values => ({...values, [name]: newVal}));
     }, []);
+
+    //Managing dialog switching and payment steps
+    const [state, actions] = useBookingReducer();
+    const cancelBooking = useCallback((msg = null) => {
+        if(msg) { displayError(msg); }
+        setTimeout(() => {
+            onClose();
+        }, 4000);
+    }, [onClose, displayError]);
  
     //For fetching occurrences for a certain date
     const {setSlotsInfo} = actions;
@@ -47,12 +56,11 @@ const BookExperience = ({exp, user, closeBooking}) => {
                 }
             })
             .catch(err => {
-                console.log(err);
-                closeBooking();
+                cancelBooking('We cannot find experience for this date.');
             });
         }
     }, [values.date, exp._id, exp.avail.schedule, 
-        exp.capacity, setSlotsInfo, closeBooking]);
+        exp.capacity, setSlotsInfo, cancelBooking]);
 
     //Handling payment
     const stripe = useStripe();
@@ -67,55 +75,39 @@ const BookExperience = ({exp, user, closeBooking}) => {
                 transferId: exp.creator.stripe.id,
                 ...values
             });
-            console.log(payIntent)
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
             }
             if (!stripe || !elements) { 
-                actions.payComplete("Sorry, the booking couldn't be completed.");
+                cancelBooking('Your booking cannot be completed right now.');
                 return; 
             } 
             //Confirm payment with Stripe
             const payConfirm = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: elements.getElement(CardElement),
-                    
                     billing_details: {
                         name: `${user.fstName} ${user.lstName}`
                     }
                 }
             });
             if(payConfirm.error) {
-                //Show error to your customer (e.g., insufficient funds)
-                console.log(payConfirm.error.message);
-            } else {
-                console.log(payConfirm);
-                if(payConfirm.paymentIntent.status === 'requires_capture') {
-                    axios.post(`/api/exp/${exp._id}/occ`, {
-                        ...values,
-                        stripeId: payConfirm.paymentIntent.id
-                    })
-                    .then(res => {
-                        console.log(res)
-                        if(res.status === 200) {
-                            actions.payComplete(`Congrats ${user.fstName}! 
-                            Your booking was successfully completed.`);
-                        }
-                    })
-                    .catch(err => {
-                        actions.payComplete('Oh no, something went wrong...');
-                        console.log(err)
-                    });
-                }
+                cancelBooking(payConfirm.error.message);
+            } else if(payConfirm.paymentIntent.status === 'requires_capture') {
+                axios.post(`/api/exp/${exp._id}/occ`, {
+                    ...values,
+                    stripeId: payConfirm.paymentIntent.id
+                })
+                .then(res => {
+                    console.log(res)
+                    if(res.data.status === 'succeeded') {
+                        actions.payComplete(`Congrats ${user.fstName}! 
+                        Your booking was successfully completed.`);
+                    } else { cancelBooking('Please contact us.'); }
+                })
+                .catch(err => { cancelBooking('Please contact us.'); });
             }
-        } catch(err) {
-            console.log(err);
-            actions.payComplete('Oh no, something went wrong...');
-        }
-        //No matter what, after 4 seconds close booking
-        setTimeout(() => {
-            cancelBooking();
-        }, 4000);
+        } catch(err) { cancelBooking('Please contact us.'); }
     }
 
     switch(state.step) {
@@ -132,7 +124,7 @@ const BookExperience = ({exp, user, closeBooking}) => {
                     availDays={Object.keys(exp.avail.schedule)}
                     onChange={handleChange}
                     controls={{
-                        goBack: cancelBooking,
+                        goBack: onClose,
                         nextStep: actions.setStep(steps.TIMES)
                     }}/>
         case steps.TIMES: 
@@ -167,9 +159,10 @@ const BookExperience = ({exp, user, closeBooking}) => {
                         nextStep: actions.setStep(steps.PAYMENT)
                     }}/>
         case steps.PAYMENT: 
-            return <>
-                    <dialogs.PaymentDialog 
-                    open={!state.payDone}
+            return <dialogs.PaymentDialog 
+                    openForm={!state.payDone}
+                    openStatus={state.payProcessing || state.payDone}
+                    payMessage={state.payMsg}
                     form={values}
                     exp={{
                         title: exp.title,
@@ -181,12 +174,8 @@ const BookExperience = ({exp, user, closeBooking}) => {
                         goBack: actions.setStep(steps.BOOK_TYPE),
                         nextStep: handlePayment
                     }}/>
-                    <dialogs.CompletedDialog
-                    open={state.payProcessing || state.payDone}
-                    message={state.payMsg}/>
-                    </>
         default: return null;
     }
 }
 
-export default BookExperience;
+export default withErrorDialog(BookExperience);

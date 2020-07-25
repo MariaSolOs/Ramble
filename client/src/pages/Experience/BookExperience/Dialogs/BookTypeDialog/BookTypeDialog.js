@@ -56,6 +56,7 @@ const BookTypeDialog = ({open, form, exp, onChange, controls}) => {
         <Template 
         open={open} 
         controls={controls} 
+        showContinue
         continueDisabled={(!form.bookType || !form.numGuests)}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>

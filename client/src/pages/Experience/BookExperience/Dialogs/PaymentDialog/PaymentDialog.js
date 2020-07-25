@@ -11,7 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';
 const useStyles = makeStyles(styles);
 
-const PaymentDialog = ({open, form, exp, controls}) => {
+const PaymentDialog = ({openForm, openStatus, payMessage, form, exp, controls}) => {
     const classes = useStyles();
     const totalPrice = (form.numGuests * +exp.price.perPerson);
 
@@ -21,9 +21,11 @@ const PaymentDialog = ({open, form, exp, controls}) => {
     }
 
     return (
+        <>
         <Template 
-        open={open} 
+        open={openForm} 
         controls={controls} 
+        showContinue
         continueDisabled={!enableSubmit}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={controls.goBack} className="goBackIcon"/>
@@ -64,6 +66,10 @@ const PaymentDialog = ({open, form, exp, controls}) => {
                 </p>
             </DialogContent>
         </Template>
+        <Template open={openStatus}>
+            <h3 style={{ color: '#FFF' }}>{payMessage}</h3>
+        </Template>
+        </>
     );
 }
 

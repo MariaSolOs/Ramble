@@ -10,11 +10,11 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) {
-        return res.status(403).send({ error: "Couldn't find token." });
+        return res.status(401).send({ error: "Couldn't find token." });
     }
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if(err) { 
-            return res.status(403).send({ error: "Couldn't verify token" });
+            return res.status(401).send({ error: "Couldn't verify token" });
         } 
         //Set userId in req and remaining time from token
         req.userId = decoded.userId;

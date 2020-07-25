@@ -54,7 +54,6 @@ const mapDispatch = (dispatch) => ({
 });
 
 export default function useBookingReducer() {
-    //console.log('heee')
     const [state, dispatch] = useReducer(reducer, initialState);
     const actions = useCallback(mapDispatch(dispatch), []);
     return [state, actions];

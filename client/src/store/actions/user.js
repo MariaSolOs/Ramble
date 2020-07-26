@@ -45,7 +45,7 @@ export const emailAuth = (userInfo, authType) => {
         //authtype is login or register
         axios.post(`/api/${authType}/email`, userInfo)
         .then(res => {
-            if(res.status === 200) {
+            if(res.status === 201 || res.status === 200) {
                 dispatch(fetchProfile());
             }
         })
@@ -58,7 +58,7 @@ export const editProfile = (updatedInfo) => {
     return dispatch => {
         userAxios().put('/api/profile/edit', updatedInfo)
         .then(res => {
-            if(res.status === 200) {
+            if(res.status === 201) {
                 //Update state with new user data
                 dispatch(setProfile(res.data.userData))
             }

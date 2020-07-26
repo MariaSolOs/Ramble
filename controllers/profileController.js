@@ -17,14 +17,11 @@ exports.getProfile = (req, res) => {
 //Editing user info
 exports.editProfile = async (req, res) => {
     try {
-        req.user.fstName = req.body.fstName;
-        req.user.lstName = req.body.lstName;
-        req.user.city = req.body.city;
-        req.user.email = req.body.email;
-        req.user.phoneNumber = req.body.phoneNumber;
-        req.user.birthday = req.body.birthday;
+        for(const field in req.body) {
+            req.user[field] = req.body[field];
+        }
         await req.user.save();
-        return res.status(200).send({ userData: helpers.getUserData(req.user) });
+        return res.status(201).send({ userData: helpers.getUserData(req.user) });
     } catch(err) {
         return res.status(409).send({error: "Couldn't update user"});
     }

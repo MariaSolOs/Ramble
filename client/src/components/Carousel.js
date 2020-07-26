@@ -15,14 +15,15 @@ const useStyles = makeStyles((theme) => ({
             margin: '0 auto 2% auto'
         },
 
-        '& .image-gallery-slide:focus': { outline: 'none' },
-
-        //Main images
-        '& .image-gallery-image': {
-            height: 500,
-            width: '90%',
-            borderRadius: '2rem',
-            objectFit: 'cover'
+        '& .image-gallery-slide': {
+            '&:focus': { outline: 'none' },
+            //Main images
+            '& .image-gallery-image': {
+                height: 500,
+                width: '90%',
+                borderRadius: '2rem',
+                objectFit: 'cover'
+            },
         },
 
         //Thumbnails
@@ -32,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: 10,
             '& .image-gallery-thumbnail-image': { 
                 borderRadius: '1rem',
-                maxHeight: 120,
+                maxHeight: 110,
                 width: 'auto',
-                maxWidth: 80
+                maxWidth: 70
             }
         },
 
@@ -47,7 +48,10 @@ const useStyles = makeStyles((theme) => ({
                 padding: 7,
                 border: 'none',
                 transform: 'none',
-                '&:hover': { outline: 'none' },
+                '&:hover': { 
+                    outline: 'none',
+                    backgroundColor: '#FFF'
+                },
                 '&:focus': { outline: 'none' },
                 '&.active': { backgroundColor: '#FFF' }
             } 

@@ -37,11 +37,11 @@ exports.getExp = (req, res) => {
     });
 }
 
-//Show occurrences for a certain date 
+//Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
     const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
     const requiredFields = 'timeslot bookings spotsLeft';
-    Occurrence.find({expId: req.params.id, 
+    Occurrence.find({experience: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
     requiredFields).populate('bookings').exec((err, occ) => {
         if(err || !occ) {
@@ -82,10 +82,10 @@ exports.addBookingToOcurrence = async (req, res) => {
         });
         await booking.save();
         //Once saved to database, capture payment intent
-        res.redirect(307, '/stripe/payment-intent/capture');
+        res.redirect(307, '/api/stripe/payment-intent/capture');
     }
     catch(err) {
         //Cancel the intent
-        res.redirect(307, '/stripe/payment-intent/cancel');
+        res.redirect(307, '/api/stripe/payment-intent/cancel');
     }
 }

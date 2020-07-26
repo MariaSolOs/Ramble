@@ -224,12 +224,12 @@ const seedDB = async () => {
         exp.duration = 2;
         exp.ageRestriction = 15;
         exp.avail = {};
-        exp.avail.from = new Date('Thursday July 16 2020');
-        exp.avail.to = new Date('Sunday August 2 2020');
-        exp.avail.schedule = {Tuesday: ['8AM-10AM', '2:30PM-4:30PM'],
-                              Thursday: ['8AM-10AM', '2:30PM-4:30PM'],
-                              Friday: ['8AM-10AM', '2:30PM-4:30PM'],
-                              Saturday: ['8AM-10AM', '2:30PM-4:30PM']};
+        exp.avail.from = new Date('July July 27 2020');
+        exp.avail.to = new Date('Sunday August 30 2020');
+        exp.avail.schedule = {Tuesday: ['8AM-10AM'],
+                              Thursday: ['8AM-10AM', '2:30PM-4:30PM', '4:30PM-6:30PM'],
+                              Friday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM', '10PM-12AM'],
+                              Saturday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM']};
         exp.price.currency = 'CAD';
         exp.languages = ['English', 'Español'];
         exp.capacity = Math.floor(Math.random() * 7) + 1;
@@ -238,19 +238,19 @@ const seedDB = async () => {
         exp.bring = ['stickers', 'spoons'];
         exp.rating = 4.91;
         //I create everything
-        exp.creator = '5f171ff95a03c60dae134422';
+        exp.creator = '5f1d95d704411f0750ae454b';
         await exp.save();
 
         //Create some random occurrences
         const numPeople = Math.floor(Math.random() * 5) + 1;
         if(exp.capacity < numPeople){ return; }
         const occ = new Occurrence({
-            expId: exp._id,
-            date: new Date('Friday July 31 2020'),
-            timeslot: '8AM-10AM',
+            experience: exp._id,
+            date: new Date('Friday August 28 2020'),
+            timeslot: '8PM-10PM',
             spotsLeft: exp.capacity
         });
-        const book = new Booking({ occId: occ._id, numPeople });
+        const book = new Booking({ occurrence: occ._id, numPeople });
         await book.save();
         occ.spotsLeft -= book.numPeople;
         occ.bookings.push(book);

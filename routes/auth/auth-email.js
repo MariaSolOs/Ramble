@@ -18,7 +18,7 @@ router.post('/api/register/email', (req, res, next) => {
                 res.status(404).send({error: 'Registration error'}); 
             } else { 
                 const token = generateAccessToken(user._id);
-                res.status(200).send({ token });
+                res.status(201).send({ token });
             }
         });
     }).catch(err => { next(err); });

@@ -8,7 +8,7 @@ exports.upgradeToCreator = (req, res) => {
     stripe.oauth.token({grant_type: 'authorization_code', code})
     .then(async (response) => {
         //User is now a creator
-        await helpers.updateUserToCreator(response.stripe_user_id, req.userId);
+        await helpers.updateUserToCreator(response.stripe_user_id, req.user);
         //TODO: Redirect to creator platform here
         return res.status(200).redirect(`${process.env.CLIENT_URL}`);
         }, (err) => {
@@ -63,7 +63,7 @@ exports.createPaymentIntent = async (req, res) => {
 
 //const webhook_secret = process.env.STRIPE_WEBHOOK_SECRET;
 const webhook_secret = 'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx';
-exports.stripeWebhook = (req, res) => {
+exports.stripeWebhook = async (req, res) => {
     const sign = req.headers['stripe-signature'];
     let event;
 
@@ -77,7 +77,7 @@ exports.stripeWebhook = (req, res) => {
     switch(event.type) {
         case 'payment_intent.succeeded':
             const paymentIntent = event.data.object;
-            message = helpers.handleSuccessfulPaymentIntent(paymentIntent);  
+            message = helpers.handleSuccessfulPaymentIntent(paymentIntent.id);  
             break;
         default:
             return res.status(400).end(); //Unexpected event type

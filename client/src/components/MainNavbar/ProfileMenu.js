@@ -99,10 +99,6 @@ const ProfileMenu = (props) => {
             onClick={closeMenu}>
                 View Profile
             </MenuItem>
-            <MenuItem component={NavLink} to="/messages"
-            onClick={closeMenu}>
-                Messages
-            </MenuItem>
             <MenuItem component={NavLink} to="/notifications"
             onClick={closeMenu}>
                 Notifications

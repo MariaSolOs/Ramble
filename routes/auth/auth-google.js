@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
-      {generateAccessToken} = require('../../middleware/JWTMiddleware');
+      {redirectWithCookie} = require('../../middleware/profileMiddleware');
       
 router.get('/api/auth/google', (req, res, next) => {
     passport.authenticate('google', {
@@ -11,11 +11,10 @@ router.get('/api/auth/google', (req, res, next) => {
     })(req, res, next)
 });
 
-router.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-    const token = generateAccessToken(req.user._id);
-    res.cookie('token', token);
-    return res.redirect(`${process.env.CLIENT_URL}`);
-});
+router.get('/auth/google/callback', passport.authenticate('google'), (req, res, next) => {
+    req.userId = req.user._id;
+    next();
+}, redirectWithCookie);
 
 module.exports = router;
 

@@ -8,7 +8,7 @@ exports.getProfile = (req, res) => {
     req.user.populate('savedExperiences pastExperiences').execPopulate()
     .then(user => {
         res.status(200).send({
-            userData: helpers.getUserData(user),
+            userData: helpers.getUserData(user, req.token),
             ...helpers.getUserExps(user)
         });
     });
@@ -21,7 +21,7 @@ exports.editProfile = async (req, res) => {
             req.user[field] = req.body[field];
         }
         await req.user.save();
-        return res.status(201).send({ userData: helpers.getUserData(req.user) });
+        return res.status(201).send({ userData: helpers.getUserData(req.user, req.token) });
     } catch(err) {
         return res.status(409).send({error: "Couldn't update user"});
     }

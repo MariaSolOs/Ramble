@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {emailAuth} from '../../../store/actions/user';
@@ -21,10 +21,10 @@ const LogInDialog = (props) => {
     const classes = useStyles();
     const {register, handleSubmit} = useForm();
 
-    //To return to the current page after FB/Google login
-    const handleClickToAPI = () => {
+    //To return to the current page after login
+    useEffect(() => {
         window.localStorage.setItem('redirectURL', props.currentRoute);
-    }
+    }, [props.currentRoute]);
     
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
@@ -52,14 +52,14 @@ const LogInDialog = (props) => {
                 </form>
                 <div className={classes.formDivisor}/>
                 <a href="/api/auth/facebook" className={classes.link}>
-                    <button className={classes.mediaButton} onClick={handleClickToAPI}>
+                    <button className={classes.mediaButton}>
                         <img src="https://img.icons8.com/color/48/000000/facebook-new.png" 
                         alt="Facebook icon" className="icon" style={{height: '100%'}}/>
                         Log in with Facebook
                     </button>
                 </a>
                 <a href="/api/auth/google" className={classes.link}> 
-                    <button className={classes.mediaButton} onClick={handleClickToAPI}>
+                    <button className={classes.mediaButton}>
                         <img src="https://img.icons8.com/color/48/000000/google-logo.png" 
                         alt="Google icon" className="icon" style={{height: '90%'}}/>
                         Log in with Google

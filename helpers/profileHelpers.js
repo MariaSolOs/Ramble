@@ -1,5 +1,5 @@
-exports.getUserData = (user) => ({
-    id: user._id,
+exports.getUserData = (user, token) => ({
+    token,
     fstName: user.fstName,
     lstName: user.lstName,
     photo: user.photo,

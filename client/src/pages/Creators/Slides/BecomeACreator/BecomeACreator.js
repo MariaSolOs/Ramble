@@ -20,7 +20,7 @@ const BecomeACreator = (props) => {
     const classes = useStyles();
 
     const cloudinary = useContext(CloudinaryContext);
-    const isAuth = useSelector(state => state.user.data.id !== null);
+    const isAuth = useSelector(state => state.user.data.token !== null);
 
     return (
         <div className={classes.root}>

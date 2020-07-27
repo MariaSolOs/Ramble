@@ -56,7 +56,9 @@ const Footer = () => {
                 </div>
             </div>
             <div className={classes.bottom}>
-                <p>&copy; 2020 Ramble Technologies Inc</p>
+                <Link to="/admin">
+                    &copy; 2020 Ramble Technologies Inc
+                </Link>
                 <div>
                     {/* TODO: Add real links to pages here */}
                     <p>+1 514 654-7156</p>

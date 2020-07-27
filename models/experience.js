@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const ExperienceSchema = new mongoose.Schema({
+    approved: {
+        type: Boolean,
+        required: true
+    },
     location: {
         city: {
             type: String,

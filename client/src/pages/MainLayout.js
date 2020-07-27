@@ -2,7 +2,6 @@ import React from 'react';
 import {useLocation} from 'react-router-dom';
 
 import Navbar from '../components/MainNavbar/MainNavbar';
-import withIdleTimer from '../hoc/withIdleTimer/withIdleTimer';
 import Footer from '../components/MainFooter/MainFooter';
 
 const MainLayout = (props) => { 
@@ -23,4 +22,4 @@ const MainLayout = (props) => {
         </>
 )};
 
-export default (withIdleTimer(MainLayout));
+export default MainLayout;

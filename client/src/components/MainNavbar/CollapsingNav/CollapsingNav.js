@@ -38,6 +38,15 @@ const CollapsingNav = (props) => {
     }, []);
 
     const {dialogActions} = props;
+    // if(props.isAdmin) {
+    //     return (
+    //         <div className={classes.root}>
+    //             <Link to="/" onClick={props.logoutUser} className={classes.navLink}>
+    //                 Logout
+    //             </Link>
+    //         </div>
+    //     )
+    // }
     return (
         <div className={classes.root}>
             <div className={classes.collapsedNav}>
@@ -75,31 +84,30 @@ const CollapsingNav = (props) => {
                         </MenuItem>]}
                 </Menu>
             </div>
-        <div className={classes.expandedLinks}>
-            <Link to="/creator" className={classes.navLink}
-                onClick={props.collapseNav} style={{color: '#FFF'}}>
+            <div className={classes.expandedLinks}>
+                <Link to="/creator" className={classes.navLink} style={{color: '#FFF'}}>
                     Become a Creator
                 </Link>
                 {props.isAuth? profileMenu : 
-                    <>
-                        <button 
-                        onClick={() => dialogActions.openSignUpDialog()}
-                        className={`${classes.navLink} ${classes.dialogToggler}`}>
-                            Sign up
-                        </button>
-                        <button as="button" 
-                        onClick={() => dialogActions.openLogInDialog()}
-                        className={`${classes.navLink} ${classes.dialogToggler}`}>
-                            Log in
-                        </button>
-                    </>}
+                <>
+                    <button 
+                    onClick={() => dialogActions.openSignUpDialog()}
+                    className={`${classes.navLink} ${classes.dialogToggler}`}>
+                        Sign up
+                    </button>
+                    <button as="button" 
+                    onClick={() => dialogActions.openLogInDialog()}
+                    className={`${classes.navLink} ${classes.dialogToggler}`}>
+                        Log in
+                    </button>
+                </>}
+            </div>
         </div>
-      </div>
     );
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: (state.user.data.id !== null),
+    isAuth: (state.user.data.token !== null),
     userName: state.user.data.fstName,
     userPic: state.user.data.photo
 });

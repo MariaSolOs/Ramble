@@ -1,14 +1,11 @@
 import React, {useState, useRef} from 'react';
 import {useDispatch} from 'react-redux';
 import {logout} from '../../store/actions/user';
-import IdleTimer from 'react-idle-timer';
+import ReactIdleTimer from 'react-idle-timer';
 
 import IdleDialog from './IdleDialog';
 
-const withIdleTimer = (App) => (props) => {
-    //Only used when the user is logged in
-    if(!props.isAuth) { return <App {...props}/>; }
-
+const IdleTimer = (props) => {
     //Manage idle modal
     const [showDialog, setShowDialog] = useState(false);
     const handleClose = () => { setShowDialog(false); }
@@ -43,7 +40,7 @@ const withIdleTimer = (App) => (props) => {
 
     return (
         <>
-            <IdleTimer
+            <ReactIdleTimer
             ref={idleTimer}
             element={document}
             onIdle={onIdle}
@@ -53,9 +50,8 @@ const withIdleTimer = (App) => (props) => {
             <IdleDialog
             open={showDialog}
             handleClose={handleClose}/>
-            <App {...props}/>
         </>
     );
 }
 
-export default withIdleTimer;
+export default IdleTimer;

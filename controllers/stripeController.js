@@ -61,14 +61,16 @@ exports.createPaymentIntent = async (req, res) => {
     });
 }
 
-//const webhook_secret = process.env.STRIPE_WEBHOOK_SECRET;
-const webhook_secret = 'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx';
 exports.stripeWebhook = async (req, res) => {
     const sign = req.headers['stripe-signature'];
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.rawBody, sign, webhook_secret);
+        event = stripe.webhooks.constructEvent(
+                    req.rawBody, 
+                    sign, 
+                    process.env.STRIPE_WEBHOOK_SECRET
+                );
     } catch (err) {
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }

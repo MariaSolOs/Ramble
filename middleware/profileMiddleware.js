@@ -1,4 +1,5 @@
-const User = require('../models/user');
+const User = require('../models/user'),
+      {generateAccessToken} = require('../middleware/JWTMiddleware');
 
 exports.findUser = (req, res, next) => {
     User.findById(req.userId, (err, user) => {
@@ -8,4 +9,10 @@ exports.findUser = (req, res, next) => {
         req.user = user;
         next();
     });
+}
+
+exports.redirectWithCookie = (req, res) => {
+    const token = generateAccessToken(req.userId, false, '12h');
+    res.cookie('token', token);
+    return res.redirect(`${process.env.CLIENT_URL}`);
 }

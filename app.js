@@ -17,7 +17,6 @@ require('./config/mongoose');
 //Seed experience database
 //seedDB();
 
-//TODO: Restrict origin (https://www.npmjs.com/package/cors#enable-cors-for-a-single-route)
 //Server setup
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 //Stripe webhooks aren't parsed to json
@@ -64,6 +63,10 @@ app.use('/api/exp', experienceRoutes);
 //Profile API:
 const profileRoutes = require('./routes/profile');
 app.use('/api/profile', profileRoutes);
+
+//Admin API: 
+//const adminRoutes = require('./routes/admin');
+//app.use('/api/admin', adminRoutes);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

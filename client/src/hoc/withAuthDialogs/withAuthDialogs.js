@@ -8,12 +8,11 @@ import SignUpWithEmailDialog from './Dialogs/SignUpWithEmailDialog';
 import LogInDialog from './Dialogs/LogInDialog';
 
 const withAuthDialogs = (Component) => (props) => {
-    const isAuth = useSelector(state => state.user.data.id !== null);
+    const isAuth = useSelector(state => state.user.data.token !== null);
 
     const [state, actions] = useAuthDialogReducer();
 
-    /*To remember in which page we were when the user 
-    authenticates with Facebook/Google*/
+    //To remember in which page we were when the user authenticates
     const {pathname} = useLocation();
     return (
         <>
@@ -28,7 +27,8 @@ const withAuthDialogs = (Component) => (props) => {
                 <SignUpWithEmailDialog
                 open={state.showEmailDialog}
                 onClose={actions.closeEmailDialog} 
-                switchToLogin={actions.openLogInDialog}/>
+                switchToLogin={actions.openLogInDialog}
+                currentRoute={pathname}/>
                 <LogInDialog 
                 open={state.showLogInDialog} 
                 onClose={actions.closeLogInDialog}

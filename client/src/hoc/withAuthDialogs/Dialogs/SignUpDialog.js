@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 //MUI
 import Dialog from '@material-ui/core/Dialog';
@@ -14,10 +14,10 @@ const useStyles = makeStyles(styles);
 const SignUpDialog = (props) => {
     const classes = useStyles();
 
-    //To return to the current page after FB/Google signup
-    const handleClickToAPI = () => {
+    //To return to the current page after signup
+    useEffect(() => {
         window.localStorage.setItem('redirectURL', props.currentRoute);
-    }
+    }, [props.currentRoute]);
 
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
@@ -32,7 +32,7 @@ const SignUpDialog = (props) => {
                     Continue with Email
                 </button>
                 <a href="/api/auth/facebook" className={classes.link}>
-                    <button className={classes.mediaButton} onClick={handleClickToAPI}>
+                    <button className={classes.mediaButton}>
                         <img src="https://img.icons8.com/color/48/000000/facebook-new.png" 
                         alt="Facebook icon" className="icon"
                         style={{height: 26, width: 26}}/>
@@ -40,7 +40,7 @@ const SignUpDialog = (props) => {
                     </button>
                 </a>
                 <a href="/api/auth/google" className={classes.link}>
-                    <button className={classes.mediaButton} onClick={handleClickToAPI}>
+                    <button className={classes.mediaButton}>
                         <img src="https://img.icons8.com/color/48/000000/google-logo.png" 
                         className="icon" alt="Google icon" style={{height: 24, width: 24}}/>
                         Continue with Google

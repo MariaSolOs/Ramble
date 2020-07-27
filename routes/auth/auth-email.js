@@ -10,14 +10,14 @@ router.post('/api/register/email', (req, res, next) => {
         lstName: req.body.lstName,
         birthday: req.body.birthday, 
         email: req.body.email, 
-        password: req.body.email, 
+        password: req.body.password, 
         membershipProvider: 'email'
     }).then(user => {
         req.login(user, err => {
             if(err) { 
                 res.status(404).send({error: 'Registration error'}); 
             } else { 
-                const token = generateAccessToken(user._id);
+                const token = generateAccessToken(user._id, false, '12h');
                 res.status(201).send({ token });
             }
         });
@@ -27,9 +27,9 @@ router.post('/api/register/email', (req, res, next) => {
 //Login with email
 router.post('/api/login/email', passport.authenticate('local', {
     failureRedirect: '/'
-}), (req, res) => {
+}), (req, res, next) => {
     if(req.user) {
-        const token = generateAccessToken(req.user._id);
+        const token = generateAccessToken(req.user._id, false, '12h');
         res.status(200).send({ token });
     }
 });

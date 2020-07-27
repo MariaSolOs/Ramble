@@ -214,6 +214,7 @@ const seedDB = async () => {
     [...experienceData, ...experienceData, ...experienceData]
     .forEach(async seed => {
         const exp = new Experience(seed);
+        exp.approved = true;
         exp.location.displayLocation = `${exp.location.city}, ${exp.location.region}`;
         const randImgIndex = Math.floor(Math.random() * 6);
         exp.images.push(images[randImgIndex]);

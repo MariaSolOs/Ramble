@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {emailAuth} from '../../../store/actions/user';
@@ -20,6 +20,11 @@ const useStyles = makeStyles(styles);
 const SignUpWithEmailDialog = (props) => {
     const classes = useStyles();
     const {register, handleSubmit} = useForm();
+
+    //To return to the current page after signup
+    useEffect(() => {
+        window.localStorage.setItem('redirectURL', props.currentRoute);
+    }, [props.currentRoute]);
     
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"

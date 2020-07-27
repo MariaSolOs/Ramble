@@ -95,7 +95,7 @@ const SearchExperienceCard = (props) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    isAuth: (state.user.data.id !== null),
+    isAuth: (state.user.data.token !== null),
     saved: state.user.savedExps.map(exp => exp._id).includes(ownProps.exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({

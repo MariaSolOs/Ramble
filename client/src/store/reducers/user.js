@@ -2,7 +2,7 @@ import * as types from '../actionTypes';
 
 const initialState = {
     data: {
-        id: null,
+        token: null,
         fstName: '',
         lstName: '',
         photo: '',
@@ -11,7 +11,6 @@ const initialState = {
         phoneNumber: '',
         birthday: ''
     },
-    //errMsg: '', TODO: Put this in a global err modal
     pastExps: [],
     savedExps: [],
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import App from './App';
+import App from './Apps/MainApp';
 import * as serviceWorker from './serviceWorker';
 
 //Redux configuration
@@ -21,7 +21,7 @@ import './index.css';
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const rootReducer = combineReducers({
     user: userReducer,
-    exp: experienceReducer,
+    exp: experienceReducer
 });
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 

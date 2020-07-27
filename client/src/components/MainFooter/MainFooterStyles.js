@@ -91,14 +91,15 @@ const styles = (theme) => ({
         justifyContent: 'space-between',
         width: '80%',
         margin: '0 auto 3rem 15%',
-        '& p': { 
+        '& p': {
             margin: 0,
             display: 'inline',
             color: '#C0BFBA',
-            letterSpacing: '-0.05rem',
-            fontSize: '0.85rem',
+            fontSize: '0.85rem'
         },
-        '& a': { marginLeft: 20 },
+        '& > div a': {
+            marginLeft: 20
+        },
         [theme.breakpoints.down('sm')]: { marginLeft: '10%' },
         [theme.breakpoints.down('xs')]: {
             marginLeft: '5%', 

@@ -38,6 +38,7 @@ export const fetchProfile = () => {
         });
     }
 }
+//TODO: Replace userid by token
 
 //For email authentication
 export const emailAuth = (userInfo, authType) => {
@@ -46,6 +47,7 @@ export const emailAuth = (userInfo, authType) => {
         axios.post(`/api/${authType}/email`, userInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
+                window.localStorage.setItem('token', res.data.token);
                 dispatch(fetchProfile());
             }
         })

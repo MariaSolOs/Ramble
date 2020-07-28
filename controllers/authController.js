@@ -1,15 +1,16 @@
 const User = require('../models/user'), 
       Admin = require('../models/admin');
-const e = require('express');
 
 exports.registerUserWithEmail = (req, res, next) => {
     User.find({email: req.body.email,
                membershipProvider: 'email'}, 
     (err, users) => {
         if(err) {
-            return next(err);
+            return res.status(404).send({error: 'Registration error'});
         } else if(users.length > 0) {
-            return res.status(409).send({error: 'Email is already used.'}); 
+            return res.status(409).send({
+                error: 'Email is already used.'
+            }); 
         } else {
             User.create({ 
                 fstName: req.body.fstName, 
@@ -28,7 +29,9 @@ exports.registerUserWithEmail = (req, res, next) => {
                         next();
                     }
                 });
-            }).catch(err => { next(err); });
+            }).catch(err => { 
+                return res.status(404).send({error: 'Registration error'}); 
+            });
         }
     });
 }
@@ -42,19 +45,17 @@ exports.googleAuth = (req, res, next) => {
 }
 
 exports.registerAdmin = (req, res, next) => {
+    if(!req.isAdmin || req.user.permissions.includes('addAdmin')) {
+        return res.status(401).send({err: 'Unauthorized.'});
+    }
     Admin.create({ 
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        permissions: req.body.permissions
     }).then(admin => {
-        req.login(admin, err => {
-            if(err) { 
-                res.status(404).send({error: 'Admin registration error'}); 
-            } else { 
-                req.userId = req.user._id;
-                req.isAdmin = true;
-                next();
-            }
-        });
+        if(admin) {
+            return res.status(201).send({message: 'Successfully added admin'});
+        }
     }).catch(err => { next(err); });
 }
 

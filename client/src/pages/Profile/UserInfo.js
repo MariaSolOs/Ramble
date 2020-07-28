@@ -2,14 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {editProfile} from '../../store/actions/user';
 import {useForm} from 'react-hook-form';
-import withSnackbar from '../../hoc/withSnackbar';
 
 //Components
 import CustomScroll from 'react-custom-scroll';
 import FormControl from '@material-ui/core/FormControl';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import TextField from '../../components/Input/TextField';
-import Snackbar from './Layout/Snackbar';
 
 //Styles 
 import 'react-custom-scroll/dist/customScroll.css';
@@ -71,7 +69,7 @@ const UserInfo = (props) => {
     
     //Set form based on saved user fields
     const user = props.user;
-    const {register, handleSubmit, getValues} = useForm({defaultValues: {
+    const {register, handleSubmit} = useForm({defaultValues: {
         fstName: user.fstName,
         lstName: user.lstName,
         photo: user.photo,
@@ -81,17 +79,10 @@ const UserInfo = (props) => {
         birthday: user.birthday
     }});
 
-    const handleUpdate = (updatedInfo) => {
-        //Save changes in database
-        props.editProfile(updatedInfo);
-        //Display notification
-        props.displaySnackbar(`Hey ${getValues('fstName')}! Your profile has been updated.`);
-    }
-
     return (
         <div className={classes.formContainer}>
             <CustomScroll heightRelativeToParent="80%">
-                <form onSubmit={handleSubmit(handleUpdate)}>
+                <form onSubmit={handleSubmit(props.editProfile)}>
                     <div className={classes.formRow} style={{ margin: 0 }}>
                         <label htmlFor="fstName" className={classes.label}>Name</label>
                         <button type="submit" className={classes.submitButton}>
@@ -166,4 +157,4 @@ const mapDispatchToProps = (dispatch) => ({
     editProfile: (updatedInfo) => dispatch(editProfile(updatedInfo))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(UserInfo, Snackbar));
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);

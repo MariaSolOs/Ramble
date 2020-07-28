@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {fetchProfile} from '../store/actions/user';
 import Cookies from 'js-cookie';
 import {Route, Switch, useHistory} from 'react-router-dom';
-import CloudinaryProvider from '../context/cloudinaryContext';
 
 import Spinner from '../components/Spinner';
 import PublicApp from './PublicApp';
@@ -41,18 +40,21 @@ const MainApp = (props) => {
         <>
             {props.loadingUser? <Spinner/> :
             <Suspense fallback={<Spinner/>}> 
-                <CloudinaryProvider>
-                    <Switch>
-                        <Route path="/admin" component={AdminApp}/>
-                        <Route path="/" component={PublicApp}/>
-                    </Switch>
-                </CloudinaryProvider> 
+                <Switch>
+                    <Route path="/admin">
+                        <AdminApp isAuth={props.isAuth}/>
+                    </Route>
+                    <Route path="/">
+                        <PublicApp isAuth={props.isAuth}/>
+                    </Route>
+                </Switch>
             </Suspense>}
         </>
     );
 }
 
 const mapStateToProps = (state) => ({
+    isAuth: state.user.token !== null,
     loadingUser: state.user.loading
 });
 const mapDispatchToProps = (dispatch) => ({

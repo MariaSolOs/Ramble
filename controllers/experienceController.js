@@ -4,6 +4,7 @@ const Experience = require('../models/experience'),
       Booking = require('../models/booking');
 
 const helpers = require('../helpers/experienceHelpers');
+const e = require('express');
 
 //Fetch cities stored in database
 exports.getCities = (req, res) => {
@@ -25,6 +26,33 @@ exports.getExps = (req, res) => {
         if(err) { 
             res.status(404).send({err: "Couldn't fetch experiences."});
         } else { res.status(200).send({ exps }); }
+    });
+}
+
+//For all the approving/dissapproving drama
+exports.getUnapprovedExps = (req, res) => {
+    if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
+        return res.status(401).send({err: 'Unauthorized.'});
+    }
+    const displayFields = 'title location.displayLocation images price rating';
+    Experience.find({ approved: false }, displayFields,
+    (err, exps) => {
+        if(err) { 
+            res.status(404).send({err: "Couldn't fetch experiences."});
+        } else { res.status(200).send({ exps }); }
+    });
+}
+exports.approveExp = (req, res) => {
+    if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
+        return res.status(401).send({err: 'Unauthorized.'});
+    }
+    Experience.findByIdAndUpdate(req.params.id, {approved: true},
+    (err, exp) => {
+        if(err || !exp) {
+            res.status(500).send({err: 'Failed to update experience.'});
+        } else {
+            res.status(200).send({message: 'Experience successfully approved'});
+        }
     });
 }
 

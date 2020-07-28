@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 600,
         backgroundColor: 'rgba(49, 49, 49, 0.9)'
     },
-    position: { top: 100 }
+    position: { top: 80 }
 }));
 
 const Snackbar = ({open, onClose, message}) => {
@@ -24,8 +24,8 @@ const Snackbar = ({open, onClose, message}) => {
         ContentProps={{classes: { root: classes.root }}}
         classes={{anchorOriginTopRight: classes.position}}
         open={open}
-        autoHideDuration={2700}
         onClose={onClose}
+        autoHideDuration={2700}
         message={message}/>
     );
 }

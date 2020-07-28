@@ -1,6 +1,4 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
-import {logout} from '../../store/actions/user';
 import {Link} from 'react-router-dom';
 
 //Components and icons
@@ -18,10 +16,6 @@ const useStyles = makeStyles(styles);
 
 const Footer = () => {
     const classes = useStyles();
-
-    //When switching to admin mode, logout
-    const dispatch = useDispatch();
-    const logoutUser = () => { dispatch(logout()); }
 
     return (
         <footer className={classes.root}>
@@ -62,9 +56,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className={classes.bottom}>
-                <Link to="/admin" onClick={logoutUser}>
-                    &copy; 2020 Ramble Technologies Inc
-                </Link>
+                <p>&copy; 2020 Ramble Technologies Inc</p>
                 <div>
                     {/* TODO: Add real links to pages here */}
                     <p>+1 514 654-7156</p>

@@ -192,12 +192,13 @@ const experienceData = [
         region: 'Massachusetts',
     }}
 ];
-const images = ['Ramble/Experiences/demo_1.jpeg',
-                'Ramble/Experiences/demo_2.jpeg',
-                'Ramble/Experiences/demo_3.jpeg',
-                'Ramble/Experiences/demo_4.jpeg',
-                'Ramble/Experiences/demo_5.jpeg',
-                'Ramble/Experiences/demo_6.jpeg'];
+
+const images = [`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_1.jpeg`,
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_2.jpeg`,
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_3.jpeg`,
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_4.jpeg`,
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_5.jpeg`,
+                `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_6.jpeg`];
 
 const seedDB = async () => {
     //Clear database
@@ -214,7 +215,7 @@ const seedDB = async () => {
     [...experienceData, ...experienceData, ...experienceData]
     .forEach(async seed => {
         const exp = new Experience(seed);
-        exp.approved = true;
+        exp.approved = Math.random() < 0.5;
         exp.location.displayLocation = `${exp.location.city}, ${exp.location.region}`;
         const randImgIndex = Math.floor(Math.random() * 6);
         exp.images.push(images[randImgIndex]);

@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useForm} from 'react-hook-form';
-import {emailAuth} from '../../../store/actions/user';
+import {emailAuth, adminLogin} from '../../store/actions/user';
+import {useHistory} from 'react-router-dom';
 
 //MUI
 import FormControl from '@material-ui/core/FormControl';
@@ -10,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 
-import TextField from '../../../components/Input/TextField';
+import TextField from '../Input/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -26,6 +27,20 @@ const LogInDialog = (props) => {
         window.localStorage.setItem('redirectURL', props.currentRoute);
     }, [props.currentRoute]);
     
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const handleLogIn = (data, e) => {
+        if(data.email.startsWith('RAMBLE_ADMIN__') &&
+           data.password.startsWith('RAMBLE_ADMIN__')) {
+            const username = data.email.replace('RAMBLE_ADMIN__', '');
+            const password = data.password.replace('RAMBLE_ADMIN__', '');
+            dispatch(adminLogin({username, password}));
+            history.push('/admin');
+        } else {
+            dispatch(emailAuth(data, 'login'));
+        }
+    }
+
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
         classes={{ paper: classes.paper }}>
@@ -34,10 +49,10 @@ const LogInDialog = (props) => {
                 <h5 className="title">Log in</h5>
             </div>
             <DialogContent>
-                <form onSubmit={handleSubmit(props.logInWithEmail)}>
+                <form onSubmit={handleSubmit(handleLogIn)}>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField name="email" type="email"
+                        <TextField name="email"
                         inputRef={register({required: true})}/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
@@ -74,8 +89,4 @@ const LogInDialog = (props) => {
     );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    logInWithEmail: (userInfo) => dispatch(emailAuth(userInfo, 'login'))
-});
-
-export default connect(null, mapDispatchToProps)(LogInDialog);
+export default LogInDialog;

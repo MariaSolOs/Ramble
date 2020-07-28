@@ -1,10 +1,9 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {fetchExperiences} from '../../../store/actions/experiences';
 import useNumberField from '../../../hooks/useNumberField';
 import useLocations from '../../../hooks/useLocations';
-import {CloudinaryContext} from '../../../context/cloudinaryContext';
 
 //Components and icons
 import ReferBox from './ReferBox';
@@ -23,7 +22,6 @@ const useStyles = makeStyles(styles);
 const Landing = (props) => {
     const classes = useStyles();
 
-    const cloudinary = useContext(CloudinaryContext);
     const dispatch = useDispatch();
     const cities = useLocations();
     const history = useHistory();
@@ -88,8 +86,7 @@ const Landing = (props) => {
             <ReferBox/>
             </div>
             <div className={classes.image}>
-                <img src={cloudinary.url('Ramble/Homepage/fireBalloon.jpeg', 
-                {height: 700, width: 550, crop: 'fill', gravity: 'north', secure: true})}
+                <img src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,g_north,h_700,w_550/v1/Ramble/Homepage/fireBalloon.jpeg`}
                 alt="Fire balloon"/>
             </div>
         </div>

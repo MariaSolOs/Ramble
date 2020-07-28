@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import useAuthDialogReducer from './authDialogReducer';
 
-import SignUpDialog from './Dialogs/SignUpDialog';
-import SignUpWithEmailDialog from './Dialogs/SignUpWithEmailDialog';
-import LogInDialog from './Dialogs/LogInDialog';
+import SignUpDialog from '../../components/AuthDialogs/SignUpDialog';
+import SignUpWithEmailDialog from '../../components/AuthDialogs/SignUpWithEmailDialog';
+import LogInDialog from '../../components/AuthDialogs/LogInDialog';
 
 const withAuthDialogs = (Component) => (props) => {
     const isAuth = useSelector(state => state.user.token !== null);

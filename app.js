@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './.env' });
 const express = require('express'),
       app = express(),
       cors = require('cors'),
@@ -6,7 +7,6 @@ const express = require('express'),
       path = require('path'),
       compression = require('compression'),
       seedDB = require('./experienceSeeds');
-require('dotenv').config();
 
 //Setting environment variables
 const PORT = process.env.PORT || 5000;

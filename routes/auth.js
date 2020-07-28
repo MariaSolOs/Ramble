@@ -1,6 +1,8 @@
 const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
+      {authenticateToken} = require('../middleware/JWTMiddleware'),
+      {findUser} = require('../middleware/profileMiddleware'),
       {sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
       controller = require('../controllers/authController');
 
@@ -8,7 +10,7 @@ router.post('/email-register',
             controller.registerUserWithEmail, 
             sendToken);
 router.post('/email-login', 
-            passport.authenticate('local', {failureRedirect: '/'}), 
+            passport.authenticate('local', { failureRedirect: '/' }),
             (req, res, next) => {
                 req.userId = req.user._id;
                 req.isAdmin = false;
@@ -45,16 +47,18 @@ router.get('/google/callback',
             },
             redirectUserWithCookie);  
 
-router.post('/admin-register', 
-            controller.registerAdmin,
-            sendToken);
 router.post('/admin-login',
-            passport.authenticate('local-admin', {failureRedirect: '/'}), 
-            (req, res, next) => {
-                req.userId = req.user._id;
-                req.isAdmin = true;
-                next();
-            }, 
+    passport.authenticate('local-admin', {failureRedirect: '/'}), 
+    (req, res, next) => {
+        req.userId = req.user._id;
+        req.isAdmin = true;
+        next();
+    }, sendToken);
+//Only users with respective permissions can register new admins
+router.post('/admin-register', 
+            authenticateToken,
+            findUser,
+            controller.registerAdmin,
             sendToken);
             
 router.get('/logout', controller.logout);

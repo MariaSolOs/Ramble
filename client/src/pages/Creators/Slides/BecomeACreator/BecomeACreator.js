@@ -1,8 +1,7 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import uuid from 'react-uuid';
-import {CloudinaryContext} from '../../../../context/cloudinaryContext';
 import withAuthDialogs from '../../../../hoc/withAuthDialogs/withAuthDialogs';
 
 //Styles
@@ -10,16 +9,15 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './BecomeACreatorStyles';
 const useStyles = makeStyles(styles);
 
-const gridImages = ['Ramble/Creators/creatorGrid1.jpeg',
-                    'Ramble/Creators/creatorGrid2.jpeg',
-                    'Ramble/Creators/creatorGrid3.jpeg',
-                    'Ramble/Creators/creatorGrid4.jpeg',
-                    'Ramble/Creators/creatorGrid5.jpeg'];
+const gridImages = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid1.jpeg`,
+                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid2.jpeg`,
+                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid3.jpeg`,
+                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid4.jpeg`,
+                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid5.jpeg`];
 
 const BecomeACreator = (props) => {
     const classes = useStyles();
 
-    const cloudinary = useContext(CloudinaryContext);
     const isAuth = useSelector(state => state.user.token !== null);
 
     return (
@@ -43,8 +41,8 @@ const BecomeACreator = (props) => {
                     <figure 
                     className={`grid-item grid-item-${index + 1}`} 
                     key={uuid()} >
-                        <img src={cloudinary.url(url, 
-                        {height: 500, width: 'auto', dpr: 'auto', quality: 'auto', secure: true})}
+                        <img 
+                        src={url}
                         alt={`Creator grid item ${index}`}
                         className={classes.gridImg}/>
                     </figure>

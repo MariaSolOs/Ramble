@@ -1,11 +1,10 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {saveExperience, unsaveExperience} from '../../../store/actions/user';
 import axios from 'axios';
 import {useParams, useHistory} from 'react-router-dom';
 import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
 import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
-import {CloudinaryContext} from '../../../context/cloudinaryContext';
 
 //Components and icons
 import BookExperience from '../BookExperience/BookExperience';
@@ -79,19 +78,13 @@ const ShowExperience = (props) => {
     }, []);
 
     //Carousel images
-    const cloudinary = useContext(CloudinaryContext);
     const images = exp && 
         exp.images.map(img => {
-            const original =
-            cloudinary.url(img, 
-                {height: 700, crop: 'fill', quality: 'auto', dpr: 'auto', secure: true},
-            );
-            const thumbnail =
-            cloudinary.url(img, 
-                {height: 200, width: 150, crop: 'thumb', quality: 30, secure: true},
-            );
+            const original = img.replace('h_400', 'h_700');
+            const thumbnail = img.replace('h_400', 'h_200');
             return { original, thumbnail }
-    });
+        }
+    );
 
     return (
         <div className={classes.root}>

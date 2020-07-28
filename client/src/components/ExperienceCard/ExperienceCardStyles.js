@@ -1,13 +1,47 @@
-import React, {useContext} from 'react';
-import {CloudinaryContext} from '../context/cloudinaryContext';
-
-//MUI
-import StarRateIcon from '@material-ui/icons/StarRate';
-
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
     root: {
+        borderRadius: '1.5rem',
+        display: 'inline-block',
+        overflow: 'hidden',
+        width: '21%',
+        minWidth: 170,
+        height: 300,
+        position: 'relative',
+        margin: '0 1.35rem 1.35rem 0',
+        '&:hover': {
+            transform: 'scale(1.03)',
+            transition: 'transform 0.5s'
+        }
+    },
+
+    //Save button
+    saveButton: {
+        position: 'absolute',
+        top: 10, right: 10,
+        height: 36, width: 36,
+        backgroundColor: 'rgba(256, 256, 256, 0.56)',
+        '& svg': {
+            //Heart color: red is exp is saved, white if not
+            color: props => props.saved? '#FE4164' : '#FFF',
+            fontSize: '1.25rem'
+        }
+    },
+
+     //Tooltip
+     tooltip: {
+        fontFamily: 'Helvetica, sans-serif',
+        letterSpacing: '-0.05rem',
+        fontWeight: 'bold',
+        fontSize: 11,
+        whiteSpace: 'nowrap',
+    },
+    tooltip_top: { 
+        position: 'absolute',
+        right: -50,
+        top: -50
+    },
+
+    card: {
         cursor: 'default',
         flexShrink: 0,
         flexDirection: 'column',
@@ -68,31 +102,6 @@ const useStyles = makeStyles((theme) => ({
             letterSpacing: '-0.02rem'
         }
     }
-}));
+});
 
-/**
- * Displays a single experience card
- * @param {Object} exp - Experience to display
- */
-const ExperienceCard = (props) => {
-    const classes = useStyles();
-    const cloudinary = useContext(CloudinaryContext);
-
-    return (
-        <div className={classes.root}>
-            <img src={cloudinary.url(props.exp.images[0], 
-            {height: 400, dpr: 'auto', quality: 'auto', crop: 'fill', secure: true})}
-            alt={`Experience - ${props.exp.title}`}/>
-            <div className={classes.body}>
-                <p className={classes.title}>{props.exp.title}</p>
-                <p className={classes.location}>{props.exp.location.displayLocation}</p>
-                <p className={classes.rating}>{props.exp.rating}<StarRateIcon/></p>
-                <p className={classes.price}>
-                    <span>${props.exp.price.perPerson}</span> PER PERSON
-                </p>
-            </div>
-        </div>
-    );
-}
-
-export default React.memo(ExperienceCard);
+export default styles;

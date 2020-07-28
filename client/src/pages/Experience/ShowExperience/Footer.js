@@ -47,7 +47,6 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-//TODO: Add booking functionality
 const Footer = ({price, onBooking}) => {
     const classes = useStyles();
     return (

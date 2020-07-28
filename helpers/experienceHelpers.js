@@ -1,4 +1,4 @@
-//Helpers
+//To deal with Mongoose dates
 exports.extractDayFrame = (date) => {
     const dayStart = new Date(date);
     const day = (60 * 60 * 24 * 1000) - 1;

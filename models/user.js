@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     passwordHash: String,
     photo: {
         type: String, 
-        default: 'https://res.cloudinary.com/dxod7etqu/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg'
+        default: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg`
     },
     city: String,
     pastExperiences: [{

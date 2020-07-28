@@ -1,25 +1,46 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
+import withSnackbar from '../hoc/withSnackbar';
 
 //Pages and layout
+import Snackbar from '../components/Snackbar';
 import Nav from '../components/Navs/AdminNav';
-import Auth from '../pages/Admin/Auth/Auth';
+import ApproveExps from '../pages/Admin/ApproveExps';
+import ApprovalPage from '../pages/Admin/ApprovalPage';
+import Register from '../pages/Admin/Register';
 
 const AdminApp = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();
-    //const isAuth = useSelector(state => state.user.token !== null);
 
     return (
         <>
-            <Nav/>
+            <Nav 
+            isAuth={props.isAuth}
+            canRegister={props.canRegister} 
+            canEditExps={props.canEditExps}/>
             <Switch location={location}>
-                <Route exact path={`${path}/`} component={Auth}/>
-                <Redirect to="/"/>
+                <Route path={`${path}/approveExps`}>
+                    <ApproveExps displaySnackbar={props.displaySnackbar}/>
+                </Route>
+                <Route path={`${path}/approveExp/:id`}>
+                    <ApprovalPage displaySnackbar={props.displaySnackbar}/>
+                </Route>
+                <Route path={`${path}/register`}>
+                    <Register displaySnackbar={props.displaySnackbar}/>
+                </Route>
+                {/* <Route exact path={`${path}/`}>
+                    <Auth/>
+                </Route> */}
             </Switch>
         </>
     );
 }
 
-export default AdminApp;
+const mapStateToProps = (state, ownProps) => ({
+    canRegister: ownProps.isAuth && state.user.data.permissions.includes('addAdmin'),
+    canEditExps: ownProps.isAuth && state.user.data.permissions.includes('approveExp')
+});
+
+export default connect(mapStateToProps, null)(withSnackbar(AdminApp, Snackbar));

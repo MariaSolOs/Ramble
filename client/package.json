@@ -19,7 +19,6 @@
     "@wojtekmaj/react-daterange-picker": "^3.0.0",
     "algolia-places-react": "^1.6.0",
     "axios": "^0.19.2",
-    "cloudinary-core": "^2.10.3",
     "http-proxy-middleware": "^1.0.4",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",

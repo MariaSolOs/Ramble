@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useForm} from 'react-hook-form';
-import {emailAuth} from '../../../store/actions/user';
+import {emailAuth} from '../../store/actions/user';
 
 //MUI
 import FormControl from '@material-ui/core/FormControl';
@@ -10,7 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 
-import TextField from '../../../components/Input/TextField';
+import TextField from '../../components/Input/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

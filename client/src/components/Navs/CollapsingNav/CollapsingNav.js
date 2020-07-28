@@ -64,7 +64,7 @@ const CollapsingNav = (props) => {
                         paper: classes.collapsedPaper,
                         list: classes.collapsedList
                     }}>
-                        <MenuItem component={NavLink} to="/creator"
+                        <MenuItem component={NavLink} to="/become-creator"
                         onClick={closeMenu}>
                             Become a Creator
                         </MenuItem>
@@ -83,7 +83,7 @@ const CollapsingNav = (props) => {
                     </Menu>
                 </div>
                 <div className={classes.expandedLinks}>
-                    <Link to="/creator" className={classes.navLink} style={{color: '#FFF'}}>
+                    <Link to="/become-creator" className={classes.navLink} style={{color: '#FFF'}}>
                         Become a Creator
                     </Link>
                     {props.isAuth? profileMenu : 

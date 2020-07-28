@@ -38,9 +38,18 @@ const AdminNav = (props) => {
     return (
         <AppBar onRambleClick={logoutAdmin}>
             <div className={classes.root}>
-                <Link to="/" onClick={logoutAdmin} className={classes.navLink}>
-                    Logout
-                </Link>
+                {props.canRegister && 
+                    <Link to="/admin/register" className={classes.navLink}>
+                        Register a new admin
+                    </Link>}
+                {props.canEditExps && 
+                    <Link to="/admin/approveExps" className={classes.navLink}>
+                        Approve experiences
+                    </Link>}
+                {props.isAuth && 
+                    <Link to="/" onClick={logoutAdmin} className={classes.navLink}>
+                        Logout
+                    </Link>}
             </div>
         </AppBar>
     ); 

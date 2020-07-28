@@ -2,6 +2,7 @@ import * as types from '../actionTypes';
 
 const initialState = {
     loading: false,
+    message: '',
     token: null,
     data: {},
     pastExps: [],
@@ -31,8 +32,21 @@ const authReducer = (state = initialState, action) => {
                 savedExps: action.savedExps.slice(0)
             }
         }
+        case types.SET_MSG: {
+            return {
+                ...state,
+                message: action.message
+            }
+        }
         case types.RESET_USER: {
-            return { ...initialState }
+            return { 
+                ...state,
+                loading: false,
+                token: null,
+                data: {},
+                pastExps: [],
+                savedExps: []
+            }
         }
         default: { return state; }
     }

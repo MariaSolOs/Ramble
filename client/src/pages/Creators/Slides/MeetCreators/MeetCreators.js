@@ -1,6 +1,5 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import creatorBios from './biosData';
-import {CloudinaryContext} from '../../../../context/cloudinaryContext';
 
 //Arrow icons
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -14,7 +13,6 @@ const useStyles = makeStyles(styles);
 
 const CreatorCard = (props) => {
     const classes = useStyles();
-    const cloudinary = useContext(CloudinaryContext);
 
     const [currentSlide, setSlide] = useState(0);
     const creator = creatorBios[currentSlide];
@@ -37,8 +35,8 @@ const CreatorCard = (props) => {
             <div className={classes.bioCard}>
                 <div className={classes.imageContainer}>
                     <KeyboardArrowLeftIcon onClick={scrollLeft}/>
-                    <img src={cloudinary.url(creator.img, 
-                    {height: 500, width: 500, gravity: 'face', crop: 'thumb', secure: true})}
+                    <img 
+                    src={creator.img}
                     alt={`Creator Bio - ${creator.name}`}
                     className={classes.gridImg}/>
                     <KeyboardArrowRightIcon onClick={scrollRight}/>

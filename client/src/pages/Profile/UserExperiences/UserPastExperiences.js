@@ -1,9 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom';
 
 //Components
-import ExperienceCard from '../../../components/ExperienceCard';
+import ExperienceCard from '../../../components/ExperienceCard/ExperienceCard';
 import NavRow from './UserExperiencesNavRow';
 
 //Styles
@@ -15,15 +16,21 @@ const UserPastExperiences = (props) => {
     const classes = useStyles();
     const pastExps = useSelector(state => state.user.pastExps);
 
+    const history = useHistory();
+    const handleViewExp = (expId) => (e) => {
+        history.push(`/experience/${expId}`);
+    }
+
     return (
         <div className={classes.root}>
             <NavRow/>
             <div className={classes.gallery}>
                 {pastExps.length > 0? 
                     pastExps.map(exp => (
-                        <div className={classes.card} key={exp._id}>  
-                            <ExperienceCard exp={exp}/>
-                        </div>
+                        <ExperienceCard
+                        exp={exp}
+                        className={classes.card}
+                        onCardClick={handleViewExp(exp._id)}/>
                     )) : 
                     <h2 className={classes.exploreLink}>
                         <Link to="/experience/search">Start exploring</Link>

@@ -20,22 +20,12 @@ const styles = (theme) => ({
         overflow: 'hidden',
         width: '40%',
         minWidth: 170,
-        height: 230,
+        height: 250,
         position: 'relative',
         margin: '1% 4%',
         '&:hover': {
             transform: 'scale(1.02)',
             transition: 'transform 0.5s'
-        }
-    },
-    heartButton: {
-        position: 'absolute',
-        top: 10, right: 10,
-        height: 36, width: 36,
-        backgroundColor: 'rgba(256, 256, 256, 0.56)',
-        '& svg': {
-            color: '#FE4164',
-            fontSize: '1.25rem'
         }
     },
 

@@ -1,16 +1,5 @@
 import * as types from '../actionTypes';
-
-//Axios instance with token in header
-import axios from 'axios';
-const tokenAxios = () => {
-    const instance = axios.create();
-    instance.interceptors.request.use((config) => {
-        const token = window.localStorage.getItem('token');
-        config.headers.Authorization = token ? `JWT ${token}`: '';
-        return config;
-    });
-    return instance;
-}
+import axios from '../../tokenizedAxios';
 
 //Clean actions
 const authInit = () => ({ type: types.AUTH_INIT });
@@ -20,14 +9,17 @@ const setUserData = (token, data) => ({
 const setUserExps = (pastExps, savedExps) => ({
     type: types.SET_USER_EXPS, pastExps, savedExps
 });
+const setMessage = (message) => ({
+    type: types.SET_MSG, message
+});
 const resetUser = () => ({ type: types.RESET_USER });
 
 export const fetchProfile = () => {
     return dispatch => {
         if(!window.localStorage.getItem('token')) { return; }
-        tokenAxios().get('/api/profile')
+        dispatch(authInit());
+        axios.get('/api/profile')
         .then(res => {
-            console.log(res.data)
             if(res.status === 200) {
                 dispatch(setUserData(res.data.token, res.data.userData));
                 if(!res.data.isAdmin) {
@@ -42,10 +34,10 @@ export const fetchProfile = () => {
 }
 
 //For admin authentication
-export const adminAuth = (adminInfo, authType) => {
+export const adminLogin = (adminInfo) => {
     return dispatch => {
         dispatch(authInit());
-        axios.post(`/api/auth/admin-${authType}`, adminInfo)
+        axios.post(`/api/auth/admin-login`, adminInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
                 window.localStorage.setItem('token', res.data.token);
@@ -69,12 +61,15 @@ export const emailAuth = (userInfo, authType) => {
             if(res.status === 201 || res.status === 200) {
                 window.localStorage.setItem('token', res.data.token);
                 dispatch(fetchProfile());
-            } else {
-                dispatch(resetUser());
-            }
+            } else { dispatch(resetUser()); }
         })
         .catch(err => { 
             console.log(`EMAIL AUTH FAILED: ${err}`); 
+            if(err.response.status === 409) {
+                dispatch(setMessage('Someone is already using that email...'));
+            } else {
+                dispatch(setMessage('Something went wrong...'));
+            }
             dispatch(resetUser());
         });
     }
@@ -83,21 +78,26 @@ export const emailAuth = (userInfo, authType) => {
 //For editing user info
 export const editProfile = (updatedInfo) => {
     return dispatch => {
-        tokenAxios().put('/api/profile/edit', updatedInfo)
+        axios.put('/api/profile/edit', updatedInfo)
         .then(res => {
             if(res.status === 201) {
                 //Update state with new user data
                 dispatch(setUserData(res.data.token, res.data.userData));
+                dispatch(setMessage(`Hey ${res.data.userData.fstName}! 
+                Your profile has been updated.`));
             }
         })
-        .catch(err => console.log(`EDIT PROFILE FAILED: ${err}`))
+        .catch(err => {
+            console.log(`EDIT PROFILE FAILED: ${err}`);
+            dispatch(setMessage("Oh no! We couldn't update your profile..."))
+        });
     }
 }
 
 //For saving/unsaving an experience
 export const saveExperience = (expId) => {
     return dispatch => {
-        tokenAxios().post('/api/profile/exps', {expId})
+        axios.post('/api/profile/exps', {expId})
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences
@@ -109,7 +109,7 @@ export const saveExperience = (expId) => {
 }
 export const unsaveExperience = (expId) => {
     return dispatch => {
-        tokenAxios().delete('/api/profile/exps', {data: {expId}})
+        axios.delete('/api/profile/exps', {data: {expId}})
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences

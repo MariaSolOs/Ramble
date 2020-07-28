@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import {CloudinaryContext} from '../../../context/cloudinaryContext';
+import React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
 
@@ -51,7 +50,6 @@ const useStyles = makeStyles(() => ({
 
 const ExperienceSummary = ({date, timeslot, exp}) => {
     const classes = useStyles();
-    const cloudinary = useContext(CloudinaryContext);
 
     //To format the occurrence
     const format = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -60,8 +58,8 @@ const ExperienceSummary = ({date, timeslot, exp}) => {
 
     return (
         <div className={classes.root}>
-            <img src={cloudinary.url(exp.img, 
-            {height: 200, dpr: 'auto', quality: 'auto', crop: 'fill', secure: true})}
+            <img 
+            src={exp.img.replace('h_400', 'h_200')}
             alt={`Experience - ${exp.title}`}/>
             <div className={classes.details}>
                 <h4 className={classes.title}>{exp.title}</h4>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useRouteMatch, Switch, Route} from 'react-router-dom';
+import {useRouteMatch, Switch, Route, useLocation} from 'react-router-dom';
 
 //Pages
 import Layout from './Layout/Layout';
@@ -9,10 +9,11 @@ import Info from './UserInfo';
 
 const Router = (props) => {
     const {path} = useRouteMatch();
+    const location = useLocation();
 
     return (
         <Layout>
-            <Switch>
+            <Switch location={location}>
                 <Route path={`${path}/exp/past`}>
                     <PastExperiences/>
                 </Route>

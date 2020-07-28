@@ -95,7 +95,8 @@ const styles = (theme) => ({
             margin: 0,
             display: 'inline',
             color: '#C0BFBA',
-            fontSize: '0.85rem'
+            fontSize: '0.85rem',
+            letterSpacing: '-0.05rem'
         },
         '& > div a': {
             marginLeft: 20

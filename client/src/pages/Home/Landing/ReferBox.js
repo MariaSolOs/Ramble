@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import {CloudinaryContext} from '../../../context/cloudinaryContext';
+import React from 'react';
 
 //Components and icons
 import Avatar from '@material-ui/core/Avatar';
@@ -75,13 +74,12 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const referAvat = ['Ramble/Homepage/ref_1.jpeg',
-                   'Ramble/Homepage/ref_2.jpeg',
-                   'Ramble/Homepage/ref_3.jpeg'];
+const referAvat = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_1.jpeg`,
+                   `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_2.jpeg`,
+                   `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_3.jpeg`];
 
 const ReferBox = (props) => {
     const classes = useStyles();
-    const cloudinary = useContext(CloudinaryContext);
     
     //TODO: Add refer codes here (discount for friend?)
     return (
@@ -91,14 +89,11 @@ const ReferBox = (props) => {
                 <h4 className={classes.title2}>your next experience.</h4>
                 <div className={classes.body}>
                     <div className={classes.referAvatars}>
-                        <Avatar src={cloudinary.url(referAvat[1], 
-                        {height: 80, width: 80, crop: 'thumb', gravity: 'face'})}
+                        <Avatar src={referAvat[1]}
                         alt="Refer a friend"/>
-                        <Avatar src={cloudinary.url(referAvat[0], 
-                        {height: 80, width: 80, crop: 'thumb', gravity: 'face'})}
+                        <Avatar src={referAvat[0]}
                         alt="Refer a friend" className="middle-avatar"/>
-                        <Avatar src={cloudinary.url(referAvat[2], 
-                        {height: 80, width: 80, crop: 'thumb', gravity: 'face'})}
+                        <Avatar src={referAvat[2]}
                         alt="Refer a friend"/>
                     </div>
                     <div className={classes.referMedia}>

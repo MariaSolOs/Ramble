@@ -1,18 +1,16 @@
-import React, {useContext} from 'react';
-import {CloudinaryContext} from '../../../context/cloudinaryContext';
+import React from 'react';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './GalleryStyles';
 const useStyles = makeStyles(styles);
 
-const images = ['Ramble/Homepage/fireBalloon.jpeg',
-                'Ramble/Creators/creatorGrid1.jpeg',
-                'Ramble/Homepage/cityMusical.jpeg'];
+const images = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Homepage/fireBalloon.jpeg`,
+                `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Creators/creatorGrid1.jpeg`,
+                `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Homepage/cityMusical.jpeg`];
 
 const Partake = (props) => {
     const classes = useStyles();
-    const cloudinary = useContext(CloudinaryContext);
     
     return (
         <div className={classes.root}>
@@ -24,11 +22,11 @@ const Partake = (props) => {
                     access to their universe.</h5>
                 </div>
                 <div className={classes.images}>
-                    <img src={cloudinary.url(images[0], {height: 500, width: 400, crop: 'fill', secure: true})}
+                    <img src={images[0]}
                     alt="Fire balloon"/>
-                    <img src={cloudinary.url(images[1], {height: 500, width: 400, crop: 'fill', secure: true})}
+                    <img src={images[1]}
                     alt="Pool dive"/>
-                    <img src={cloudinary.url(images[2], {height: 500, width: 400, crop: 'fill', secure: true})}
+                    <img src={images[2]}
                     alt="Street singers"/>
                 </div>
             </div>

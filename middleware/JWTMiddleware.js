@@ -1,16 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-exports.generateAccessToken = (userId, isAdmin, expireTime) => {
-    return jwt.sign({
-        userId, 
-        isAdmin
-    }, 
-    process.env.JWT_SECRET, 
-    {   expiresIn: expireTime, 
-        issuer: 'RAMBLE:API'    }
-    );
-}
-
 exports.authenticateToken = (req, res, next) => {
     //Gather the jwt access token from the request header
     const authHeader = req.headers['authorization'];

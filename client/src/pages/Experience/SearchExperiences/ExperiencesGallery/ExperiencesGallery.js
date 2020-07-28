@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {connect} from 'react-redux';
+import {saveExperience, unsaveExperience} from '../../../../store/actions/user';
+import {useHistory} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 import ExperienceCard from './ExperienceCard';
@@ -26,12 +29,30 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const ExperiencesGallery = ({experiences}) => {
+const ExperiencesGallery = (props) => {
     const classes = useStyles();
+
+    //For showing experience pages
+    const history = useHistory();
+    const handleViewExp = useCallback((expId) => (e) => {
+        history.push(`/experience/${expId}`);
+    }, [history]);
+
+    //For saving/unsaving an experience
+    const {savedExps, unsaveExp, saveExp} = props;
+    const handleHeartClick = useCallback((expId) => (e) => {
+        //Don't show the experience page
+        e.stopPropagation();
+        if(savedExps.includes(expId)) {
+            unsaveExp(expId);
+        } else {
+            saveExp(expId);
+        }
+    }, [savedExps, saveExp, unsaveExp]);
 
     return (
         <TransitionGroup className={classes.gallery}>
-            {experiences.map(exp => (
+            {props.experiences.map(exp => (
             <CSSTransition 
                 key={exp._id}
                 timeout={300}
@@ -40,11 +61,25 @@ const ExperiencesGallery = ({experiences}) => {
                     enterActive: classes.fadeEnterActive,
                     exit: classes.fadeExit
                 }}>
-                    <ExperienceCard exp={exp}/>
+                    <ExperienceCard 
+                    exp={exp}
+                    isAuth={props.isAuth}
+                    saved={props.savedExps.includes(exp._id)}
+                    onHeartClick={handleHeartClick(exp._id)}
+                    onViewExperience={handleViewExp(exp._id)}/>
                 </CSSTransition>
             ))}
         </TransitionGroup>
     );
 }
 
-export default React.memo(ExperiencesGallery);
+const mapStateToProps = (state) => ({
+    isAuth: (state.user.token !== null),
+    savedExps: state.user.savedExps.map(exp => exp._id)
+});
+const mapDispatchToProps = (dispatch) => ({
+    saveExp: (expId) => dispatch(saveExperience(expId)),
+    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExperiencesGallery);

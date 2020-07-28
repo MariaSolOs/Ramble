@@ -5,13 +5,27 @@ const helpers = require('../helpers/profileHelpers');
 
 //For fetching profile information
 exports.getProfile = (req, res) => {
-    req.user.populate('savedExperiences pastExperiences').execPopulate()
-    .then(user => {
-        res.status(200).send({
-            userData: helpers.getUserData(user, req.token),
-            ...helpers.getUserExps(user)
+    if(req.isAdmin) {
+        return res.status(200).send({ 
+            isAdmin: true,
+            token: req.token,
+            userData: {
+                username: req.user.username,
+                permissions: req.user.permissions
+            }
         });
-    });
+    } else {
+        req.user.populate('savedExperiences pastExperiences').execPopulate()
+        .then(user => {
+            res.status(200).send({
+                isAdmin: false,
+                token:  req.token,
+                userData: helpers.getUserData(user),
+                pastExps: user.pastExperiences,
+                savedExps: user.savedExperiences
+            });
+        });
+    }
 }
 
 //Editing user info
@@ -21,7 +35,10 @@ exports.editProfile = async (req, res) => {
             req.user[field] = req.body[field];
         }
         await req.user.save();
-        return res.status(201).send({ userData: helpers.getUserData(req.user, req.token) });
+        return res.status(201).send({ 
+            token: req.token,
+            userData: helpers.getUserData(req.user) 
+        });
     } catch(err) {
         return res.status(409).send({error: "Couldn't update user"});
     }
@@ -37,7 +54,10 @@ exports.saveExperience = async (req, res) => {
         }
         req.user.populate('pastExperiences savedExperiences').execPopulate()
         .then(user => {
-            res.status(200).send({ ...helpers.getUserExps(user) });
+            res.status(200).send({ 
+                pastExps: user.pastExperiences,
+                savedExps: user.savedExperiences
+            });
         });
     }catch (err) {
         res.status(409).send({err: `Couldn't save experience: ${err}`});
@@ -50,12 +70,10 @@ exports.unsaveExperience = async (req, res) => {
     req.user.savedExperiences = newExps;
     await req.user.save();
     req.user.populate('pastExperiences savedExperiences').execPopulate()
-    .then(user => { res.status(200).send({ ...helpers.getUserExps(user) }); });
-}
-
-//Logout route
-exports.logout = (req, res) => {
-    req.logout();
-    res.clearCookie('token'); //Delete auto login cookie
-    res.redirect(`${process.env.CLIENT_URL}`);
+    .then(user => { 
+        res.status(200).send({ 
+            pastExps: user.pastExperiences,
+            savedExps: user.savedExperiences
+        }); 
+    });
 }

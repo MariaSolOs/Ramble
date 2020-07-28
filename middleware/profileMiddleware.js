@@ -1,18 +1,16 @@
 const User = require('../models/user'),
-      {generateAccessToken} = require('../middleware/JWTMiddleware');
+      Admin = require('../models/admin');
 
-exports.findUser = (req, res, next) => {
-    User.findById(req.userId, (err, user) => {
-        if(err || !user) { 
-            return res.status(404).send({error: "Couldn't find user."}) ;
-        }
-        req.user = user;
-        next();
-    });
-}
-
-exports.redirectWithCookie = (req, res) => {
-    const token = generateAccessToken(req.userId, false, '12h');
-    res.cookie('token', token);
-    return res.redirect(`${process.env.CLIENT_URL}`);
+exports.findUser = async (req, res, next) => {
+    let user;
+    if(req.isAdmin) {
+        user = await Admin.findById(req.userId);
+    } else {
+        user = await User.findById(req.userId);
+    }
+    if(!user) {
+        return res.status(400).send({err: "Couldn't find user."});
+    }
+    req.user = user;
+    next();
 }

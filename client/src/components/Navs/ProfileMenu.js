@@ -76,7 +76,7 @@ const ProfileMenu = (props) => {
     //Close popover when window resizes
     useEffect(() => {
         window.addEventListener('resize', closeMenu);
-        return () => window.removeEventListener('resize', closeMenu);
+        return () => { window.removeEventListener('resize', closeMenu); }
     }, [closeMenu]);
 
     return (

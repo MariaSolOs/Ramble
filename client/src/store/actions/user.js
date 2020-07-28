@@ -1,8 +1,8 @@
 import * as types from '../actionTypes';
 
-//Axios instance for profile API
+//Axios instance with token in header
 import axios from 'axios';
-const userAxios = () => {
+const tokenAxios = () => {
     const instance = axios.create();
     instance.interceptors.request.use((config) => {
         const token = window.localStorage.getItem('token');
@@ -13,56 +13,81 @@ const userAxios = () => {
 }
 
 //Clean actions
-const setProfile = (userData) => ({ 
-    type: types.SET_PROFILE, userData 
+const authInit = () => ({ type: types.AUTH_INIT });
+const setUserData = (token, data) => ({ 
+    type: types.SET_USER_DATA, token, data 
 });
 const setUserExps = (pastExps, savedExps) => ({
     type: types.SET_USER_EXPS, pastExps, savedExps
 });
-const logoutUser = () => ({ 
-    type: types.LOGOUT_USER 
-});
+const resetUser = () => ({ type: types.RESET_USER });
 
 export const fetchProfile = () => {
     return dispatch => {
-        userAxios().get('/api/profile')
+        if(!window.localStorage.getItem('token')) { return; }
+        tokenAxios().get('/api/profile')
         .then(res => {
+            console.log(res.data)
             if(res.status === 200) {
-                dispatch(setProfile(res.data.userData)); 
-                dispatch(setUserExps(res.data.pastExps, res.data.savedExps));          
-            }
-        })
-        .catch(err => { 
+                dispatch(setUserData(res.data.token, res.data.userData));
+                if(!res.data.isAdmin) {
+                    dispatch(setUserExps(res.data.pastExps, res.data.savedExps)); 
+                }        
+            } else { dispatch(resetUser()); }
+        }).catch(err => { 
             console.log(`FETCH PROFILE FAILED: ${err}`); 
             dispatch(logout());
         });
     }
 }
-//TODO: Replace userid by token
 
-//For email authentication
-export const emailAuth = (userInfo, authType) => {
+//For admin authentication
+export const adminAuth = (adminInfo, authType) => {
     return dispatch => {
-        //authtype is login or register
-        axios.post(`/api/${authType}/email`, userInfo)
+        dispatch(authInit());
+        axios.post(`/api/auth/admin-${authType}`, adminInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
                 window.localStorage.setItem('token', res.data.token);
                 dispatch(fetchProfile());
+            } else { dispatch(resetUser()); }
+        })
+        .catch(err => { 
+            console.log(`ADMIN AUTH FAILED: ${err}`); 
+            dispatch(resetUser());
+        });
+    }
+}
+
+//For email authentication
+export const emailAuth = (userInfo, authType) => {
+    return dispatch => {
+        dispatch(authInit());
+        //authtype is login or register
+        axios.post(`/api/auth/email-${authType}`, userInfo)
+        .then(res => {
+            if(res.status === 201 || res.status === 200) {
+                window.localStorage.setItem('token', res.data.token);
+                dispatch(fetchProfile());
+            } else {
+                dispatch(resetUser());
             }
         })
-        .catch(err => { console.log(`EMAIL AUTH FAILED: ${err}`); })
+        .catch(err => { 
+            console.log(`EMAIL AUTH FAILED: ${err}`); 
+            dispatch(resetUser());
+        });
     }
 }
 
 //For editing user info
 export const editProfile = (updatedInfo) => {
     return dispatch => {
-        userAxios().put('/api/profile/edit', updatedInfo)
+        tokenAxios().put('/api/profile/edit', updatedInfo)
         .then(res => {
             if(res.status === 201) {
                 //Update state with new user data
-                dispatch(setProfile(res.data.userData))
+                dispatch(setUserData(res.data.token, res.data.userData));
             }
         })
         .catch(err => console.log(`EDIT PROFILE FAILED: ${err}`))
@@ -72,7 +97,7 @@ export const editProfile = (updatedInfo) => {
 //For saving/unsaving an experience
 export const saveExperience = (expId) => {
     return dispatch => {
-        userAxios().post('/api/profile/exps', {expId})
+        tokenAxios().post('/api/profile/exps', {expId})
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences
@@ -84,7 +109,7 @@ export const saveExperience = (expId) => {
 }
 export const unsaveExperience = (expId) => {
     return dispatch => {
-        userAxios().delete('/api/profile/exps', {data: {expId}})
+        tokenAxios().delete('/api/profile/exps', {data: {expId}})
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences
@@ -99,7 +124,7 @@ export const logout = () => {
     return dispatch => {
         window.localStorage.removeItem('token');
         window.localStorage.setItem('redirectURL', '/');
-        axios.get('/api/profile/logout');
-        dispatch(logoutUser());
+        axios.get('/api/auth/logout');
+        dispatch(resetUser());
     }
 }

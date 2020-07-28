@@ -1,7 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {saveExperience, unsaveExperience} from '../../../../store/actions/user';
-import {useHistory} from 'react-router-dom';
 
 //Components
 import Fab from '@material-ui/core/Fab';
@@ -58,23 +55,8 @@ const useStyles = makeStyles((theme) => ({
 const SearchExperienceCard = (props) => {
     const classes = useStyles({saved: props.saved});
 
-    const history = useHistory();
-
-    //For showing experience pages
-    const handleViewExp = () => {
-        history.push(`/experience/${props.exp._id}`);
-    }
-
-    //For saving/unsaving an experience
-    const heartAction = props.saved? props.unsaveExp : props.saveExp;
-    const handleHeartClick = (e) => {
-        //Don't show the experience page
-        e.stopPropagation();
-        heartAction(props.exp._id);
-    }
-
     return (
-        <div className={classes.card} onClick={handleViewExp}>
+        <div className={classes.card} onClick={props.onViewExperience}>
             {props.isAuth && 
                 <Tooltip 
                 disableFocusListener
@@ -85,7 +67,7 @@ const SearchExperienceCard = (props) => {
                     tooltipPlacementTop: classes.tooltip_top
                 }}>
                     <Fab aria-label="save" disableRipple 
-                    className={classes.saveButton} onClick={handleHeartClick}>
+                    className={classes.saveButton} onClick={props.onHeartClick}>
                         <FontAwesomeIcon icon={faHeart}/>
                     </Fab>
                 </Tooltip>}
@@ -94,13 +76,6 @@ const SearchExperienceCard = (props) => {
     );
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    isAuth: (state.user.data.token !== null),
-    saved: state.user.savedExps.map(exp => exp._id).includes(ownProps.exp._id)
+export default React.memo(SearchExperienceCard, (prevProps, nextProps) => {
+    return prevProps.saved === nextProps.saved
 });
-const mapDispatchToProps = (dispatch) => ({
-    saveExp: (expId) => dispatch(saveExperience(expId)),
-    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchExperienceCard);

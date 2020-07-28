@@ -26,7 +26,4 @@ router.delete('/exps',
                findUser,
                controllers.unsaveExperience);
 
-//Logout route
-router.get('/logout', controllers.logout);
-
 module.exports = router;

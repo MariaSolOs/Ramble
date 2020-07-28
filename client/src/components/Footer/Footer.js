@@ -1,4 +1,6 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
+import {logout} from '../../store/actions/user';
 import {Link} from 'react-router-dom';
 
 //Components and icons
@@ -11,11 +13,15 @@ import {faInstagram} from '@fortawesome/free-brands-svg-icons/faInstagram';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './MainFooterStyles';
+import styles from './FooterStyles';
 const useStyles = makeStyles(styles);
 
 const Footer = () => {
     const classes = useStyles();
+
+    //When switching to admin mode, logout
+    const dispatch = useDispatch();
+    const logoutUser = () => { dispatch(logout()); }
 
     return (
         <footer className={classes.root}>
@@ -56,7 +62,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className={classes.bottom}>
-                <Link to="/admin">
+                <Link to="/admin" onClick={logoutUser}>
                     &copy; 2020 Ramble Technologies Inc
                 </Link>
                 <div>

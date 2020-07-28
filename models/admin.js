@@ -6,6 +6,7 @@ const AdminSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
+        unique: true,
         validate: /R[0-9]{3}[A-Z]{5}/
     },
     passwordHash: {

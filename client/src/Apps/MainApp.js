@@ -1,12 +1,12 @@
 import React, {useEffect, lazy, Suspense} from 'react';
+import {connect} from 'react-redux';
+import {fetchProfile} from '../store/actions/user';
 import Cookies from 'js-cookie';
 import {Route, Switch, useHistory} from 'react-router-dom';
 import CloudinaryProvider from '../context/cloudinaryContext';
-import AdminProvider from '../context/adminContext';
 
-//Pages
 import Spinner from '../components/Spinner';
-import UserApp from './UserApp';
+import PublicApp from './PublicApp';
 const AdminApp = lazy(() => import('./AdminApp'));
 
 const MainApp = (props) => {
@@ -31,20 +31,32 @@ const MainApp = (props) => {
         }
     }, [redirect, history]);
 
+    //For automatic auth after refreshing the page
+    const {fetchProfile} = props;
+    useEffect(() => { 
+        fetchProfile();
+    }, [fetchProfile]);
+
     return (
-        <Suspense fallback={<Spinner/>}> 
-            <CloudinaryProvider>
-                <Switch>
-                    <Route path="/admin">
-                        <AdminProvider>
-                            <AdminApp/>
-                        </AdminProvider>
-                    </Route>
-                    <Route path="/" component={UserApp}/>
-                </Switch>
-            </CloudinaryProvider> 
-        </Suspense>
+        <>
+            {props.loadingUser? <Spinner/> :
+            <Suspense fallback={<Spinner/>}> 
+                <CloudinaryProvider>
+                    <Switch>
+                        <Route path="/admin" component={AdminApp}/>
+                        <Route path="/" component={PublicApp}/>
+                    </Switch>
+                </CloudinaryProvider> 
+            </Suspense>}
+        </>
     );
 }
 
-export default MainApp;
+const mapStateToProps = (state) => ({
+    loadingUser: state.user.loading
+});
+const mapDispatchToProps = (dispatch) => ({
+    fetchProfile: () => dispatch(fetchProfile())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainApp);

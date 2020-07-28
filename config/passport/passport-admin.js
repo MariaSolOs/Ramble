@@ -1,18 +1,18 @@
 const passport = require('passport'),
       LocalStrategy = require('passport-local').Strategy,
-      User = require('../../models/user');
+      Admin = require('../../models/admin');
       
 const local = new LocalStrategy({
-      usernameField: 'email',
+      usernameField: 'username',
       passwordField: 'password',
       session: false
     }, (username, password, done) => {
-        User.findOne({email: username})
-        .then(user => {
-            if (!user || !user.validPassword(password)) {
+        Admin.findOne({username})
+        .then(admin => {
+            if (!admin || !admin.validPassword(password)) {
                 done(null, false);
-            } else { done(null, user); }
+            } else { done(null, admin); }
         }).catch(e => done(e));
 });
 
-passport.use('local', local);
+passport.use('local-admin', local);

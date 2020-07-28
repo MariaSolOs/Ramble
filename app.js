@@ -33,11 +33,12 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(compression());
 
-//Passport configuration
+//Passport configuration and routes
 const passport = require('passport');
 require('./config/passport/passport-facebook');
 require('./config/passport/passport-email');
 require('./config/passport/passport-google');
+require('./config/passport/passport-admin');
 app.use(passport.initialize());
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -45,12 +46,8 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
     done(null, user)
 });
-const passportFacebook = require('./routes/auth/auth-facebook');
-const passportEmail = require('./routes/auth/auth-email');
-const passportGoogle = require('./routes/auth/auth-google');
-app.use(passportFacebook);
-app.use(passportEmail);
-app.use(passportGoogle);
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
 
 //Stripe API:
 const stripeRoutes = require('./routes/stripe');
@@ -63,10 +60,6 @@ app.use('/api/exp', experienceRoutes);
 //Profile API:
 const profileRoutes = require('./routes/profile');
 app.use('/api/profile', profileRoutes);
-
-//Admin API: 
-//const adminRoutes = require('./routes/admin');
-//app.use('/api/admin', adminRoutes);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

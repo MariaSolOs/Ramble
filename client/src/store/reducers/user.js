@@ -1,26 +1,27 @@
 import * as types from '../actionTypes';
 
 const initialState = {
-    data: {
-        token: null,
-        fstName: '',
-        lstName: '',
-        photo: '',
-        city: '',
-        email: '',
-        phoneNumber: '',
-        birthday: ''
-    },
+    loading: false,
+    token: null,
+    data: {},
     pastExps: [],
-    savedExps: [],
+    savedExps: []
 }
 
 const authReducer = (state = initialState, action) => {
     switch(action.type) {
-        case types.SET_PROFILE: {
+        case types.AUTH_INIT: {
+            return {
+                ...initialState,
+                loading: true
+            }
+        }
+        case types.SET_USER_DATA: {
             return {
                 ...state,
-                data: { ...action.userData },
+                loading: false,
+                token: action.token,
+                data: { ...action.data },
             }
         }
         case types.SET_USER_EXPS: {
@@ -30,7 +31,7 @@ const authReducer = (state = initialState, action) => {
                 savedExps: action.savedExps.slice(0)
             }
         }
-        case types.LOGOUT_USER: {
+        case types.RESET_USER: {
             return { ...initialState }
         }
         default: { return state; }

@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
 
 //MUI
-import AppBar from '@material-ui/core/AppBar';
+import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
-import CollapsingNav from './CollapsingNav/CollapsingNav';
 import Logo from './navLogo.png';
 
 import {makeStyles} from "@material-ui/core/styles";
@@ -32,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     //Ramble logo
     brand: {
         alignContent: 'bottom',
+        cursor: 'pointer',
         '& img': {
             height: 48,
             width: 85,
@@ -47,31 +47,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const MainNavbar = (props) => {
+const AppBar = (props) => {
     const classes = useStyles();
-
-    //For fading navbar effect:
-    const [scrollClass, setScrollClass] = useState('');
-    useEffect(() => {
-        window.onscroll = () => {
-            if(window.scrollY >= 100) { setScrollClass('scrolled'); } 
-            else { setScrollClass('') }
-        }
-    }, []);
+    const scrolledNav = useScrollTrigger();
 
     return (
-        <AppBar position="fixed" classes={{ root: `${classes.root} ${scrollClass}` }}>
+        <MUIAppBar 
+        position="fixed" 
+        classes={{ root: `${classes.root} ${scrolledNav && 'scrolled'}` }}>
             <Toolbar>
-                <Link to="/">
+                <div onClick={props.onRambleClick}>
                     <div className={classes.brand}>
                         <img src={Logo} alt="ramble logo"/>
                         <span>ramble</span>
                     </div>
-                </Link>
-                <CollapsingNav {...props}/>
+                </div>
+                {props.children}
             </Toolbar>
-        </AppBar>
+        </MUIAppBar>
     );
 }
 
-export default MainNavbar;
+export default AppBar;

@@ -8,7 +8,7 @@ import SignUpWithEmailDialog from './Dialogs/SignUpWithEmailDialog';
 import LogInDialog from './Dialogs/LogInDialog';
 
 const withAuthDialogs = (Component) => (props) => {
-    const isAuth = useSelector(state => state.user.data.token !== null);
+    const isAuth = useSelector(state => state.user.token !== null);
 
     const [state, actions] = useAuthDialogReducer();
 

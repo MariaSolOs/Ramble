@@ -18,7 +18,8 @@ exports.getCities = (req, res) => {
 exports.getExps = (req, res) => {
     //We only need this for the gallery card
     const displayFields = 'title location.displayLocation images price rating';
-    Experience.find({'location.displayLocation': req.query.location, 
+    Experience.find({ approved: true,
+                      'location.displayLocation': req.query.location, 
                       capacity: {$gte: req.query.numPeople}},
     displayFields, (err, exps) => {
         if(err) { 
@@ -41,6 +42,8 @@ exports.getExp = (req, res) => {
 exports.getExpOcurrences = (req, res) => {
     const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
     const requiredFields = 'timeslot bookings spotsLeft';
+    const now = new Date();
+    console.log(now, dayStart)
     Occurrence.find({experience: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
     requiredFields).populate('bookings').exec((err, occ) => {

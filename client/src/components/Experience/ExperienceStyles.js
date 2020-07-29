@@ -33,10 +33,11 @@ const styles = (theme) => ({
 
     categories: {
         display: 'flex',
-        width: '80%',
+        justifyContent: 'space-between',
+        width: 280,
         margin: '8px 0',
         '& h5': {
-            fontSize: '0.9rem'
+            fontSize: '0.85rem'
         }
     },
 

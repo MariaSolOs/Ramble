@@ -27,7 +27,11 @@ const Experience = ({exp, images, floatButtons}) => {
                 <p className={classes.location}>{exp.location.displayLocation}</p>
                 <div className={classes.categories}>
                     {exp.categories.map(categ => (
-                        <CategoryBox category={categ} height="35px" width="30%" key={uuid()}/>
+                        <CategoryBox 
+                        category={categ} 
+                        height="35px" 
+                        width="130px" 
+                        key={uuid()}/>
                     ))}
                 </div>
                 <QuickInfos 

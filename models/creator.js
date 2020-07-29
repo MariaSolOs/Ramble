@@ -11,10 +11,12 @@ const CreatorSchema = new mongoose.Schema({
     },
     bio: String,
     stripe: {
-        id: { 
-            type: String, required: true
-        }
-    }
+        id: { type: String, required: true }
+    },
+    bookingRequests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Booking'
+    }]
 });
   
 module.exports = mongoose.model('Creator', CreatorSchema);

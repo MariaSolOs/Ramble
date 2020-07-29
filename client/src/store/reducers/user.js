@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     message: '',
     token: null,
-    data: {},
+    userData: {},
+    creatorData: {},
     pastExps: [],
     savedExps: []
 }
@@ -22,7 +23,7 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 token: action.token,
-                data: { ...action.data },
+                userData: { ...action.data },
             }
         }
         case types.SET_USER_EXPS: {
@@ -39,14 +40,7 @@ const authReducer = (state = initialState, action) => {
             }
         }
         case types.RESET_USER: {
-            return { 
-                ...state,
-                loading: false,
-                token: null,
-                data: {},
-                pastExps: [],
-                savedExps: []
-            }
+            return { ...initialState }
         }
         default: { return state; }
     }

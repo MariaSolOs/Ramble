@@ -42,20 +42,26 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests) => {
     }
 }
 
-exports.handleSuccessfulPaymentIntent = async (intentId) => {
+exports.handleSuccessfulPaymentIntent = async (intent) => {
     try {
+        //Update booking status to confirmed
         const booking = await Booking.findOne({
-            'stripe.id': intentId, 
+            'stripe.id': intent.id, 
             'stripe.status': 'pending'
         }).populate('occurrence');
         if(!booking) { 
             return 'No booking found with a matching intent ID'; 
         }
         booking.stripe.status = 'confirmed';
+        //Add booking to occurrence and update
         booking.occurrence.spotsLeft -= booking.numPeople;
         booking.occurrence.bookings.push(booking);
         await booking.occurrence.save();
         await booking.save();
+        //Add booking creator's requests
+        const creator = await Creator.findById(intent.metadata.creatorId, 'bookingRequests');
+        creator.bookingRequests.push(booking);
+        await creator.save();
         return 'Successfully added booking to occurrence';
     } catch(err) {
         return `Failed to handle payment intent: ${err}.`;

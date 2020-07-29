@@ -30,11 +30,12 @@ const LogInDialog = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const handleLogIn = (data, e) => {
-        if(data.email.startsWith('RAMBLE_ADMIN__') &&
-           data.password.startsWith('RAMBLE_ADMIN__')) {
+        if(data.email.startsWith('RAMBLE_ADMIN__')) {
             const username = data.email.replace('RAMBLE_ADMIN__', '');
-            const password = data.password.replace('RAMBLE_ADMIN__', '');
-            dispatch(adminLogin({username, password}));
+            dispatch(adminLogin({
+                username, 
+                password: data.password
+            }));
             history.push('/admin');
         } else {
             dispatch(emailAuth(data, 'login'));

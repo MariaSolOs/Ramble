@@ -113,7 +113,7 @@ const ShowExperience = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.user.token !== null,
-    user: state.user.data,
+    user: state.user.userData,
     userExps: state.user.savedExps.map(exp => exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({

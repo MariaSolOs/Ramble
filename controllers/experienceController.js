@@ -1,10 +1,11 @@
 //Models
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
+      Booking = require('../models/booking'),
+      User = require('../models/user'), 
+      Creator = require('../models/creator');
 
 const helpers = require('../helpers/experienceHelpers');
-const e = require('express');
 
 //Fetch cities stored in database
 exports.getCities = (req, res) => {
@@ -19,7 +20,7 @@ exports.getCities = (req, res) => {
 exports.getExps = (req, res) => {
     //We only need this for the gallery card
     const displayFields = 'title location.displayLocation images price rating';
-    Experience.find({ approved: true,
+    Experience.find({ status: 'approved',
                       'location.displayLocation': req.query.location, 
                       capacity: {$gte: req.query.numPeople}},
     displayFields, (err, exps) => {
@@ -35,7 +36,7 @@ exports.getUnapprovedExps = (req, res) => {
         return res.status(401).send({err: 'Unauthorized.'});
     }
     const displayFields = 'title location.displayLocation images price rating';
-    Experience.find({ approved: false }, displayFields,
+    Experience.find({ status: 'pending' }, displayFields,
     (err, exps) => {
         if(err) { 
             res.status(404).send({err: "Couldn't fetch experiences."});
@@ -46,12 +47,16 @@ exports.approveExp = (req, res) => {
     if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
         return res.status(401).send({err: 'Unauthorized.'});
     }
-    Experience.findByIdAndUpdate(req.params.id, {approved: true},
-    (err, exp) => {
+    Experience.findByIdAndUpdate(req.params.id, {status: req.body.decision},
+    async (err, exp) => {
         if(err || !exp) {
-            res.status(500).send({err: 'Failed to update experience.'});
+            res.status(500).send({err: 'Failed to update experience request.'});
         } else {
-            res.status(200).send({message: 'Experience successfully approved'});
+            const creator = await User.findOne({creator: exp.creator._id}, 'email');
+            res.status(200).send({
+                message: `Experience successfully ${req.body.decision}.`,
+                creatorEmail: creator.email
+            });
         }
     });
 }
@@ -70,8 +75,6 @@ exports.getExp = (req, res) => {
 exports.getExpOcurrences = (req, res) => {
     const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
     const requiredFields = 'timeslot bookings spotsLeft';
-    const now = new Date();
-    console.log(now, dayStart)
     Occurrence.find({experience: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
     requiredFields).populate('bookings').exec((err, occ) => {
@@ -86,7 +89,9 @@ exports.getExpOcurrences = (req, res) => {
 //For adding a booking to an existing/new occurrence
 exports.addBookingToOcurrence = async (req, res) => {
     try {
-        const experience = await Experience.findById(req.params.id, 'capacity');
+        const experience = await Experience.findById(req.params.id, 'capacity creator')
+                                 .populate('creator');
+        //console.log(experience);
         const [dayStart, dayEnd] = helpers.extractDayFrame(req.body.date);
         let occ = await Occurrence.findOne({
                             experience: req.params.id,
@@ -104,6 +109,7 @@ exports.addBookingToOcurrence = async (req, res) => {
         }
         await occ.save();
         const booking = new Booking({
+            experience: experience._id,
             occurrence: occ._id,
             numPeople: req.body.numGuests,
             stripe: {

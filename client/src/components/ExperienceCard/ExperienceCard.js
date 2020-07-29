@@ -49,4 +49,7 @@ const ExperienceCard = (props) => {
     );
 }
 
-export default React.memo(ExperienceCard);
+export default React.memo(ExperienceCard, (prevProps, nextProps) => {
+    return prevProps.exp._id === nextProps.exp._id && 
+           prevProps.saved === nextProps.saved
+});

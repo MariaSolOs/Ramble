@@ -15,7 +15,7 @@ const CreateExperience = (props) => {
     const location = useLocation();
 
     //Form values and options
-    const creator = useSelector(state => state.user.data);
+    const creator = useSelector(state => state.user.userData);
     const allLanguages = useLanguages();
     const [values, setValues] = useState({
         location: null,

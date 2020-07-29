@@ -1,7 +1,7 @@
 const User = require('../models/user'),
       Admin = require('../models/admin');
 
-exports.findUser = async (req, res, next) => {
+exports.identifyUser = async (req, res, next) => {
     let user;
     if(req.isAdmin) {
         user = await Admin.findById(req.userId);

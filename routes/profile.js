@@ -1,29 +1,29 @@
 const express = require('express'),
       router  = express.Router(),
       {authenticateToken} = require('../middleware/JWTMiddleware'),
-      {findUser} = require('../middleware/profileMiddleware'),
+      {identifyUser} = require('../middleware/profileMiddleware'),
       controllers = require('../controllers/profileController'); 
 
 //For fetching profile information
 router.get('/', 
             authenticateToken, 
-            findUser, 
+            identifyUser, 
             controllers.getProfile);
 
 //Editing user info
 router.put('/edit', 
             authenticateToken, 
-            findUser, 
+            identifyUser, 
             controllers.editProfile);
 
 //For saving/unsaving an experience
 router.post('/exps', 
              authenticateToken, 
-             findUser,
+             identifyUser,
              controllers.saveExperience);
 router.delete('/exps', 
                authenticateToken, 
-               findUser,
+               identifyUser,
                controllers.unsaveExperience);
 
 module.exports = router;

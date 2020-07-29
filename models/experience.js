@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const ExperienceSchema = new mongoose.Schema({
-    approved: {
-        type: Boolean,
-        required: true
+    status: {
+        type: String,
+        required: true,
+        enum: ['pending', 'approved', 'refused']
     },
     location: {
         city: {

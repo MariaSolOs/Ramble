@@ -7,7 +7,7 @@ import withSnackbar from '../hoc/withSnackbar';
 import Snackbar from '../components/Snackbar';
 import Nav from '../components/Navs/AdminNav';
 import ApproveExps from '../pages/Admin/ApproveExps';
-import ApprovalPage from '../pages/Admin/ApprovalPage';
+import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
 import Register from '../pages/Admin/Register';
 
 const AdminApp = (props) => {
@@ -39,8 +39,8 @@ const AdminApp = (props) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    canRegister: ownProps.isAuth && state.user.data.permissions.includes('addAdmin'),
-    canEditExps: ownProps.isAuth && state.user.data.permissions.includes('approveExp')
+    canRegister: ownProps.isAuth && state.user.userData.permissions.includes('addAdmin'),
+    canEditExps: ownProps.isAuth && state.user.userData.permissions.includes('approveExp')
 });
 
 export default connect(mapStateToProps, null)(withSnackbar(AdminApp, Snackbar));

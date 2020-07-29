@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
+    experience: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Experience',
+        required: true
+    },
     occurrence: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Occurrence',

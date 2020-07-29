@@ -44,7 +44,7 @@ const ExperiencesGallery = (props) => {
                     exp={exp}
                     showHeart={props.showHeart}
                     saved={props.showHeart && props.checkIfSaved(exp._id)}
-                    onHeartClick={ props.showHeart && props.handleHeartClick(exp._id)}
+                    onHeartClick={ props.showHeart && props.onHeartClick(exp._id)}
                     onCardClick={props.onCardClick(exp._id)}/>
                 </CSSTransition>
             ))}

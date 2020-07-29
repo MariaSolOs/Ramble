@@ -107,8 +107,8 @@ const CollapsingNav = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: (state.user.token !== null),
-    userName: state.user.data.fstName,
-    userPic: state.user.data.photo
+    userName: state.user.userData.fstName,
+    userPic: state.user.userData.photo
 });
 const mapDispatchToProps = (dispatch) => ({
     logoutUser: () => dispatch(logout())

@@ -99,9 +99,9 @@ const Layout = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    fstName: state.user.data.fstName,
-    photo: state.user.data.photo,
-    city: state.user.data.city
+    fstName: state.user.userData.fstName,
+    photo: state.user.userData.photo,
+    city: state.user.userData.city
 });
 
 export default connect(mapStateToProps, null)(Layout);

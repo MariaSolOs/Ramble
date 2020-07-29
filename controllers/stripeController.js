@@ -42,15 +42,21 @@ exports.cancelPaymentIntent = async (req, res) => {
 }
 
 exports.createPaymentIntent = async (req, res) => {
-    const {expId, bookType, numGuests, transferId} = req.body;
-    const payInfo = await helpers.calculatePaymentAmount(expId, bookType, +numGuests);
+    const payInfo = await helpers.calculatePaymentAmount(
+                            req.body.expId, 
+                            req.body.bookType, 
+                            +req.body.numGuests
+                    );
     await stripe.paymentIntents.create({
         amount: payInfo.amount,
         currency: payInfo.currency,
         application_fee_amount: payInfo.rambleFee,
         capture_method: 'manual',
         transfer_data: {
-            destination: transferId
+            destination: req.body.transferId
+        },
+        metadata: {
+            creatorId: req.body.creatorId
         }
     }).then((payIntent) => {
         try {
@@ -70,6 +76,7 @@ exports.stripeWebhook = async (req, res) => {
                     req.rawBody, 
                     sign, 
                     process.env.STRIPE_WEBHOOK_SECRET
+                    //'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx'
                 );
     } catch (err) {
         return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -79,7 +86,7 @@ exports.stripeWebhook = async (req, res) => {
     switch(event.type) {
         case 'payment_intent.succeeded':
             const paymentIntent = event.data.object;
-            message = helpers.handleSuccessfulPaymentIntent(paymentIntent.id);  
+            message = helpers.handleSuccessfulPaymentIntent(paymentIntent);  
             break;
         default:
             return res.status(400).end(); //Unexpected event type

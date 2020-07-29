@@ -1,5 +1,6 @@
 //Models
-const Experience = require('../models/experience');
+const Experience = require('../models/experience'),
+      Occurrence = require('../models/occurrence');
 
 const helpers = require('../helpers/profileHelpers');
 
@@ -15,8 +16,12 @@ exports.getProfile = (req, res) => {
             }
         });
     } else {
-        req.user.populate('savedExperiences pastExperiences').execPopulate()
-        .then(user => {
+        req.user.populate('savedExperiences pastExperiences creator')
+        .execPopulate().then(user => {
+            console.log(user);
+            // const createdExps = await Experience.find({
+            //     creator: user.creator._id
+            // }).distinct('_id');
             res.status(200).send({
                 isAdmin: false,
                 token:  req.token,

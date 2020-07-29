@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       {authenticateToken} = require('../middleware/JWTMiddleware'),
-      {findUser} = require('../middleware/profileMiddleware'),
+      {identifyUser} = require('../middleware/profileMiddleware'),
       controllers = require('../controllers/experienceController');
 
 //Fetch cities stored in database
@@ -10,12 +10,12 @@ router.get('/cities', controllers.getCities);
 //For admins to approve/disapprove experiences
 router.get('/unapproved', 
             authenticateToken, 
-            findUser,
+            identifyUser,
             controllers.getUnapprovedExps);
-router.put('/:id', 
-            authenticateToken, 
-            findUser,
-            controllers.approveExp);
+router.post('/:id/approve', 
+             authenticateToken, 
+             identifyUser,
+             controllers.approveExp);
 
 //Show experience page
 router.get('/:id', controllers.getExp);

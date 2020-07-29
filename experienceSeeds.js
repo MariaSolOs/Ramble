@@ -200,6 +200,8 @@ const images = [`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}
                 `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_5.jpeg`,
                 `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,dpr_auto,h_400,q_auto/v1/Ramble/Experiences/demo_6.jpeg`];
 
+const expStatus = ['pending', 'approved', 'refused'];
+
 const seedDB = async () => {
     //Clear database
     try {
@@ -212,10 +214,23 @@ const seedDB = async () => {
     }
     console.log('Database cleared.');
 
+    // const creator = new Creator({
+    //     name: 'Maria',
+    //     photo: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10214469674769845&height=200&width=200&ext=1598365748&hash=AeQ3WCqIwWvVW92a',
+    //     bio: `Occupy nisi ex disrupt scenester mixtape 90's. Quinoa asymmetrical 
+    //     ad humblebrag tousled enim cloud bread consequat williamsburg bushwick 
+    //     eu magna cray vaporware subway tile.`,
+    //     stripe: {
+    //         id: 'acct_1GpJf0JtP9MgNrPQ'
+    //     }
+    // });
+    // await creator.save();
+    const creator = await Creator.findById('5f21b3176a6c734261291a0a');
+
     [...experienceData, ...experienceData, ...experienceData]
     .forEach(async seed => {
         const exp = new Experience(seed);
-        exp.approved = Math.random() < 0.5;
+        exp.status = expStatus[Math.round(Math.random())]
         exp.location.displayLocation = `${exp.location.city}, ${exp.location.region}`;
         const randImgIndex = Math.floor(Math.random() * 6);
         exp.images.push(images[randImgIndex]);
@@ -240,7 +255,7 @@ const seedDB = async () => {
         exp.bring = ['stickers', 'spoons'];
         exp.rating = 4.91;
         //I create everything
-        exp.creator = '5f1d95d704411f0750ae454b';
+        exp.creator = creator._id;
         await exp.save();
 
         //Create some random occurrences
@@ -252,7 +267,12 @@ const seedDB = async () => {
             timeslot: '8PM-10PM',
             spotsLeft: exp.capacity
         });
-        const book = new Booking({ occurrence: occ._id, numPeople });
+        const book = new Booking({ 
+            experience: exp._id,
+            occurrence: occ._id, 
+            numPeople
+        });
+        if(Math.random() < 0.35) { creator.bookingRequests.push(book); }
         await book.save();
         occ.spotsLeft -= book.numPeople;
         occ.bookings.push(book);

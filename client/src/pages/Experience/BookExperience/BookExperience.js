@@ -74,6 +74,7 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
             const payIntent = await axios.post('/api/stripe/payment-intent', {
                 expId: exp._id,
                 transferId: exp.creator.stripe.id,
+                creatorId: exp.creator._id,
                 ...values
             });
             if(payIntent.status === 200) {

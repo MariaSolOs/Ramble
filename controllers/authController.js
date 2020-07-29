@@ -45,7 +45,7 @@ exports.googleAuth = (req, res, next) => {
 }
 
 exports.registerAdmin = (req, res, next) => {
-    if(!req.isAdmin || req.user.permissions.includes('addAdmin')) {
+    if(!req.isAdmin || !req.user.permissions.includes('addAdmin')) {
         return res.status(401).send({err: 'Unauthorized.'});
     }
     Admin.create({ 

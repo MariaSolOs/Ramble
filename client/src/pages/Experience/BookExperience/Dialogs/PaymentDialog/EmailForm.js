@@ -36,6 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const EmailForm = (props) => {
+    console.log(props)
     //For handling form changes 
     const [showForm, setShowForm] = useState(!props.userEmail);
     const handleFormCheckbox = (e) => setShowForm(e.target.checked); 
@@ -55,7 +56,7 @@ const EmailForm = (props) => {
                 </div> :
                 <div className={classes.root}>
                 <p className={classes.message}>
-                    We'll send your receipt to {props.savedEmail}. Would you like to use a
+                    We'll send your receipt to {props.userEmail}. Would you like to use a
                     different email address?
                 </p>
                 <Checkbox onChange={handleFormCheckbox}/>

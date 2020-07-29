@@ -76,7 +76,6 @@ exports.stripeWebhook = async (req, res) => {
                     req.rawBody, 
                     sign, 
                     process.env.STRIPE_WEBHOOK_SECRET
-                    //'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx'
                 );
     } catch (err) {
         return res.status(400).send(`Webhook Error: ${err.message}`);

@@ -61,7 +61,7 @@ const styles = () => ({
         height: 45,
         '& .react-daterange-picker__wrapper': { 
             borderRadius: '0.7rem',
-            padding: '0 5px' 
+            padding: '0 5px'
         },
         '& .react-daterange-picker__inputGroup__input, & .react-daterange-picker__inputGroup': {
             color: '#FFF',
@@ -71,6 +71,9 @@ const styles = () => ({
             fontSize: '1.1rem',
             margin: '0 3px',
             letterSpacing: '-0.05rem',
+            flexGrow: 1,
+            border: 0,
+            background: 'none',
             '&:invalid': { background: 'none' },
             '&:focus': { outline: 'none' }
         },
@@ -84,6 +87,10 @@ const styles = () => ({
         },
         '& .react-daterange-picker__button': {
             marginLeft: 'auto',
+            cursor: 'pointer',
+            border: 0,
+            backgroundColor: 'transparent',
+            padding: '4px 6px',
             '& svg': { stroke: '#FFF !important' },
             '&:focus': { outline: 'none' }
         },
@@ -91,13 +98,14 @@ const styles = () => ({
             right: '0 !important',
             left: 'auto !important',
             width: '100%',
+            position: 'absolute',
         }
     },
 
     calendar: {
         borderRadius: '1rem',
-        backgroundColor: '#2F2E2E',
-        border: 'none',
+        backgroundColor: '#2F2E2E !important',
+        border: 'none !important',
         margin: '15px 0 0 auto',
         padding: '0.5rem',
         width: '85%',
@@ -112,10 +120,8 @@ const styles = () => ({
                 letterSpacing: '-0.05rem',
                 fontWeight: 'bold',
                 fontSize: '1.1rem',
-                backgroundColor: 'transparent',
+                backgroundColor: 'transparent !important',
                 '&:disabled': { opacity: 0 },
-                '&:hover': { backgroundColor: 'transparent' },
-                '&:focus': { backgroundColor: 'transparent' },
                 '&.react-calendar__navigation__arrow svg': {
                     fontSize: '2rem'
                 }
@@ -127,8 +133,11 @@ const styles = () => ({
         },
         '& .react-calendar__month-view__weekdays': {
             fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
             fontSize: '0.9rem',
             color: '#C4C4C5',
+            textAlign: 'center',
+            padding: '7px 0',
             '& abbr': { textDecoration: 'none' }
         },
         '& .react-calendar__tile, & .react-calendar__tile--now': {
@@ -139,10 +148,6 @@ const styles = () => ({
             background: 'none',
             transition: 'color 200ms ease-in-out',
             padding: '7px 5px',
-            '&:disabled': { 
-                transform: 'scale(0)',
-                padding: 0
-             },
             '&:hover': {
                 borderRadius: '10%',
                 color: '#151515',
@@ -152,9 +157,14 @@ const styles = () => ({
             '&.react-calendar__tile--active': { 
                 borderRadius: '10%',
                 color: '#151515',
-                background: 'rgba(196, 196, 197, 0.3)'
+                backgroundColor: 'rgba(196, 196, 197, 0.3) !important'
+            },
+            '&:disabled': { 
+                opacity: 0.5,
+                fontWeight: 200,
+                backgroundColor: 'transparent'
             }
-        },
-    },
+        }
+    }
 });
 export default styles;

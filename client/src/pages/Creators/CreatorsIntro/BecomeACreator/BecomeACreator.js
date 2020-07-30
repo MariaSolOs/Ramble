@@ -19,6 +19,7 @@ const BecomeACreator = (props) => {
     const classes = useStyles();
 
     const isAuth = useSelector(state => state.user.token !== null);
+    const isCreator = useSelector(state => Object.keys(state.user.creatorData).length > 0);
 
     return (
         <div className={classes.root}>
@@ -27,6 +28,11 @@ const BecomeACreator = (props) => {
                 <h1>Share your passion.</h1>
                 <h1>Get paid.</h1>
                 {isAuth? 
+                    isCreator?
+                    <Link to="/experience/new/intro"
+                    className={classes.getStartedButton}>
+                        Get Started
+                    </Link> :
                     <Link to="/experience/new/intro"
                     className={classes.getStartedButton}>
                         Get Started
@@ -40,7 +46,7 @@ const BecomeACreator = (props) => {
                 {gridImages.map((url, index) => (
                     <figure 
                     className={`grid-item grid-item-${index + 1}`} 
-                    key={uuid()} >
+                    key={uuid()}>
                         <img 
                         src={url}
                         alt={`Creator grid item ${index}`}

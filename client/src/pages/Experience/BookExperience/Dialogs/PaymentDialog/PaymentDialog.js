@@ -58,7 +58,7 @@ const PaymentDialog = (props) => {
                 </div>
                 <EmailForm 
                 userEmail={props.userEmail} 
-                newEmail={props.newEmail} 
+                newEmail={props.form.email} 
                 onChange={handleChangeEmail}/>
                 {/* TODO: Replace this link with real one */}
                 <p className={classes.policyMessage}>

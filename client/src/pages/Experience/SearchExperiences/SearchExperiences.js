@@ -1,8 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import axios from 'axios';
+import useSearchReducer from './store/reducer';
+import * as actions from './store/actionTypes';
 import {connect} from 'react-redux';
-import {fetchExperiences} from '../../../store/actions/experiences';
 import {saveExperience, unsaveExperience} from '../../../store/actions/user';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
+import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 
 //Components
 import Searchbar from './Searchbar/Searchbar';
@@ -23,41 +26,62 @@ const useStyles = makeStyles((theme) => ({
 
 const SearchExperiences = (props) => {
     const classes = useStyles();
+    const [state, dispatch] = useSearchReducer();
 
-    //Update experiences with new queries
-    const [displayExps, setDisplayExps] = useState([]);
-    const {experiences} = props;
+    const {displayError} = props;
+    const fetchExperiences = useCallback((location, numPeople) => {
+        dispatch({type: actions.SET_QUERY, location, numPeople});
+        axios.get('/api/exp', { params: { location, numPeople }})
+        .then(res => {
+            if(res.status === 200) {
+                dispatch({
+                    type: actions.SET_EXPERIENCES, 
+                    experiences: res.data.exps
+                });
+            }
+        }).catch(err => {
+            displayError('We cannot find the experiences you searched for.');
+        });
+    }, [dispatch, displayError]);
+
+    //Get query from URL and do initial search
+    const query = new URLSearchParams(useLocation().search);
+    const location = query.get('location');
+    const numPeople = query.get('numPeople');
     useEffect(() => {
-        setDisplayExps(experiences);
-    }, [experiences]);
+        if(location && numPeople) {
+            fetchExperiences(location, numPeople);
+        }
+    }, [fetchExperiences, location, numPeople]);
 
-    //Handle searches
+    const {experiences} = state;
+    //Handle title filtering
     const [title, setTitle] = useState('');
-    const onQueryChange = (location, numPeople) => { 
-        props.fetchExps(location, numPeople); 
-    }
-    const onTitleChange = (title) => { 
-        setTitle(title);
-    }
+    const onTitleChange = (title) => { setTitle(title); }
     useEffect(() => {
         //Wait 800ms after the user stops typing to update gallery
         const waitTimeout = setTimeout(() => {
             let matchingExps = experiences;
             if(title.length > 0) {
-                setDisplayExps([]);
+                dispatch({type: actions.SET_EXPS_BY_TITLE, experiences: []});
                 matchingExps =  experiences.filter(exp => 
                     exp.title.toLowerCase().includes(title.toLowerCase())
                 );
             }
-            setDisplayExps(matchingExps);
+            dispatch({type: actions.SET_EXPS_BY_TITLE, experiences: matchingExps});
         }, [800]);
         return () => clearTimeout(waitTimeout); 
-    }, [title, experiences]);
+    }, [title, experiences, dispatch]);
 
-    //For showing experience pages
     const history = useHistory();
+    //For showing experience pages
     const handleViewExp = useCallback((expId) => (e) => {
         history.push(`/experience/${expId}`);
+    }, [history]);
+
+    //For handling new queries
+    const handleNewQuery = useCallback((location, numPeople) => {
+        history.push(`/experience/search?location=${location}&numPeople=${numPeople}`);
     }, [history]);
 
     //For saving/unsaving an experience
@@ -65,11 +89,8 @@ const SearchExperiences = (props) => {
     const handleHeartClick = useCallback((expId) => (e) => {
         //Don't show the experience page
         e.stopPropagation();
-        if(savedExps.includes(expId)) {
-            unsaveExp(expId);
-        } else {
-            saveExp(expId);
-        }
+        if(savedExps.includes(expId)) { unsaveExp(expId); } 
+        else { saveExp(expId); }
     }, [savedExps, saveExp, unsaveExp]);
 
     const checkIfSaved = useCallback((expId) => {
@@ -80,14 +101,14 @@ const SearchExperiences = (props) => {
         <div className={classes.root}>
             <div>
                 <Searchbar 
-                location={props.location}
-                numPeople={props.numPeople}
+                location={location}
+                numPeople={numPeople}
                 title={title}
-                onQueryChange={onQueryChange}
+                onQueryChange={handleNewQuery}
                 onTitleChange={onTitleChange}/>
             </div>
             <Gallery 
-            experiences={displayExps}
+            experiences={state.expsByTitle}
             showHeart={props.isAuth} 
             onHeartClick={handleHeartClick}
             onCardClick={handleViewExp}
@@ -97,16 +118,12 @@ const SearchExperiences = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    location: state.exp.location,
-    numPeople: state.exp.numPeople,
-    experiences: state.exp.experiences,
     isAuth: (state.user.token !== null),
     savedExps: state.user.savedExps.map(exp => exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({
-    fetchExps: (loc, numPeople) => dispatch(fetchExperiences(loc, numPeople)),
     saveExp: (expId) => dispatch(saveExperience(expId)),
     unsaveExp: (expId) => dispatch(unsaveExperience(expId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchExperiences);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorDialog(SearchExperiences));

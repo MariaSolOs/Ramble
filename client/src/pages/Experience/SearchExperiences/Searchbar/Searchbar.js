@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import useNumberField from '../../../../hooks/useNumberField';
-import useLocations from '../../../../hooks/useLocations';
+import {LocationContext} from '../../../../context/locationContext';
 
 //Components and icons
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -20,7 +20,7 @@ const useStyles = makeStyles(styles);
 const Searchbar = (props) => {
     const classes = useStyles();
 
-    const cities = useLocations();
+    const locations = useContext(LocationContext);
     //For updating location and numPeople changes
     const [location, setLocation] = useState(props.location || 'Montreal, Quebec');
     const handleLocationChange = (event, value, reason) => {
@@ -34,23 +34,21 @@ const Searchbar = (props) => {
         startadornment: <FontAwesomeIcon icon={faUsers}/>,
     });
 
-    //For new search queries, call parent function to update gallery
+    //For new search queries, call parents function to update gallery
     const handleNewQuery = () => {
         props.onQueryChange(location, numPeople);
     }
-    const handleNewTitle = (e) => {
-        props.onTitleChange(e.target.value);
-    }
+    const handleNewTitle = (e) => { props.onTitleChange(e.target.value); }
     
     return (
         <div className={classes.root}>
             <div>
                 <div className="locSearchbar">
                     <Autocomplete
-                    id="city-query"
+                    id="location-query"
                     value={location}
-                    loading={Boolean(cities)}
-                    options={cities}
+                    loading={Boolean(locations)}
+                    options={locations}
                     onInputChange={handleLocationChange}
                     classes={{ paper: classes.search_list }}
                     renderInput={(params) => (

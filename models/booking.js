@@ -11,18 +11,28 @@ const BookingSchema = new mongoose.Schema({
         ref: 'Occurrence',
         required: true
     },
+    client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     numPeople: {
         type: Number,
         required: true,
         min: 1
     },
-    stripe: { //TODO: Make these fields required
-        id: String,
+    stripe: {
+        id: {
+            type: String,
+            required: true,
+        },
         status: {
             type: String,
+            required: true,
             enum: ['pending', 'confirmed']
-        }
+        },
+        creatorProfit: Number //This is in whatever units Stripe uses
     }
-});
+}, {timestamps: true});
   
 module.exports = mongoose.model('Booking', BookingSchema);

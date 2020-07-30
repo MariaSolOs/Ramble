@@ -9,7 +9,10 @@ const CreatorSchema = new mongoose.Schema({
         type: String, 
         default: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg`
     },
-    bio: String,
+    bio: {
+        type: String,
+        required: true
+    },
     stripe: {
         id: { type: String, required: true }
     },

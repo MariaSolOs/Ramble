@@ -1,34 +1,56 @@
-import * as types from '../actionTypes';
+import {userTypes as types} from '../actionTypes';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const authInit = () => ({ type: types.AUTH_INIT });
+const loadProfile = () => ({ type: types.LOAD_PROFILE });
 const setUserData = (token, data) => ({ 
     type: types.SET_USER_DATA, token, data 
+});
+const setCreatorData = (data) => ({ 
+    type: types.SET_CREATOR_DATA, data 
 });
 const setUserExps = (pastExps, savedExps) => ({
     type: types.SET_USER_EXPS, pastExps, savedExps
 });
-const setMessage = (message) => ({
-    type: types.SET_MSG, message
-});
+const saveExp = (exp) => ({ type: types.SAVE_EXP, exp });
+const unsaveExp = (expId) => ({ type: types.UNSAVE_EXP, expId });
+const setMessage = (message) => ({ type: types.SET_MSG, message });
 const resetUser = () => ({ type: types.RESET_USER });
 
-export const fetchProfile = () => {
+//For fetching user and creator data
+export const fetchUserProfile = () => {
     return dispatch => {
         if(!window.localStorage.getItem('token')) { return; }
-        dispatch(authInit());
+        dispatch(loadProfile());
         axios.get('/api/profile')
         .then(res => {
             if(res.status === 200) {
                 dispatch(setUserData(res.data.token, res.data.userData));
                 if(!res.data.isAdmin) {
-                    dispatch(setUserExps(res.data.pastExps, res.data.savedExps)); 
+                    dispatch(setUserExps(
+                        res.data.pastExperiences,
+                        res.data.savedExperiences
+                    ));
                 }        
             } else { dispatch(resetUser()); }
-        }).catch(err => { 
+        })
+        .catch(err => {
             console.log(`FETCH PROFILE FAILED: ${err}`); 
             dispatch(logout());
+        })
+    }
+}
+export const fetchCreatorProfile = () => {
+    return dispatch => {
+        dispatch(loadProfile());
+        axios.get('/api/profile/creator')
+        .then(res => {
+            console.log(res)
+            dispatch(setCreatorData(res.data.creatorData));       
+        }).catch(err => { 
+            console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
+            dispatch(setMessage(`We cannot get your creator information 
+            right now...`)); 
         });
     }
 }
@@ -36,12 +58,12 @@ export const fetchProfile = () => {
 //For admin authentication
 export const adminLogin = (adminInfo) => {
     return dispatch => {
-        dispatch(authInit());
+        dispatch(loadProfile());
         axios.post(`/api/auth/admin-login`, adminInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
                 window.localStorage.setItem('token', res.data.token);
-                dispatch(fetchProfile());
+                dispatch(fetchUserProfile());
             } else { dispatch(resetUser()); }
         })
         .catch(err => { 
@@ -54,13 +76,13 @@ export const adminLogin = (adminInfo) => {
 //For email authentication
 export const emailAuth = (userInfo, authType) => {
     return dispatch => {
-        dispatch(authInit());
+        dispatch(loadProfile());
         //authtype is login or register
         axios.post(`/api/auth/email-${authType}`, userInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
                 window.localStorage.setItem('token', res.data.token);
-                dispatch(fetchProfile());
+                dispatch(fetchUserProfile());
             } else { dispatch(resetUser()); }
         })
         .catch(err => { 
@@ -101,7 +123,7 @@ export const saveExperience = (expId) => {
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences
-                dispatch(setUserExps(res.data.pastExps, res.data.savedExps));    
+                dispatch(saveExp(res.data.savedExp));
             }
         })
         .catch(err => console.log(`SAVE EXPERIENCE FAILED: ${err}`));
@@ -113,7 +135,7 @@ export const unsaveExperience = (expId) => {
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences
-                dispatch(setUserExps(res.data.pastExps, res.data.savedExps));    
+                dispatch(unsaveExp(expId));  
             }
         })
         .catch(err => console.log(`UNSAVE EXPERIENCE FAILED: ${err}`));

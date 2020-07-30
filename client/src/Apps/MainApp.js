@@ -1,8 +1,9 @@
 import React, {useEffect, lazy, Suspense} from 'react';
 import {connect} from 'react-redux';
-import {fetchProfile} from '../store/actions/user';
+import {fetchUserProfile} from '../store/actions/user';
 import Cookies from 'js-cookie';
 import {Route, Switch, useHistory} from 'react-router-dom';
+import {LocationProvider} from '../context/locationContext';
 
 import Spinner from '../components/Spinner';
 import PublicApp from './PublicApp';
@@ -31,24 +32,26 @@ const MainApp = (props) => {
     }, [redirect, history]);
 
     //For automatic auth after refreshing the page
-    const {fetchProfile} = props;
+    const {fetchUserProfile} = props;
     useEffect(() => { 
-        fetchProfile();
-    }, [fetchProfile]);
+        fetchUserProfile();
+    }, [fetchUserProfile]);
 
     return (
         <>
-            {props.loadingUser? <Spinner/> :
-            <Suspense fallback={<Spinner/>}> 
-                <Switch>
-                    <Route path="/admin">
-                        <AdminApp isAuth={props.isAuth}/>
-                    </Route>
-                    <Route path="/">
+        {props.loadingUser? <Spinner/> :
+        <Suspense fallback={<Spinner/>}> 
+            <Switch>
+                <Route path="/admin">
+                    <AdminApp isAuth={props.isAuth}/>
+                </Route>
+                <Route path="/">
+                    <LocationProvider>
                         <PublicApp isAuth={props.isAuth}/>
-                    </Route>
-                </Switch>
-            </Suspense>}
+                    </LocationProvider>
+                </Route>
+            </Switch>
+        </Suspense>}
         </>
     );
 }
@@ -58,7 +61,7 @@ const mapStateToProps = (state) => ({
     loadingUser: state.user.loading
 });
 const mapDispatchToProps = (dispatch) => ({
-    fetchProfile: () => dispatch(fetchProfile())
+    fetchUserProfile: () => dispatch(fetchUserProfile())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainApp);

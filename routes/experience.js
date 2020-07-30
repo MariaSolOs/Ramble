@@ -5,7 +5,7 @@ const express = require('express'),
       controllers = require('../controllers/experienceController');
 
 //Fetch cities stored in database
-router.get('/cities', controllers.getCities); 
+router.get('/locations', controllers.getLocations); 
 
 //For admins to approve/disapprove experiences
 router.get('/unapproved', 
@@ -24,7 +24,7 @@ router.get('/:id', controllers.getExp);
 router.get('/:id/occ', controllers.getExpOcurrences);
 
 //For adding a booking to an existing/new occurrence
-router.post('/:id/occ', controllers.addBookingToOcurrence);
+router.post('/:id/occ', authenticateToken, controllers.addBookingToOcurrence);
 
 //Get experiences based on location and number of people
 router.get('/', controllers.getExps);

@@ -8,13 +8,14 @@ const Experience = require('../models/experience'),
 const helpers = require('../helpers/experienceHelpers');
 
 //Fetch cities stored in database
-exports.getCities = (req, res) => {
-    Experience.distinct('location.displayLocation', (err, cities) => {
+exports.getLocations = (req, res) => {
+    Experience.distinct('location.displayLocation', (err, locations) => {
         if(err) {
-            res.status(409).send({err: "Couldn't fetch cities"});
-        } else { res.status(200).send({ cities }); }
+            res.status(409).send({err: "Couldn't fetch locations."});
+        } else { res.status(200).send({ locations }); }
     });
 }
+
 
 //Get experiences based on location and number of people
 exports.getExps = (req, res) => {
@@ -63,7 +64,8 @@ exports.approveExp = (req, res) => {
 
 //Show experience page
 exports.getExp = (req, res) => {
-    Experience.findById(req.params.id).populate('creator')
+    const creatorFields = 'name photo bio stripe';
+    Experience.findById(req.params.id).populate('creator', creatorFields)
     .exec((err, exp) => {
         if(err || !exp) { 
             res.status(404).send({err: "Couldn't find experience."});
@@ -74,10 +76,9 @@ exports.getExp = (req, res) => {
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
     const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
-    const requiredFields = 'timeslot bookings spotsLeft';
     Occurrence.find({experience: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
-    requiredFields).populate('bookings').exec((err, occ) => {
+    'timeslot spotsLeft', (err, occ) => {
         if(err || !occ) {
             res.status(404).send({err: "Couldn't find occurrences."});
         } else {
@@ -91,7 +92,6 @@ exports.addBookingToOcurrence = async (req, res) => {
     try {
         const experience = await Experience.findById(req.params.id, 'capacity creator')
                                  .populate('creator');
-        //console.log(experience);
         const [dayStart, dayEnd] = helpers.extractDayFrame(req.body.date);
         let occ = await Occurrence.findOne({
                             experience: req.params.id,
@@ -111,6 +111,7 @@ exports.addBookingToOcurrence = async (req, res) => {
         const booking = new Booking({
             experience: experience._id,
             occurrence: occ._id,
+            client: req.userId,
             numPeople: req.body.numGuests,
             stripe: {
                 id: req.body.stripeId,

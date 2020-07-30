@@ -56,13 +56,14 @@ exports.createPaymentIntent = async (req, res) => {
             destination: req.body.transferId
         },
         metadata: {
-            creatorId: req.body.creatorId
+            creatorId: req.body.creatorId,
+            clientId: req.userId
         }
     }).then((payIntent) => {
         try {
-            return res.send({ clientSecret: payIntent.client_secret })
+            return res.send({clientSecret: payIntent.client_secret});
         } catch(err) {
-            return res.status(500).send({ err })
+            return res.status(500).send({ err });
         }
     });
 }

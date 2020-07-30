@@ -53,6 +53,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             return 'No booking found with a matching intent ID'; 
         }
         booking.stripe.status = 'confirmed';
+        booking.stripe.creatorProfit = intent.amount_received - intent.application_fee_amount;
         //Add booking to occurrence and update
         booking.occurrence.spotsLeft -= booking.numPeople;
         booking.occurrence.bookings.push(booking);

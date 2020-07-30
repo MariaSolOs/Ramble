@@ -1,6 +1,6 @@
 const express = require('express'),
       router = express.Router(),
-      {validateStripeState} = require('../middleware/JWTMiddleware'),
+      {validateStripeState, authenticateToken} = require('../middleware/JWTMiddleware'),
       {identifyUser} = require('../middleware/profileMiddleware'),
       controllers = require('../controllers/stripeController');
 
@@ -14,7 +14,7 @@ router.get('/creator-oauth',
 router.post('/payment-intent/capture', controllers.capturePaymentIntent);
 router.post('/payment-intent/cancel', controllers.cancelPaymentIntent);
 
-router.post('/payment-intent', controllers.createPaymentIntent);
+router.post('/payment-intent', authenticateToken, controllers.createPaymentIntent);
 
 //Webhook
 router.post('/webhook', controllers.stripeWebhook);

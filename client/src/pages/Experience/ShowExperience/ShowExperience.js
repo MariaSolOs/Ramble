@@ -64,6 +64,7 @@ const ShowExperience = (props) => {
     const [showBooking, setShowBooking] = useState(false);
     const handleBooking = () => {
         if(props.isAuth) { setShowBooking(true); }
+        //If no logged in user, show sign up instead
         else { props.dialogActions.openSignUpDialog(); }
     }
     const closeBooking = () => { setShowBooking(false); }

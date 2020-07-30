@@ -1,15 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 
 import ErrorDialog from './ErrorDialog';
 
 const withErrorDialog = (Component) => (props) => {
     const [openErrDialog, setOpenErrDialog] = useState(false);
     const [errMsg, setErrMsg] = useState('');
-    const displayError = (msg) => {
+    const displayError = useCallback((msg) => {
         setErrMsg(msg);
         setOpenErrDialog(true);
-    }
-    const handleClose = () => setOpenErrDialog(false);
+    }, []);
+    const handleClose = useCallback(() => {
+        setErrMsg('');
+        setOpenErrDialog(false);
+    }, []);
 
     return (
         <>

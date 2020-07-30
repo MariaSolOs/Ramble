@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useState, useContext} from 'react';
 import {useHistory} from 'react-router-dom';
-import {fetchExperiences} from '../../../store/actions/experiences';
 import useNumberField from '../../../hooks/useNumberField';
-import useLocations from '../../../hooks/useLocations';
+import {LocationContext} from '../../../context/locationContext';
 
 //Components and icons
 import ReferBox from './ReferBox';
@@ -22,8 +20,7 @@ const useStyles = makeStyles(styles);
 const Landing = (props) => {
     const classes = useStyles();
 
-    const dispatch = useDispatch();
-    const cities = useLocations();
+    const locations = useContext(LocationContext);
     const history = useHistory();
 
     //For handling the user search queries
@@ -41,8 +38,7 @@ const Landing = (props) => {
 
     //Redirect to search page when user 'starts exploring'
     const handleSearch = () => {
-        dispatch(fetchExperiences(location, numPeople));
-        history.push('/experience/search');
+        history.push(`/experience/search?location=${location}&numPeople=${numPeople}`);
     }
 
     return (
@@ -52,10 +48,10 @@ const Landing = (props) => {
                 <h5 className={classes.description}>Discover and attend unique experiences</h5>
                 <div className={classes.row}>
                     <Autocomplete
-                    id="city-search"
+                    id="location-search"
                     onInputChange={handleLocationChange}
-                    options={cities}
-                    loading={Boolean(cities)}
+                    options={locations}
+                    loading={Boolean(locations)}
                     classes={{ paper: classes.search_list }}
                     fullWidth
                     renderInput={(params) => (

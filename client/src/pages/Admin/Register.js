@@ -44,7 +44,7 @@ const Register = (props) => {
     const classes = useStyles();
 
     //For managing registration
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, reset} = useForm();
     const onSubmit = (values) => {
         const permissions = [];
         for(const perm in values.permissions) {
@@ -63,6 +63,7 @@ const Register = (props) => {
         .catch(err => {
             props.displaySnackbar(`FUUUUCKKKK ${err} 🤖`);
         });
+        reset({});
     }
 
     return (

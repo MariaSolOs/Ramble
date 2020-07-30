@@ -1,0 +1,3 @@
+export const SET_QUERY = 'SET_QUERY';
+export const SET_EXPERIENCES = 'SET_EXPERIENCES';
+export const SET_EXPS_BY_TITLE = 'SET_EXPS_BY_TITLE';

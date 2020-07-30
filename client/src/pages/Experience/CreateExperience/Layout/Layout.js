@@ -31,7 +31,7 @@ const Layout = (props) => {
             completed={props.completedSteps}
             currStage={props.currStage}/>
             <div className={classes.content}>
-                <NavDots currentStep={props.currStage} numSteps={12}
+                <NavDots currentStep={props.currStage} numSteps={11}
                 className={classes.navDots}/>
                 {props.children}
             </div>
@@ -40,7 +40,7 @@ const Layout = (props) => {
             currStage={props.currStage} 
             backLink={props.backLink} 
             nextLink={props.nextLink}
-            numSteps={12}/>
+            numSteps={11}/>
         </div>
     );
 }

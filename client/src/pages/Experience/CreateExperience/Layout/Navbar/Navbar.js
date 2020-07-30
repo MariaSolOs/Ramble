@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
-import * as slides from '../../slideTypes';
+import * as slides from '../../pageNames';
 import Collapse from '@material-ui/core/Collapse';
 
 //Styles
@@ -42,8 +42,7 @@ const Navbar = ({completed, currStage}) => {
                     </Collapse>
                 </li>
             {[{ name: 'Title', link: slides.TITLE },
-              { name: 'Category', link: slides.CATEGORIES },
-              { name: 'About you', link: slides.ABOUT}].map(({name, link}, i) => (
+              { name: 'Category', link: slides.CATEGORIES }].map(({name, link}, i) => (
                 <li key={name} className={`${(i + 1) < currStage && classes.completed}
                                            ${currPage === link && classes.current}`}>
                     {(i + 1) <= completed? 
@@ -54,9 +53,9 @@ const Navbar = ({completed, currStage}) => {
             <li 
             onMouseEnter={openSteps('Planning')}
             onMouseLeave={openSteps('')}
-            className={`${4 > completed && classes.inactive} 
-                        ${4 < currStage && classes.completed} 
-                        ${4 === currStage && classes.current}`}>
+            className={`${3 > completed && classes.inactive} 
+                        ${3 < currStage && classes.completed} 
+                        ${3 === currStage && classes.current}`}>
                 Planning
                 <Collapse
                 component="ul"
@@ -82,9 +81,9 @@ const Navbar = ({completed, currStage}) => {
             <li 
             onMouseEnter={openSteps('Quick infos')}
             onMouseLeave={openSteps('')}
-            className={`${6 > completed && classes.inactive} 
-                        ${6 <= currStage && classes.completed} 
-                        ${5 === currStage && classes.current}`}>
+            className={`${5 > completed && classes.inactive} 
+                        ${5 <= currStage && classes.completed} 
+                        ${4 === currStage && classes.current}`}>
                 Quick infos
                 <Collapse
                 component="ul"
@@ -110,9 +109,9 @@ const Navbar = ({completed, currStage}) => {
               { name: "What's included", link: slides.INCLUDED},
               { name: 'What to bring', link: slides.BRING},
               { name: 'Pricing', link: slides.PRICE}].map(({name, link}, i) => (
-                <li key={name} className={`${(i + 6) <= currStage && classes.completed}  
+                <li key={name} className={`${(i + 5) <= currStage && classes.completed}  
                                            ${link === currPage && classes.current}`}>
-                    {(i + 10) <= completed? 
+                    {(i + 9) <= completed? 
                     <Link to={`/experience/new/${link}`}>{name}</Link> : 
                     <span className={classes.inactive}>{name}</span>}
                 </li>
@@ -120,9 +119,9 @@ const Navbar = ({completed, currStage}) => {
             <li 
             onMouseEnter={openSteps('Availabilities')}
             onMouseLeave={openSteps('')}
-            className={`${13 > completed && classes.inactive}
-                        ${10 < currStage && classes.completed}
-                        ${10 === currStage && classes.current}`}>
+            className={`${12 > completed && classes.inactive}
+                        ${9 < currStage && classes.completed}
+                        ${9 === currStage && classes.current}`}>
                 Availabilities
                 <Collapse
                 component="ul"
@@ -145,9 +144,9 @@ const Navbar = ({completed, currStage}) => {
                     </li>
                 </Collapse>
             </li>
-            <li className={`${11 <= currStage && classes.completed}
-                            ${11 === currStage &&  classes.current}`}>
-                {15 <= completed ?
+            <li className={`${10 <= currStage && classes.completed}
+                            ${10 === currStage &&  classes.current}`}>
+                {14 <= completed ?
                 <Link to={`/experience/new/${slides.REVIEW}`}>
                     Review & Submit
                 </Link> : 

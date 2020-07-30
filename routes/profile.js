@@ -8,7 +8,12 @@ const express = require('express'),
 router.get('/', 
             authenticateToken, 
             identifyUser, 
-            controllers.getProfile);
+            controllers.getUserProfile);
+//For fetching profile information
+router.get('/creator', 
+            authenticateToken, 
+            identifyUser, 
+            controllers.getCreatorProfile);
 
 //Editing user info
 router.put('/edit', 

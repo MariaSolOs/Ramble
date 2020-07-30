@@ -12,7 +12,7 @@ import Snackbar from '../components/Snackbar';
 import Home from '../pages/Home/Home';
 const ExperienceRouter = lazy(() => import('../pages/Experience/Router'));
 const ProfileRouter = lazy(() => import('../pages/Profile/Router'));
-const Creators = lazy(() => import('../pages/Creators/Creators'));
+const CreatorRouter = lazy(() => import('../pages/Creators/Router'));
 
 const UserApp = (props) => {
     //For general errors
@@ -32,9 +32,8 @@ const UserApp = (props) => {
                 <Route path="/experience">
                     <ExperienceRouter isAuth={props.isAuth}/>
                 </Route>
-                <Route path="/become-creator">
-                    <Creators/>
-                    <Footer/>
+                <Route path="/creator">
+                    <CreatorRouter/>
                 </Route>
                 <Route exact path="/">
                     <Home/>

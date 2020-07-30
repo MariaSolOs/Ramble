@@ -1,11 +1,10 @@
 //Models
-const Experience = require('../models/experience'),
-      Occurrence = require('../models/occurrence');
+const Experience = require('../models/experience');
 
 const helpers = require('../helpers/profileHelpers');
 
 //For fetching profile information
-exports.getProfile = (req, res) => {
+exports.getUserProfile = async (req, res) => {
     if(req.isAdmin) {
         return res.status(200).send({ 
             isAdmin: true,
@@ -16,21 +15,22 @@ exports.getProfile = (req, res) => {
             }
         });
     } else {
-        req.user.populate('savedExperiences pastExperiences creator')
-        .execPopulate().then(user => {
-            console.log(user);
-            // const createdExps = await Experience.find({
-            //     creator: user.creator._id
-            // }).distinct('_id');
-            res.status(200).send({
-                isAdmin: false,
-                token:  req.token,
-                userData: helpers.getUserData(user),
-                pastExps: user.pastExperiences,
-                savedExps: user.savedExperiences
-            });
+        res.status(200).send({
+            isAdmin: false,
+            isCreator: Boolean(req.user.creator),
+            token:  req.token,
+            userData: helpers.getUserData(req.user),
+            ...await helpers.getUserExperiences(req.user)
         });
     }
+}
+exports.getCreatorProfile = (req, res) => {
+    req.user.populate('creator')
+    .execPopulate().then(async user => {
+        res.status(200).send({
+            creatorData: {...await helpers.getCreatorData(user.creator)}
+        });
+    });
 }
 
 //Editing user info
@@ -52,33 +52,28 @@ exports.editProfile = async (req, res) => {
 //For saving/unsaving an experience
 exports.saveExperience = async (req, res) => {
     try {
-        const exp = await Experience.findById(req.body.expId);
+        let savedExp = null;
+        const exp = await Experience.findById(req.body.expId, 
+                          'title location.displayLocation images price rating');
         if(!req.user.savedExperiences.includes(exp._id)){
             req.user.savedExperiences.push(exp._id);
+            savedExp = exp;
             await req.user.save();
         }
-        req.user.populate('pastExperiences savedExperiences').execPopulate()
-        .then(user => {
-            res.status(200).send({ 
-                pastExps: user.pastExperiences,
-                savedExps: user.savedExperiences
-            });
-        });
-    }catch (err) {
+        res.status(200).send({ savedExp });
+    } catch(err) {
         res.status(409).send({err: `Couldn't save experience: ${err}`});
     }
 }
 exports.unsaveExperience = async (req, res) => {
-    const newExps = req.user.savedExperiences.filter(id => 
-                        !id.equals(req.body.expId)
-                    );
-    req.user.savedExperiences = newExps;
-    await req.user.save();
-    req.user.populate('pastExperiences savedExperiences').execPopulate()
-    .then(user => { 
-        res.status(200).send({ 
-            pastExps: user.pastExperiences,
-            savedExps: user.savedExperiences
-        }); 
-    });
+    try {
+        const newExps = req.user.savedExperiences.filter(id => 
+            !id.equals(req.body.expId)
+        );
+        req.user.savedExperiences = newExps;
+        await req.user.save();
+        res.status(200).send({message: 'Experience succesfully unsaved.'});
+    } catch(err) {
+        res.status(409).send({err: `Couldn't unsave experience: ${err}`});
+    }
 }

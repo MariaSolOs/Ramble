@@ -1,9 +1,10 @@
 import React from 'react';
 
 //Components 
-import BecomeACreator from './Slides/BecomeACreator/BecomeACreator';
-import MeetCreators from './Slides/MeetCreators/MeetCreators';
-import GetYourActOut from './Slides/GetYourActOut/GetYourActOut';
+import BecomeACreator from './BecomeACreator/BecomeACreator';
+import MeetCreators from './MeetCreators/MeetCreators';
+import GetYourActOut from './GetYourActOut/GetYourActOut';
+import Footer from '../../../components/Footer/Footer';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Creators = (props) => {
+const CreatorsIntro = (props) => {
     const classes = useStyles();
 
     return (
@@ -23,8 +24,9 @@ const Creators = (props) => {
             <BecomeACreator/>
             <MeetCreators/>
             <GetYourActOut/>
+            <Footer/>
         </div>
     );
 }
 
-export default Creators;
+export default CreatorsIntro;

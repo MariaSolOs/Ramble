@@ -267,15 +267,6 @@ const seedDB = async () => {
             timeslot: '8PM-10PM',
             spotsLeft: exp.capacity
         });
-        const book = new Booking({ 
-            experience: exp._id,
-            occurrence: occ._id, 
-            numPeople
-        });
-        if(Math.random() < 0.35) { creator.bookingRequests.push(book); }
-        await book.save();
-        occ.spotsLeft -= book.numPeople;
-        occ.bookings.push(book);
         await occ.save();
     });
     console.log('Database populated.');

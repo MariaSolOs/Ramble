@@ -1,7 +1,7 @@
+export const INTRO = 'intro';
 export const LOCATION = 'location';
 export const TITLE = 'title';
 export const CATEGORIES = 'categories';
-export const ABOUT = 'about';
 export const DESCRIPTION = 'description';
 export const SETTING = 'setting';
 export const DURATION = 'duration';

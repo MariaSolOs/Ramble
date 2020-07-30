@@ -36,7 +36,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const EmailForm = (props) => {
-    console.log(props)
     //For handling form changes 
     const [showForm, setShowForm] = useState(!props.userEmail);
     const handleFormCheckbox = (e) => setShowForm(e.target.checked); 

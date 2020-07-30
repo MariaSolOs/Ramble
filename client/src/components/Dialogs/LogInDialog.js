@@ -15,7 +15,7 @@ import TextField from '../Input/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './DialogStyles';
+import styles from './AuthDialogStyles';
 const useStyles = makeStyles(styles);
 
 const LogInDialog = (props) => {

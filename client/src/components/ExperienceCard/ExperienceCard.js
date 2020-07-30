@@ -14,7 +14,6 @@ const useStyles = makeStyles(styles);
 
 const ExperienceCard = (props) => {
     const classes = useStyles({saved: props.saved});
-
     return (
         <div 
         className={`${classes.root} ${props.className}`} 

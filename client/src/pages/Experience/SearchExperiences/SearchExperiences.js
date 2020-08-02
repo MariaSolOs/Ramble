@@ -3,9 +3,9 @@ import axios from 'axios';
 import useSearchReducer from './store/reducer';
 import * as actions from './store/actionTypes';
 import {connect} from 'react-redux';
-import {saveExperience, unsaveExperience} from '../../../store/actions/user';
+import {saveExperience, unsaveExperience} from '../../../store/actions/experiences';
+import {showError} from '../../../store/actions/ui';
 import {useHistory, useLocation} from 'react-router-dom';
-import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 
 //Components
 import Searchbar from './Searchbar/Searchbar';
@@ -28,7 +28,7 @@ const SearchExperiences = (props) => {
     const classes = useStyles();
     const [state, dispatch] = useSearchReducer();
 
-    const {displayError} = props;
+    const {showError} = props;
     const fetchExperiences = useCallback((location, numPeople) => {
         dispatch({type: actions.SET_QUERY, location, numPeople});
         axios.get('/api/exp', { params: { location, numPeople }})
@@ -40,9 +40,9 @@ const SearchExperiences = (props) => {
                 });
             }
         }).catch(err => {
-            displayError('We cannot find the experiences you searched for.');
+            showError('We cannot find the experience you searched for.');
         });
-    }, [dispatch, displayError]);
+    }, [dispatch, showError]);
 
     //Get query from URL and do initial search
     const query = new URLSearchParams(useLocation().search);
@@ -119,11 +119,12 @@ const SearchExperiences = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: (state.user.token !== null),
-    savedExps: state.user.savedExps.map(exp => exp._id)
+    savedExps: state.exp.savedExps.map(exp => exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({
     saveExp: (expId) => dispatch(saveExperience(expId)),
-    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
+    unsaveExp: (expId) => dispatch(unsaveExperience(expId)),
+    showError: (msg) => dispatch(showError(msg))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorDialog(SearchExperiences));
+export default connect(mapStateToProps, mapDispatchToProps)(SearchExperiences);

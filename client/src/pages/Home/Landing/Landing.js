@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import useNumberField from '../../../hooks/useNumberField';
-import {LocationContext} from '../../../context/locationContext';
+import useLocations from '../../../hooks/useLocations';
 
 //Components and icons
 import ReferBox from './ReferBox';
@@ -20,7 +20,7 @@ const useStyles = makeStyles(styles);
 const Landing = (props) => {
     const classes = useStyles();
 
-    const locations = useContext(LocationContext);
+    const locations = useLocations();
     const history = useHistory();
 
     //For handling the user search queries

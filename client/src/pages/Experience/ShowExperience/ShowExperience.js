@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {saveExperience, unsaveExperience} from '../../../store/actions/user';
+import {saveExperience, unsaveExperience} from '../../../store/actions/experiences';
+import {showError} from '../../../store/actions/ui';
 import axios from 'axios';
 import {useParams, useHistory} from 'react-router-dom';
 import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
-import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 
 //Components and icons
 import BookExperience from '../BookExperience/BookExperience';
@@ -20,7 +20,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);
 
-//TODO: Add a reducer here
 const ShowExperience = (props) => {
     const classes = useStyles();
 
@@ -28,7 +27,7 @@ const ShowExperience = (props) => {
     const history = useHistory();
     const {id} = useParams();
     const [exp, setExp] = useState(null);
-    const {userExps, displayError} = props;
+    const {userExps, showError} = props;
     useEffect(() => {
         let mounted = true;
         axios.get(`/api/exp/${id}`)
@@ -37,13 +36,13 @@ const ShowExperience = (props) => {
                 setExp(res.data.exp);
             }
         }).catch(err => {
-            displayError('We cannot find this experience right now.');
+            showError('We cannot find this experience right now.');
             setTimeout(() => {
                 history.push('/');
             }, 3000);
         });
         return () => mounted = false;
-    }, [id, history, displayError]);
+    }, [id, history, showError]);
 
     //For saving/unsaving an experience
     const [saved, setSaved] = useState(false);
@@ -115,11 +114,12 @@ const ShowExperience = (props) => {
 const mapStateToProps = (state) => ({
     isAuth: state.user.token !== null,
     user: state.user.userData,
-    userExps: state.user.savedExps.map(exp => exp._id)
+    userExps: state.exp.savedExps.map(exp => exp._id)
 });
 const mapDispatchToProps = (dispatch) => ({
     saveExp: (expId) => dispatch(saveExperience(expId)),
-    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
+    unsaveExp: (expId) => dispatch(unsaveExperience(expId)),
+    showError: (msg) => dispatch(showError(msg))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(withErrorDialog(ShowExperience)));
+export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(ShowExperience));

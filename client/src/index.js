@@ -9,6 +9,8 @@ import {Provider} from 'react-redux';
 import {combineReducers, createStore, compose, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import userReducer from './store/reducers/user';
+import experienceReducer from './store/reducers/experiences';
+import uiReducer from './store/reducers/ui';
 
 //Stripe configuration
 import {Elements} from '@stripe/react-stripe-js';
@@ -19,7 +21,9 @@ import './index.css';
 //Create global store
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    exp: experienceReducer,
+    ui: uiReducer
 });
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 

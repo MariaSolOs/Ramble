@@ -65,12 +65,14 @@ const Creator = ({creator}) => {
     return (
         <><h3 className={classes.label}>Hosted by</h3>
         <div className={classes.host}>
-            <Avatar src={creator.photo} alt="Experience creator"/>
-            <span className="creator-name">{creator.name}</span>
+            <Avatar src={creator.user.photo} alt="Experience creator"/>
+            <span className="creator-name">{creator.user.fstName}</span>
             <ExpansionPanel expanded={expandedBio} onClick={handleBioToggle}
             classes={{ root: classes.bioPanel }}
             TransitionProps={{ timeout: { enter: 300, exit: 300 }}}>
-                <ExpansionPanelSummary aria-controls="bioPanel-content" id="bioPanel-header">
+                <ExpansionPanelSummary 
+                aria-controls="bioPanel-content" 
+                id="bioPanel-header">
                     About creator
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>

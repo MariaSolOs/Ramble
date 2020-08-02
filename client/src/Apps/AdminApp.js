@@ -1,10 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
-import withSnackbar from '../hoc/withSnackbar';
 
 //Pages and layout
-import Snackbar from '../components/Snackbar';
 import Nav from '../components/Navs/AdminNav';
 import ApproveExps from '../pages/Admin/ApproveExps';
 import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
@@ -17,30 +15,20 @@ const AdminApp = (props) => {
     return (
         <>
             <Nav 
-            isAuth={props.isAuth}
             canRegister={props.canRegister} 
             canEditExps={props.canEditExps}/>
             <Switch location={location}>
-                <Route path={`${path}/approveExps`}>
-                    <ApproveExps displaySnackbar={props.displaySnackbar}/>
-                </Route>
-                <Route path={`${path}/approveExp/:id`}>
-                    <ApprovalPage displaySnackbar={props.displaySnackbar}/>
-                </Route>
-                <Route path={`${path}/register`}>
-                    <Register displaySnackbar={props.displaySnackbar}/>
-                </Route>
-                {/* <Route exact path={`${path}/`}>
-                    <Auth/>
-                </Route> */}
+                <Route path={`${path}/approveExps`} component={ApproveExps}/>
+                <Route path={`${path}/approveExp/:id`} component={ApprovalPage}/>
+                <Route path={`${path}/register`} component={Register}/>
             </Switch>
         </>
     );
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    canRegister: ownProps.isAuth && state.user.userData.permissions.includes('addAdmin'),
-    canEditExps: ownProps.isAuth && state.user.userData.permissions.includes('approveExp')
+const mapStateToProps = (state) => ({
+    canRegister: state.user.userData.permissions.includes('addAdmin'),
+    canEditExps: state.user.userData.permissions.includes('approveExp')
 });
 
-export default connect(mapStateToProps, null)(withSnackbar(AdminApp, Snackbar));
+export default connect(mapStateToProps, null)(AdminApp);

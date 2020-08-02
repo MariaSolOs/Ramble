@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 const UserPastExperiences = (props) => {
     const classes = useStyles();
-    const pastExps = useSelector(state => state.user.pastExps);
+    const pastExps = useSelector(state => state.exp.pastExps);
 
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {

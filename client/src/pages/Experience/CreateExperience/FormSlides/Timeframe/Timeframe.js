@@ -3,27 +3,24 @@ import React from 'react';
 //Components and icons
 import TextField from '../../../../../components/Input/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import DatePicker from 'react-datepicker';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 //Styles
+import 'react-datepicker/dist/react-datepicker.css';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './TimeframeStyles';
 const useStyles = makeStyles(styles);
 
-//For calendar formatting
-const getWeekdays = (locale, date) => (
-    ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()]
-);
-
 const Timeframe = ({timeframe, updateFreq, submitInput}) => {
     const classes = useStyles();
 
+    let inOneMonth = new Date();
+    inOneMonth.setMonth(new Date().getMonth() + 1);
+
     //Update values in form
-    const handleDateChange = (newDate) => {
-        submitInput('timeframe', newDate);
+    const handleDateChange = (timeframe) => {
+        submitInput('timeframe', timeframe);
     }
     const handleFreqChange = (e) => {
         submitInput('scheduleUpdateFreq', e.target.value);
@@ -32,7 +29,7 @@ const Timeframe = ({timeframe, updateFreq, submitInput}) => {
     return (
         <>
         <h1 className={classes.title}>Availability updates</h1>
-        <div style={{ marginBottom: 60 }}>
+        <div style={{ marginBottom: 20 }}>
             <p className={classes.description}>
                 At which frequency would you like to update your availabilities?
             </p>
@@ -62,20 +59,16 @@ const Timeframe = ({timeframe, updateFreq, submitInput}) => {
             <p className={classes.description}>
                 For which dates will you have these availabilities?
             </p>
-            <DateRangePicker 
-            value={timeframe}
-            className={classes.timeframe}
-            calendarClassName={classes.calendar}
-            formatShortWeekday={getWeekdays}
-            prevLabel={<ChevronLeftIcon/>}
-            nextLabel={<ChevronRightIcon/>}
-            prev2Label={null}
-            next2Label={null}
+            <DatePicker
+            selected={timeframe[0]}
+            startDate={timeframe[0]}
+            endDate={timeframe[1]}
+            onChange={handleDateChange}
             minDate={new Date()}
-            minDetail="year"
-            rangeDivider="to"
-            clearIcon={null}
-            onChange={handleDateChange}/>
+            maxDate={inOneMonth}
+            calendarClassName={classes.calendar}
+            selectsRange
+            inline/>
         </div>
         </>
     );

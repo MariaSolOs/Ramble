@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from '../../tokenizedAxios';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../store/actions/ui';
 import {useForm} from 'react-hook-form';
 
 import TextField from '../../components/Input/TextField';
@@ -45,6 +47,7 @@ const Register = (props) => {
 
     //For managing registration
     const {register, handleSubmit, reset} = useForm();
+    const dispatch = useDispatch();
     const onSubmit = (values) => {
         const permissions = [];
         for(const perm in values.permissions) {
@@ -58,10 +61,10 @@ const Register = (props) => {
             permissions
         })
         .then(res => {
-            props.displaySnackbar('Successfully created admin 🥳');
+            dispatch(showSnackbar('Successfully created admin 🥳'));
         })
         .catch(err => {
-            props.displaySnackbar(`FUUUUCKKKK ${err} 🤖`);
+            dispatch(showSnackbar(`FUUUUCKKKK ${err} 🤖`));
         });
         reset({});
     }

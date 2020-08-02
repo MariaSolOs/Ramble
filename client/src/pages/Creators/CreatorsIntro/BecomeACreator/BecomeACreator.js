@@ -19,7 +19,7 @@ const BecomeACreator = (props) => {
     const classes = useStyles();
 
     const isAuth = useSelector(state => state.user.token !== null);
-    const isCreator = useSelector(state => Object.keys(state.user.creatorData).length > 0);
+    const isCreator = useSelector(state => state.user.isCreator);
 
     return (
         <div className={classes.root}>
@@ -28,12 +28,7 @@ const BecomeACreator = (props) => {
                 <h1>Share your passion.</h1>
                 <h1>Get paid.</h1>
                 {isAuth? 
-                    isCreator?
-                    <Link to="/experience/new/intro"
-                    className={classes.getStartedButton}>
-                        Get Started
-                    </Link> :
-                    <Link to="/experience/new/intro"
+                    <Link to={isCreator? '/experience/new/intro' : '/creator/join'}
                     className={classes.getStartedButton}>
                         Get Started
                     </Link> :

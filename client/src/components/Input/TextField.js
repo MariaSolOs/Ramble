@@ -3,7 +3,6 @@ import MUITextField from '@material-ui/core/TextField';
 
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
-    //Input fields
     textField_root: { fontFamily: 'Helvetica, sans-serif' },
     label_root: { opacity: 0 },
     label_focused: {
@@ -17,11 +16,22 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#2A2A2A',
         color: '#FFF',
         fontWeight: 'bold',
-        letterSpacing: '-0.05rem'
+        letterSpacing: '-0.05rem',
+        '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#D8246E'
+        }
     },
     input_focused: {
         '& .MuiOutlinedInput-notchedOutline': {
             borderColor: '#CDCDCD !important'
+        }
+    },
+    helperText_root: {
+        '&.MuiFormHelperText-root.Mui-error': {
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            color: '#D8246E',
+            letterSpacing: '-0.01rem'
         }
     }
 }));
@@ -54,6 +64,11 @@ const TextField = (props) => {
             root: classes.label_root,
             focused: classes.label_focused
         }}}
+        FormHelperTextProps={{
+            classes: {
+                root: classes.helperText_root
+            }
+        }}
         {...props}/>
     );
 }

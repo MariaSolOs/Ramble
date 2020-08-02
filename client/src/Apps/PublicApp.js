@@ -1,36 +1,45 @@
-import React, {lazy, Suspense, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux';
+import {fetchExperiences} from '../store/actions/experiences';
 import {Route, Redirect, Switch} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 //Pages and layout
 import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
 import Spinner from '../components/Spinner';
 import IdleTimer from '../components/IdleTimer/IdleTimer';
-import withSnackbar from '../hoc/withSnackbar';
-import Snackbar from '../components/Snackbar';
 import Home from '../pages/Home/Home';
-const ExperienceRouter = lazy(() => import('../pages/Experience/Router'));
-const ProfileRouter = lazy(() => import('../pages/Profile/Router'));
-const CreatorRouter = lazy(() => import('../pages/Creators/Router'));
+const ExperienceRouter = React.lazy(() => import('../pages/Experience/Router'));
+const ProfileRouter = React.lazy(() => import('../pages/Profile/Router'));
+const CreatorRouter = React.lazy(() => import('../pages/Creators/Router'));
 
-const UserApp = (props) => {
-    //For general errors
-    const message = useSelector(state => state.user.message);
-    const {displaySnackbar} = props;
+const PublicApp = (props) => {
+    //Keep token updated
+    const cookieToken = Cookies.get('token');
     useEffect(() => {
-        displaySnackbar(message);
-    }, [displaySnackbar, message]);
+        const storedToken = window.localStorage.getItem('token');
+        if(cookieToken && (cookieToken !== storedToken)) {
+            window.localStorage.setItem('token', cookieToken);
+            Cookies.remove('token');
+        }
+    }, [cookieToken]);
+
+    const {isAuth, fetchExps} = props;
+    //Fetch user experiences if logged in 
+    useEffect(() => {
+        if(isAuth) { fetchExps(); }
+    }, [isAuth, fetchExps]);
 
     //The isAuth prop is passed to the page routers to filter routes
     return (
-        <Suspense fallback={<Spinner/>}>
+        <React.Suspense fallback={<Spinner/>}>
             <Nav/>
-            {props.isAuth && <IdleTimer/>}
+            {isAuth && <IdleTimer/>}
             <Switch>
-                {props.isAuth && <Route path="/profile" component={ProfileRouter}/>}
+                {isAuth && <Route path="/profile" component={ProfileRouter}/>}
                 <Route path="/experience">
-                    <ExperienceRouter isAuth={props.isAuth}/>
+                    <ExperienceRouter isAuth={isAuth}/>
                 </Route>
                 <Route path="/creator">
                     <CreatorRouter/>
@@ -41,8 +50,15 @@ const UserApp = (props) => {
                 </Route>
                 <Redirect to="/"/>
             </Switch>
-        </Suspense>
+        </React.Suspense>
     );
 }
 
-export default withSnackbar(UserApp, Snackbar);
+const mapStateToProps = (state) => ({
+    isAuth: state.user.token !== null
+});
+const mapDispatchToProps = (dispatch) => ({
+    fetchExps: () => dispatch(fetchExperiences())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublicApp);

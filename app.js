@@ -11,8 +11,9 @@ const express = require('express'),
 //Setting environment variables
 const PORT = process.env.PORT || 5000;
 
-//Mongoose setup 
+//Global configurations
 require('./config/mongoose');
+require('./config/cloudinary');
 
 //Seed experience database
 //seedDB();
@@ -21,6 +22,7 @@ require('./config/mongoose');
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 //Stripe webhooks aren't parsed to json
 app.use(bodyParser.json({
+    limit: '5mb',
     verify: function(req, res, buf) {
         if(req.originalUrl.startsWith('/api/stripe/webhook')) {
             req.rawBody = buf.toString();

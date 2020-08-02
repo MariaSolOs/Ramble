@@ -2,24 +2,28 @@ import React, {useEffect, useCallback} from 'react';
 import axios from '../../../tokenizedAxios';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import {getWeekdayKey, getSlotsInfo} from './bookHelpers';
-import withErrorDialog from '../../../hoc/withErrorDialog/withErrorDialog';
 import useBookingReducer from './store/reducer';
 import {steps, actions} from './store/types';
+import {useDispatch} from 'react-redux';
+import {showError} from '../../../store/actions/ui';
 
 import * as dialogs from './Dialogs';
 
-const BookExperience = ({exp, user, onClose, displayError}) => {
+const BookExperience = ({exp, user, onClose}) => {
     //Managing dialog switching and payment steps
     const [state, dispatch] = useBookingReducer();
     const setStep = useCallback((step) => () => {
         dispatch({type: actions.SET_STEP, step})
     }, [dispatch]);
+
+    //For booking cancelling
+    const uiDispatch = useDispatch();
     const cancelBooking = useCallback((msg = null) => {
-        if(msg) { displayError(msg); }
+        if(msg) { uiDispatch(showError(msg)); }
         setTimeout(() => {
             onClose();
         }, 4000);
-    }, [onClose, displayError]);
+    }, [onClose, uiDispatch]);
 
     //For handling booking details
     const handleChange = useCallback((name, value) => {
@@ -172,4 +176,4 @@ const BookExperience = ({exp, user, onClose, displayError}) => {
     }
 }
 
-export default withErrorDialog(BookExperience);
+export default BookExperience;

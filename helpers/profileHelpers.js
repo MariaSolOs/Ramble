@@ -1,6 +1,6 @@
-const Experience = require('../models/experience'),
-      Ocurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
+// const Experience = require('../models/experience'),
+    //   Ocurrence = require('../models/occurrence'),
+    //   Booking = require('../models/booking');
 
 exports.getUserData = (user) => ({
     fstName: user.fstName,

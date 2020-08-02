@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {unsaveExperience} from '../../../store/actions/user';
+import {useDispatch, useSelector} from 'react-redux';
+import {unsaveExperience} from '../../../store/actions/experiences';
 
 //Components
 import ExperienceCard from '../../../components/ExperienceCard/ExperienceCard';
@@ -16,22 +16,25 @@ const UserSavedExperiences = (props) => {
     const classes = useStyles();
 
     //Experience card actions
+    const savedExps = useSelector(state => state.exp.savedExps);
+    const dispatch = useDispatch();
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {
         history.push(`/experience/${expId}`);
     }
     const handleUnsave = (expId) => (e) => {
         e.stopPropagation();
-        props.unsaveExp(expId);
+        dispatch(unsaveExperience(expId));
     }
 
     return (
         <div className={classes.root}>
             <NavRow/>
             <div className={classes.gallery}>
-                {props.savedExps.length > 0? 
-                    props.savedExps.map(exp => (
+                {savedExps.length > 0? 
+                    savedExps.map(exp => (
                         <ExperienceCard
+                        key={exp._id}
                         exp={exp}
                         showHeart
                         saved
@@ -47,11 +50,5 @@ const UserSavedExperiences = (props) => {
     ); 
 }
 
-const mapStateToProps = (state) => ({
-    savedExps: state.user.savedExps
-});
-const mapDispatchToProps = (dispatch) => ({
-    unsaveExp: (expId) => dispatch(unsaveExperience(expId))
-});
-export default connect(mapStateToProps, mapDispatchToProps)(UserSavedExperiences);
+export default UserSavedExperiences;
 

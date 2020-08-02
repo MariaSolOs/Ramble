@@ -9,7 +9,6 @@ router.get('/',
             authenticateToken, 
             identifyUser, 
             controllers.getUserProfile);
-//For fetching profile information
 router.get('/creator', 
             authenticateToken, 
             identifyUser, 
@@ -21,7 +20,17 @@ router.put('/edit',
             identifyUser, 
             controllers.editProfile);
 
-//For saving/unsaving an experience
+//Update user to creator
+router.post('/creator', 
+            authenticateToken, 
+            identifyUser,
+            controllers.updateUserToCreator);
+
+//For getting and saving/unsaving an experience
+router.get('/exps', 
+            authenticateToken, 
+            identifyUser, 
+            controllers.getUserExperiences);
 router.post('/exps', 
              authenticateToken, 
              identifyUser,

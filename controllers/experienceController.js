@@ -64,9 +64,14 @@ exports.approveExp = (req, res) => {
 
 //Show experience page
 exports.getExp = (req, res) => {
-    const creatorFields = 'name photo bio stripe';
-    Experience.findById(req.params.id).populate('creator', creatorFields)
-    .exec((err, exp) => {
+    Experience.findById(req.params.id).populate({
+        path: 'creator',
+        select: 'bio stripe',
+        populate: {
+            path: 'user',
+            select: 'fstName photo'
+        }
+    }).exec((err, exp) => {
         if(err || !exp) { 
             res.status(404).send({err: "Couldn't find experience."});
         } else { res.status(200).send({ exp }); }

@@ -46,10 +46,9 @@ const AdminNav = (props) => {
                     <Link to="/admin/approveExps" className={classes.navLink}>
                         Approve experiences
                     </Link>}
-                {props.isAuth && 
-                    <Link to="/" onClick={logoutAdmin} className={classes.navLink}>
-                        Logout
-                    </Link>}
+                <Link to="/" onClick={logoutAdmin} className={classes.navLink}>
+                    Logout
+                </Link>
             </div>
         </AppBar>
     ); 

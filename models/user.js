@@ -10,7 +10,10 @@ const UserSchema = new mongoose.Schema({
     lstName: String,
     birthday: Date,
     email: String,
-    phoneNumber: String,
+    phoneNumber: {
+        type: String,
+        validate: /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/
+    },
     passwordHash: String,
     photo: {
         type: String, 

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     position: { top: 80 }
 }));
 
-const Snackbar = ({open, onClose, message}) => {
+const Snackbar = (props) => {
     const classes = useStyles();
 
     return (
@@ -23,11 +23,11 @@ const Snackbar = ({open, onClose, message}) => {
         anchorOrigin={{vertical: 'top', horizontal: 'right'}}
         ContentProps={{classes: { root: classes.root }}}
         classes={{anchorOriginTopRight: classes.position}}
-        open={open}
-        onClose={onClose}
+        open={props.open}
+        onClose={props.onClose}
         autoHideDuration={2700}
-        message={message}/>
+        message={props.message}/>
     );
 }
 
-export default React.memo(Snackbar);
+export default Snackbar;

@@ -29,6 +29,7 @@ const CollapsingNav = (props) => {
                         <ProfileMenu 
                         userName={props.userName}
                         userPic={props.userPic}
+                        isCreator={props.isCreator}
                         closeParentMenu={closeMenu}
                         logoutUser={props.logoutUser}/>;
 
@@ -64,9 +65,12 @@ const CollapsingNav = (props) => {
                         paper: classes.collapsedPaper,
                         list: classes.collapsedList
                     }}>
-                        <MenuItem component={NavLink} to="/creator/become"
+                        <MenuItem 
+                        component={NavLink} 
+                        to={props.isCreator? '/creator/dashboard/bookings' : 
+                                             '/creator/become'}
                         onClick={closeMenu}>
-                            Become a Creator
+                            {props.isCreator? 'Creator dashboard': 'Become a Creator'}
                         </MenuItem>
                         {props.isAuth? 
                             <MenuItem>{profileMenu}</MenuItem> : 
@@ -83,8 +87,12 @@ const CollapsingNav = (props) => {
                     </Menu>
                 </div>
                 <div className={classes.expandedLinks}>
-                    <Link to="/creator/become" className={classes.navLink} style={{color: '#FFF'}}>
-                        Become a Creator
+                    <Link 
+                    to={props.isCreator? '/creator/dashboard/bookings' : 
+                                         '/creator/become'}
+                    className={classes.navLink} 
+                    style={{color: '#FFF'}}>
+                        {props.isCreator? 'Creator dashboard': 'Become a Creator'}
                     </Link>
                     {props.isAuth? profileMenu : 
                     <>
@@ -107,6 +115,7 @@ const CollapsingNav = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: (state.user.token !== null),
+    isCreator: (state.user.isCreator),
     userName: state.user.userData.fstName,
     userPic: state.user.userData.photo
 });

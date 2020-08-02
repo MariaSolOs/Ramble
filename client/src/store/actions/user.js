@@ -1,56 +1,52 @@
 import {userTypes as types} from '../actionTypes';
+import {startLoading, endLoading, showError, showSnackbar} from './ui';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const loadProfile = () => ({ type: types.LOAD_PROFILE });
-const setUserData = (token, data) => ({ 
-    type: types.SET_USER_DATA, token, data 
+const setUserData = (token, isAdmin, isCreator, userData) => ({ 
+    type: types.SET_USER_DATA, token, isAdmin, isCreator, userData 
 });
-const setCreatorData = (data) => ({ 
-    type: types.SET_CREATOR_DATA, data 
+const setCreatorData = (creatorData) => ({ 
+    type: types.SET_CREATOR_DATA, creatorData
 });
-const setUserExps = (pastExps, savedExps) => ({
-    type: types.SET_USER_EXPS, pastExps, savedExps
-});
-const saveExp = (exp) => ({ type: types.SAVE_EXP, exp });
-const unsaveExp = (expId) => ({ type: types.UNSAVE_EXP, expId });
-const setMessage = (message) => ({ type: types.SET_MSG, message });
 const resetUser = () => ({ type: types.RESET_USER });
 
 //For fetching user and creator data
 export const fetchUserProfile = () => {
     return dispatch => {
         if(!window.localStorage.getItem('token')) { return; }
-        dispatch(loadProfile());
+        dispatch(startLoading());
         axios.get('/api/profile')
         .then(res => {
             if(res.status === 200) {
-                dispatch(setUserData(res.data.token, res.data.userData));
-                if(!res.data.isAdmin) {
-                    dispatch(setUserExps(
-                        res.data.pastExperiences,
-                        res.data.savedExperiences
-                    ));
-                }        
+                dispatch(setUserData(
+                    res.data.token,
+                    res.data.isAdmin,
+                    res.data.isCreator,
+                    res.data.userData
+                ));       
             } else { dispatch(resetUser()); }
+            dispatch(endLoading());
         })
         .catch(err => {
             console.log(`FETCH PROFILE FAILED: ${err}`); 
+            dispatch(endLoading());
             dispatch(logout());
-        })
+        });
     }
 }
 export const fetchCreatorProfile = () => {
     return dispatch => {
-        dispatch(loadProfile());
+        dispatch(startLoading());
         axios.get('/api/profile/creator')
         .then(res => {
             console.log(res)
-            dispatch(setCreatorData(res.data.creatorData));       
+            dispatch(setCreatorData(res.data.creatorData));  
+            dispatch(endLoading());     
         }).catch(err => { 
             console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
-            dispatch(setMessage(`We cannot get your creator information 
-            right now...`)); 
+            dispatch(showError(`We cannot get your creator information 
+            right now...`));
         });
     }
 }
@@ -58,11 +54,10 @@ export const fetchCreatorProfile = () => {
 //For admin authentication
 export const adminLogin = (adminInfo) => {
     return dispatch => {
-        dispatch(loadProfile());
+        dispatch(startLoading());
         axios.post(`/api/auth/admin-login`, adminInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
-                window.localStorage.setItem('token', res.data.token);
                 dispatch(fetchUserProfile());
             } else { dispatch(resetUser()); }
         })
@@ -70,27 +65,28 @@ export const adminLogin = (adminInfo) => {
             console.log(`ADMIN AUTH FAILED: ${err}`); 
             dispatch(resetUser());
         });
+        dispatch(endLoading());  
     }
 }
 
 //For email authentication
 export const emailAuth = (userInfo, authType) => {
     return dispatch => {
-        dispatch(loadProfile());
+        dispatch(startLoading());
         //authtype is login or register
         axios.post(`/api/auth/email-${authType}`, userInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
-                window.localStorage.setItem('token', res.data.token);
                 dispatch(fetchUserProfile());
             } else { dispatch(resetUser()); }
+            dispatch(endLoading());  
         })
         .catch(err => { 
             console.log(`EMAIL AUTH FAILED: ${err}`); 
             if(err.response.status === 409) {
-                dispatch(setMessage('Someone is already using that email...'));
+                dispatch(showError('Someone is already using that email...'));
             } else {
-                dispatch(setMessage('Something went wrong...'));
+                dispatch(showError('Something went wrong...'));
             }
             dispatch(resetUser());
         });
@@ -104,41 +100,44 @@ export const editProfile = (updatedInfo) => {
         .then(res => {
             if(res.status === 201) {
                 //Update state with new user data
-                dispatch(setUserData(res.data.token, res.data.userData));
-                dispatch(setMessage(`Hey ${res.data.userData.fstName}! 
+                dispatch(setUserData(
+                    res.data.token,
+                    res.data.isAdmin,
+                    res.data.isCreator,
+                    res.data.userData
+                )); 
+                dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
                 Your profile has been updated.`));
             }
         })
         .catch(err => {
             console.log(`EDIT PROFILE FAILED: ${err}`);
-            dispatch(setMessage("Oh no! We couldn't update your profile..."))
+            dispatch(showError("We couldn't update your profile..."));
         });
     }
 }
 
-//For saving/unsaving an experience
-export const saveExperience = (expId) => {
+export const updateToCreator = (creatorInfo) => {
     return dispatch => {
-        axios.post('/api/profile/exps', {expId})
+        dispatch(startLoading());
+        axios.post('/api/profile/creator', creatorInfo)
         .then(res => {
-            if(res.status === 200) {
-                //Update saved experiences
-                dispatch(saveExp(res.data.savedExp));
+            if(res.status === 201) {
+                //Update state with new user data
+                dispatch(setUserData(
+                    res.data.token,
+                    res.data.isAdmin,
+                    res.data.isCreator,
+                    res.data.userData
+                )); 
+                dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
+                We'll rewiew your submission so that you can start creating...`));
             }
         })
-        .catch(err => console.log(`SAVE EXPERIENCE FAILED: ${err}`));
-    }
-}
-export const unsaveExperience = (expId) => {
-    return dispatch => {
-        axios.delete('/api/profile/exps', {data: {expId}})
-        .then(res => {
-            if(res.status === 200) {
-                //Update saved experiences
-                dispatch(unsaveExp(expId));  
-            }
-        })
-        .catch(err => console.log(`UNSAVE EXPERIENCE FAILED: ${err}`));
+        .catch(err => {
+            console.log(`CREATOR CREATION FAILED: ${err}`);
+            dispatch(showError("We couldn't submit your form..."));
+        });
     }
 }
 

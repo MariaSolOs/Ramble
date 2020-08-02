@@ -63,28 +63,39 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const validPhoneReg = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
+
 //TODO: Add change password and profile picture
 const UserInfo = (props) => {
     const classes = useStyles();
     
     //Set form based on saved user fields
     const user = props.user;
-    const {register, handleSubmit} = useForm({defaultValues: {
+    const {register, handleSubmit, errors} = useForm({defaultValues: {
         fstName: user.fstName,
         lstName: user.lstName,
         photo: user.photo,
         city: user.city,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        birthday: user.birthday
+        birthday: user.birthday.split('T')[0]
     }});
+
+    const onSubmit = (data) => {
+        if(validPhoneReg.test(data.phoneNumber)) {
+            data.phoneNumber = data.phoneNumber.replace(validPhoneReg, '($1) $2-$3');
+        } else { return; }
+        props.editProfile(data);
+    }
 
     return (
         <div className={classes.formContainer}>
             <CustomScroll heightRelativeToParent="80%">
-                <form onSubmit={handleSubmit(props.editProfile)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={classes.formRow} style={{ margin: 0 }}>
-                        <label htmlFor="fstName" className={classes.label}>Name</label>
+                        <label htmlFor="fstName" className={classes.label}>
+                            Name
+                        </label>
                         <button type="submit" className={classes.submitButton}>
                             <BorderColorIcon/>
                             Save changes
@@ -108,7 +119,9 @@ const UserInfo = (props) => {
                     </div>
                     <div className={classes.formRow}>
                         <FormControl className={classes.formGroup}>
-                            <label htmlFor="city" className={classes.label}>I live in</label>
+                            <label htmlFor="city" className={classes.label}>
+                                I live in
+                            </label>
                             <TextField
                             id="city" 
                             name="city"
@@ -117,7 +130,9 @@ const UserInfo = (props) => {
                     </div>
                     <div className={classes.formRow}>
                         <FormControl className={classes.formGroup}>
-                            <label htmlFor="email" className={classes.label}>Email</label>
+                            <label htmlFor="email" className={classes.label}>
+                                Email
+                            </label>
                             <TextField
                             id="email" 
                             name="email"
@@ -126,17 +141,24 @@ const UserInfo = (props) => {
                     </div>
                     <div className={classes.formRow}>
                         <FormControl className={classes.formGroup}>
-                            <label htmlFor="phoneNumber" className={classes.label}>Phone number</label>
+                            <label htmlFor="phoneNumber" className={classes.label}>
+                                Phone number
+                            </label>
                             <TextField
                             id="phoneNumber" 
                             name="phoneNumber"
                             type="tel"
-                            inputRef={register}/>
+                            error={errors.phoneNumber}
+                            helperText={errors.phoneNumber && 
+                                        'Please enter a valid phone number'}
+                            inputRef={register({pattern: validPhoneReg})}/>
                         </FormControl>
                     </div>
                     <div className={classes.formRow}>
                         <FormControl className={classes.formGroup}>
-                            <label htmlFor="birthday" className={classes.label}>Birthday</label>
+                            <label htmlFor="birthday" className={classes.label}>
+                                Birthday
+                            </label>
                             <TextField
                             id="birthday" 
                             name="birthday"

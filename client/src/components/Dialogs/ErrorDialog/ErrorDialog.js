@@ -37,13 +37,13 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const ErrorDialog = ({open, onClose, message}) => {
+const ErrorDialog = (props) => {
     const classes = useStyles();
 
     return (
         <Dialog
-        open={open}
-        onClose={onClose}
+        open={props.open}
+        onClose={props.onClose}
         aria-labelledby="idle-modal-title"
         aria-describedby="idle-modal"
         maxWidth="sm"
@@ -53,7 +53,7 @@ const ErrorDialog = ({open, onClose, message}) => {
                 Sorry 'bout that. 
             </div>
             <p className={classes.message}>
-                We f*cked up. {message}
+                We f*cked up. {props.message}
             </p>
         </Dialog>
     );

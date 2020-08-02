@@ -1,6 +1,6 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import useNumberField from '../../../../hooks/useNumberField';
-import {LocationContext} from '../../../../context/locationContext';
+import useLocations from '../../../../hooks/useLocations';
 
 //Components and icons
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -20,7 +20,7 @@ const useStyles = makeStyles(styles);
 const Searchbar = (props) => {
     const classes = useStyles();
 
-    const locations = useContext(LocationContext);
+    const locations = useLocations();
     //For updating location and numPeople changes
     const [location, setLocation] = useState(props.location || 'Montreal, Quebec');
     const handleLocationChange = (event, value, reason) => {

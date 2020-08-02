@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -43,40 +43,36 @@ const useStyles = makeStyles((theme) => ({
     },
     nextButton: {
         background: 'radial-gradient(circle at 96%, #2BB282, #2D73EA)',
-        '&.disabled': { 
+        '&:disabled': { 
             filter: 'brightness(40%)',
             cursor: 'not-allowed'
         }
     },
 }));
 
+//TODO: Add the save for now feature
 const Footer = ({currStage, backLink, nextLink, numSteps, canContinue}) => {
     const classes = useStyles();
+    const history = useHistory();
 
     return (
         <div className={classes.footer}>
-            <Link to="/">
-                <button className={classes.saveButton}>
-                    Save for now
-                </button>
-            </Link>
+            <button className={classes.saveButton}>
+                Save for now
+            </button>
             {currStage <= numSteps - 1 && 
-                canContinue ?
-                <Link to={`/experience/new/${nextLink}`}>
-                    <button className={`${classes.nextButton} ${classes.navButton}`}>
-                        {currStage === numSteps - 1? 'Submit my experience' : 'Next'}
-                    </button>
-                </Link> : 
-                <button className={`${classes.nextButton} ${classes.navButton}
-                                    disabled`}>
+                <button 
+                className={`${classes.nextButton} ${classes.navButton}`}
+                disabled={!canContinue}
+                onClick={() => history.push(`/experience/new/${nextLink}`)}>
                     {currStage === numSteps - 1? 'Submit my experience' : 'Next'}
                 </button>}
             {currStage > 0 && 
-            <Link to={`/experience/new/${backLink}`}>
-                <button className={`${classes.backButton} ${classes.navButton}`}>
+                <button 
+                className={`${classes.backButton} ${classes.navButton}`}
+                onClick={() => history.push(`/experience/new/${backLink}`)}>
                     Back
-                </button>
-            </Link>}
+                </button>}
         </div>
     );
 }

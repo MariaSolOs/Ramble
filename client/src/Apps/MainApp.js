@@ -1,26 +1,17 @@
-import React, {useEffect, lazy, Suspense} from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {fetchUserProfile} from '../store/actions/user';
-import Cookies from 'js-cookie';
+import {messageShown} from '../store/actions/ui';
 import {Route, Switch, useHistory} from 'react-router-dom';
-import {LocationProvider} from '../context/locationContext';
 
+import Snackbar from '../components/Snackbar';
+import ErrorDialog from '../components/Dialogs/ErrorDialog/ErrorDialog';
 import Spinner from '../components/Spinner';
 import PublicApp from './PublicApp';
-const AdminApp = lazy(() => import('./AdminApp'));
+const AdminApp = React.lazy(() => import('./AdminApp'));
 
 const MainApp = (props) => {
     const history = useHistory();
-
-    //Keep token updated
-    const cookieToken = Cookies.get('token');
-    useEffect(() => {
-        const storedToken = window.localStorage.getItem('token');
-        if(cookieToken && (cookieToken !== storedToken)) {
-            window.localStorage.setItem('token', cookieToken);
-            Cookies.remove('token');
-        }
-    }, [cookieToken]);
 
     //For redirect requests:
     const redirect = window.localStorage.getItem('redirectURL');
@@ -39,29 +30,40 @@ const MainApp = (props) => {
 
     return (
         <>
-        {props.loadingUser? <Spinner/> :
-        <Suspense fallback={<Spinner/>}> 
+        {props.loading? <Spinner/> :
+        <React.Suspense fallback={<Spinner/>}> 
+            <Snackbar 
+            open={props.msgComponent === 'Snackbar'} 
+            message={props.msg} 
+            onClose={props.onMsgShown}/>
+            <ErrorDialog
+            open={props.msgComponent === 'ErrorDialog'} 
+            message={props.msg} 
+            onClose={props.onMsgShown}/>
             <Switch>
-                <Route path="/admin">
-                    <AdminApp isAuth={props.isAuth}/>
-                </Route>
+                {props.isAdmin &&
+                    <Route path="/admin">
+                        <AdminApp/>
+                    </Route>}
                 <Route path="/">
-                    <LocationProvider>
-                        <PublicApp isAuth={props.isAuth}/>
-                    </LocationProvider>
+                    <PublicApp/>
                 </Route>
             </Switch>
-        </Suspense>}
+        </React.Suspense>}
         </>
     );
 }
 
 const mapStateToProps = (state) => ({
     isAuth: state.user.token !== null,
-    loadingUser: state.user.loading
+    isAdmin: state.user.isAdmin,
+    loading: state.ui.loading,
+    msg: state.ui.message,
+    msgComponent: state.ui.component
 });
 const mapDispatchToProps = (dispatch) => ({
-    fetchUserProfile: () => dispatch(fetchUserProfile())
-});
+    fetchUserProfile: () => dispatch(fetchUserProfile()),
+    onMsgShown: () => dispatch(messageShown())
+}); 
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainApp);

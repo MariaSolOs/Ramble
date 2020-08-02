@@ -36,7 +36,7 @@ const CreateExperience = (props) => {
         privatePrice: 0, //for private bookings
         currency: 'CAD',
         schedule: new Map(),
-        timeframe: null,
+        timeframe: [new Date(), null],
         scheduleUpdateFreq: 'weekly',
         canSubmit: false
     });
@@ -236,7 +236,7 @@ const CreateExperience = (props) => {
             <Route path={`${path}/${pages.TIMEFRAME}`}>
                 <Layout
                 completedSteps={completedSteps}
-                canContinue={values.timeframe} 
+                canContinue={values.timeframe[1]} 
                 currStage={9} 
                 backLink={pages.SCHEDULE}
                 nextLink={pages.REVIEW}>
@@ -263,7 +263,8 @@ const CreateExperience = (props) => {
                 <Submitted 
                 expTitle={values.title}/>
             </Route>
-            </Switch>
+            <Redirect to="/creator/become"/>
+        </Switch>
     );
 }
 

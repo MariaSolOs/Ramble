@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'),
+      {generateAccessToken} = require('../helpers/JWTHelpers');
 
 exports.authenticateToken = (req, res, next) => {
     //Gather the jwt access token from the request header
@@ -22,8 +23,8 @@ exports.authenticateToken = (req, res, next) => {
             timeRemaining = (decoded.exp  - now) / 3600;
             //Refresh token if it will expire soon
             if(timeRemaining <= 1) {
-                const token = generateAccessToken(req.userId);
-                res.cookie('token', token);
+                const newToken = generateAccessToken(req.userId, false, '12h');
+                req.token = newToken;
             }
         }
         next(); 

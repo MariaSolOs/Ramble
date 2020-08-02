@@ -14,7 +14,7 @@ const initialState = {
     slotsInfo: [],
     payDone: false,
     payProcessing: false,
-    payMsg: '',
+    payMsg: ''
 }
 
 export default function useBookingReducer() {

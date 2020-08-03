@@ -8,7 +8,7 @@ const express = require('express'),
 router.get('/creator-oauth', 
             validateStripeState, 
             identifyUser,
-            controllers.upgradeToCreator);
+            controllers.connectCreatorToStripe);
 
 //Server routes called once bookings are (tried to be) saved to DB
 router.post('/payment-intent/capture', controllers.capturePaymentIntent);

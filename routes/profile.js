@@ -9,22 +9,12 @@ router.get('/',
             authenticateToken, 
             identifyUser, 
             controllers.getUserProfile);
-router.get('/creator', 
-            authenticateToken, 
-            identifyUser, 
-            controllers.getCreatorProfile);
 
 //Editing user info
 router.put('/edit', 
             authenticateToken, 
             identifyUser, 
             controllers.editProfile);
-
-//Update user to creator
-router.post('/creator', 
-            authenticateToken, 
-            identifyUser,
-            controllers.updateUserToCreator);
 
 //For getting and saving/unsaving an experience
 router.get('/exps', 
@@ -33,11 +23,9 @@ router.get('/exps',
             controllers.getUserExperiences);
 router.post('/exps', 
              authenticateToken, 
-             identifyUser,
              controllers.saveExperience);
 router.delete('/exps', 
                authenticateToken, 
-               identifyUser,
                controllers.unsaveExperience);
 
 module.exports = router;

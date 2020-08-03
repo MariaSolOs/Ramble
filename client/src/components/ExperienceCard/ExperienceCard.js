@@ -14,6 +14,7 @@ const useStyles = makeStyles(styles);
 
 const ExperienceCard = (props) => {
     const classes = useStyles({saved: props.saved});
+    
     return (
         <div 
         className={`${classes.root} ${props.className}`} 
@@ -22,7 +23,7 @@ const ExperienceCard = (props) => {
                 <Tooltip 
                 disableFocusListener
                 placement="top-end"
-                title={props.saved? 'Saved!' : 'Save experience'}
+                title={props.saved? 'Saved' : 'Save experience'}
                 classes={{
                     tooltip: classes.tooltip,
                     tooltipPlacementTop: classes.tooltip_top

@@ -101,13 +101,6 @@ const ProfileMenu = (props) => {
             onClick={closeMenu}>
                 View Profile
             </MenuItem>
-            {props.isCreator && 
-                <MenuItem 
-                component={NavLink} 
-                to="/creator/dashboard/bookings"
-                onClick={closeMenu}>
-                    Creator dashboard
-                </MenuItem>}
             <MenuItem component={NavLink} to="/experience/new/intro"
             onClick={closeMenu}>
                 New Experience

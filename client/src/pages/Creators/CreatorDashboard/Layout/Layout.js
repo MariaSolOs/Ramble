@@ -8,9 +8,11 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         minHeight: '70vh',
         width: '90%',
-        margin: '15vh auto 0'
+        margin: '15vh auto 5vh'
     },
-    //Shadow divider
+    page: {
+        width: 'calc(100% - 10px - 3%)'
+    },
     shadowSeparator: {
         padding: 5,
         borderRadius: '2rem',
@@ -25,7 +27,7 @@ const Layout = (props) => {
     return (
         <div className={classes.root}>
             <div className={classes.shadowSeparator}/>
-            <div>
+            <div className={classes.page}>
                 <NavRow/>
                 {props.children}
             </div>

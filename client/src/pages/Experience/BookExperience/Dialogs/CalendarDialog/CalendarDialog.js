@@ -1,5 +1,5 @@
 import React from 'react';
-import {getWeekdayKey} from '../../bookHelpers';
+import {getWeekdayKey} from '../../helpers';
 
 //Components
 import Template from '../Template';

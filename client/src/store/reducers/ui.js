@@ -3,7 +3,7 @@ import {uiTypes as types} from '../actionTypes';
 const initialState = {
     loading: false,
     message: '',
-    component: ''
+    messageComponent: ''
 }
 
 const uiReducer = (state = initialState, action) => {
@@ -25,7 +25,7 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 message: action.message,
-                component: 'ErrorDialog'
+                messageComponent: 'ErrorDialog'
             }
         }
         case types.SHOW_SNACKBAR: {
@@ -33,14 +33,14 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 message: action.message,
-                component: 'Snackbar'
+                messageComponent: 'Snackbar'
             }
         }
         case types.MESSAGE_SHOWN: {
             return {
                 ...state,
                 message: '',
-                component: ''
+                messageComponent: ''
             }
         }
         default: { return state; }

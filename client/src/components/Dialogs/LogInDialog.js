@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {emailAuth, adminLogin} from '../../store/actions/user';
-import {useHistory} from 'react-router-dom';
 
 //MUI
 import FormControl from '@material-ui/core/FormControl';
@@ -28,7 +27,6 @@ const LogInDialog = (props) => {
     }, [props.currentRoute]);
     
     const dispatch = useDispatch();
-    const history = useHistory();
     const handleLogIn = (data, e) => {
         if(data.email.startsWith('RAMBLE_ADMIN__')) {
             const username = data.email.replace('RAMBLE_ADMIN__', '');
@@ -36,10 +34,7 @@ const LogInDialog = (props) => {
                 username, 
                 password: data.password
             }));
-            history.push('/admin');
-        } else {
-            dispatch(emailAuth(data, 'login'));
-        }
+        } else { dispatch(emailAuth(data, 'login')); }
     }
 
     return (

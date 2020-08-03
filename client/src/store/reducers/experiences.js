@@ -1,9 +1,9 @@
 import {experienceTypes as types} from '../actionTypes';
 
 const initialState = {
-    locations: [],
-    pastExps: [],
-    savedExps: []
+    locations: null,
+    pastExps: null,
+    savedExps: null
 }
 
 const authReducer = (state = initialState, action) => {

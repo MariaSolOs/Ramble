@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {prepareReview} from '../formHelpers';
+import {prepareReview} from '../helpers';
 
 //Components
 import Experience from '../../../../../components/Experience/Experience';

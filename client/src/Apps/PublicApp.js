@@ -25,11 +25,11 @@ const PublicApp = (props) => {
         }
     }, [cookieToken]);
 
-    const {isAuth, fetchExps} = props;
+    const {isAuth, savedExps, fetchExps} = props;
     //Fetch user experiences if logged in 
     useEffect(() => {
-        if(isAuth) { fetchExps(); }
-    }, [isAuth, fetchExps]);
+        if(isAuth && !savedExps) { fetchExps(); }
+    }, [isAuth, fetchExps, savedExps]);
 
     //The isAuth prop is passed to the page routers to filter routes
     return (
@@ -55,7 +55,8 @@ const PublicApp = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.token !== null
+    isAuth: state.user.token !== null,
+    savedExps: state.exp.savedExps
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchExps: () => dispatch(fetchExperiences())

@@ -1,6 +1,6 @@
 import React from 'react';
 import uuid from 'react-uuid';
-import {getDatePieces} from '../../bookHelpers';
+import {getDatePieces} from '../../helpers';
 
 //Components and icons
 import Template from '../Template';

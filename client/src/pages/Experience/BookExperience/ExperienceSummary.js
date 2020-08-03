@@ -65,8 +65,8 @@ const ExperienceSummary = ({date, timeslot, exp}) => {
                 <h4 className={classes.title}>{exp.title}</h4>
                 <h4 className={classes.date}>{occString}</h4>
                 <div className={classes.creator}>
-                    <Avatar src={exp.creator.photo} alt="Experience creator" className="photo"/>
-                    <span>{exp.creator.name}</span>
+                    <Avatar src={exp.creator.user.photo} alt="Experience creator" className="photo"/>
+                    <span>{exp.creator.user.fstName}</span>
                 </div>
             </div>
         </div>

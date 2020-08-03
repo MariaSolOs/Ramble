@@ -1,7 +1,7 @@
 import React, {useEffect, useCallback} from 'react';
 import axios from '../../../tokenizedAxios';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
-import {getWeekdayKey, getSlotsInfo} from './bookHelpers';
+import {getWeekdayKey, getSlotsInfo} from './helpers';
 import useBookingReducer from './store/reducer';
 import {steps, actions} from './store/types';
 import {useDispatch} from 'react-redux';

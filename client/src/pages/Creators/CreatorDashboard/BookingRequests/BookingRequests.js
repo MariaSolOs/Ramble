@@ -1,12 +1,19 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import BookingCard from './BookingCard/BookingCard';
+
 const BookingRequests = (props) => {
-    const bookings = useSelector(state => state.user.creatorData);
-    console.log(bookings);
+    const bookings = useSelector(state => state.user.creatorData.bookingRequests);
 
     return (
-        null
+        <>
+            {bookings.map(booking => (
+                <BookingCard 
+                booking={booking}
+                key={booking._id}/>
+            ))}
+        </>
     );
 }
 

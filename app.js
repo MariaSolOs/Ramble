@@ -63,6 +63,10 @@ app.use('/api/exp', experienceRoutes);
 const profileRoutes = require('./routes/profile');
 app.use('/api/profile', profileRoutes);
 
+//Creator API:
+const creatorRoutes = require('./routes/creator');
+app.use('/api/creator', creatorRoutes);
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });

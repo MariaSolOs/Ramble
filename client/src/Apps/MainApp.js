@@ -59,7 +59,7 @@ const mapStateToProps = (state) => ({
     isAdmin: state.user.isAdmin,
     loading: state.ui.loading,
     msg: state.ui.message,
-    msgComponent: state.ui.component
+    msgComponent: state.ui.messageComponent
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchUserProfile: () => dispatch(fetchUserProfile()),

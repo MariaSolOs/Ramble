@@ -21,9 +21,10 @@ const Router = (props) => {
 
     return (
         <Layout>
+            {creatorProfile.creatorId && 
             <Switch location={location}>
                 <Route path={`${path}/bookings`} component={BookingRequests}/>
-            </Switch>
+            </Switch>}
         </Layout>
     );
 }

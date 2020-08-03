@@ -5,7 +5,13 @@ const Experience = require('../models/experience'),
       User = require('../models/user'), 
       Creator = require('../models/creator');
 
-const helpers = require('../helpers/experienceHelpers');
+//To deal with Mongoose dates
+const extractDayFrame = (date) => {
+    const dayStart = new Date(date);
+    const day = (60 * 60 * 24 * 1000) - 1;
+    const dayEnd = new Date(dayStart.getTime() + day);
+    return [dayStart, dayEnd];
+}
 
 //Fetch cities stored in database
 exports.getLocations = (req, res) => {
@@ -80,7 +86,7 @@ exports.getExp = (req, res) => {
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
-    const [dayStart, dayEnd] = helpers.extractDayFrame(req.query.date);
+    const [dayStart, dayEnd] = extractDayFrame(req.query.date);
     Occurrence.find({experience: req.params.id, 
                      date: {$gte: dayStart, $lt: dayEnd}}, 
     'timeslot spotsLeft', (err, occ) => {
@@ -97,7 +103,7 @@ exports.addBookingToOcurrence = async (req, res) => {
     try {
         const experience = await Experience.findById(req.params.id, 'capacity creator')
                                  .populate('creator');
-        const [dayStart, dayEnd] = helpers.extractDayFrame(req.body.date);
+        const [dayStart, dayEnd] = extractDayFrame(req.body.date);
         let occ = await Occurrence.findOne({
                             experience: req.params.id,
                             date: {$gte: dayStart, $lt: dayEnd},

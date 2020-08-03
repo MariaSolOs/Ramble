@@ -38,7 +38,7 @@ export const fetchUserProfile = () => {
 export const fetchCreatorProfile = () => {
     return dispatch => {
         dispatch(startLoading());
-        axios.get('/api/profile/creator')
+        axios.get('/api/creator')
         .then(res => {
             console.log(res)
             dispatch(setCreatorData(res.data.creatorData));  
@@ -60,6 +60,7 @@ export const adminLogin = (adminInfo) => {
             if(res.status === 201 || res.status === 200) {
                 dispatch(fetchUserProfile());
             } else { dispatch(resetUser()); }
+            window.localStorage.setItem('redirectURL', '/admin');
         })
         .catch(err => { 
             console.log(`ADMIN AUTH FAILED: ${err}`); 
@@ -120,19 +121,10 @@ export const editProfile = (updatedInfo) => {
 export const updateToCreator = (creatorInfo) => {
     return dispatch => {
         dispatch(startLoading());
-        axios.post('/api/profile/creator', creatorInfo)
-        .then(res => {
-            if(res.status === 201) {
-                //Update state with new user data
-                dispatch(setUserData(
-                    res.data.token,
-                    res.data.isAdmin,
-                    res.data.isCreator,
-                    res.data.userData
-                )); 
-                dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
-                We'll rewiew your submission so that you can start creating...`));
-            }
+        axios.post('/api/creator', creatorInfo)
+        .then(res => {  
+            dispatch(showSnackbar(`Thank you for your submission! 
+            We'll rewiew it ASAP so that you can start creating...`));
         })
         .catch(err => {
             console.log(`CREATOR CREATION FAILED: ${err}`);

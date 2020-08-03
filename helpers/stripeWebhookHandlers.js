@@ -1,24 +1,6 @@
-const User = require('../models/user'),
-      Creator = require('../models/creator'),
+const Creator = require('../models/creator'),
       Experience = require('../models/experience'),
-      Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking');
-
-exports.updateUserToCreator = async (stripeId, user) => {
-    try {
-        const newCreator = new Creator({
-            name: user.fstName,
-            photo: user.photo,
-            'stripe.id': stripeId
-        });
-        await newCreator.save();
-        return User.findByIdAndUpdate(user._id, 
-               {creator: newCreator._id}, 
-               {new: true});
-    } catch(err) {
-        return console.log("Couldn't upgrade user to creator.");
-    }
-}
 
 exports.calculatePaymentAmount = async (expId, bookType, numGuests) => {
     try {

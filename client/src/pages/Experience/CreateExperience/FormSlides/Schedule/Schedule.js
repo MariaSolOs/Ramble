@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import uuid from 'react-uuid';
-import * as helpers from '../formHelpers';
+import * as helpers from '../helpers';
 
 //Components
 import Tip from '../../../../../components/Tip';

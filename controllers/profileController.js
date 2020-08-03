@@ -1,10 +1,17 @@
-const helpers = require('../helpers/profileHelpers'),
-      cloudinary = require('cloudinary').v2;
-
 //Models
 const User = require('../models/user'),
-      Experience = require('../models/experience'),
-      Creator = require('../models/creator');
+      Experience = require('../models/experience');
+
+//Helpers
+const getUserData = (user) => ({
+    fstName: user.fstName,
+    lstName: user.lstName,
+    photo: user.photo,
+    city: user.city,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    birthday: user.birthday
+});
 
 //For fetching profile information
 exports.getUserProfile = (req, res) => {
@@ -22,17 +29,9 @@ exports.getUserProfile = (req, res) => {
             isAdmin: false,
             isCreator: Boolean(req.user.creator),
             token:  req.token,
-            userData: helpers.getUserData(req.user)
+            userData: getUserData(req.user)
         });
     }
-}
-exports.getCreatorProfile = (req, res) => {
-    req.user.populate('creator')
-    .execPopulate().then(async user => {
-        res.status(200).send({
-            creatorData: {...await helpers.getCreatorData(user.creator)}
-        });
-    });
 }
 
 //Editing user info
@@ -46,66 +45,32 @@ exports.editProfile = async (req, res) => {
             token: req.token,
             isAdmin: false,
             isCreator: Boolean(req.user.creator),
-            userData: helpers.getUserData(req.user) 
+            userData: getUserData(req.user) 
         });
     } catch(err) {
         res.status(409).send({error: "Couldn't update user."});
     }
 }
 
-//Upgrade an user to a creator
-exports.updateUserToCreator = async (req, res) => {
-    try {
-        //Upload ID to Cloudinary
-        const governmentIds = [];
-        for(idImg of req.body.id) {
-            const upload = await cloudinary.uploader.upload(idImg, {
-                folder: 'Ramble/Creators',
-                eager: [
-                    { format: 'jpeg', height: 300, quality: 30, crop: 'fit' }
-                ]
-            });
-            governmentIds.push(upload.eager[0].secure_url);
-        }
-        //Make a new creator
-        const creator = new Creator({
-            user: req.userId,
-            bio: req.body.bio,
-            verified: false,
-            governmentIds
-        });
-        await creator.save();
-        //Update user's info
-        req.user.phoneNumber = req.body.phoneNumber;
-        req.user.creator = creator._id;
-        await req.user.save();
-        res.status(201).send({
-            isAdmin: false,
-            isCreator: true,
-            token:  req.token,
-            userData: helpers.getUserData(req.user)
-        });
-    } catch(err) {
-        res.status(409).send({err: "Couldn't update user to creator."});
-    }
-}
-
 //For getting and saving/unsaving an experience
 exports.getUserExperiences = async (req, res) => {
+    //We only need this for experience cards
+    const expFields = 'title location.displayLocation images price rating';
+    const {pastExperiences, savedExperiences} = 
+        await req.user.populate('pastExperiences', expFields)
+                  .populate('savedExperiences', expFields)
+                  .execPopulate();
     res.status(200).send({
-        ...await helpers.getUserExperiences(req.user)
+        pastExperiences, 
+        savedExperiences
     });
 }
 exports.saveExperience = async (req, res) => {
     try {
-        let savedExp = null;
-        const exp = await Experience.findById(req.body.expId, 
-                          'title location.displayLocation images price rating');
-        if(!req.user.savedExperiences.includes(exp._id)){
-            req.user.savedExperiences.push(exp._id);
-            savedExp = exp;
-            await req.user.save();
-        }
+        const savedExp = await Experience.findById(req.body.expId, 
+                         'title location.displayLocation images price rating');
+        await User.findByIdAndUpdate(req.userId, 
+              {$addToSet: { savedExperiences: savedExp._id }});
         res.status(200).send({ 
             token: req.token,
             savedExp 
@@ -116,11 +81,8 @@ exports.saveExperience = async (req, res) => {
 }
 exports.unsaveExperience = async (req, res) => {
     try {
-        const newExps = req.user.savedExperiences.filter(id => 
-            !id.equals(req.body.expId)
-        );
-        req.user.savedExperiences = newExps;
-        await req.user.save();
+        await User.findByIdAndUpdate(req.userId, 
+              {$pull: {savedExperiences: req.body.expId }});
         res.status(200).send({
             token: req.token,
             message: 'Experience succesfully unsaved.'

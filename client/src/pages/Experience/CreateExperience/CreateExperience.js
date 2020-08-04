@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {useRouteMatch, Switch, Route, useLocation, Redirect} from 'react-router-dom';
 import * as pages from './pageNames';
 import useLanguages from '../../../hooks/useLanguages';
+import {prepareReview} from './FormSlides/helpers';
 
 //Pages and components
 import * as slides from './FormSlides';
@@ -15,7 +16,7 @@ const CreateExperience = (props) => {
     const location = useLocation();
 
     //Form values and options
-    const creator = useSelector(state => state.user.userData);
+    const creator = useSelector(state => state.user.profile);
     const allLanguages = useLanguages();
     const [values, setValues] = useState({
         location: null,
@@ -31,6 +32,7 @@ const CreateExperience = (props) => {
         ageRequired: 18,
         images: [null, null, null, null],
         included: [],
+        mustBring: false,
         toBring: [],
         price: 0, //per person 
         privatePrice: 0, //for private bookings
@@ -159,7 +161,8 @@ const CreateExperience = (props) => {
             <Route path={`${path}/${pages.AGE}`}>
                 <Layout
                 completedSteps={completedSteps}
-                canContinue={values.ageRestricted} 
+                canContinue={(values.ageRestricted && values.ageRequired)
+                             || !values.ageRestricted} 
                 currStage={4} 
                 backLink={pages.CAPACITY}
                 nextLink={pages.PREVIEW}>
@@ -196,11 +199,13 @@ const CreateExperience = (props) => {
             <Route path={`${path}/${pages.BRING}`}>
                 <Layout
                 completedSteps={completedSteps}
-                canContinue={true} 
+                canContinue={!values.mustBring || 
+                             (values.mustBring && values.toBring.length > 0)} 
                 currStage={7} 
                 backLink={pages.INCLUDED}
                 nextLink={pages.PRICE}>
                     <slides.Bring
+                    mustBring={values.mustBring}
                     toBring={values.toBring}
                     submitInput={submitInput}/>
                 </Layout>
@@ -254,9 +259,8 @@ const CreateExperience = (props) => {
                 backLink={pages.TIMEFRAME}
                 nextLink={pages.SUBMITTED}>
                     <slides.Review
-                    exp={values}
-                    creator={creator}
-                    submitExp={submitInput}/>
+                    exp={prepareReview(values, creator)}
+                    images={values.images}/>
                 </Layout>
             </Route>
             <Route path={`${path}/${pages.SUBMITTED}`}>

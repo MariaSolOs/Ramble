@@ -257,17 +257,6 @@ const seedDB = async () => {
         //I create everything
         exp.creator = creator._id;
         await exp.save();
-
-        //Create some random occurrences
-        const numPeople = Math.floor(Math.random() * 5) + 1;
-        if(exp.capacity < numPeople){ return; }
-        const occ = new Occurrence({
-            experience: exp._id,
-            date: new Date('Friday August 28 2020'),
-            timeslot: '8PM-10PM',
-            spotsLeft: exp.capacity
-        });
-        await occ.save();
     });
     console.log('Database populated.');
 }

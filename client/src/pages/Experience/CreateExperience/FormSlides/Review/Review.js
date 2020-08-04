@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import {prepareReview} from '../helpers';
+import React from 'react';
 
 //Components
 import Experience from '../../../../../components/Experience/Experience';
@@ -10,18 +9,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ReviewStyles';
 const useStyles = makeStyles(styles);
 
-const Review = ({exp, creator, submitExp}) => {
+const Review = ({review, images}) => {
     const classes = useStyles();
 
     //Prepare data 
-    const images = exp.images.map(img => ({original: img, thumbnail: img}));
-    const [review, setReview] = useState();
-    useEffect(() => {
-        setReview(prepareReview(exp, creator));
-    }, [exp, creator]);
-    useEffect(() => {
-        if(review) { submitExp('canSubmit', true); }
-    }, [review, submitExp]);
+    const carouselImgs = images.map(img => ({original: img, thumbnail: img}));
 
     return (
         <div className={classes.root}>
@@ -30,7 +22,7 @@ const Review = ({exp, creator, submitExp}) => {
             <div className={classes.experience}>
                 <Experience exp={review}
                 floatButtons={<FloatButtons showSave/>}
-                images={images}/>
+                images={carouselImgs}/>
             </div> : 
             <p className={classes.description}>
                 Your experience couldn't be submitted.<br/>

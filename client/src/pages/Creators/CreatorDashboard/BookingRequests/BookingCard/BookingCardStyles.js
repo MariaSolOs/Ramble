@@ -4,7 +4,7 @@ const styles = () => ({
         fontWeight: 'bold',
         letterSpacing: '-0.05rem',
         width: '35%',
-        minWidth: 380,
+        minWidth: 400,
         '& p': { margin: 0 }
     },
 
@@ -19,7 +19,7 @@ const styles = () => ({
     withLargeNum: {
         fontSize: '0.9rem',
         '& span': {
-            fontSize: '1.2rem',
+            fontSize: '1.1rem',
             marginRight: 3
         }
     },
@@ -66,7 +66,7 @@ const styles = () => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '95%'
+        whiteSpace: 'nowrap'
     },
     experience: {
         display: 'flex',

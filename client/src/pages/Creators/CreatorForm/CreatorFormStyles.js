@@ -126,8 +126,7 @@ const styles = () => ({
         '&:hover': { color: '#FFF' }
     },
 
-    submitButton: {
-        background: 'radial-gradient(circle at 298%, #F7521E, #AC9EFF)',
+    gradientButton: {
         border: 'none',
         borderRadius: '1.7rem',
         fontSize: '1.05rem',
@@ -139,12 +138,19 @@ const styles = () => ({
         textAlign: 'center',
         cursor: 'pointer',
         float: 'right',
-        margin: '1.7rem',
+        margin: '1.5rem 1.5rem 1.5rem 0',
+        whiteSpace: 'nowrap',
         '&:focus': { outline: 'none' },
         '&:disabled': {
             filter: 'brightness(70%)',
             cursor: 'not-allowed'
         }
+    },
+    doLaterButton: {
+        //backgroundColor: '',
+    },
+    submitButton: {
+        background: 'radial-gradient(circle at 298%, #F7521E, #AC9EFF)'
     }
 });
 

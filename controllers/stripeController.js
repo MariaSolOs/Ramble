@@ -1,8 +1,31 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      
-const handlers = require('../helpers/stripeWebhookHandlers');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
+      handlers = require('../helpers/stripeWebhookHandlers');
 
-const User = require('../models/user');
+const User = require('../models/user'),
+      Experience = require('../models/experience');
+
+//Helpers
+const calculatePaymentAmount = async (expId, bookType, numGuests) => {
+    try {
+        const exp = await Experience.findById(expId, 'price');
+        let amount;
+        if(bookType === 'public') {
+            amount = exp.price.perPerson * numGuests * 100;
+        } else if(bookType === 'private') {
+            amount = exp.price.private * 100;
+        } else {
+            throw new Error('Invalid booking type.');
+        }
+        //Price is multiplied by 100 to use cents
+        return {
+            amount,
+            currency: exp.price.currency,
+            rambleFee: amount * 0.15
+        }
+    } catch(err) {
+        throw new Error(`Couldn't calculate amount: ${err}`);
+    }
+}
 
 exports.connectCreatorToStripe = (req, res) => {
     const {code} = req.query;
@@ -27,7 +50,7 @@ exports.connectCreatorToStripe = (req, res) => {
 }
 
 //Called once bookings are (tried to be) saved to DB
-exports.capturePaymentIntent = async (req, res) => {
+exports.capturePaymentIntent = (req, res) => {
     stripe.paymentIntents.capture(req.body.stripeId, (err, intent) => {
         if(err) {
             res.status(500).send({err: "Couldn't capture intent."});
@@ -36,7 +59,7 @@ exports.capturePaymentIntent = async (req, res) => {
         }
     });
 }
-exports.cancelPaymentIntent = async (req, res) => {
+exports.cancelPaymentIntent = (req, res) => {
     stripe.paymentIntents.cancel(req.body.stripeId, (err, intent) => {
         if(err) {
             res.status(500).send({err: "Couldn't cancel intent."});
@@ -47,10 +70,10 @@ exports.cancelPaymentIntent = async (req, res) => {
 }
 
 exports.createPaymentIntent = async (req, res) => {
-    const payInfo = await handlers.calculatePaymentAmount(
-                            req.body.expId, 
-                            req.body.bookType, 
-                            +req.body.numGuests
+    const payInfo = await calculatePaymentAmount(
+                          req.body.expId, 
+                          req.body.bookType, 
+                          +req.body.numGuests
                     );
     await stripe.paymentIntents.create({
         amount: payInfo.amount,
@@ -70,7 +93,7 @@ exports.createPaymentIntent = async (req, res) => {
         } catch(err) {
             return res.status(500).send({ err });
         }
-    });
+    }).catch(err => res.status(500).send({ err }));
 }
 
 exports.stripeWebhook = async (req, res) => {
@@ -90,8 +113,10 @@ exports.stripeWebhook = async (req, res) => {
     let message;
     switch(event.type) {
         case 'payment_intent.succeeded':
-            const paymentIntent = event.data.object;
-            message = handlers.handleSuccessfulPaymentIntent(paymentIntent);  
+            message = handlers.handleSuccessfulPaymentIntent(event.data.object);  
+            break;
+        case 'payment_intent.canceled': 
+            message = handlers.handleCancelledPaymentIntent(event.data.object);  
             break;
         default:
             return res.status(400).end(); //Unexpected event type

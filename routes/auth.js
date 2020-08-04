@@ -2,7 +2,7 @@ const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
       {authenticateToken} = require('../middleware/JWTMiddleware'),
-      {identifyUser} = require('../middleware/profileMiddleware'),
+      {identifyUser} = require('../middleware/userMiddleware'),
       {sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
       controller = require('../controllers/authController');
 

@@ -50,7 +50,7 @@ const Landing = (props) => {
                     <Autocomplete
                     id="location-search"
                     onInputChange={handleLocationChange}
-                    options={locations}
+                    options={locations || []}
                     loading={Boolean(locations)}
                     classes={{ paper: classes.search_list }}
                     fullWidth

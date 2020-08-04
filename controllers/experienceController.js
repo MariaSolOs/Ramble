@@ -104,21 +104,25 @@ exports.addBookingToOcurrence = async (req, res) => {
         const experience = await Experience.findById(req.params.id, 'capacity creator')
                                  .populate('creator');
         const [dayStart, dayEnd] = extractDayFrame(req.body.date);
+
+        //Find or create the occurrence
         let occ = await Occurrence.findOne({
                             experience: req.params.id,
                             date: {$gte: dayStart, $lt: dayEnd},
                             timeslot: req.body.timeslot
                         });
-        //No ocurrence yet, must create one
         if(!occ) {
             occ = new Occurrence({
                 experience: req.params.id,
                 date: dayStart,
                 timeslot: req.body.timeslot,
-                spotsLeft: experience.capacity
+                spotsLeft: experience.capacity,
+                creatorProfit: 0
             });
         }
         await occ.save();
+
+        //Create booking
         const booking = new Booking({
             experience: experience._id,
             occurrence: occ._id,
@@ -126,15 +130,25 @@ exports.addBookingToOcurrence = async (req, res) => {
             numPeople: req.body.numGuests,
             stripe: {
                 id: req.body.stripeId,
-                status: 'pending' //Will be switched to confirmed in webhook
+                paymentCaptured: false,
+                creatorProfit: req.body.creatorProfit
             }
         });
         await booking.save();
-        //Once saved to database, capture payment intent
-        res.redirect(307, '/api/stripe/payment-intent/capture');
+
+        //Add booking to occurrence and update
+        occ.spotsLeft -= booking.numPeople;
+        occ.bookings.push(booking);
+        await occ.save();
+
+        //Add booking to creator's requests
+        experience.creator.bookingRequests.push(booking);
+        await experience.creator.save();
+
+        res.status(201).send({ message: 'Successfully added booking to occurrence.' });
     }
     catch(err) {
-        //Cancel the intent
+        //If something goes wrong, cancel the intent
         res.redirect(307, '/api/stripe/payment-intent/cancel');
     }
 }

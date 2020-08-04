@@ -63,7 +63,7 @@ const BookExperience = ({exp, user, onClose}) => {
         dispatch({type: actions.PAY_INIT});
         try {
             let clientSecret;
-            //Get client secret from server
+            //Create payment intent and get client secret 
             const payIntent = await axios.post('/api/stripe/payment-intent', {
                 expId: exp._id,
                 transferId: exp.creator.stripe.id,
@@ -90,21 +90,24 @@ const BookExperience = ({exp, user, onClose}) => {
             if(payConfirm.error) {
                 cancelBooking(payConfirm.error.message);
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
+                //Everything is good so far, now add booking to occurrence
                 axios.post(`/api/exp/${exp._id}/occ`, {
                     ...state.form,
-                    stripeId: payConfirm.paymentIntent.id
+                    stripeId: payConfirm.paymentIntent.id,
+                    creatorProfit: payConfirm.paymentIntent.amount * 0.85
                 })
                 .then(res => {
-                    if(res.data.status === 'succeeded') {
+                    if(res.status === 201) {
                         dispatch({
                             type: actions.PAY_COMPLETE,
                             msg: `Congrats ${user.fstName}! 
                             Your booking was successfully completed.`
                         });
-                        setTimeout(() => { onClose(); }, 4000);
-                    } else { cancelBooking('Please contact us.'); }
-                })
-                .catch(err => { cancelBooking('Please contact us.'); });
+                    } else {
+                        cancelBooking('Please contact us.');
+                    }
+                    setTimeout(() => { onClose(); }, 4000);
+                }).catch(err => { cancelBooking('Please contact us.'); });
             }
         } catch(err) { cancelBooking('Please contact us.'); }
     }

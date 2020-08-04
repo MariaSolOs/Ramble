@@ -3,15 +3,12 @@ import {startLoading, endLoading, showError, showSnackbar} from './ui';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const setUserData = (token, isAdmin, isCreator, userData) => ({ 
-    type: types.SET_USER_DATA, token, isAdmin, isCreator, userData 
-});
-const setCreatorData = (creatorData) => ({ 
-    type: types.SET_CREATOR_DATA, creatorData
+const setProfile = (token, isAdmin, profile) => ({ 
+    type: types.SET_PROFILE, token, isAdmin, profile
 });
 const resetUser = () => ({ type: types.RESET_USER });
 
-//For fetching user and creator data
+//For fetching user data
 export const fetchUserProfile = () => {
     return dispatch => {
         if(!window.localStorage.getItem('token')) { return; }
@@ -19,10 +16,9 @@ export const fetchUserProfile = () => {
         axios.get('/api/profile')
         .then(res => {
             if(res.status === 200) {
-                dispatch(setUserData(
+                dispatch(setProfile(
                     res.data.token,
                     res.data.isAdmin,
-                    res.data.isCreator,
                     res.data.userData
                 ));       
             } else { dispatch(resetUser()); }
@@ -32,21 +28,6 @@ export const fetchUserProfile = () => {
             console.log(`FETCH PROFILE FAILED: ${err}`); 
             dispatch(endLoading());
             dispatch(logout());
-        });
-    }
-}
-export const fetchCreatorProfile = () => {
-    return dispatch => {
-        dispatch(startLoading());
-        axios.get('/api/creator')
-        .then(res => {
-            console.log(res)
-            dispatch(setCreatorData(res.data.creatorData));  
-            dispatch(endLoading());     
-        }).catch(err => { 
-            console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
-            dispatch(showError(`We cannot get your creator information 
-            right now...`));
         });
     }
 }
@@ -101,10 +82,9 @@ export const editProfile = (updatedInfo) => {
         .then(res => {
             if(res.status === 201) {
                 //Update state with new user data
-                dispatch(setUserData(
+                dispatch(setProfile(
                     res.data.token,
                     res.data.isAdmin,
-                    res.data.isCreator,
                     res.data.userData
                 )); 
                 dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
@@ -114,21 +94,6 @@ export const editProfile = (updatedInfo) => {
         .catch(err => {
             console.log(`EDIT PROFILE FAILED: ${err}`);
             dispatch(showError("We couldn't update your profile..."));
-        });
-    }
-}
-
-export const updateToCreator = (creatorInfo) => {
-    return dispatch => {
-        dispatch(startLoading());
-        axios.post('/api/creator', creatorInfo)
-        .then(res => {  
-            dispatch(showSnackbar(`Thank you for your submission! 
-            We'll rewiew it ASAP so that you can start creating...`));
-        })
-        .catch(err => {
-            console.log(`CREATOR CREATION FAILED: ${err}`);
-            dispatch(showError("We couldn't submit your form..."));
         });
     }
 }

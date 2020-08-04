@@ -27,8 +27,8 @@ const AdminApp = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    canRegister: state.user.userData.permissions.includes('addAdmin'),
-    canEditExps: state.user.userData.permissions.includes('approveExp')
+    canRegister: state.user.profile.permissions.includes('addAdmin'),
+    canEditExps: state.user.profile.permissions.includes('approveExp')
 });
 
 export default connect(mapStateToProps, null)(AdminApp);

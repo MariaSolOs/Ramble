@@ -3,26 +3,25 @@ import {userTypes as types} from '../actionTypes';
 const initialState = {
     token: null,
     isAdmin: false,
-    isCreator: false,
-    userData: {},
-    creatorData: {}
+    profile: {
+        fstName: '',
+        lstName: '',      
+        photo: '',
+        city: '',
+        email: '',
+        phoneNumber: '',
+        birthday: ''
+    }
 }
 
 const authReducer = (state = initialState, action) => {
     switch(action.type) {
-        case types.SET_USER_DATA: {
+        case types.SET_PROFILE: {
             return {
                 ...state,
                 token: action.token,
                 isAdmin: action.isAdmin,
-                isCreator: action.isCreator,
-                userData: { ...action.userData },
-            }
-        }
-        case types.SET_CREATOR_DATA: {
-            return {
-                ...state,
-                creatorData: { ...action.creatorData },
+                profile: { ...action.profile },
             }
         }
         case types.RESET_USER: {

@@ -6,12 +6,12 @@ exports.authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) {
-        return res.status(401).send({ error: "Couldn't find token." });
+        return res.status(401).send({ error: 'Unauthorized.' });
     }
     jwt.verify(token, process.env.JWT_SECRET, {issuer: 'RAMBLE:API'},
     (err, decoded) => {
         if(err) { 
-            return res.status(401).send({ error: "Couldn't verify token." });
+            return res.status(401).send({ error: 'Unauthorized.' });
         } 
         //Set userId, admin status and token in req 
         req.userId = decoded.userId;

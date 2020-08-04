@@ -173,7 +173,7 @@ const UserInfo = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user.userData
+    user: state.user.profile
 });
 const mapDispatchToProps = (dispatch) => ({
     editProfile: (updatedInfo) => dispatch(editProfile(updatedInfo))

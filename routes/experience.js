@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       {authenticateToken} = require('../middleware/JWTMiddleware'),
-      {identifyUser} = require('../middleware/profileMiddleware'),
+      {identifyUser} = require('../middleware/userMiddleware'),
       controllers = require('../controllers/experienceController');
 
 //Fetch cities stored in database

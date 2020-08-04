@@ -40,6 +40,7 @@ export const prepareReview = (values, user) => {
     try {
         const locArray = values.location.split(', ');
         const exp = {
+            status: 'pending',
             location: {
                 city: locArray[0],
                 region: locArray.length === 3 && locArray[1],
@@ -49,8 +50,8 @@ export const prepareReview = (values, user) => {
 
             title: values.title,
 
-            categories: [categoryOptions[values.category1], 
-                        categoryOptions[values.category2]]
+            categories: [categoryOptions[values.categories[0]], 
+                        categoryOptions[values.categories[1]]]
                         .filter(opt => opt), //Remove undefined values
 
             description: values.description,
@@ -66,6 +67,8 @@ export const prepareReview = (values, user) => {
                         ),
 
             capacity: values.capacity,
+
+            //Images will be uploaded to Cloudinary in server
             images: values.images.slice(0),
 
             included: (values.included).map(el => el.item),
@@ -83,10 +86,13 @@ export const prepareReview = (values, user) => {
                 schedule: values.schedule
             },
 
+            //This is the only field that changes after review
             creator: {
-                name: user.fstName,
-                photo: user.photo,
-                bio: values.creatorBio
+                user: {
+                    name: user.fstName,
+                    photo: user.photo,
+                    bio: values.creatorBio
+                }
             }
         }
         console.log(exp)

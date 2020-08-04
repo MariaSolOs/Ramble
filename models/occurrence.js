@@ -17,6 +17,12 @@ const OccurrenceSchema = new mongoose.Schema({
     },
     spotsLeft: {
         type: Number,
+        required: true,
+        min: 0
+    },
+    creatorProfit: { //Only takes into account confirmed bookings
+        type: Number,
+        required: true,
         min: 0
     },
     bookings: [{

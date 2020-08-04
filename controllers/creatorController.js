@@ -1,34 +1,39 @@
 const cloudinary = require('cloudinary').v2;
 
 //Models
-const Creator = require('../models/creator');
+const User = require('../models/user'),
+      Booking = require('../models/booking');
 
 //For fetching profile information
 exports.getCreatorProfile = (req, res) => {
+    res.status(200).send({ 
+        profile: {
+            id: req.user.creator
+        }
+    });
+}
+exports.getBookingRequests = async (req, res) => {
     req.user.populate('creator')
     .execPopulate().then(async user => {
-        let creatorData = null;
-        if(user.creator) {
+        try {
             const {bookingRequests} = await user.creator.populate({
                 path: 'bookingRequests',
-                select: `client experience occurrence createdAt 
-                numPeople stripe.creatorProfit`,
+                select: 'client experience createdAt numPeople occurrence stripe',
                 populate: [
                 { path: 'experience',
                   select: 'title images capacity' }, 
                 { path: 'occurrence',
-                  select: 'date timeslot spotsLeft' },
+                  select: 'date timeslot spotsLeft creatorProfit' },
                 { path: 'client',
                   select: 'fstName city photo' }
                 ]
             }).execPopulate();
-
-            creatorData = {
-                creatorId: user.creator._id,
-                bookingRequests
-            }
+            return res.status(200).send({ bookingRequests });
+        } catch(err) {
+            res.status(500).send({err: 'Failed to get booking requests.'});
         }
-        res.status(200).send({creatorData});
+    }).catch(err => {
+        res.status(500).send({err: 'Failed to get booking requests.'});
     });
 }
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {updateToCreator} from '../../../store/actions/user';
+import {updateToCreator} from '../../../store/actions/creator';
 import Files from 'react-butterfiles';
 
 //Components
@@ -29,8 +29,8 @@ const CreatorForm = (props) => {
     const dispatch = useDispatch();
 
     //Current user's data
-    const userName = useSelector(state => state.user.userData.fstName);
-    const userPhone = useSelector(state => state.user.userData.phoneNumber);
+    const userName = useSelector(state => state.user.profile.fstName);
+    const userPhone = useSelector(state => state.user.profile.phoneNumber);
 
     //Creator bio
     const [bio, setBio] = useState('');
@@ -170,11 +170,15 @@ const CreatorForm = (props) => {
                 </Files>
             </div>
             <button
+            className={`${classes.doLaterButton} ${classes.gradientButton}`}>
+                Do this later 
+            </button>
+            <button
             type="submit"
             disabled={bio.length === 0 || 
                       phoneNumber.length === 0 ||  
                       !id.front || !id.back}
-            className={classes.submitButton}>
+            className={`${classes.submitButton} ${classes.gradientButton}`}>
                 Done
             </button>
         </form>

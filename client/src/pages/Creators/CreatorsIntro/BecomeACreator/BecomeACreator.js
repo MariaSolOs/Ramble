@@ -19,7 +19,7 @@ const BecomeACreator = (props) => {
     const classes = useStyles();
 
     const isAuth = useSelector(state => state.user.token !== null);
-    const isCreator = useSelector(state => state.user.isCreator);
+    const isCreator = useSelector(state => state.creator.profile.id !== null);
 
     return (
         <div className={classes.root}>

@@ -8,7 +8,7 @@ export default function useLocations(props) {
     //Fetch cities from database if not loaded
     const locations = useSelector(state => state.exp.locations);
     useEffect(() => {
-        if(!locations) { dispatch(fetchLocations()); } 
+        if(locations.length === 0) { dispatch(fetchLocations()); } 
     }, [locations, dispatch]);
 
     return locations;

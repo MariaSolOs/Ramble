@@ -26,10 +26,9 @@ const BookingSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        status: {
-            type: String,
+        paymentCaptured: { //True after the creator approves it
+            type: Boolean,
             required: true,
-            enum: ['pending', 'confirmed']
         },
         creatorProfit: Number //This is in whatever units Stripe uses
     }

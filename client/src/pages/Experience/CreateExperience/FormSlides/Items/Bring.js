@@ -13,7 +13,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ItemsStyles';
 const useStyles = makeStyles(styles);
 
-const Bring = ({toBring, submitInput}) => {
+const Bring = ({mustBring, toBring, submitInput}) => {
     const classes = useStyles();
 
     //For handling checkbox changes
@@ -22,8 +22,10 @@ const Bring = ({toBring, submitInput}) => {
     const handleBringCheck = (e) => {
         if(e.target.name === 'bringYes') {
             setBring(true);
+            submitInput('mustBring', true);
             setShowForm(true);
         } else { //e.target.name === 'bringNo'
+            submitInput('mustBring', false);
             setBring(false);
         }
     }

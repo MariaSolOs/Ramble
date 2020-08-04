@@ -1,8 +1,14 @@
 //User actions
 export const userTypes = {
-    SET_USER_DATA: 'SET_USER_DATA',
-    SET_CREATOR_DATA: 'SET_CREATOR_DATA',
+    SET_PROFILE: 'SET_PROFILE',
     RESET_USER: 'RESET_USER'
+}
+//Creator actions
+export const creatorTypes = {
+    SET_CREATOR_PROFILE: 'SET_CREATOR_PROFILE',
+    SET_BOOKING_REQUESTS: 'SET_BOOKING_REQUESTS',
+    REMOVE_BOOKING: 'REMOVE_BOOKING',
+    CREATOR_FORM_PENDING: 'CREATOR_FORM_PENDING'
 }
 
 //Experience actions

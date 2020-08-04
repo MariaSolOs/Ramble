@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {fetchUserProfile} from '../store/actions/user';
+import {fetchCreatorProfile} from '../store/actions/creator';
 import {messageShown} from '../store/actions/ui';
 import {Route, Switch, useHistory} from 'react-router-dom';
 
@@ -23,15 +24,15 @@ const MainApp = (props) => {
     }, [redirect, history]);
 
     //For automatic auth after refreshing the page
-    const {fetchUserProfile} = props;
+    const {fetchUserProfile, fetchCreatorProfile} = props;
     useEffect(() => { 
         fetchUserProfile();
-    }, [fetchUserProfile]);
+        fetchCreatorProfile();
+    }, [fetchUserProfile, fetchCreatorProfile]);
 
     return (
-        <>
-        {props.loading? <Spinner/> :
         <React.Suspense fallback={<Spinner/>}> 
+            {props.loading && <Spinner/>}
             <Snackbar 
             open={props.msgComponent === 'Snackbar'} 
             message={props.msg} 
@@ -49,8 +50,7 @@ const MainApp = (props) => {
                     <PublicApp/>
                 </Route>
             </Switch>
-        </React.Suspense>}
-        </>
+        </React.Suspense>
     );
 }
 
@@ -63,6 +63,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchUserProfile: () => dispatch(fetchUserProfile()),
+    fetchCreatorProfile: () => dispatch(fetchCreatorProfile()),
     onMsgShown: () => dispatch(messageShown())
 }); 
 

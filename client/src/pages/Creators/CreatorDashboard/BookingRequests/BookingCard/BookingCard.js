@@ -12,9 +12,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './BookingCardStyles';
 const useStyles = makeStyles(styles);
 
-const BookingCard = ({booking}) => {
+const BookingCard = ({booking, onAccept, onDecline}) => {
     const classes = useStyles();
-
     const [fromHour, fromTime, toHour, toTime] = 
         helpers.getTimePieces(booking.occurrence.timeslot);
     const bookedSpots = booking.experience.capacity - booking.occurrence.spotsLeft;
@@ -95,19 +94,27 @@ const BookingCard = ({booking}) => {
                             <FontAwesomeIcon icon={faUsers}/>
                         </Fab>
                         <span className={classes.whiteText}>
-                            {` ${bookedSpots} / ${booking.experience.capacity} ${bookedSpots > 1? 'Guests' : 'Guest'}`}
+                            {` ${bookedSpots} / ${booking.experience.capacity} Guests`}
                         </span>
                     </div>
                     <div>
                         <span className={classes.greyText}>Current payment </span>
                         <span className={`${classes.whiteText} ${classes.withLargeNum}`}>
-                            $ <span>{(bookedSpots * booking.stripe.creatorProfit / 100).toFixed(2)}</span>
+                            $ <span>{(booking.occurrence.creatorProfit / 100).toFixed(2)}</span>
                         </span>
                     </div>
                 </div>
                 <div className={classes.actions}>
-                    <button className={classes.acceptButton}>Accept</button>
-                    <button className={classes.declineButton}>Decline</button>
+                    <button 
+                    onClick={onAccept(booking.stripe.id)}
+                    className={classes.acceptButton}>
+                        Accept
+                    </button>
+                    <button 
+                    onClick={onDecline(booking.stripe.id)}
+                    className={classes.declineButton}>
+                        Decline
+                    </button>
                 </div>
             </div>
         </div>

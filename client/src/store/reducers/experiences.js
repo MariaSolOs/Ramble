@@ -1,9 +1,10 @@
 import {experienceTypes as types} from '../actionTypes';
 
 const initialState = {
-    locations: null,
-    pastExps: null,
-    savedExps: null
+    locations: [],
+    pastExps: [],
+    savedExps: [],
+    expsLoaded: false
 }
 
 const authReducer = (state = initialState, action) => {
@@ -18,7 +19,8 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pastExps: action.pastExps.slice(0),
-                savedExps: action.savedExps.slice(0)
+                savedExps: action.savedExps.slice(0),
+                expsLoaded: true
             }
         }
         case types.SAVE_EXP: {

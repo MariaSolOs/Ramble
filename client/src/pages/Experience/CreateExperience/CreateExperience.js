@@ -1,9 +1,9 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {useSelector} from 'react-redux';
-import {useRouteMatch, Switch, Route, useLocation, Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {Switch, Route, useLocation, Redirect} from 'react-router-dom';
 import * as pages from './pageNames';
 import useLanguages from '../../../hooks/useLanguages';
-import {prepareReview} from './FormSlides/helpers';
+import {prepareReview} from './helpers';
 
 //Pages and components
 import * as slides from './FormSlides';
@@ -12,11 +12,9 @@ import Submitted from './Submitted';
 import Layout from './Layout/Layout';
 
 const CreateExperience = (props) => {
-    const {path} = useRouteMatch();
     const location = useLocation();
 
     //Form values and options
-    const creator = useSelector(state => state.user.profile);
     const allLanguages = useLanguages();
     const [values, setValues] = useState({
         location: null,
@@ -38,9 +36,8 @@ const CreateExperience = (props) => {
         privatePrice: 0, //for private bookings
         currency: 'CAD',
         schedule: new Map(),
-        timeframe: [new Date(), null],
-        scheduleUpdateFreq: 'weekly',
-        canSubmit: false
+        startDate: null,
+        scheduleUpdateFreq: 'weekly'
     });
     //Called after validation
     const submitInput = useCallback((name, newVal) => {
@@ -59,10 +56,11 @@ const CreateExperience = (props) => {
 
     return (
         <Switch location={location}>
-            <Route path={`${path}/${pages.INTRO}`}>
+            {!props.isAuth && <Redirect to="/creator/become"/>}
+            <Route path={pages.INTRO}>
                 <Intro/>
             </Route>
-            <Route path={`${path}/${pages.LOCATION}`}>
+            <Route path={pages.LOCATION}>
                 <Layout 
                 completedSteps={completedSteps}
                 canContinue={values.location && values.meetPoint} 
@@ -74,7 +72,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.TITLE}`}>
+            <Route path={pages.TITLE}>
                 <Layout 
                 completedSteps={completedSteps}
                 canContinue={values.title.length > 0} 
@@ -86,43 +84,43 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.CATEGORIES}`}>
+            <Route path={pages.CATEGORIES}>
                 <Layout 
                 completedSteps={completedSteps}
                 canContinue={values.categories.length === 2} 
                 currStage={2} 
                 backLink={pages.TITLE}
-                nextLink={pages.DESCRIPTION}>
+                nextLink={pages.PLANNING}>
                     <slides.Categories
                     categories={values.categories}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.DESCRIPTION}`}>
+            <Route path={pages.PLANNING}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.description.length > 0} 
                 currStage={3} 
                 backLink={pages.CATEGORIES}
                 nextLink={pages.SETTING}>
-                    <slides.Description
+                    <slides.Planning
                     description={values.description}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.SETTING}`}>
+            <Route path={pages.SETTING}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.setting} 
                 currStage={3} 
-                backLink={pages.DESCRIPTION}
+                backLink={pages.PLANNING}
                 nextLink={pages.DURATION}>
                     <slides.Setting
                     setting={values.setting}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.DURATION}`}>
+            <Route path={pages.DURATION}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.duration >= 1} 
@@ -134,7 +132,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.LANGUAGE}`}>
+            <Route path={pages.LANGUAGE}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.languages.length > 0} 
@@ -146,7 +144,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.CAPACITY}`}>
+            <Route path={pages.CAPACITY}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.capacity} 
@@ -158,7 +156,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.AGE}`}>
+            <Route path={pages.AGE}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={(values.ageRestricted && values.ageRequired)
@@ -172,7 +170,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.PREVIEW}`}>
+            <Route path={pages.PREVIEW}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.images.every(img => img)} 
@@ -184,7 +182,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.INCLUDED}`}>
+            <Route path={pages.INCLUDED}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={true} 
@@ -196,7 +194,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.BRING}`}>
+            <Route path={pages.BRING}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={!values.mustBring || 
@@ -210,7 +208,7 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.PRICE}`}>
+            <Route path={pages.PRICE}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={values.price > 0} 
@@ -225,51 +223,65 @@ const CreateExperience = (props) => {
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.SCHEDULE}`}>
+            <Route path={pages.SCHEDULE}>
                 <Layout
                 completedSteps={completedSteps}
                 canContinue={[...values.schedule.keys()].length > 0} 
                 currStage={9} 
                 backLink={pages.PRICE}
-                nextLink={pages.TIMEFRAME}>
+                nextLink={pages.CAL_UPDATES}>
                     <slides.Schedule
                     schedule={values.schedule}
                     duration={values.duration}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.TIMEFRAME}`}>
+            <Route path={pages.CAL_UPDATES}>
                 <Layout
                 completedSteps={completedSteps}
-                canContinue={values.timeframe[1]} 
+                canContinue={values.startDate} 
                 currStage={9} 
                 backLink={pages.SCHEDULE}
                 nextLink={pages.REVIEW}>
-                    <slides.Timeframe
-                    timeframe={values.timeframe}
+                    <slides.CalendarUpdates
+                    startDate={values.startDate}
                     updateFreq={values.scheduleUpdateFreq}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
-            <Route path={`${path}/${pages.REVIEW}`}>
-                <Layout
-                completedSteps={completedSteps}
-                canContinue={values.canSubmit} 
-                currStage={10} 
-                backLink={pages.TIMEFRAME}
-                nextLink={pages.SUBMITTED}>
-                    <slides.Review
-                    exp={prepareReview(values, creator)}
+            <Route path={pages.REVIEW} render={() => {
+                const expReview = prepareReview(values, {
+                    name: props.userProfile.fstName,
+                    photo: props.userProfile.photo,
+                    bio: props.creatorBio
+                });
+                return (
+                    <Layout
+                    completedSteps={completedSteps}
+                    canContinue={expReview}
+                    currStage={10} 
+                    backLink={pages.CAL_UPDATES}
+                    nextLink={props.creatorId ? pages.SUBMITTED :
+                            '/creator/join'}>
+                        <slides.Review
+                    review={expReview}
                     images={values.images}/>
-                </Layout>
-            </Route>
-            <Route path={`${path}/${pages.SUBMITTED}`}>
-                <Submitted 
-                expTitle={values.title}/>
-            </Route>
-            <Redirect to="/creator/become"/>
+                    </Layout>
+                );
+            }}/>            
+            {props.creatorId && 
+                <Route path={pages.SUBMITTED}>
+                    <Submitted/>
+                </Route>}
         </Switch>
     );
 }
 
-export default CreateExperience;
+const mapStateToProps = (state) => ({
+    isAuth: state.user.token,
+    userProfile: state.user.profile,
+    creatorId: state.user.creator.id,
+    creatorBio: state.user.creator.bio
+});
+
+export default connect(mapStateToProps, null)(CreateExperience);

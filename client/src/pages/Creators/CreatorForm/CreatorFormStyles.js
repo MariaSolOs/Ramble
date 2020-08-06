@@ -132,13 +132,13 @@ const styles = () => ({
         fontSize: '1.05rem',
         font: 'inherit',
         letterSpacing: '-0.02rem',
-        padding: '10px 20px',
+        padding: '12px 22px',
         color: '#FFF',
-        width: 130,
+        width: 120,
         textAlign: 'center',
         cursor: 'pointer',
         float: 'right',
-        margin: '1.5rem 1.5rem 1.5rem 0',
+        margin: '1.5rem 1.8rem 1.5rem 0',
         whiteSpace: 'nowrap',
         '&:focus': { outline: 'none' },
         '&:disabled': {
@@ -147,7 +147,7 @@ const styles = () => ({
         }
     },
     doLaterButton: {
-        //backgroundColor: '',
+        backgroundColor: 'transparent',
     },
     submitButton: {
         background: 'radial-gradient(circle at 298%, #F7521E, #AC9EFF)'

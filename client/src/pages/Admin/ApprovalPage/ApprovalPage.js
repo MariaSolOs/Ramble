@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../tokenizedAxios';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../../store/actions/ui';
 import {useParams, useHistory} from 'react-router-dom';
 
 //Components and icons
@@ -21,14 +23,14 @@ const ApprovalPage = (props) => {
     //Fetch the requested experience
     const {id} = useParams();
     const [exp, setExp] = useState(null);
-    const {displaySnackbar} = props;
+    const dispatch = useDispatch();
     useEffect(() => {
         axios.get(`/api/exp/${id}`)
         .then(res => setExp(res.data.exp))
         .catch(err => {
-            displaySnackbar(`LOL try again 👾 ${err}`);
+            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
         });
-    }, [id, displaySnackbar]);
+    }, [id, dispatch]);
 
     //To notify the creator about the decision
     const [creatorEmail, setCreatorEmail] = useState('');
@@ -38,10 +40,10 @@ const ApprovalPage = (props) => {
         axios.post(`/api/exp/${exp._id}/approve`, { decision })
         .then(res => {
             setCreatorEmail(res.data.creatorEmail);
-            displaySnackbar(`Awesome, you successfully ${decision} this 
-            experience 🌝`);
+            dispatch(showSnackbar(`Awesome, you successfully ${decision} this 
+            experience 🌝`));
         }).catch(err => {
-            displaySnackbar(`LOL try again 👾 ${err}`);
+            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
         });
     }
 

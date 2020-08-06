@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {updateToCreator} from '../../../store/actions/creator';
+import {connect} from 'react-redux';
+import {upgradeToCreator} from '../../../store/actions/user';
+import {useHistory} from 'react-router-dom';
 import Files from 'react-butterfiles';
 
 //Components
@@ -24,13 +25,9 @@ const idSides = [
 ];
 const validPhoneReg = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
 
+//TODO: Hide this form from logged in creators
 const CreatorForm = (props) => {
     const classes = useStyles();
-    const dispatch = useDispatch();
-
-    //Current user's data
-    const userName = useSelector(state => state.user.profile.fstName);
-    const userPhone = useSelector(state => state.user.profile.phoneNumber);
 
     //Creator bio
     const [bio, setBio] = useState('');
@@ -40,7 +37,7 @@ const CreatorForm = (props) => {
         }
     }
     //Phone number
-    const [phoneNumber, setPhoneNumber] = useState(userPhone);
+    const [phoneNumber, setPhoneNumber] = useState(props.userPhone);
     const [phoneErr, setPhoneErr] = useState(false);
     const handlePhoneChange = (e) => { setPhoneNumber(e.target.value); }
 
@@ -55,16 +52,25 @@ const CreatorForm = (props) => {
     }
 
     //Form validation and submission
+    const history = useHistory();
     const handleSubmit = (e) => {
         e.preventDefault();
         if(!validPhoneReg.test(phoneNumber)) {
             return setPhoneErr(true);
         }
-        dispatch(updateToCreator({ 
+        props.upgradeToCreator({ 
             bio, 
             phoneNumber: phoneNumber.replace(validPhoneReg, '($1) $2-$3'),
             id: [id.front, id.back]
-        }));
+        });
+        history.push(props.backFromCreation? '/experience/new/submitted' :
+                    '/experience/new/intro');
+    }
+
+    //If user decides to fill the form after the experience creation
+    const handleSkip = (e) => { 
+        e.preventDefault();
+        history.push('/experience/new/intro'); 
     }
     
     return (
@@ -72,7 +78,7 @@ const CreatorForm = (props) => {
             <div className={classes.header}>
                 <div className="gradient"/>
                 <div>
-                    <h2 className={classes.title}>{userName},</h2>
+                    <h2 className={classes.title}>{props.userName},</h2>
                     <h3 className={classes.subtitle}>
                         Before giving life to your experience we would like to get to 
                         know you a little bit better.
@@ -170,10 +176,6 @@ const CreatorForm = (props) => {
                 </Files>
             </div>
             <button
-            className={`${classes.doLaterButton} ${classes.gradientButton}`}>
-                Do this later 
-            </button>
-            <button
             type="submit"
             disabled={bio.length === 0 || 
                       phoneNumber.length === 0 ||  
@@ -181,8 +183,25 @@ const CreatorForm = (props) => {
             className={`${classes.submitButton} ${classes.gradientButton}`}>
                 Done
             </button>
+            {!props.backFromCreation &&
+                <button
+                type="submit"
+                className={`${classes.doLaterButton} ${classes.gradientButton}`}
+                onClick={handleSkip}>
+                    Do this later 
+                </button>}
         </form>
     );
 }
 
-export default CreatorForm;
+const mapStateToProps = (state) => ({
+    userName: state.user.profile.fstName,
+    userPhone: state.user.profile.phoneNumber,
+    backFromCreation: Object.keys(state.exp.savedExperienceForm).length > 0,
+    creatorRegistered: state.user.creator.id !== null
+});
+const mapDispatchToProps = (dispatch) => ({
+    upgradeToCreator: (info) => dispatch(upgradeToCreator(info))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatorForm);

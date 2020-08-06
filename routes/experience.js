@@ -17,6 +17,9 @@ router.post('/:id/approve',
              identifyUser,
              controllers.approveExp);
 
+//For creators to create an experience
+router.post('/', authenticateToken, controllers.createExperience);
+
 //Show experience page
 router.get('/:id', controllers.getExp);
 

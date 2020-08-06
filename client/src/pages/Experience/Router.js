@@ -14,7 +14,7 @@ const Router = ({isAuth}) => {
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Switch location={location}>
-                {isAuth && <Route path={`${path}/new`} component={CreateExperience}/>}
+                <Route path={`${path}/new`} component={CreateExperience}/>
                 <Route path={`${path}/search`} component={SearchExperiences}/>
                 <Route path={`${path}/:id`} component={ShowExperience}/>
                 <Redirect to="/"/>

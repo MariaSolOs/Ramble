@@ -35,16 +35,24 @@ export const getTimeSlots = (duration) => {
 /*Transform data to display in experience page and 
 save in database*/
 export const prepareReview = (values, user) => {
-    console.log(values);
+    const locArray = values.location.split(', ');
+    locArray.pop(); //Drop the country code
+    let endWeek = new Date(values.startDate);
+    let end2Weeks = new Date(values.startDate);
+    let endMonth = new Date(values.startDate);
+    endWeek.setDate(endWeek.getDate() + 7);
+    end2Weeks.setDate(end2Weeks.getDate() + 14);
+    endMonth.setMonth(endMonth.getMonth() + 1);
 
     try {
-        const locArray = values.location.split(', ');
         const exp = {
             status: 'pending',
             location: {
                 city: locArray[0],
                 region: locArray.length === 3 && locArray[1],
-                displayLocation: values.location,
+                displayLocation: locArray.length === 3? 
+                                `${locArray[0]}, ${locArray[2]}` : 
+                                `${locArray[0]}, ${locArray[1]}`,
                 meetPoint: values.meetPoint
             },
 
@@ -76,30 +84,29 @@ export const prepareReview = (values, user) => {
 
             price: {    
                 perPerson: values.price,
-                private: values.privatePrice,
+                private: values.privatePrice > 0? values.privatePrice : null,
                 currency: values.currency
             },
 
             avail: {
-                from: values.timeframe[0],
-                to: values.timeframe[1],
-                schedule: values.schedule
+                from: values.startDate,
+                to: values.scheduleUpdateFreq === 'weekly'? 
+                    endWeek : values.scheduleUpdateFreq === 'biweekly'?
+                    end2Weeks : endWeek,
+                schedule: Array.from(values.schedule)
             },
 
             //This is the only field that changes after review
             creator: {
                 user: {
-                    name: user.fstName,
-                    photo: user.photo,
-                    bio: values.creatorBio
-                }
+                    name: user.name,
+                    photo: user.photo
+                },
+                bio: user.bio
             }
         }
         console.log(exp)
         return exp; 
-    } catch(err) {
-        console.log(err);
-        return null;
-    }
+    } catch(err) { return null; }
 }
 

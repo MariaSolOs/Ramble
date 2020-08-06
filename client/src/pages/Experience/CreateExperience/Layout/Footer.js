@@ -18,24 +18,23 @@ const useStyles = makeStyles((theme) => ({
             fontWeight: 'bold',
             letterSpacing: '-0.05rem',
             border: 'none',
+            cursor: 'pointer',
             '&:focus': { outline: 'none' }
         }
     },
-    saveButton: {
-        backgroundColor: '#282828',
-        borderRadius: '0.5rem',
-        color: '#EBEBEB',
-        padding: '1% 2%',
-        fontSize: '1rem',
-        cursor: 'pointer'
-    },
+    // saveButton: {
+    //     backgroundColor: '#282828',
+    //     borderRadius: '0.5rem',
+    //     color: '#EBEBEB',
+    //     padding: '1% 2%',
+    //     fontSize: '1rem',
+    // },
     navButton: {
         float: 'right',
         borderRadius: 30,
         color: 'white',
         padding: '1% 4%',
         fontSize: '1.1rem',
-        cursor: 'pointer'
     },
     backButton: {
         background: 'radial-gradient(circle at 96%, #2E2E2E, #6F6F6F)',
@@ -57,14 +56,14 @@ const Footer = ({currStage, backLink, nextLink, numSteps, canContinue}) => {
 
     return (
         <div className={classes.footer}>
-            <button className={classes.saveButton}>
+            {/* <button className={classes.saveButton}>
                 Save for now
-            </button>
+            </button> */}
             {currStage <= numSteps - 1 && 
                 <button 
                 className={`${classes.nextButton} ${classes.navButton}`}
                 disabled={!canContinue}
-                onClick={() => history.push(`/experience/new/${nextLink}`)}>
+                onClick={() => history.push(nextLink)}>
                     {currStage === numSteps - 1? 'Submit my experience' : 'Next'}
                 </button>}
             {currStage > 0 && 

@@ -2,7 +2,8 @@ const styles = (theme) => ({
     //Container
     root: {
         position: 'relative',
-        margin: '12vh 0 10vh',
+        margin: '12vh 0 0',
+        height: '88vh',
         width: '100vw',
         padding: '2% 15% 2% 15%',
         boxSizing: 'border-box',

@@ -1,3 +1,5 @@
+const cloudinary = require('cloudinary').v2;
+
 //Models
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
@@ -66,6 +68,35 @@ exports.approveExp = (req, res) => {
             });
         }
     });
+}
+
+//Create an experience (unapproved status)
+exports.createExperience = async (req, res) => {
+    try {
+        //Upload images to Cloudinary
+        const expImages = [];
+        for(img of req.body.images) {
+            const upload = await cloudinary.uploader.upload(img, {
+                folder: 'Ramble/Experiences',
+                eager: [
+                    { format: 'jpeg', height: 400, quality: 'auto', 
+                    crop: 'fill', dpr: 'auto' }
+                ]
+            });
+            expImages.push(upload.eager[0].secure_url);
+        }
+        const createdExp = new Experience({
+            ...req.body.form,
+            images: expImages
+        });
+        await createdExp.save();
+        res.status(201).send({
+            message: 'Experience successfully created.',
+            title: createdExp.title
+        });
+    } catch(err) {
+        res.status(409).send({err: "Couldn't create experience."});
+    }
 }
 
 //Show experience page

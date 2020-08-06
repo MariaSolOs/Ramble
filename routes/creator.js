@@ -18,6 +18,6 @@ router.get('/bookingRequests',
 router.post('/', 
             authenticateToken, 
             identifyUser,
-            controllers.updateUserToCreator);
+            controllers.upgradeUserToCreator);
 
 module.exports = router;

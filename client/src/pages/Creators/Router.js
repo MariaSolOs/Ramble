@@ -12,7 +12,7 @@ const Router = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();
 
-    const isCreator = useSelector(state => state.creator.profile.id !== null);
+    const isCreator = useSelector(state => state.user.creator.id !== null);
 
     return (
         <React.Suspense fallback={<Spinner/>}>

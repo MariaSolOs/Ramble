@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {fetchUserProfile} from '../store/actions/user';
-import {fetchCreatorProfile} from '../store/actions/creator';
 import {messageShown} from '../store/actions/ui';
 import {Route, Switch, useHistory} from 'react-router-dom';
 
@@ -24,11 +23,10 @@ const MainApp = (props) => {
     }, [redirect, history]);
 
     //For automatic auth after refreshing the page
-    const {fetchUserProfile, fetchCreatorProfile} = props;
+    const {fetchUserProfile} = props;
     useEffect(() => { 
         fetchUserProfile();
-        fetchCreatorProfile();
-    }, [fetchUserProfile, fetchCreatorProfile]);
+    }, [fetchUserProfile]);
 
     return (
         <React.Suspense fallback={<Spinner/>}> 
@@ -63,7 +61,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchUserProfile: () => dispatch(fetchUserProfile()),
-    fetchCreatorProfile: () => dispatch(fetchCreatorProfile()),
     onMsgShown: () => dispatch(messageShown())
 }); 
 

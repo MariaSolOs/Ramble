@@ -1,15 +1,25 @@
 const cloudinary = require('cloudinary').v2;
 
 //Models
-const User = require('../models/user'),
-      Booking = require('../models/booking');
+const Creator = require('../models/creator');
+
+//Helpers
+const getCreatorProfile = (creator) => ({
+    id: creator._id,
+    stripeId: creator.stripe.id,
+    bio: creator.bio
+});
 
 //For fetching profile information
 exports.getCreatorProfile = (req, res) => {
-    res.status(200).send({ 
-        profile: {
-            id: req.user.creator
-        }
+    req.user.populate('creator')
+    .execPopulate().then(user => {
+        res.status(200).send({ 
+            profile: getCreatorProfile(user.creator)
+        });
+    })
+    .catch(err => {
+        res.status(500).send({err: "Couldn't fetch creator profile."});
     });
 }
 exports.getBookingRequests = async (req, res) => {
@@ -38,7 +48,7 @@ exports.getBookingRequests = async (req, res) => {
 }
 
 //Upgrade an user to a creator
-exports.updateUserToCreator = async (req, res) => {
+exports.upgradeUserToCreator = async (req, res) => {
     try {
         //Upload ID to Cloudinary
         const governmentIds = [];
@@ -56,15 +66,17 @@ exports.updateUserToCreator = async (req, res) => {
             user: req.userId,
             bio: req.body.bio,
             verified: false,
-            governmentIds
+            governmentIds,
+            stripe: { id: null }
         });
         await creator.save();
         //Update user's info
         req.user.phoneNumber = req.body.phoneNumber;
-        req.creatorId = creator._id;
         req.user.creator = creator._id;
         await req.user.save();
-        res.status(201).send({message: 'Creator creation successful.'});
+        res.status(201).send({
+            profile: getCreatorProfile(creator)
+        });
     } catch(err) {
         res.status(409).send({err: "Couldn't update user to creator."});
     }

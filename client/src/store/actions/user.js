@@ -6,6 +6,10 @@ import axios from '../../tokenizedAxios';
 const setProfile = (token, isAdmin, profile) => ({ 
     type: types.SET_PROFILE, token, isAdmin, profile
 });
+const setCreatorProfile = (creatorProfile) => ({
+    type: types.SET_CREATOR_PROFILE, creatorProfile
+});
+
 const resetUser = () => ({ type: types.RESET_USER });
 
 //For fetching user data
@@ -20,7 +24,15 @@ export const fetchUserProfile = () => {
                     res.data.token,
                     res.data.isAdmin,
                     res.data.userData
-                ));       
+                )); 
+                if(res.data.isCreator) {
+                    axios.get('/api/creator')
+                    .then(res => {
+                        dispatch(setCreatorProfile(res.data.profile));  
+                    }).catch(err => { 
+                        console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
+                    });
+                }      
             } else { dispatch(resetUser()); }
             dispatch(endLoading());
         })
@@ -94,6 +106,19 @@ export const editProfile = (updatedInfo) => {
         .catch(err => {
             console.log(`EDIT PROFILE FAILED: ${err}`);
             dispatch(showError("We couldn't update your profile..."));
+        });
+    }
+}
+
+export const upgradeToCreator = (creatorInfo) => {
+    return dispatch => {
+        axios.post('/api/creator', creatorInfo)
+        .then(res => {  
+            dispatch(setCreatorProfile(res.data.profile));
+        })
+        .catch(err => {
+            console.log(`CREATOR CREATION FAILED: ${err}`);
+            dispatch(showError("We couldn't submit your form..."));
         });
     }
 }

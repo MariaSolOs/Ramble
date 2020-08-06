@@ -106,12 +106,12 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                 </div>
                 <div className={classes.actions}>
                     <button 
-                    onClick={onAccept(booking.stripe.id)}
+                    onClick={onAccept}
                     className={classes.acceptButton}>
                         Accept
                     </button>
                     <button 
-                    onClick={onDecline(booking.stripe.id)}
+                    onClick={onDecline}
                     className={classes.declineButton}>
                         Decline
                     </button>

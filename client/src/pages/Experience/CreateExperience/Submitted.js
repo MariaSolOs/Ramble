@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import axios from '../../../tokenizedAxios';
+import {connect} from 'react-redux';
+import {showError} from '../../../store/actions/ui';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faStripe} from '@fortawesome/free-brands-svg-icons/faStripe';
@@ -48,7 +51,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const Submitted = ({expTitle}) => {
+const Submitted = (props) => {
     const classes = useStyles();
 
     //Retrieve token to use as stripe state
@@ -57,18 +60,33 @@ const Submitted = ({expTitle}) => {
         const token = window.localStorage.getItem('token');
         setStripeState(token);
     }, []);
+    //Create experience when here
+    const {savedForm, showError, creatorId} = props;
+    useEffect(() => {
+        const form = {
+            ...savedForm,
+            creator: creatorId
+        };
+        const images = form.images.slice(0);
+        delete form.images;
+        axios.post('/api/exp', {form, images})
+        .catch(err => {
+            showError("We couldn't submit your experience...");
+        });
+    }, [savedForm, showError, creatorId]);
 
     return (
         <div className={classes.root}>
             <div>
                 <h1 className={classes.title}>Your experience was submitted</h1>
                 <p>
-                    Your experience <strong>{expTitle}</strong> was submitted 
-                    successfully.<br/>
+                    Your experience<strong> {props.savedForm.title} </strong>
+                    was submitted successfully.<br/>
                     We'll review it and get back to you shortly so you can get 
                     your act out there as soon as possible.
                 </p>
-                <p>
+                {!props.hasStripe &&
+                <><p>
                     <strong>Once your experience is approved</strong>, all you have 
                     left to do is choose the way you want to receive your payments.
                     <br/>
@@ -84,10 +102,19 @@ const Submitted = ({expTitle}) => {
                         <p>Continue with</p>
                         <FontAwesomeIcon icon={faStripe}/>
                     </a>
-                </div>
+                </div></>}
             </div>
         </div>
     );
 }
 
-export default Submitted;
+const mapStateToProps = (state) => ({
+    savedForm: state.exp.savedExperienceForm,
+    creatorId: state.user.creator.id,
+    hasStripe: state.user.creator.stripeId !== null
+});
+const mapDispatchToProps = (dispatch) => ({
+    showError: (msg) => dispatch(showError(msg))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Submitted);

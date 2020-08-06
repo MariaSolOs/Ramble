@@ -10,6 +10,9 @@ const setExps = (pastExps, savedExps) => ({
 });
 const saveExp = (exp) => ({ type: types.SAVE_EXP, exp });
 const unsaveExp = (expId) => ({ type: types.UNSAVE_EXP, expId });
+export const saveExperienceForm = (form) => ({
+    type: types.SAVE_EXPERIENCE_FORM, form
+});
 
 export const fetchLocations = () => {
     return dispatch => {

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {saveExperienceForm} from '../../../../../store/actions/experiences';
 
 //Components
 import Experience from '../../../../../components/Experience/Experience';
@@ -11,6 +13,12 @@ const useStyles = makeStyles(styles);
 
 const Review = ({review, images}) => {
     const classes = useStyles();
+
+    //Save experience 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(saveExperienceForm(review));
+    }, [dispatch, review]);
 
     //Prepare data 
     const carouselImgs = images.map(img => ({original: img, thumbnail: img}));

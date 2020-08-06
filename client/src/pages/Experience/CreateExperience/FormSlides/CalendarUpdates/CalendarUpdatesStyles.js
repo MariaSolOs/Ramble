@@ -56,6 +56,7 @@ const styles = () => ({
         }
     },
 
+    tip: { marginTop: -10 },
     calendar: {
         '&.react-datepicker': {
             backgroundColor: '#2F2E2E',

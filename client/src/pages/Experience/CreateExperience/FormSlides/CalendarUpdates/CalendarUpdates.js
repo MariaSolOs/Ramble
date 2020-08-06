@@ -2,6 +2,7 @@ import React from 'react';
 
 //Components and icons
 import TextField from '../../../../../components/Input/TextField';
+import Tip from '../../../../../components/Tip';
 import MenuItem from '@material-ui/core/MenuItem';
 import DatePicker from 'react-datepicker';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
@@ -9,18 +10,18 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 //Styles
 import 'react-datepicker/dist/react-datepicker.css';
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './TimeframeStyles';
+import styles from './CalendarUpdatesStyles';
 const useStyles = makeStyles(styles);
 
-const Timeframe = ({timeframe, updateFreq, submitInput}) => {
+const CalendarUpdates = ({startDate, updateFreq, submitInput}) => {
     const classes = useStyles();
 
     let inOneMonth = new Date();
     inOneMonth.setMonth(new Date().getMonth() + 1);
 
     //Update values in form
-    const handleDateChange = (timeframe) => {
-        submitInput('timeframe', timeframe);
+    const handleDateChange = (date) => {
+        submitInput('startDate', date);
     }
     const handleFreqChange = (e) => {
         submitInput('scheduleUpdateFreq', e.target.value);
@@ -55,23 +56,24 @@ const Timeframe = ({timeframe, updateFreq, submitInput}) => {
                 </TextField>
             </div>
         </div>
-        <div className={classes.field}>
+        <div>
             <p className={classes.description}>
-                For which dates will you have these availabilities?
+                When would you like to start hosting your experience?
             </p>
+            <Tip className={classes.tip}>
+                A week / two weeks / a month after this date, you'll have to update 
+                your schedule for the next week / two weeks / month.
+            </Tip>
             <DatePicker
-            selected={timeframe[0]}
-            startDate={timeframe[0]}
-            endDate={timeframe[1]}
+            selected={startDate}
             onChange={handleDateChange}
             minDate={new Date()}
             maxDate={inOneMonth}
             calendarClassName={classes.calendar}
-            selectsRange
             inline/>
         </div>
         </>
     );
 }
 
-export default Timeframe;
+export default CalendarUpdates;

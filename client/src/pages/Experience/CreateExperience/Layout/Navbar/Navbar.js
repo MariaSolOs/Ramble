@@ -60,11 +60,11 @@ const Navbar = ({completed, currStage}) => {
                 <Collapse
                 component="ul"
                 className={classes.stepNav}
-                in={showSteps === 'Planning' || (currPage === slides.DESCRIPTION) ||
+                in={showSteps === 'Planning' || (currPage === slides.PLANNING) ||
                     (currPage === slides.SETTING)}>
                     <li className={`${4 <= completed && classes.completed}`}>
                         {4 <= completed ?
-                        <Link to={`/experience/new/${slides.DESCRIPTION}`}>
+                        <Link to={`/experience/new/${slides.PLANNING}`}>
                             Description
                         </Link> : 
                         <span className={classes.inactive}>Description</span>}
@@ -127,7 +127,7 @@ const Navbar = ({completed, currStage}) => {
                 component="ul"
                 className={classes.stepNav}
                 in={showSteps === 'Availabilities' || (currPage === slides.SCHEDULE) ||
-                   (currPage === slides.TIMEFRAME)}>
+                   (currPage === slides.CAL_UPDATES)}>
                     <li className={`${completed - currStage >= 4 && classes.completed} 
                                     ${completed < 14 && classes.inactive}`}>
                         {14 <= completed ?
@@ -138,9 +138,9 @@ const Navbar = ({completed, currStage}) => {
                     <li className={`${completed - currStage >= 4 && classes.completed} 
                                     ${completed < 15 && classes.inactive}`}>
                         {15 <= completed ?
-                        <Link to={`/experience/new/${slides.TIMEFRAME}`}>
-                            Timeframe
-                        </Link> : 'Timeframe'}
+                        <Link to={`/experience/new/${slides.CAL_UPDATES}`}>
+                            Calendar updates
+                        </Link> : 'Calendar updates'}
                     </li>
                 </Collapse>
             </li>

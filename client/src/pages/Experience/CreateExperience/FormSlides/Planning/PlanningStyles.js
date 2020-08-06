@@ -3,7 +3,16 @@ const styles = () => ({
         display: 'flex',
         flexDirection: 'column',
         width: '80%',
-        height: '70%'
+        height: '70%',
+
+        '& .MuiInputBase-root': {
+            position: 'relative'
+        },
+        '& .MuiInputAdornment-positionEnd': {
+            margin: 0,
+            position: 'absolute',
+            bottom: 18, right: 15 
+        }
     },
     title: {
         fontFamily: 'Helvetica, sans-serif',

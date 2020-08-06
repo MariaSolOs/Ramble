@@ -7,7 +7,9 @@ const useStyles = makeStyles(() => ({
         bottom: 0, left: 0, right: 0,
         padding: '0.65rem 2rem',
         display: 'flex',
-        height: '7vh',
+        height: 'auto',
+        maxHeight: 60,
+        zIndex: 5,
         alignItems: 'center',
         fontFamily: 'Helvetica, sans-serif',
         backgroundColor: '#1C1C1C'

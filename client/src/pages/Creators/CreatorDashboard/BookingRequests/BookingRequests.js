@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
-import {fetchBookingRequests, handleRequestAction} from '../../../../store/actions/creator';
+import {startLoading, endLoading, showError, showSnackbar} from '../../../../store/actions/ui';
 
 import BookingCard from './BookingCard/BookingCard';
 
@@ -21,32 +22,55 @@ const BookingRequests = (props) => {
     const classes = useStyles();
 
     //Fetch bookings on mounting 
-    const {fetchBookings} = props;
+    const {startLoading, endLoading, showError, showSnackbar} = props;
+    const [bookings, setBookings] = useState();
     useEffect(() => {
-        fetchBookings();
-    }, [fetchBookings]);
+        startLoading();
+        axios.get('/api/creator/bookingRequests')
+        .then(res => {
+            setBookings(res.data.bookingRequests);
+            endLoading();
+        }).catch(err => { 
+            showError("We couldn't get your booking requests.");
+            endLoading();
+        });
+    }, [startLoading, endLoading, showError]);
+
+    //Handle accept/decline request
+    const handleDecision = useCallback((action, stripeId) => (e) => {
+        //Action is either capture or cancel
+        axios.post(`/api/stripe/payment-intent/${action}`, {stripeId})
+        .then(res => {
+            setBookings(bookings => bookings.filter(booking => 
+                booking.stripeId !== stripeId
+            ));
+            const decision = action === 'capture'? 'approved' : 'canceled';
+            showSnackbar(`The booking was ${decision}`);
+        })
+        .catch(err => {
+            showError("We couldn't process your decision...");
+        });
+    }, [showSnackbar, showError]);
 
     return (
         <div className={classes.requests}> 
-            {props.bookings.map(booking => (
+            {bookings && bookings.map(booking => (
                 <div key={booking._id} className={classes.request}>
                     <BookingCard 
                     booking={booking}
-                    onAccept={props.acceptBooking}
-                    onDecline={props.declineBooking}/>
+                    onAccept={handleDecision('capture', booking.stripe.id)}
+                    onDecline={handleDecision('cancel', booking.stripe.id)}/>
                 </div>
             ))}
         </div>
     );
 }
 
-const mapStateToProps = (state) => ({
-    bookings: state.creator.bookingRequests  
-});
 const mapDispatchToProps = (dispatch) => ({
-    fetchBookings: () => dispatch(fetchBookingRequests()),
-    acceptBooking: (stripeId) => (e) => dispatch(handleRequestAction(stripeId, 'capture')),
-    declineBooking: (stripeId) => (e) => dispatch(handleRequestAction(stripeId, 'cancel'))
+    startLoading: () => dispatch(startLoading()),
+    endLoading: () => dispatch(endLoading()),
+    showError: (msg) => dispatch(showError(msg)),
+    showSnackbar: (msg) => dispatch(showSnackbar(msg))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookingRequests);
+export default connect(null, mapDispatchToProps)(BookingRequests);

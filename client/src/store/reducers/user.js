@@ -11,6 +11,12 @@ const initialState = {
         email: '',
         phoneNumber: '',
         birthday: ''
+    },
+    //Creator information
+    creator: {
+        id: null,
+        stripeId: null,
+        bio: ''
     }
 }
 
@@ -22,6 +28,14 @@ const authReducer = (state = initialState, action) => {
                 token: action.token,
                 isAdmin: action.isAdmin,
                 profile: { ...action.profile },
+            }
+        }
+        case types.SET_CREATOR_PROFILE: {
+            return {
+                ...state,
+                creator: {
+                    ...action.creatorProfile
+                }
             }
         }
         case types.RESET_USER: {

@@ -98,7 +98,7 @@ const Submitted = (props) => {
                     are handled and processed by Stripe&trade;</strong>
                 </p>
                 <div className={classes.stripeLink}>
-                    <a href={`https://connect.stripe.com/express/oauth/authorize?client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&state=${stripeState}`}>
+                    <a href={`https://connect.stripe.com/express/oauth/authorize?client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&state=${stripeState}&redirect_uri=${process.env.REACT_APP_STRIPE_OAUTH_REDIRECT}`}>
                         <p>Continue with</p>
                         <FontAwesomeIcon icon={faStripe}/>
                     </a>

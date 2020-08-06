@@ -15,7 +15,7 @@ const AdminSchema = new mongoose.Schema({
     },
     permissions: [{
         type: String,
-        enum: ['approveExp', 'addAdmin']
+        enum: ['approveExp', 'addAdmin', 'maintenance']
     }]
 });
 

@@ -42,9 +42,13 @@ const AdminNav = (props) => {
                     <Link to="/admin/register" className={classes.navLink}>
                         Register a new admin
                     </Link>}
-                {props.canEditExps && 
+                {props.canApproveExps && 
                     <Link to="/admin/approveExps" className={classes.navLink}>
                         Approve experiences
+                    </Link>}
+                {props.canMaintain && 
+                    <Link to="/admin/maintenance" className={classes.navLink}>
+                        App maintenance
                     </Link>}
                 <Link to="/" onClick={logoutAdmin} className={classes.navLink}>
                     Logout

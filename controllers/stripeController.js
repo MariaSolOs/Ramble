@@ -36,7 +36,8 @@ exports.connectCreatorToStripe = (req, res) => {
         const user = await User.findById(req.userId, 'creator')
                            .populate('creator', 'stripe');
         user.creator.stripe.id = response.stripe_user_id;
-        await user.save();
+        await user.creator.save();
+
         //TODO: Redirect to creator platform here
         return res.status(200).redirect(`${process.env.CLIENT_URL}`);
         }, (err) => {

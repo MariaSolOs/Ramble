@@ -6,17 +6,8 @@ import {startLoading, endLoading, showError, showSnackbar} from '../../../../sto
 import BookingCard from './BookingCard/BookingCard';
 
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
-    requests: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        width: '100%'
-    },
-    request: { 
-        marginTop: 20,
-        '&:nth-child(2n)': { marginLeft: 50 }
-    }
-}));
+import styles from './BookingRequestsStyles';
+const useStyles = makeStyles(styles);
 
 const BookingRequests = (props) => {
     const classes = useStyles();
@@ -42,7 +33,7 @@ const BookingRequests = (props) => {
         axios.post(`/api/stripe/payment-intent/${action}`, {stripeId})
         .then(res => {
             setBookings(bookings => bookings.filter(booking => 
-                booking.stripeId !== stripeId
+                booking.stripe.id !== stripeId
             ));
             const decision = action === 'capture'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
@@ -52,16 +43,47 @@ const BookingRequests = (props) => {
         });
     }, [showSnackbar, showError]);
 
+    //To handle the sorting
+    const sortByBookDate = useCallback(() => {
+        const bookingsCopy = bookings.slice(0);
+        bookingsCopy.sort((book1, book2) => {
+            if(book1.createdAt < book2.createdAt) {
+                return 1;
+            } else if(book1.createdAt > book2.createdAt){
+                return -1;
+            } else { return 0; }
+        });
+        setBookings(bookingsCopy);
+    }, [bookings]);
+    const sortByExpDate = useCallback(() => {
+        const bookingsCopy = bookings.slice(0);
+        bookingsCopy.sort((book1, book2) => {
+            if(book1.occurrence.date < book2.occurrence.date) {
+                return 1;
+            } else if(book1.occurrence.date > book2.occurrence.date){
+                return -1;
+            } else { return 0; }
+        });
+        setBookings(bookingsCopy);
+    }, [bookings]);
+
     return (
-        <div className={classes.requests}> 
-            {bookings && bookings.map(booking => (
-                <div key={booking._id} className={classes.request}>
-                    <BookingCard 
-                    booking={booking}
-                    onAccept={handleDecision('capture', booking.stripe.id)}
-                    onDecline={handleDecision('cancel', booking.stripe.id)}/>
-                </div>
-            ))}
+        <div className={classes.root}>
+            <div className={classes.sortBar}>
+                Sort by
+                <button onClick={sortByBookDate}>Booking date</button>
+                <button onClick={sortByExpDate}>Experience date</button>
+            </div>
+            <div className={classes.requests}> 
+                {bookings && bookings.map(booking => (
+                    <div key={booking._id} className={classes.request}>
+                        <BookingCard 
+                        booking={booking}
+                        onAccept={handleDecision('capture', booking.stripe.id)}
+                        onDecline={handleDecision('cancel', booking.stripe.id)}/>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

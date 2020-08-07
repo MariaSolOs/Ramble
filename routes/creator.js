@@ -20,4 +20,9 @@ router.post('/',
             identifyUser,
             controllers.upgradeUserToCreator);
 
+//Edit creator info
+router.patch('/:creatorId',
+             authenticateToken,
+             controllers.editCreatorProfile);
+
 module.exports = router;

@@ -84,18 +84,17 @@ const styles = () => ({
             fontWeight: 'bold',
             color: '#ECEBE5',
             background: 'none',
-            '&:hover': { color: '#2B2B2B' },
+            '&:hover': { 
+                backgroundColor: '#ECEBE5',
+                color: '#2B2B2B',
+            },
             '&:focus': { outline: 'none' }
-        },
-        '& .react-datepicker__day--in-selecting-range': {
-            backgroundColor: 'rgba(236, 235, 229, 0.4)',
-            '&:hover': { backgroundColor: 'rgba(236, 235, 229, 0.4)' }
         },
         '& .react-datepicker__day--disabled': {
             opacity: 0.5,
             fontWeight: 200
         },
-        '& .react-datepicker__day--selected, & .react-datepicker__day--in-range': {
+        '& .react-datepicker__day--selected': {
             backgroundColor: '#ECEBE5',
             color: '#2B2B2B',
             fontWeight: 'bold',

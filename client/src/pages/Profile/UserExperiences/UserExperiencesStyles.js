@@ -20,7 +20,7 @@ const styles = (theme) => ({
         overflow: 'hidden',
         width: '40%',
         minWidth: 170,
-        height: 250,
+        height: 270,
         position: 'relative',
         margin: '1% 4%',
         '&:hover': {

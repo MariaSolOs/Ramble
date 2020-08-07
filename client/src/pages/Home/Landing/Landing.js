@@ -59,6 +59,7 @@ const Landing = (props) => {
                         {...params}
                         classes={{ root: classes.textField_root }}
                         placeholder="Select a city"
+                        inputRef={props.searchRef}
                         InputProps={{
                             ...params.InputProps,
                             disableUnderline: true,

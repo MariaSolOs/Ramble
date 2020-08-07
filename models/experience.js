@@ -4,7 +4,7 @@ const ExperienceSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['pending', 'approved', 'refused']
+        enum: ['pending', 'approved', 'rejected']
     },
     location: {
         city: {

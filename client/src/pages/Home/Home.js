@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 
 //Views
 import Landing from './Landing/Landing';
@@ -19,11 +19,17 @@ const useStyles = makeStyles(() => ({
 const Home = (props) => {
     const classes = useStyles();
 
+    //Focus searchbar when clicking on the gallery images
+    const searchRef = useRef(null);
+    const setSearchFocus = () => { 
+        searchRef.current && searchRef.current.focus(); 
+    }
+
     return (
         <div className={classes.root}>
-            <Landing/>
-            <Partake/>
-            <Adventure/>
+            <Landing searchRef={searchRef}/>
+            <Partake setSearchFocus={setSearchFocus}/>
+            <Adventure setSearchFocus={setSearchFocus}/>
         </div>
     );
 }

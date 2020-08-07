@@ -28,13 +28,15 @@ export const fetchUserProfile = () => {
                 if(res.data.isCreator) {
                     axios.get('/api/creator')
                     .then(res => {
+                        console.log(res)
                         dispatch(setCreatorProfile(res.data.profile));  
+                        dispatch(endLoading());
                     }).catch(err => { 
                         console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
+                        dispatch(endLoading());
                     });
-                }      
+                } else { dispatch(endLoading()); }      
             } else { dispatch(resetUser()); }
-            dispatch(endLoading());
         })
         .catch(err => {
             console.log(`FETCH PROFILE FAILED: ${err}`); 

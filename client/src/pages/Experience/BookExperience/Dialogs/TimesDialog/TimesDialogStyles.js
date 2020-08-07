@@ -51,6 +51,7 @@ const styles = () => ({
         border: 'none',
         padding: 12,
         marginBottom: '1.1rem',
+        cursor: 'pointer',
         //Switch colors on selection
         color: props => props.selected? '#2B2B2B' : '#ECEBE5',
         backgroundColor: props => props.selected? '#ECEBE5' : '#2A2A2A',

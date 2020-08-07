@@ -1,7 +1,11 @@
 const styles = (theme) => ({
     root: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    expPage: {
         position: 'relative',
-        margin: '12vh 0 10vh',
+        marginTop: '12vh',
         width: '100vw',
         padding: '2% 15% 2% 15%',
         boxSizing: 'border-box',
@@ -10,6 +14,29 @@ const styles = (theme) => ({
         overflowY: 'scroll',
         backgroundColor: '#151515',
         [theme.breakpoints.down('sm')]: { flexDirection: 'column' },
+    },
+    extraInfo: {
+        width: 'auto',
+        margin: '0 auto 12vh',
+        color: '#FFF',
+        letterSpacing: '-0.05rem',
+        fontSize: '1.1rem',
+        '& h4': { 
+            marginBottom: 0,
+            fontSize: '1.25rem'
+        },
+        '& li': { 
+            margin: '5px 0',
+            '&.creatorIds': {
+                display: 'inline-flex',
+                alignItems: 'center',
+                '& img': {
+                    height: 150,
+                    width: 'auto',
+                    marginLeft: 15
+                }
+            } 
+        },
     },
 
     goBackBtn: {

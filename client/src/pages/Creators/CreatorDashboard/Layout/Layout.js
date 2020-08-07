@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         minHeight: '70vh',
         width: '90%',
-        margin: '15vh auto 5vh'
+        margin: '13vh auto 5vh'
     },
     page: {
         width: 'calc(100% - 10px - 3%)'

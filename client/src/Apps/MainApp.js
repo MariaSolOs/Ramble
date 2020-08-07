@@ -7,7 +7,9 @@ import {Route, Switch, useHistory} from 'react-router-dom';
 import Snackbar from '../components/Snackbar';
 import ErrorDialog from '../components/Dialogs/ErrorDialog/ErrorDialog';
 import Spinner from '../components/Spinner';
+import IdleTimer from '../components/IdleTimer/IdleTimer';
 import PublicApp from './PublicApp';
+import PrivateRoute from '../pages/PrivateRoute';
 const AdminApp = React.lazy(() => import('./AdminApp'));
 
 const MainApp = (props) => {
@@ -30,24 +32,26 @@ const MainApp = (props) => {
 
     return (
         <React.Suspense fallback={<Spinner/>}> 
-            {props.loading && <Spinner/>}
-            <Snackbar 
-            open={props.msgComponent === 'Snackbar'} 
-            message={props.msg} 
-            onClose={props.onMsgShown}/>
-            <ErrorDialog
-            open={props.msgComponent === 'ErrorDialog'} 
-            message={props.msg} 
-            onClose={props.onMsgShown}/>
-            <Switch>
-                {props.isAdmin &&
-                    <Route path="/admin">
+            {props.isAuth && <IdleTimer/>}
+            {props.loading ? <Spinner/> : 
+                <>
+                <Snackbar 
+                open={props.msgComponent === 'Snackbar'} 
+                message={props.msg} 
+                onClose={props.onMsgShown}/>
+                <ErrorDialog
+                open={props.msgComponent === 'ErrorDialog'} 
+                message={props.msg} 
+                onClose={props.onMsgShown}/>
+                <Switch>
+                    <PrivateRoute path="/admin" test={props.isAdmin}>
                         <AdminApp/>
-                    </Route>}
-                <Route path="/">
-                    <PublicApp/>
-                </Route>
-            </Switch>
+                    </PrivateRoute>
+                    <Route>
+                        <PublicApp/>
+                    </Route>
+                </Switch>
+                </>}
         </React.Suspense>
     );
 }

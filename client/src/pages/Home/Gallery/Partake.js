@@ -17,17 +17,19 @@ const Partake = (props) => {
             <div className={classes.body}>
                 <div style={{ width: '90%' }}>
                     <h1 className={classes.title}>Partake in unforgettable moments</h1>
-                    <h5 className={classes.description}>Experiences are unique activities organized by 
-                    passionate Creators who wish to share their expertise and give their guests a privileged 
-                    access to their universe.</h5>
+                    <h5 className={classes.description}>
+                        Experiences are unique activities organized by passionate 
+                        Creators who wish to share their expertise and give their 
+                        guests a privileged access to their universe.
+                    </h5>
                 </div>
                 <div className={classes.images}>
-                    <img src={images[0]}
-                    alt="Fire balloon"/>
-                    <img src={images[1]}
-                    alt="Pool dive"/>
-                    <img src={images[2]}
-                    alt="Street singers"/>
+                    <img src={images[0]} alt="Fire balloon"
+                    onClick={props.setSearchFocus}/>
+                    <img src={images[1]} alt="Pool dive"
+                    onClick={props.setSearchFocus}/>
+                    <img src={images[2]} alt="Street singers"
+                    onClick={props.setSearchFocus}/>
                 </div>
             </div>
         </div>

@@ -16,7 +16,6 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
     const classes = useStyles();
     const [fromHour, fromTime, toHour, toTime] = 
         helpers.getTimePieces(booking.occurrence.timeslot);
-    const bookedSpots = booking.experience.capacity - booking.occurrence.spotsLeft;
 
     return (
         <div className={classes.root}>
@@ -94,7 +93,9 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                             <FontAwesomeIcon icon={faUsers}/>
                         </Fab>
                         <span className={classes.whiteText}>
-                            {` ${bookedSpots} / ${booking.experience.capacity} Guests`}
+                            {` ${booking.experience.capacity - 
+                                (booking.occurrence.spotsLeft + 
+                                booking.numPeople)} / ${booking.experience.capacity} Guests`}
                         </span>
                     </div>
                     <div>

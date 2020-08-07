@@ -6,20 +6,24 @@ import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-
 import Spinner from '../../components/Spinner';
 import CreatorsIntro from './CreatorsIntro/CreatorsIntro';
 import CreatorForm from './CreatorForm/CreatorForm';
+import PrivateRoute from '../PrivateRoute';
 const DashboardRouter = React.lazy(() => import('./CreatorDashboard/Router'));
 
 const Router = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();
 
-    const isCreator = useSelector(state => state.user.creator.id !== null);
+    const isCreator = useSelector(state => state.user.creator.id);
 
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Switch location={location}>
-                {isCreator && 
-                    <Route path={`${path}/dashboard`} component={DashboardRouter}/>}
-                <Route path={`${path}/join`} component={CreatorForm}/>
+                <PrivateRoute path={`${path}/dashboard`} test={isCreator}>
+                    <DashboardRouter/>
+                </PrivateRoute>
+                <PrivateRoute path={`${path}/join`} test={props.isAuth}>
+                    <CreatorForm/>
+                </PrivateRoute>
                 <Route path={`${path}/become`} component={CreatorsIntro}/>
                 <Redirect to="/"/>
             </Switch>

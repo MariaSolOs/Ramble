@@ -8,8 +8,8 @@ import Cookies from 'js-cookie';
 import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
 import Spinner from '../components/Spinner';
-import IdleTimer from '../components/IdleTimer/IdleTimer';
 import Home from '../pages/Home/Home';
+import PrivateRoute from '../pages/PrivateRoute';
 const ExperienceRouter = React.lazy(() => import('../pages/Experience/Router'));
 const ProfileRouter = React.lazy(() => import('../pages/Profile/Router'));
 const CreatorRouter = React.lazy(() => import('../pages/Creators/Router'));
@@ -35,14 +35,15 @@ const PublicApp = (props) => {
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Nav/>
-            {isAuth && <IdleTimer/>}
             <Switch>
-                {isAuth && <Route path="/profile" component={ProfileRouter}/>}
+                <PrivateRoute path="/profile" test={isAuth}>
+                    <ProfileRouter/>
+                </PrivateRoute>
                 <Route path="/experience">
                     <ExperienceRouter isAuth={isAuth}/>
                 </Route>
                 <Route path="/creator">
-                    <CreatorRouter/>
+                    <CreatorRouter isAuth={isAuth}/>
                 </Route>
                 <Route exact path="/">
                     <Home/>
@@ -56,6 +57,7 @@ const PublicApp = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.user.token !== null,
+    isAdmin: state.user.isAdmin,
     expsLoaded: state.exp.expsLoaded
 });
 const mapDispatchToProps = (dispatch) => ({

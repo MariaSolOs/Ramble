@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../tokenizedAxios';
-import {useDispatch} from 'react-redux';
-import {showSnackbar} from '../../../store/actions/ui';
 import {useParams, useHistory} from 'react-router-dom';
+import uuid from 'react-uuid';
 
 //Components and icons
 import Button from '@material-ui/core/Button';
@@ -23,27 +22,37 @@ const ApprovalPage = (props) => {
     //Fetch the requested experience
     const {id} = useParams();
     const [exp, setExp] = useState(null);
-    const dispatch = useDispatch();
+    const {showSnackbar} = props;
     useEffect(() => {
         axios.get(`/api/exp/${id}`)
         .then(res => setExp(res.data.exp))
         .catch(err => {
-            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
+            showSnackbar(`LOL try again 👾 ${err}`);
         });
-    }, [id, dispatch]);
+    }, [id, showSnackbar]);
 
     //To notify the creator about the decision
     const [creatorEmail, setCreatorEmail] = useState('');
 
     //Deal with the approval decision
-    const handleDecision = (decision) => (e) => {
+    const handleDecision = (decision, verifyCreator) => (e) => {
         axios.post(`/api/exp/${exp._id}/approve`, { decision })
         .then(res => {
             setCreatorEmail(res.data.creatorEmail);
-            dispatch(showSnackbar(`Awesome, you successfully ${decision} this 
-            experience 🌝`));
+            if(verifyCreator) {
+                axios.patch(`/api/creator/${exp.creator._id}`, {verified: true})
+                .then(res => {
+                    showSnackbar(`Awesome, you successfully ${decision} this 
+                    experience and verified the Creator 🌝`);
+                }).catch(err => {
+                    showSnackbar(`The Creator couldn't be verified 😰: ${err}`);
+                });
+            } else {
+                showSnackbar(`Awesome, you successfully ${decision} this 
+                experience 🌝`);
+            }
         }).catch(err => {
-            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
+            showSnackbar(`LOL try again 👾 ${err}`);
         });
     }
 
@@ -62,7 +71,8 @@ const ApprovalPage = (props) => {
     return (
         <div className={classes.root}>
             {exp && 
-                <>
+            <>
+            <div className={classes.expPage}>
                 <Fab size="small" aria-label="go back" disableRipple
                 className={classes.goBackBtn} onClick={handleGoBack}>
                     <ChevronLeftIcon/>
@@ -74,31 +84,88 @@ const ApprovalPage = (props) => {
                     showSave
                     handleSave={() => {}}/>}
                 images={images}/>
-                <div className={classes.footer}>
-                    {creatorEmail.length > 0?
-                    <Button 
-                    variant="contained" 
-                    style={{backgroundColor: '#68DAF9'}}
-                    size="large"
-                    href={`mailto:${creatorEmail}`}>
-                        Notify the creator about your decision
-                    </Button> :
-                    <><Button 
-                    variant="contained" 
-                    style={{backgroundColor: '#00C77C'}}
-                    size="large"
-                    onClick={handleDecision('approved')}>
-                        Approve <span role="img" aria-label="approve">👍🏼</span>
-                    </Button>
-                    <Button 
-                    variant="contained" 
-                    color="secondary" 
-                    size="large"
-                    onClick={handleDecision('refused')}>
-                        Reject <span role="img" aria-label="reject">👎🏼</span>
-                    </Button></>}
-                </div>
-                </>}
+            </div>
+            <div className={classes.extraInfo}>
+                <h4>More information...</h4>
+                <ul>
+                    <li>
+                        <strong>Age restriction: </strong> 
+                        {exp.ageRestriction?
+                        exp.ageRestriction : 'none'}
+                    </li>
+                    <li>
+                        <strong>Setting: </strong> {exp.setting}
+                    </li>
+                    <li>
+                        <strong>Private booking price: </strong> 
+                        {exp.price.private? 
+                        exp.price.private : '(Private bookings not enabled)'}
+                    </li>
+                    <li>
+                        <strong>Currency: </strong> 
+                        {exp.price.currency}
+                    </li>
+                    <li>
+                        <strong>To bring: </strong>
+                        {exp.toBring.length > 0 ? 
+                        <ul>
+                            {exp.toBring.map(item => (
+                            <li key={uuid()}>{item}</li>
+                            ))}
+                        </ul> : ' Nothing indicated'}
+                    </li>
+                </ul>
+                <h4>The Creator</h4>
+                <ul>
+                    <li className="creatorIds">
+                        <strong>Government IDs </strong>
+                        <img src={exp.creator.governmentIds[0]} alt="Creator ID"/>
+                        <img src={exp.creator.governmentIds[1]} alt="Creator ID"/>
+                    </li>
+                    <li>
+                        <strong>Verified: </strong> 
+                        {exp.creator.verified? 'Yes' : `No. By approving this
+                        experience the creator will have a verified profile.`}
+                    </li>
+                    <li>
+                        <strong>Availability schedule</strong> {`(from 
+                            ${exp.avail.from.split('T')[0]} to 
+                            ${exp.avail.to.split('T')[0]})`}
+                        <ul>
+                            {Object.keys(exp.avail.schedule).map((day) => (
+                                <li key={day}>
+                                    {day}: {exp.avail.schedule[day].join(', ')}
+                                </li>
+                            ))}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div className={classes.footer}>
+                {creatorEmail.length > 0?
+                <Button 
+                variant="contained" 
+                style={{backgroundColor: '#68DAF9'}}
+                size="large"
+                href={`mailto:${creatorEmail}`}>
+                    Notify the creator about your decision
+                </Button> :
+                <><Button 
+                variant="contained" 
+                style={{backgroundColor: '#00C77C'}}
+                size="large"
+                onClick={handleDecision('approved', !exp.creator.verified)}>
+                    Approve <span role="img" aria-label="approve">👍🏼</span>
+                </Button>
+                <Button 
+                variant="contained" 
+                color="secondary" 
+                size="large"
+                onClick={handleDecision('rejected', !exp.creator.verified)}>
+                    Reject <span role="img" aria-label="reject">👎🏼</span>
+                </Button></>}
+            </div>
+            </>}
         </div>
     );
 }

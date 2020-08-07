@@ -5,16 +5,19 @@ import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-
 import Spinner from '../../components/Spinner';
 import SearchExperiences from './SearchExperiences/SearchExperiences';
 import ShowExperience from './ShowExperience/ShowExperience';
+import PrivateRoute from '../PrivateRoute';
 const CreateExperience = React.lazy(() => import('./CreateExperience/CreateExperience'));
 
-const Router = ({isAuth}) => {
+const Router = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();
 
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Switch location={location}>
-                <Route path={`${path}/new`} component={CreateExperience}/>
+                <PrivateRoute path={`${path}/new`} test={props.isAuth}>
+                    <CreateExperience/>
+                </PrivateRoute>
                 <Route path={`${path}/search`} component={SearchExperiences}/>
                 <Route path={`${path}/:id`} component={ShowExperience}/>
                 <Redirect to="/"/>

@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         letterSpacing: '-0.05rem',
         border: 'none',
+        cursor: 'pointer',
         '&:focus': { outline: 'none' }
     }
 }));

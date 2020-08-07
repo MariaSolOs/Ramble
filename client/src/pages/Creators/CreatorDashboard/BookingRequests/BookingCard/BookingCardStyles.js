@@ -17,7 +17,7 @@ const styles = () => ({
         fontSize: '1rem' 
     },
     withLargeNum: {
-        fontSize: '0.9rem',
+        fontSize: '0.85rem',
         '& span': {
             fontSize: '1.1rem',
             marginRight: 3

@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {showSnackbar} from '../store/actions/ui';
 import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 
 //Pages and layout
@@ -8,6 +9,7 @@ import ApproveExps from '../pages/Admin/ApproveExps';
 import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
 import Register from '../pages/Admin/Register';
 import Maintenance from '../pages/Admin/Maintenance/Maintenance';
+import PrivateRoute from '../pages/PrivateRoute';
 
 //TODO: Add Homepage
 const AdminApp = (props) => {
@@ -16,20 +18,25 @@ const AdminApp = (props) => {
 
     return (
         <>
-            <Nav 
-            canRegister={props.canRegister} 
-            canApproveExps={props.canApproveExps}
-            canMaintain={props.canMaintain}/>
-            <Switch location={location}>
-                {props.canApproveExps && 
-                    <Route path={`${path}/approveExps`} component={ApproveExps}/>}
-                {props.canApproveExps && 
-                    <Route path={`${path}/approveExp/:id`} component={ApprovalPage}/>}
-                {props.canRegister &&
-                    <Route path={`${path}/register`} component={Register}/>}
-                {props.canMaintain &&
-                    <Route path={`${path}/maintenance`} component={Maintenance}/>}
-            </Switch>
+        <Nav 
+        canRegister={props.canRegister} 
+        canApproveExps={props.canApproveExps}
+        canMaintain={props.canMaintain}/>
+        <Switch location={location}>
+            <PrivateRoute path={`${path}/approveExps`} test={props.canApproveExps}>
+                <ApproveExps showSnackbar={props.showSnackbar}/>
+            </PrivateRoute>
+            <PrivateRoute path={`${path}/approveExp/:id`} test={props.canApproveExps}>
+                <ApprovalPage showSnackbar={props.showSnackbar}/>
+            </PrivateRoute>
+            <PrivateRoute path={`${path}/register`} test={props.canRegister}>
+                <Register showSnackbar={props.showSnackbar}/>
+            </PrivateRoute>
+            <PrivateRoute path={`${path}/maintenance`} test={props.canMaintain}>
+                <Maintenance showSnackbar={props.showSnackbar}/>
+            </PrivateRoute>
+            <Route component={ApproveExps}/>
+        </Switch>
         </>
     );
 }
@@ -39,5 +46,8 @@ const mapStateToProps = (state) => ({
     canApproveExps: state.user.profile.permissions.includes('approveExp'),
     canMaintain: state.user.profile.permissions.includes('maintenance')
 });
+const mapDispatchToProps = (dispatch) => ({
+    showSnackbar: (msg) => dispatch(showSnackbar(msg))
+});
 
-export default connect(mapStateToProps, null)(AdminApp);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminApp);

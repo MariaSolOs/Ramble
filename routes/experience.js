@@ -16,6 +16,11 @@ router.post('/:id/approve',
              authenticateToken, 
              identifyUser,
              controllers.approveExp);
+//To delete rejected experiences
+router.delete('/rejected',
+              authenticateToken,
+              identifyUser,
+              controllers.deleteRejectedExps);
 
 //For creators to create an experience
 router.post('/', authenticateToken, controllers.createExperience);

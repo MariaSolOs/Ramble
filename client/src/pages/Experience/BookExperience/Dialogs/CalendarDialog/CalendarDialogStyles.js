@@ -67,10 +67,12 @@ const styles = () => ({
             transition: 'color 200ms ease-in-out',
             fontSize: '1rem',
             padding: '0.75em 0.5em',
+            cursor: 'pointer',
             '&:disabled': { 
                 fontSize: '0.7rem',
                 color: 'rgba(196, 196, 197, 0.4)',
                 padding: '8.4px 5.6px',
+                cursor: 'default',
                 '&:hover': { 
                     background: 'none', 
                     color: 'rgba(196, 196, 197, 0.4)'

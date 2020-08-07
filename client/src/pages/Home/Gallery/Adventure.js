@@ -16,16 +16,20 @@ const Adventure = (props) => {
         <div className={classes.root}>
             <div className={classes.body}>
                 <div style={{ textAlign: 'right' }}>
-                    <h1 className={classes.title} style={{ fontSize: '2.4rem' }}>With friends, family, on your own, or with a special someone.</h1>
-                    <h5 className={classes.description}>Turn every occasion into a memorable adventure.</h5>
+                    <h1 className={classes.title} style={{ fontSize: '2.4rem' }}>
+                        With friends, family, on your own, or with a special someone.
+                    </h1>
+                    <h5 className={classes.description}>
+                        Turn every occasion into a memorable adventure.
+                    </h5>
                 </div>
                 <div className={classes.images}>
-                    <img src={images[0]}
-                    alt="Pool party"/>
-                    <img src={images[1]}
-                    alt="Motorcycles"/>
-                    <img src={images[2]}
-                    alt="Romantic camping"/>
+                    <img src={images[0]} alt="Pool party"
+                    onClick={props.setSearchFocus}/>
+                    <img src={images[1]} alt="Motorcycles"
+                    onClick={props.setSearchFocus}/>
+                    <img src={images[2]} alt="Romantic camping"
+                    onClick={props.setSearchFocus}/>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import AppBar from '../AppBar';
-import ProfileMenu from '../ProfileMenu';
+import ProfileMenu from '../ProfileMenu/ProfileMenu';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faAngleDoubleDown} from '@fortawesome/free-solid-svg-icons/faAngleDoubleDown';
 

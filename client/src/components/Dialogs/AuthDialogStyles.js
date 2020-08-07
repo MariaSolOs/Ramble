@@ -68,6 +68,7 @@ const styles = (theme) => ({
         fontSize: '0.9rem',
         letterSpacing: '-0.04rem',
         color: '#ECEBE5',
+        cursor: 'pointer',
         '&:hover': { outline: 'none' }
     },
     //Sign up/log in with media buttons

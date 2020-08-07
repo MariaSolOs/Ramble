@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
             transform: 'none',
             border: 'none !important',
             marginBottom: 10,
+            cursor: 'pointer',
             '& .image-gallery-thumbnail-image': { 
                 borderRadius: '1rem',
                 maxHeight: 110,

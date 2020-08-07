@@ -42,7 +42,7 @@ const styles = (theme) => ({
     },
 
     card: {
-        cursor: 'default',
+        cursor: 'pointer',
         flexShrink: 0,
         flexDirection: 'column',
         height: '100%',
@@ -65,14 +65,12 @@ const styles = (theme) => ({
         marginTop: -5,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '0 10px 10px',
-        boxSizing: 'border-box',
+        padding: '10px',
     },
     title: {
         fontWeight: 'bold',
         fontSize: '0.9rem',
-        margin: '5px auto 4px 0',
+        margin: '0 auto 4px 0',
         textAlign: 'left',
         overflowWrap: 'break-word'
     },
@@ -95,7 +93,7 @@ const styles = (theme) => ({
     price: {
         alignSelf: 'flex-end',
         fontSize: '0.7rem',
-        margin: '-10px 0 0',
+        margin: '5px 0 0',
         fontWeight: 'bold',
         '& span': {
             fontSize: '1.1rem',

@@ -5,7 +5,7 @@ const styles = (theme) => ({
         margin: '12vh 0 0',
         height: '88vh',
         width: '100vw',
-        padding: '2% 15% 2% 15%',
+        padding: '2% 15% 2% 9%',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'row',

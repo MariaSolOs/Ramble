@@ -5,7 +5,8 @@ const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
       User = require('../models/user'), 
-      Creator = require('../models/creator');
+      Creator = require('../models/creator'),
+      Notification = require('../models/notification');
 
 //To deal with Mongoose dates
 const extractDayFrame = (date) => {
@@ -17,7 +18,8 @@ const extractDayFrame = (date) => {
 
 //Fetch cities stored in database
 exports.getLocations = (req, res) => {
-    Experience.distinct('location.displayLocation', (err, locations) => {
+    Experience.find({status: 'approved'}).distinct('location.displayLocation', 
+    (err, locations) => {
         if(err) {
             res.status(409).send({err: "Couldn't fetch locations."});
         } else { res.status(200).send({ locations }); }
@@ -61,13 +63,44 @@ exports.approveExp = (req, res) => {
         if(err || !exp) {
             res.status(500).send({err: 'Failed to update experience request.'});
         } else {
-            const creator = await User.findOne({creator: exp.creator._id}, 'email');
+            const creator = await Creator.findById(exp.creator._id, 
+                            'email notifications user');
+            const notif = new Notification({
+                message: `Your experience "${exp.title}" has been ${
+                req.body.decision}.`,
+                user: creator.user,
+                category: 'Creator-ExperienceDecision'
+            });
+            await notif.save();
+            creator.notifications.push(notif);
+            await creator.save();
             res.status(200).send({
                 message: `Experience successfully ${req.body.decision}.`,
                 creatorEmail: creator.email
             });
         }
     });
+}
+exports.deleteRejectedExps = async (req, res) => {
+    if(!req.isAdmin || !req.user.permissions.includes('maintenance')) {
+        return res.status(401).send({err: 'Unauthorized.'});
+    }
+    //Delete images from Cloudinary
+    try {
+        const delImages = [];
+        const exps = await Experience.find({status: 'rejected'}); 
+        for(exp of exps) {
+            for(img of exp.images) {
+                const publicId = img.split('/').slice(-1)[0].split('.')[0];
+                delImages.push(`Ramble/Experiences/${publicId}`);
+            }
+        }
+        cloudinary.api.delete_resources(delImages);
+        const delResult = await Experience.deleteMany({status: 'rejected'});
+        res.status(200).send({ delCount: delResult.deletedCount });
+    } catch(err) {
+        res.status(409).send({ err });
+    }
 }
 
 //Create an experience (unapproved status)
@@ -103,7 +136,6 @@ exports.createExperience = async (req, res) => {
 exports.getExp = (req, res) => {
     Experience.findById(req.params.id).populate({
         path: 'creator',
-        select: 'bio stripe',
         populate: {
             path: 'user',
             select: 'fstName photo'

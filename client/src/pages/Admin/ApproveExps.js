@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../tokenizedAxios';
-import {useDispatch} from 'react-redux';
-import {showSnackbar} from '../../store/actions/ui';
 import {useHistory} from 'react-router-dom';
 
 import Gallery from '../../components/ExperiencesGallery';
@@ -23,16 +21,16 @@ const ApproveExps = (props) => {
     const classes = useStyles();
 
     const [exps, setExps] = useState([]);
-    const dispatch = useDispatch();
+    const {showSnackbar} = props;
     useEffect(() => {
         axios.get('/api/exp/unapproved')
         .then(res => {
             setExps(res.data.exps);
         })
         .catch(err => {
-            dispatch(showSnackbar(`FUUUUCKKKK ${err} 🤖`));
+            showSnackbar(`FUUUUCKKKK ${err} 🤖`);
         });
-    }, [dispatch]);
+    }, [showSnackbar]);
 
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {

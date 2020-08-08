@@ -17,7 +17,8 @@ const initialState = {
         id: null,
         stripeId: null,
         bio: ''
-    }
+    },
+    notifications: []
 }
 
 const authReducer = (state = initialState, action) => {
@@ -36,6 +37,12 @@ const authReducer = (state = initialState, action) => {
                 creator: {
                     ...action.creatorProfile
                 }
+            }
+        }
+        case types.SET_NOTIFICATIONS: {
+            return {
+                ...state,
+                notifications: action.notifications.slice(0)
             }
         }
         case types.RESET_USER: {

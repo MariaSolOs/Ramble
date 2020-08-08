@@ -64,7 +64,6 @@ const getExpNotifs = async (creator) => {
 
 //For fetching profile information
 exports.getCreatorProfile = (req, res) => {
-    //req.user.populate('creator')
     req.user.populate({
         path: 'creator',
         populate: {
@@ -78,7 +77,6 @@ exports.getCreatorProfile = (req, res) => {
         });
     })
     .catch(err => {
-        console.log(err)
         res.status(500).send({err: "Couldn't fetch creator profile."});
     });
 }
@@ -88,7 +86,6 @@ exports.getBookingRequests = async (req, res) => {
         try {
             const {bookingRequests} = await user.creator.populate({
                 path: 'bookingRequests',
-                select: 'client experience createdAt numPeople occurrence stripe',
                 populate: [
                 { path: 'experience',
                   select: 'title images capacity' }, 

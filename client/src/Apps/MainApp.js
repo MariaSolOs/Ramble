@@ -33,8 +33,9 @@ const MainApp = (props) => {
     return (
         <React.Suspense fallback={<Spinner/>}> 
             {props.isAuth && <IdleTimer/>}
-            {props.loading ? <Spinner/> : 
+            {(props.loading && !props.isAuth) ? <Spinner/> : 
                 <>
+                {(props.loading && props.isAuth) && <Spinner/>}
                 <Snackbar 
                 open={props.msgComponent === 'Snackbar'} 
                 message={props.msg} 

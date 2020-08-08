@@ -9,6 +9,9 @@ const setProfile = (token, isAdmin, profile) => ({
 const setCreatorProfile = (creatorProfile) => ({
     type: types.SET_CREATOR_PROFILE, creatorProfile
 });
+const setNotifications = (notifications) => ({
+    type: types.SET_NOTIFICATIONS, notifications
+});
 
 const resetUser = () => ({ type: types.RESET_USER });
 
@@ -30,6 +33,7 @@ export const fetchUserProfile = () => {
                     .then(res => {
                         console.log(res)
                         dispatch(setCreatorProfile(res.data.profile));  
+                        dispatch(setNotifications(res.data.notifications));
                         dispatch(endLoading());
                     }).catch(err => { 
                         console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 

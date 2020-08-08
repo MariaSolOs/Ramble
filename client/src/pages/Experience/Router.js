@@ -19,7 +19,7 @@ const Router = (props) => {
                     <CreateExperience/>
                 </PrivateRoute>
                 <Route path={`${path}/search`} component={SearchExperiences}/>
-                <Route path={`${path}/:id`} component={ShowExperience}/>
+                <Route path={`${path}/view/:id`} component={ShowExperience}/>
                 <Redirect to="/"/>
             </Switch>
         </React.Suspense>

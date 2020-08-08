@@ -20,7 +20,7 @@ const UserSavedExperiences = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {
-        history.push(`/experience/${expId}`);
+        history.push(`/experience/view/${expId}`);
     }
     const handleUnsave = (expId) => (e) => {
         e.stopPropagation();

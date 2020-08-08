@@ -35,7 +35,7 @@ const BookExperience = ({exp, user, onClose}) => {
         if(state.form.date) {
             //Cut off the time from query
             const dateQuery = state.form.date.split('T')[0];
-            axios.get(`/api/exp/${exp._id}/occ`, 
+            axios.get(`/api/occ/${exp._id}`, 
             {params: {date: dateQuery}})
             .then(res => {
                 if(res.status === 200) {
@@ -91,7 +91,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 cancelBooking(payConfirm.error.message);
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
                 //Everything is good so far, now add booking to occurrence
-                axios.post(`/api/exp/${exp._id}/occ`, {
+                axios.post(`/api/occ/${exp._id}/bookings`, {
                     ...state.form,
                     stripeId: payConfirm.paymentIntent.id,
                     creatorProfit: payConfirm.paymentIntent.amount * 0.85

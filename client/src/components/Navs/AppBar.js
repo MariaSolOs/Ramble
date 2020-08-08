@@ -1,4 +1,5 @@
 import React from 'react';
+import {useLocation} from 'react-router-dom';
 
 //MUI
 import MUIAppBar from '@material-ui/core/AppBar';
@@ -51,10 +52,14 @@ const AppBar = (props) => {
     const classes = useStyles();
     const scrolledNav = useScrollTrigger();
 
+    const {pathname} = useLocation();
+
     return (
         <MUIAppBar 
         position="fixed" 
-        classes={{ root: `${classes.root} ${scrolledNav && 'scrolled'}` }}>
+        classes={{root:`${classes.root} 
+                        ${(scrolledNav && !pathname.startsWith('/experience/view')) 
+                        && 'scrolled'}` }}>
             <Toolbar>
                 <div onClick={props.onRambleClick}>
                     <div className={classes.brand}>

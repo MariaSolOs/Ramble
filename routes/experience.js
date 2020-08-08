@@ -12,7 +12,7 @@ router.get('/unapproved',
             authenticateToken, 
             identifyUser,
             controllers.getUnapprovedExps);
-router.post('/:id/approve', 
+router.post('/:expId/approve', 
              authenticateToken, 
              identifyUser,
              controllers.approveExp);
@@ -26,13 +26,7 @@ router.delete('/rejected',
 router.post('/', authenticateToken, controllers.createExperience);
 
 //Show experience page
-router.get('/:id', controllers.getExp);
-
-//Show occurrences for a certain experience
-router.get('/:id/occ', controllers.getExpOcurrences);
-
-//For adding a booking to an existing/new occurrence
-router.post('/:id/occ', authenticateToken, controllers.addBookingToOcurrence);
+router.get('/:expId', controllers.getExp);
 
 //Get experiences based on location and number of people
 router.get('/', controllers.getExps);

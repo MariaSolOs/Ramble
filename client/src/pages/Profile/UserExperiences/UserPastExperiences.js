@@ -18,7 +18,7 @@ const UserPastExperiences = (props) => {
 
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {
-        history.push(`/experience/${expId}`);
+        history.push(`/experience/view/${expId}`);
     }
 
     return (

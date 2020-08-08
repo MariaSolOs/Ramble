@@ -51,19 +51,19 @@ passport.deserializeUser(function(user, done) {
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-//Stripe API:
+//APIs:
 const stripeRoutes = require('./routes/stripe');
 app.use('/api/stripe', stripeRoutes);
 
-//Experiences API:
 const experienceRoutes = require('./routes/experience');
 app.use('/api/exp', experienceRoutes);
 
-//Profile API:
+const occurrenceRoutes = require('./routes/occurrence');
+app.use('/api/occ', occurrenceRoutes);
+
 const profileRoutes = require('./routes/profile');
 app.use('/api/profile', profileRoutes);
 
-//Creator API:
 const creatorRoutes = require('./routes/creator');
 app.use('/api/creator', creatorRoutes);
 

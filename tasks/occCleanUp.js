@@ -1,8 +1,8 @@
-const Occurrence = require('./models/occurrence'),
-      Booking = require('./models/booking'),
-      User = require('./models/user');
+const Occurrence = require('../models/occurrence'),
+      Booking = require('../models/booking'),
+      User = require('../models/user');
 
-const occCleanUpJob = async () => {
+const occCleanUp = async () => {
 //const occCleanUpJob = new CronJob('0 0 * * *', async () => {
     console.log('jobbinggg')
         // const yesterday = new Date();
@@ -23,4 +23,5 @@ const occCleanUpJob = async () => {
         // }
         // await Occurrence.deleteMany({date: {$lte: yesterday}});
 }
+occCleanUp();
 

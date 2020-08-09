@@ -3,7 +3,6 @@ import axios from '../../../tokenizedAxios';
 
 import Fab from '@material-ui/core/Fab';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import EventBusyIcon from '@material-ui/icons/EventBusy';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -71,12 +70,6 @@ const Maintenance = (props) => {
                     </Fab>
                     Delete all rejected experiences
                 </li>
-                {/* <li>
-                    <Fab onClick={handleDeletePastOccs}>
-                        <EventBusyIcon/>
-                    </Fab>
-                    Delete all past occurrences (and respective bookings)
-                </li> */}
             </ul>
         </div>
     );

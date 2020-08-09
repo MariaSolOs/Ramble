@@ -4,7 +4,6 @@ const initialState = {
     locations: [],
     pastExps: [],
     savedExps: [],
-    expsLoaded: false,
     savedExperienceForm: {}
 }
 
@@ -21,7 +20,6 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 pastExps: action.pastExps.slice(0),
                 savedExps: action.savedExps.slice(0),
-                expsLoaded: true
             }
         }
         case types.SAVE_EXP: {

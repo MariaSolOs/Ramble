@@ -21,25 +21,25 @@ export const fetchUserProfile = () => {
         if(!window.localStorage.getItem('token')) { return; }
         dispatch(startLoading());
         axios.get('/api/profile')
-        .then(res => {
+        .then(async res => {
             if(res.status === 200) {
-                dispatch(setProfile(
-                    res.data.token,
-                    res.data.isAdmin,
-                    res.data.userData
-                )); 
                 if(res.data.isCreator) {
-                    axios.get('/api/creator')
+                    await axios.get('/api/creator')
                     .then(res => {
                         console.log(res)
-                        dispatch(setCreatorProfile(res.data.profile));  
+                        dispatch(setCreatorProfile(res.data.creatorProfile));  
                         dispatch(setNotifications(res.data.notifications));
-                        dispatch(endLoading());
                     }).catch(err => { 
                         console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
                         dispatch(endLoading());
                     });
-                } else { dispatch(endLoading()); }      
+                }
+                dispatch(setProfile(
+                    res.data.token,
+                    res.data.isAdmin,
+                    res.data.userData
+                ));   
+                dispatch(endLoading());  
             } else { dispatch(resetUser()); }
         })
         .catch(err => {

@@ -28,6 +28,7 @@ const UserPastExperiences = (props) => {
                 {pastExps.length > 0? 
                     pastExps.map(exp => (
                         <ExperienceCard
+                        key={exp._id}
                         exp={exp}
                         className={classes.card}
                         onCardClick={handleViewExp(exp._id)}/>

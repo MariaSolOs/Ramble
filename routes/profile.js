@@ -24,8 +24,13 @@ router.get('/exps',
 router.post('/exps', 
              authenticateToken, 
              controllers.saveExperience);
-router.delete('/exps', 
+router.delete('/exps/:expId', 
                authenticateToken, 
                controllers.unsaveExperience);
+
+//To delete user notifications
+router.delete('/notifs/:notifId',
+              authenticateToken,
+              controllers.deleteNotification);
 
 module.exports = router;

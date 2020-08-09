@@ -23,10 +23,6 @@ const CreatorSchema = new mongoose.Schema({
     bookingRequests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Booking'
-    }],
-    notifications: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification'
     }]
 });
   

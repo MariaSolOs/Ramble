@@ -12,15 +12,10 @@ const getCreatorProfile = (creator) => ({
 
 //For fetching profile information
 exports.getCreatorProfile = (req, res) => {
-    req.user.populate({
-        path: 'creator',
-        populate: {
-            path: 'notifications'
-        }
-    }).execPopulate().then(async user => {
+    req.user.populate('creator').execPopulate()
+    .then(async user => {
         res.status(200).send({ 
-            creatorProfile: getCreatorProfile(user.creator),
-            notifications: user.creator.notifications
+            creatorProfile: getCreatorProfile(user.creator)
         });
     })
     .catch(err => {

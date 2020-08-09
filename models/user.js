@@ -37,7 +37,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         enum: ['facebook', 'google', 'email']
     },
-    membershipProviderId: String
+    membershipProviderId: String,
+    notifications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification'
+    }]
 }, {timestamps: true});
 
 UserSchema.methods.validPassword = function(password) {

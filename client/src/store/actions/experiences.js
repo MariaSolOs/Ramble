@@ -54,7 +54,7 @@ export const saveExperience = (expId) => {
 }
 export const unsaveExperience = (expId) => {
     return dispatch => {
-        axios.delete('/api/profile/exps', {data: {expId}})
+        axios.delete(`/api/profile/exps/${expId}`)
         .then(res => {
             if(res.status === 200) {
                 //Update saved experiences

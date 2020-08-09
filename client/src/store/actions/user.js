@@ -9,8 +9,11 @@ const setProfile = (token, isAdmin, profile) => ({
 const setCreatorProfile = (creatorProfile) => ({
     type: types.SET_CREATOR_PROFILE, creatorProfile
 });
-const setNotifications = (notifications) => ({
-    type: types.SET_NOTIFICATIONS, notifications
+const setNotifs = (notifs) => ({
+    type: types.SET_NOTIFICATIONS, notifs
+});
+const deleteNotif = (id) => ({
+    type: types.DELETE_NOTIFICATION, id
 });
 
 const resetUser = () => ({ type: types.RESET_USER });
@@ -27,7 +30,6 @@ export const fetchUserProfile = () => {
                     await axios.get('/api/creator')
                     .then(res => {
                         dispatch(setCreatorProfile(res.data.creatorProfile));  
-                        dispatch(setNotifications(res.data.notifications));
                     }).catch(err => { 
                         console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 
                         dispatch(endLoading());
@@ -38,6 +40,7 @@ export const fetchUserProfile = () => {
                     res.data.isAdmin,
                     res.data.userData
                 ));   
+                dispatch(setNotifs(res.data.notifications));
                 dispatch(endLoading());  
             } else { dispatch(resetUser()); }
         })
@@ -124,6 +127,19 @@ export const upgradeToCreator = (creatorInfo) => {
         .catch(err => {
             console.log(`CREATOR CREATION FAILED: ${err}`);
             dispatch(showError("We couldn't submit your form..."));
+        });
+    }
+}
+
+export const deleteNotification = (notifId) => {
+    return dispatch => {
+        axios.delete(`/api/profile/notifs/${notifId}`)
+        .then(res => {
+            //Update notifications
+            dispatch(deleteNotif(notifId));
+        })
+        .catch(err => {
+            console.log(`COULDN'T DELETE NOTIFICATION: ${err}`);
         });
     }
 }

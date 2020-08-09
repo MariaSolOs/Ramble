@@ -1,6 +1,7 @@
 //Models
 const User = require('../models/user'),
-      Experience = require('../models/experience');
+      Experience = require('../models/experience'),
+      Notification = require('../models/notification');
 
 //Helpers
 const getUserData = (user) => ({
@@ -25,11 +26,18 @@ exports.getUserProfile = (req, res) => {
             }
         });
     } else {
-        res.status(200).send({
-            isAdmin: false,
-            isCreator: Boolean(req.user.creator),
-            token:  req.token,
-            userData: getUserData(req.user)
+        req.user.populate('notifications')
+        .execPopulate().then(user => {
+            res.status(200).send({
+                isAdmin: false,
+                isCreator: Boolean(user.creator),
+                token:  req.token,
+                userData: getUserData(user),
+                notifications: user.notifications
+            });
+        })
+        .catch(err => {
+            res.status(500).send({err: "Couldn't fetch user profile."});
         });
     }
 }
@@ -54,16 +62,20 @@ exports.editProfile = async (req, res) => {
 
 //For getting and saving/unsaving an experience
 exports.getUserExperiences = async (req, res) => {
-    //We only need this for experience cards
-    const expFields = 'title location.displayLocation images price rating';
-    const {pastExperiences, savedExperiences} = 
-        await req.user.populate('pastExperiences', expFields)
-                  .populate('savedExperiences', expFields)
-                  .execPopulate();
-    res.status(200).send({
-        pastExperiences, 
-        savedExperiences
-    });
+    try {
+        //We only need this for experience cards
+        const expFields = 'title location.displayLocation images price rating';
+        const {pastExperiences, savedExperiences} = 
+            await req.user.populate('pastExperiences', expFields)
+                    .populate('savedExperiences', expFields)
+                    .execPopulate();
+        res.status(200).send({
+            pastExperiences, 
+            savedExperiences
+        });
+    } catch(err) {
+        res.status(500).send({err: "Couldn't fetch user experiences."});
+    }
 }
 exports.saveExperience = async (req, res) => {
     try {
@@ -82,12 +94,27 @@ exports.saveExperience = async (req, res) => {
 exports.unsaveExperience = async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.userId, 
-              {$pull: {savedExperiences: req.body.expId }});
+              {$pull: {savedExperiences: req.params.expId }});
         res.status(200).send({
             token: req.token,
             message: 'Experience succesfully unsaved.'
         });
     } catch(err) {
         res.status(409).send({err: `Couldn't unsave experience: ${err}`});
+    }
+}
+
+//For deleting notifications
+exports.deleteNotification = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.userId, 
+              {$pull: {notifications: req.params.notifId}});
+        await Notification.findByIdAndDelete(req.params.notifId);
+        res.status(200).send({
+            token: req.token,
+            message: 'Notification deleted.'
+        });
+    } catch(err) {
+        res.status(409).send({err: `Couldn't delete notification: ${err}`});
     }
 }

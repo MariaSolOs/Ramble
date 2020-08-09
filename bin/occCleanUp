@@ -2,42 +2,41 @@
 
 require('dotenv').config({ path: '../.env' });
 require('../config/mongoose');
-const logger = require('heroku-logger');
 
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
-      User = require('../models/user');
+      User = require('../models/user'),
+      Creator = require('../models/creator');
 
 const occCleanUp = async () => {
-    logger.info('JOB START', {job: 'CLEAN OCCURRENCES'});
+    console.log('JOB STARTS: CLEAN OCCURRENCES');
     try {
-        let bookCount = 0;
+        //Find all old occurrences
         const yesterday = new Date();
-        yesterdays.setDate(new Date().getDate() - 1);
+        yesterday.setDate(new Date().getDate() - 1);
         const occs = await Occurrence.find({date: {$lte: yesterday}}).populate([
                         { path: 'experience' },
                         { path: 'bookings', select: 'client' }
                     ]);
+        const bookingsToDel = [];
         for(const occ of occs) {
             for(const booking of occ.bookings) {
                 //Update users' past experiences
                 await User.findByIdAndUpdate(booking.client, 
                 {$addToSet: {pastExperiences: occ.experience._id}});
+                //Just to be sure, delete booking from creator's requests
+                await Creator.findOneAndUpdate({bookingRequests: booking._id}, 
+                {$pull: {bookingRequests: booking._id}});
+                bookingsToDel.push(bookingsToDel);
             }
-            //Delete bookings
-            const delBookings = occ.bookings.map(booking => booking._id);
-            const delCount = await Booking.deleteMany({_id: {$in: delBookings}});
-            bookCount += delCount.deletedCount;
         }
+        const bookCount = await Booking.deleteMany({_id: {$in: bookingsToDel}});
         const occCount = await Occurrence.deleteMany({date: {$lte: yesterday}});
-        logger.info('JOB SUCCESS', {
-            job: 'CLEAN OCCURRENCES', 
-            delOccurrences: occCount.deletedCount,
-            delBookings: bookCount
-        });
+        console.log(`JOB SUCCESS: CLEAN OCCURRENCES. DELETED OCC: ${
+        occCount.deletedCount}, DELETED BOOKINGS: ${bookCount.deletedCount}`);
     } catch(err) {
-        logger.error(err, {job: 'CLEAN OCCURRENCES'});
+        console.log(`JOB FAILED: CLEAN OCCURRENCES - ${err}`);
     }
     process.exit();
 }

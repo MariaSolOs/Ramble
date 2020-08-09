@@ -28,19 +28,19 @@ exports.getExpOcurrences = (req, res) => {
 //For adding a booking to an existing/new occurrence
 exports.addBookingToOcurrence = async (req, res) => {
     try {
-        const experience = await Experience.findById(req.params.id, 'capacity creator')
+        const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
         const [dayStart, dayEnd] = extractDayFrame(req.body.date);
 
         //Find or create the occurrence
         let occ = await Occurrence.findOne({
-                            experience: req.params.id,
+                            experience: experience._id,
                             date: {$gte: dayStart, $lt: dayEnd},
                             timeslot: req.body.timeslot
                         });
         if(!occ) {
             occ = new Occurrence({
-                experience: req.params.id,
+                experience: experience._id,
                 date: dayStart,
                 timeslot: req.body.timeslot,
                 spotsLeft: experience.capacity,

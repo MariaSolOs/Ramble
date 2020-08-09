@@ -14,6 +14,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         //Update occurrence and creator's requests
         booking.occurrence.creatorProfit += booking.stripe.creatorProfit;
         booking.stripe.paymentCaptured = true;
+        await booking.occurrence.save();
         await booking.save();
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});

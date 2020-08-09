@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 
 //Models
 const Experience = require('../models/experience'),
+      User = require('../models/user'),
       Creator = require('../models/creator'),
       Notification = require('../models/notification');
 
@@ -51,12 +52,11 @@ exports.approveExp = (req, res) => {
         if(err || !exp) {
             res.status(500).send({err: 'Failed to update experience request.'});
         } else {
-            const creator = await Creator.findById(exp.creator._id, 
-                            'email notifications user');
+            const creator = await User.findOne({creator: exp.creator._id});
             const notif = new Notification({
                 message: `Your experience "${exp.title}" has been ${
                 req.body.decision}.`,
-                user: creator.user,
+                user: creator._id,
                 category: 'Creator-ExperienceDecision'
             });
             await notif.save();

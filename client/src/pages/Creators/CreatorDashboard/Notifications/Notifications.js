@@ -1,74 +1,57 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React, {useCallback} from 'react';
+import {connect} from 'react-redux';
+import {deleteNotification} from '../../../../store/actions/user';
 
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
-    notifList: {
-        listStyle: 'none',
-        padding: 0
-    },
-    notif: {
-        fontFamily: 'Helvetica, sans-serif',
-        fontWeight: 'bold',
-        letterSpacing: '-0.05rem',
-        color: '#ECEBE5',
-        fontSize: '1.15rem',
-        lineHeight: 2,
-        marginBottom: '1rem'
-    },
-    notifIcon: {
-        fontWeight: 'bold',
-        marginRight: '1rem',
-        width: 50, height: 50,
-        cursor: 'default'
-    }
-}));
+import styles from './NotificationsStyles';
+const useStyles = makeStyles(styles);
 
 const timeRegex = /((1[0-2]|[1-9])(:30)?([AP][M]))/g;
 
 const Notifications = (props) => {
     const classes = useStyles();
 
-    //const notifs = useSelector(state => state.user.notifications);
-    const notifs = [
-        {message: 'Your experience "Maria and Tequila" is happening ' +
-                  "tomorrow at 10:30PM. Don't forget!",
-        category: 'Creator-ExperienceReminder',
-        _id: 0},
-        {message: 'Your experience "Dancing with your cat" has been approved',
-        category: 'Creator-ExperienceDecision',
-        _id: 1,
-    }];
-
-    const getNotifIcon = (notif) => {
+    const getNotifIcon = useCallback((notif) => {
         switch(notif.category) {
             case 'Creator-ExperienceReminder':
                 const time = notif.message.match(timeRegex)[0];
                 return time.slice(0, -2);
             case 'Creator-ExperienceDecision': 
-                return <CheckIcon/>
-            default: ;
+                return <CheckIcon fontSize="large"/>
+            default: 
+                return <CheckIcon fontSize="large"/>
         }
-    }
+    }, []);   
 
     return (
         <ul className={classes.notifList}>
-            {notifs.map(notif =>     (
+            {props.notifs.map(notif => (
                 <li 
                 key={notif._id}
                 className={classes.notif}>
-                    <Fab classes={{ root: classes.notifIcon }}
+                    <Fab classes={{root: classes.notifIcon}}
                     disableRipple>
                         {getNotifIcon(notif)}
                     </Fab>
                     {notif.message}
+                    <HighlightOffIcon 
+                    classes={{root: classes.deleteIcon}}
+                    onClick={props.deleteNotif(notif._id)}/>
                 </li>
             ))}
         </ul>
     );
 }
 
-export default Notifications;
+const mapStateToProps = (state) => ({
+    notifs: state.user.notifs
+});
+const mapDispatchToProps = (dispatch) => ({
+    deleteNotif: (notifId) => (e) => dispatch(deleteNotification(notifId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

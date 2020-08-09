@@ -18,7 +18,7 @@ const initialState = {
         stripeId: null,
         bio: ''
     },
-    notifications: []
+    notifs: []
 }
 
 const authReducer = (state = initialState, action) => {
@@ -42,7 +42,15 @@ const authReducer = (state = initialState, action) => {
         case types.SET_NOTIFICATIONS: {
             return {
                 ...state,
-                notifications: action.notifications.slice(0)
+                notifs: action.notifs.slice(0)
+            }
+        }
+        case types.DELETE_NOTIFICATION: {
+            return {
+                ...state,
+                notifs: state.notifs.filter(notif => 
+                            notif._id !== action.id
+                        )
             }
         }
         case types.RESET_USER: {

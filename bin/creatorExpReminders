@@ -2,6 +2,7 @@
 
 require('dotenv').config({ path: '../.env' });
 require('../config/mongoose');
+const logger = require('heroku-logger');
 
 //Models
 const Creator = require('../models/creator'),
@@ -10,7 +11,7 @@ const Creator = require('../models/creator'),
       Notification = require('../models/notification');
 
 const creatorExpReminders = async () => {
-    console.log('JOB BEGINS: CREATOR EXPERIENCE REMINDERS.');
+    logger.info('JOB START', {job: 'CREATOR EXPERIENCE REMINDERS'});
     try {
         const allCreators = await Creator.find({}).populate('notifications');
         for(const creator of allCreators) {
@@ -53,9 +54,9 @@ const creatorExpReminders = async () => {
             }
             await creator.save();
         }
-        console.log('JOB SUCCESSULLY COMPLETED: CREATOR EXPERIENCE REMINDERS.');
+        logger.info('JOB SUCCESS', {job: 'CREATOR EXPERIENCE REMINDERS'});
     } catch(err) {
-        console.log(`JOB FAILED: CREATOR EXPERIENCE REMINDERS - ${err}`);
+        logger.error(err, {job: 'CREATOR EXPERIENCE REMINDERS'});
     }
     process.exit();
 }

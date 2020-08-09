@@ -2,6 +2,7 @@
 
 require('dotenv').config({ path: '../.env' });
 require('../config/mongoose');
+const logger = require('heroku-logger');
 
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
@@ -9,11 +10,11 @@ const Experience = require('../models/experience'),
       User = require('../models/user');
 
 const occCleanUp = async () => {
-    console.log('JOB BEGINS: CLEAN OCCURRENCES.');
+    logger.info('JOB START', {job: 'CLEAN OCCURRENCES'});
     try {
         let bookCount = 0;
         const yesterday = new Date();
-        yesterday.setDate(new Date().getDate() - 1);
+        yesterdays.setDate(new Date().getDate() - 1);
         const occs = await Occurrence.find({date: {$lte: yesterday}}).populate([
                         { path: 'experience' },
                         { path: 'bookings', select: 'client' }
@@ -30,10 +31,13 @@ const occCleanUp = async () => {
             bookCount += delCount.deletedCount;
         }
         const occCount = await Occurrence.deleteMany({date: {$lte: yesterday}});
-        console.log(`JOB SUCCESSULLY COMPLETED: CLEAN OCCURRENCES. DELETED BOOKINGS = ${
-            bookCount}, DELETED OCCURRENCES = ${occCount.deletedCount}`);
+        logger.info('JOB SUCCESS', {
+            job: 'CLEAN OCCURRENCES', 
+            delOccurrences: occCount.deletedCount,
+            delBookings: bookCount
+        });
     } catch(err) {
-        console.log(`JOB FAILED: CLEAN OCCURRENCES - ${err}`);
+        logger.error(err, {job: 'CLEAN OCCURRENCES'});
     }
     process.exit();
 }

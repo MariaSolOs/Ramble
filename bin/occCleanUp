@@ -1,10 +1,17 @@
-const Occurrence = require('../models/occurrence'),
+#!/usr/bin/env node
+
+require('dotenv').config({ path: '../.env' });
+require('../config/mongoose');
+
+const Experience = require('../models/experience'),
+      Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
       User = require('../models/user');
 
 const occCleanUp = async () => {
     console.log('JOB BEGINS: CLEAN OCCURRENCES.');
     try {
+        let bookCount = 0;
         const yesterday = new Date();
         yesterday.setDate(new Date().getDate() - 1);
         const occs = await Occurrence.find({date: {$lte: yesterday}}).populate([
@@ -19,13 +26,16 @@ const occCleanUp = async () => {
             }
             //Delete bookings
             const delBookings = occ.bookings.map(booking => booking._id);
-            await Booking.deleteMany({_id: {$in: delBookings}});
+            const delCount = await Booking.deleteMany({_id: {$in: delBookings}});
+            bookCount += delCount.deletedCount;
         }
-        await Occurrence.deleteMany({date: {$lte: yesterday}});
-        console.log('JOB SUCCESSULLY COMPLETED: CLEAN OCCURRENCES.');
+        const occCount = await Occurrence.deleteMany({date: {$lte: yesterday}});
+        console.log(`JOB SUCCESSULLY COMPLETED: CLEAN OCCURRENCES. DELETED BOOKINGS = ${
+            bookCount}, DELETED OCCURRENCES = ${occCount.deletedCount}`);
     } catch(err) {
         console.log(`JOB FAILED: CLEAN OCCURRENCES - ${err}`);
     }
+    process.exit();
 }
 occCleanUp();
 

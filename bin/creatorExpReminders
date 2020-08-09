@@ -24,7 +24,7 @@ const creatorExpReminders = async () => {
             //Delete old reminders
             await Notification.deleteMany({
                 user: creator.user, 
-                category: 'Creator-ExperienceDecisionReminder'
+                category: 'Creator-ExperienceReminder'
             });
 
             //Get creator's experiences happening in the next 2 days
@@ -57,5 +57,6 @@ const creatorExpReminders = async () => {
     } catch(err) {
         console.log(`JOB FAILED: CREATOR EXPERIENCE REMINDERS - ${err}`);
     }
+    process.exit();
 }
 creatorExpReminders();

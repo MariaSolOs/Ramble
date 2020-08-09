@@ -26,7 +26,6 @@ export const fetchUserProfile = () => {
                 if(res.data.isCreator) {
                     await axios.get('/api/creator')
                     .then(res => {
-                        console.log(res)
                         dispatch(setCreatorProfile(res.data.creatorProfile));  
                         dispatch(setNotifications(res.data.notifications));
                     }).catch(err => { 

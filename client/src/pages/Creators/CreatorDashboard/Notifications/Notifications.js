@@ -37,7 +37,7 @@ const Notifications = (props) => {
                 const time = notif.message.match(timeRegex)[0];
                 console.log(time);
                 return time;
-            //default: ;
+            default: ;
         }
     }
 

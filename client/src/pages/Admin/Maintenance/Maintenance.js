@@ -49,16 +49,6 @@ const Maintenance = (props) => {
             showSnackbar(`Ha... ${err} 🐲`)            
         });
     }, [showSnackbar]);
-    const handleDeletePastOccs = useCallback(() => {
-        axios.delete('/api/exp/rejected')
-        .then(res => {
-            showSnackbar(`You just deleted ${res.data.delCount}
-            experiences. 🚮`)
-        })
-        .catch(err => {
-            showSnackbar(`Ha... ${err} 🐲`)            
-        });
-    }, [showSnackbar]);
 
     return (
         <div className={classes.root}>

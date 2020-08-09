@@ -1,9 +1,7 @@
-#! /app/bin/env node
-//require('dotenv');
-require('dotenv').config({ path: '../.env' });
-console.log(process.env.MONGODB_URI)
+#!/usr/bin/env node
 
-//require('../config/mongoose');
+require('dotenv').config({ path: '../.env' });
+require('../config/mongoose');
 
 //Models
 const Creator = require('../models/creator'),
@@ -14,14 +12,11 @@ const Creator = require('../models/creator'),
 const creatorExpReminders = async () => {
     console.log('JOB BEGINS: CREATOR EXPERIENCE REMINDERS.');
     try {
-        const allCreators = await Creator.find({});
-        // const allCreators = await Creator.find({}).populate('notifications');
-        console.log(allCreators)
-        return;
+        const allCreators = await Creator.find({}).populate('notifications');
         for(const creator of allCreators) {
             const otherNotifs = [];
             for(const notif of creator.notifications) {
-                if(notif.category !== 'Creator-ExperienceDecisionReminder') {
+                if(notif.category !== 'Creator-ExperienceReminder') {
                     otherNotifs.push(notif);
                 }
             }

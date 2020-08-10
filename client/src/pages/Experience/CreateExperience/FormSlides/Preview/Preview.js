@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../../../../store/actions/ui';
 import Files from 'react-butterfiles';
 import uuid from 'react-uuid';
 
@@ -25,12 +27,26 @@ const captions = [
 
 const Preview = ({images, submitInput}) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     //Image dropzone
     const [index, setIndex] = useState(0);
     const handleErrors = (errors) => {
-        //TODO: Do something smart here
-        console.log(errors);
+        let message;
+        switch(errors[0].type) {
+            case 'unsupportedFileType':
+                message = 'Please upload .jpg, .jpeg or .png files only';
+                break;
+            case 'maxSizeExceeded': 
+                message = 'The file size is too heavy. Maybe try a .jpg image?';
+                break;
+            case 'multipleNotAllowed': 
+                message = 'Please upload a single image in each box!';
+                break;
+            default:
+                message = 'The image cannot be uploaded...';
+        }
+        dispatch(showSnackbar(message));
     }
     const handleAddImage = (files) => {
         const newImg = files[0].src.base64;
@@ -55,7 +71,6 @@ const Preview = ({images, submitInput}) => {
         </div>
         <div>
             <Files
-            multiple
             convertToBase64
             accept={['image/jpg', 'image/jpeg', 'image/png']}
             onError={handleErrors}

@@ -69,7 +69,7 @@ const Footer = ({currStage, backLink, nextLink, numSteps, canContinue}) => {
             {currStage > 0 && 
                 <button 
                 className={`${classes.backButton} ${classes.navButton}`}
-                onClick={() => history.push(`/experience/new/${backLink}`)}>
+                onClick={() => history.push(backLink)}>
                     Back
                 </button>}
         </div>

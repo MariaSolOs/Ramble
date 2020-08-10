@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
         margin: '1rem 0',
         cursor: 'default',
         whiteSpace: 'nowrap',
-        padding: props => `0 ${10 + 5*(props.rootPadding)}px`,
+        padding: props => `0 ${5 + 5*(props.rootPadding)}px`,
         '& > div': {
             display: 'flex',
             flexDirection: 'column',
@@ -32,19 +32,21 @@ const useStyles = makeStyles(() => ({
         fontSize: '0.9rem',
         color: '#717171',
         textTransform: 'uppercase',
-        marginBottom: 3
+        marginBottom: 3,
+        textAlign: 'center'
     },
     content: {
         fontSize: '1.05rem',
         color: '#DDDDDD',
         textTransform: 'capitalize',
+        textAlign: 'center',
     },
     icon: {
         backgroundColor: '#1C1C1C',
         borderRadius: '50%',
         position: 'absolute',
         top: -28,
-        left: -22,
+        left: 'calc(50% - 14px)',
         padding: 5,
         '& svg': {
             color: '#717171',

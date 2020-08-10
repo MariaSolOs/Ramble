@@ -13,22 +13,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ItemsStyles';
 const useStyles = makeStyles(styles);
 
-const Bring = ({mustBring, toBring, submitInput}) => {
+const Bring = ({toBring, submitInput}) => {
     const classes = useStyles();
-
-    //For handling checkbox changes
-    const [bring, setBring] = useState(toBring.length > 0);
-    const [showForm, setShowForm] = useState(toBring.length > 0);
-    const handleBringCheck = (e) => {
-        if(e.target.name === 'bringYes') {
-            setBring(true);
-            submitInput('mustBring', true);
-            setShowForm(true);
-        } else { //e.target.name === 'bringNo'
-            submitInput('mustBring', false);
-            setBring(false);
-        }
-    }
 
     //For managing the included items
     const [formVal, setFormVal] = useState('');
@@ -48,8 +34,27 @@ const Bring = ({mustBring, toBring, submitInput}) => {
         submitInput('toBring', items);
     }, [items, submitInput]);
 
+    //For handling checkbox changes
+    const [bring, setBring] = useState(toBring.length > 0);
+    const [showForm, setShowForm] = useState(toBring.length > 0);
+    const handleBringCheck = (e) => {
+        if(e.target.name === 'bringYes') {
+            setBring(true);
+            setShowForm(true);
+        } else { //e.target.name === 'bringNo'
+            setShowForm(false);
+            setItems([]);
+            setBring(false);
+        }
+    }
+
+    //Add item if user presses enter
+    const handleEnter = (e) => {
+        if(e.keyCode === 13) { addItem(); }
+    }
+
     return (
-        <>
+        <div onKeyDown={handleEnter}>
             <div>
                 <h1 className={classes.title}>What to bring</h1>
                 <p className={classes.description}>Should your guests be bringing anything?</p>
@@ -76,7 +81,7 @@ const Bring = ({mustBring, toBring, submitInput}) => {
                 <Tip>Be as precise as possible so your guests can prepare appropriately.</Tip>
                 <TextField 
                 label="My guests need..." 
-                placeholder="Ex: Painting brushes" 
+                placeholder="Ex: Paint brushes" 
                 style={{width: 340, marginTop: '0.5rem' }} 
                 value={formVal} 
                 onChange={handleFormChange}/>
@@ -88,7 +93,7 @@ const Bring = ({mustBring, toBring, submitInput}) => {
                     <Chip key={key} label={item} onDelete={() => removeItem(key)} className="chip"/>
                 ))}
             </div></>}
-        </>
+        </div>
     );
 }
 

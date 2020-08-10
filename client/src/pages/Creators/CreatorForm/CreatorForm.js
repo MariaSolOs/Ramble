@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
+import {showSnackbar} from '../../../store/actions/ui';
 import {upgradeToCreator} from '../../../store/actions/user';
 import {useHistory} from 'react-router-dom';
 import Files from 'react-butterfiles';
@@ -47,8 +48,25 @@ const CreatorForm = (props) => {
     const handleAddId = (files) => { 
         setId(id => ({...id, [side]: files[0].src.base64 }));
     }
-    const handleDeleteId = (side) => () => { 
+    const handleDeleteId = (side) => (e) => { 
         setId(id => ({...id, [side]: null }));
+    }
+    const handleDropzoneErr = (errors) => {
+        let message;
+        switch(errors[0].type) {
+            case 'unsupportedFileType':
+                message = 'Please upload .jpg, .jpeg or .png files only';
+                break;
+            case 'maxSizeExceeded': 
+                message = 'The file size is too heavy. Maybe try a .jpg image?';
+                break;
+            case 'multipleNotAllowed': 
+                message = 'Please upload a single image in each box!';
+                break;
+            default:
+                message = 'The image cannot be uploaded...';
+        }
+        props.showSnackbar(message);
     }
 
     //Form validation and submission
@@ -143,10 +161,10 @@ const CreatorForm = (props) => {
                     </Tip>
                 </div>
                 <Files
-                multiple
                 convertToBase64
                 accept={['image/jpg', 'image/jpeg', 'image/png']}
-                onSuccess={handleAddId}>
+                onSuccess={handleAddId}
+                onError={handleDropzoneErr}>
                 {({browseFiles, getDropZoneProps}) => (
                     <div {...getDropZoneProps({className: classes.dropzone})}>
                         {idSides.map(({side, message}) => (
@@ -201,7 +219,8 @@ const mapStateToProps = (state) => ({
     creatorRegistered: state.user.creator.id !== null
 });
 const mapDispatchToProps = (dispatch) => ({
-    upgradeToCreator: (info) => dispatch(upgradeToCreator(info))
+    upgradeToCreator: (info) => dispatch(upgradeToCreator(info)),
+    showSnackbar: (msg) => dispatch(showSnackbar(msg))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatorForm);

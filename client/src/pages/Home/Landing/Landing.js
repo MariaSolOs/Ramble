@@ -4,7 +4,7 @@ import useNumberField from '../../../hooks/useNumberField';
 import useLocations from '../../../hooks/useLocations';
 
 //Components and icons
-import ReferBox from './ReferBox';
+import ReferBox from '../../../components/ReferBox/ReferBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -80,7 +80,7 @@ const Landing = (props) => {
                         </button>
                     </div>
                 </div>
-            <ReferBox/>
+            <ReferBox shareUrl={process.env.REACT_APP_SHARE_LINK}/>
             </div>
             <div className={classes.image}>
                 <img src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,g_north,h_700,w_550/v1/Ramble/Homepage/fireBalloon.jpeg`}

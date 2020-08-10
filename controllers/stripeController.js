@@ -35,7 +35,7 @@ exports.connectCreatorToStripe = (req, res) => {
         //Add Stripe ID to creator
         const user = await User.findById(req.userId, 'creator')
                            .populate('creator', 'stripe');
-        user.creator.stripe.id = response.stripe_user_id;
+        user.creator.stripe.accountId = response.stripe_user_id;
         await user.creator.save();
 
         //TODO: Redirect to creator platform here

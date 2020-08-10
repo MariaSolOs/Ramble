@@ -82,7 +82,7 @@ const ApprovalPage = (props) => {
                 floatButtons={
                     <FloatButtons 
                     showSave
-                    handleSave={() => {}}/>}
+                    onSave={() => {}}/>}
                 images={images}/>
             </div>
             <div className={classes.extraInfo}>

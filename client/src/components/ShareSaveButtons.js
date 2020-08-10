@@ -24,23 +24,24 @@ const useStyles = makeStyles((theme) => ({
  * Share and media buttons
  * @param {Boolean} showSave - If true, show save button 
  * @param {Boolean} saved - If true, heart is red
- * @param {Function} handleSave - Callback for save button
- * @param {Function} handleShare - Callback for share button
+ * @param {Function} onSave - Callback for save button
+ * @param {Function} onShare - Callback for share button
  */
-const ShareSaveButtons = ({saved, showSave, handleSave, handleShare}) => {
+const ShareSaveButtons = ({saved, showSave, onSave, onShare}) => {
     const classes = useStyles({saved});
 
     //TODO: Add share to media links
     return (
         <div className={classes.container}>
             <Fab size="small" aria-label="share" disableRipple
-            className={classes.floatButton}>
+            className={classes.floatButton}
+            onClick={onShare}>
                 <FontAwesomeIcon icon={faShareSquare}/>
             </Fab>
             {showSave && 
                 <Fab size="small" aria-label="favorite" disableRipple
                 className={`${classes.floatButton} saveButton`} 
-                onClick={handleSave}>
+                onClick={onSave}>
                     <FontAwesomeIcon icon={faHeart}/>
                 </Fab>}
         </div>

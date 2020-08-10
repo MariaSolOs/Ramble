@@ -27,15 +27,15 @@ const styles = (theme) => ({
         }
     },
 
-     //Tooltip
-     tooltip: {
+    //Tooltip
+    tooltip: {
         fontFamily: 'Helvetica, sans-serif',
-        letterSpacing: '-0.05rem',
+        letterSpacing: '-0.04rem',
         fontWeight: 'bold',
         fontSize: 11,
-        whiteSpace: 'nowrap',
+        whiteSpace: 'nowrap'
     },
-    tooltip_top: { 
+    tooltipTop: { 
         position: 'absolute',
         right: -50,
         top: -50

@@ -31,7 +31,7 @@ const ProfileMenu = (props) => {
     return (
         <div className={classes.root}>
             <button onClick={openMenu} className={classes.dropButton}>
-                <Avatar src={props.userPic} alt="Logged user"/>
+                <Avatar src={props.userPic} alt="Profile picture"/>
                 <span>{props.userName}</span>
             </button>
         <Menu
@@ -46,11 +46,19 @@ const ProfileMenu = (props) => {
         classes={{ paper: classes.menuPaper, list: classes.menuList }}>
             <MenuItem 
             component={NavLink} 
+            to="/notifications"
+            onClick={closeMenu}>
+                Notifications
+            </MenuItem>
+            <MenuItem 
+            component={NavLink} 
             to="/profile/exp/past"
             onClick={closeMenu}>
                 View Profile
             </MenuItem>
-            <MenuItem component={NavLink} to="/experience/new/intro"
+            <MenuItem 
+            component={NavLink} 
+            to={props.isCreator? '/experience/new/intro' : '/creator/join'}
             onClick={closeMenu}>
                 New Experience
             </MenuItem>

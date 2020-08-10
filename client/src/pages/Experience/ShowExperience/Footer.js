@@ -7,13 +7,20 @@ const useStyles = makeStyles(() => ({
         bottom: 0, left: 0, right: 0,
         padding: '0.65rem 2rem',
         display: 'flex',
+        justifyContent: 'center',
         height: 'auto',
         maxHeight: 60,
         zIndex: 5,
-        alignItems: 'center',
         fontFamily: 'Helvetica, sans-serif',
-        backgroundColor: '#1C1C1C'
+        backgroundColor: '#1C1C1C', 
+        '& > div': {
+            width: 330,
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center'
+        }
     },
+
     price: {
         margin: '0 auto',
         color: '#BFBFBF',
@@ -28,8 +35,8 @@ const useStyles = makeStyles(() => ({
             '&:first-letter': { fontSize: '1rem' }
         }
     },
+    
     bookButton: {
-        float: 'right',
         height: '3rem',
         width: '8.5rem',
         borderRadius: '0.5rem',
@@ -53,10 +60,12 @@ const Footer = ({price, onBooking}) => {
     const classes = useStyles();
     return (
         <div className={classes.footer}>
-            <p className={classes.price}><span>${price}</span>PER PERSON</p>
-            <button className={classes.bookButton} onClick={onBooking}>
-                Book experience
-            </button>
+            <div>
+                <p className={classes.price}><span>${price}</span>PER PERSON</p>
+                <button className={classes.bookButton} onClick={onBooking}>
+                    Book experience
+                </button>
+            </div>
         </div>
     );
 }

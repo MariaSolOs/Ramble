@@ -50,9 +50,9 @@ const CalendarUpdates = ({startDate, updateFreq, submitInput}) => {
                     },
                     IconComponent: KeyboardArrowDownIcon
                 }}>
-                    <MenuItem value='weekly'>Weekly</MenuItem>
-                    <MenuItem value='biweekly'>Biweekly</MenuItem>
-                    <MenuItem value='monthly'>Monthly</MenuItem>
+                    <MenuItem value='weekly'>Every week</MenuItem>
+                    <MenuItem value='biweekly'>Every two weeks</MenuItem>
+                    <MenuItem value='monthly'>Every month</MenuItem>
                 </TextField>
             </div>
         </div>

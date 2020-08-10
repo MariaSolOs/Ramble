@@ -12,8 +12,8 @@ const Router = (props) => {
     const location = useLocation();
 
     return (
-        <Layout>
-            <Switch location={location}>
+        <Switch location={location}>
+            <Layout>
                 <Route path={`${path}/exp/past`}>
                     <PastExperiences/>
                 </Route>
@@ -23,8 +23,8 @@ const Router = (props) => {
                 <Route path={`${path}/info`}>
                     <Info/>
                 </Route>
-            </Switch>
-        </Layout>
+            </Layout>
+        </Switch>
     );
 }
 

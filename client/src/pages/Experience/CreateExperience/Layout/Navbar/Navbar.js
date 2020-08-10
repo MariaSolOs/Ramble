@@ -20,7 +20,7 @@ const Navbar = ({completed, currStage}) => {
     const [showSteps, setShowSteps] = useState('');
     const openSteps = (steps) => () => setShowSteps(steps);
 
-    const currPage = useLocation().pathname.replace('/experience/new/', '');
+    const currPage = useLocation().pathname;
 
     return (
         <ul className={classes.nav}>
@@ -35,7 +35,7 @@ const Navbar = ({completed, currStage}) => {
                     className={classes.stepNav}
                     in={showSteps === 'Location' || (currPage === slides.LOCATION)}>
                         <li className={classes.completed}>
-                            <Link to={`/experience/new/${slides.LOCATION}`}>
+                            <Link to={slides.LOCATION}>
                                 Meeting point
                             </Link>
                         </li>
@@ -45,8 +45,8 @@ const Navbar = ({completed, currStage}) => {
               { name: 'Category', link: slides.CATEGORIES }].map(({name, link}, i) => (
                 <li key={name} className={`${(i + 1) < currStage && classes.completed}
                                            ${currPage === link && classes.current}`}>
-                    {(i + 1) <= completed? 
-                        <Link to={`/experience/new/${link}`}>{name}</Link> : 
+                    {(i + 1) < completed? 
+                        <Link to={link}>{name}</Link> : 
                         <span className={classes.inactive}>{name}</span>}
                 </li>)
             )}
@@ -64,14 +64,14 @@ const Navbar = ({completed, currStage}) => {
                     (currPage === slides.SETTING)}>
                     <li className={`${4 <= completed && classes.completed}`}>
                         {4 <= completed ?
-                        <Link to={`/experience/new/${slides.PLANNING}`}>
+                        <Link to={slides.PLANNING}>
                             Description
                         </Link> : 
                         <span className={classes.inactive}>Description</span>}
                     </li>
                     <li className={`${5 <= completed && classes.completed}`}>
                         {5 <= completed ?
-                        <Link to={`/experience/new/${slides.SETTING}`}>
+                        <Link to={slides.SETTING}>
                             Setting
                         </Link> : 
                         <span className={classes.inactive}>Setting</span>}
@@ -99,7 +99,7 @@ const Navbar = ({completed, currStage}) => {
                         key={name}
                         className={`${(i + 6) <= completed && classes.completed}`}>
                             {(i + 6) <= completed ?
-                            <Link to={`/experience/new/${link}`}>{name}</Link> : 
+                            <Link to={link}>{name}</Link> : 
                             <span className={classes.inactive}>{name}</span>}
                         </li>
                     ))}
@@ -111,15 +111,15 @@ const Navbar = ({completed, currStage}) => {
               { name: 'Pricing', link: slides.PRICE}].map(({name, link}, i) => (
                 <li key={name} className={`${(i + 5) <= currStage && classes.completed}  
                                            ${link === currPage && classes.current}`}>
-                    {(i + 9) <= completed? 
-                    <Link to={`/experience/new/${link}`}>{name}</Link> : 
+                    {(i + 9) < completed? 
+                    <Link to={link}>{name}</Link> : 
                     <span className={classes.inactive}>{name}</span>}
                 </li>
             ))}
             <li 
             onMouseEnter={openSteps('Availabilities')}
             onMouseLeave={openSteps('')}
-            className={`${12 > completed && classes.inactive}
+            className={`${14 > completed && classes.inactive}
                         ${9 < currStage && classes.completed}
                         ${9 === currStage && classes.current}`}>
                 Availabilities
@@ -131,14 +131,14 @@ const Navbar = ({completed, currStage}) => {
                     <li className={`${completed - currStage >= 4 && classes.completed} 
                                     ${completed < 14 && classes.inactive}`}>
                         {14 <= completed ?
-                        <Link to={`/experience/new/${slides.SCHEDULE}`}>
+                        <Link to={slides.SCHEDULE}>
                             Schedule
                         </Link> : 'Schedule'}
                     </li>
                     <li className={`${completed - currStage >= 4 && classes.completed} 
                                     ${completed < 15 && classes.inactive}`}>
                         {15 <= completed ?
-                        <Link to={`/experience/new/${slides.CAL_UPDATES}`}>
+                        <Link to={slides.CAL_UPDATES}>
                             Calendar updates
                         </Link> : 'Calendar updates'}
                     </li>
@@ -147,7 +147,7 @@ const Navbar = ({completed, currStage}) => {
             <li className={`${10 <= currStage && classes.completed}
                             ${10 === currStage &&  classes.current}`}>
                 {14 <= completed ?
-                <Link to={`/experience/new/${slides.REVIEW}`}>
+                <Link to={slides.REVIEW}>
                     Review & Submit
                 </Link> : 
                 <span className={classes.inactive}>Review & Submit</span>}

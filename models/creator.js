@@ -18,7 +18,7 @@ const CreatorSchema = new mongoose.Schema({
         required: true
     },
     stripe: {
-        id: { type: String }
+        accountId: { type: String }
     },
     bookingRequests: [{
         type: mongoose.Schema.Types.ObjectId,

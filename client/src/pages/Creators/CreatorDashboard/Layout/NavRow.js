@@ -27,9 +27,6 @@ const NavRow = () => {
     return (
         <div>
             <Breadcrumbs separator="" classes={{ root: classes.nav }}>
-                <NavLink to="/creator/dashboard/notifications">
-                    Notifications
-                </NavLink>
                 <NavLink to="/creator/dashboard/bookings">
                     Booking requests
                 </NavLink>

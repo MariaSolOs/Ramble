@@ -6,7 +6,7 @@ const Creator = require('../models/creator');
 //Helpers
 const getCreatorProfile = (creator) => ({
     id: creator._id,
-    stripeId: creator.stripe.id,
+    stripeId: creator.stripe.accountId,
     bio: creator.bio
 });
 

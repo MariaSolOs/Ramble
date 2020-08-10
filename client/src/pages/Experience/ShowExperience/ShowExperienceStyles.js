@@ -14,6 +14,12 @@ const styles = (theme) => ({
         [theme.breakpoints.down('sm')]: { flexDirection: 'column' },
     },
 
+    shareDialog: {
+        '& .MuiDialog-paper': {
+            borderRadius: '1rem'
+        }
+    },
+
     goBackBtn: {
         position: 'absolute',
         top: 25, left: 25,

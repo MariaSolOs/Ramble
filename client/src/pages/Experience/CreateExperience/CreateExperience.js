@@ -26,11 +26,10 @@ const CreateExperience = (props) => {
         duration: 1, //in hours
         languages: [],
         capacity: null,
-        ageRestricted: true, 
+        ageRestricted: false, 
         ageRequired: 18,
         images: [null, null, null, null],
         included: [],
-        mustBring: false,
         toBring: [],
         price: 0, //per person 
         privatePrice: 0, //for private bookings
@@ -203,7 +202,6 @@ const CreateExperience = (props) => {
                 backLink={pages.INCLUDED}
                 nextLink={pages.PRICE}>
                     <slides.Bring
-                    mustBring={values.mustBring}
                     toBring={values.toBring}
                     submitInput={submitInput}/>
                 </Layout>
@@ -256,17 +254,20 @@ const CreateExperience = (props) => {
                     bio: props.creatorBio
                 });
                 return (
-                    <Layout
-                    completedSteps={completedSteps}
-                    canContinue={expReview}
-                    currStage={10} 
-                    backLink={pages.CAL_UPDATES}
-                    nextLink={props.creatorId ? pages.SUBMITTED :
-                            '/creator/join'}>
-                        <slides.Review
-                    review={expReview}
-                    images={values.images}/>
-                    </Layout>
+                    <>
+                        {expReview?
+                        <Layout
+                        completedSteps={completedSteps}
+                        canContinue
+                        currStage={10} 
+                        backLink={pages.CAL_UPDATES}
+                        nextLink={props.creatorId ? pages.SUBMITTED :
+                                '/creator/join'}>
+                            <slides.Review
+                        review={expReview}
+                        images={values.images}/>
+                        </Layout> : <Redirect to={pages.INTRO}/>}
+                    </>
                 );
             }}/>            
             {props.creatorId && 

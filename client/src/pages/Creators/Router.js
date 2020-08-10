@@ -21,7 +21,7 @@ const Router = (props) => {
                 <PrivateRoute path={`${path}/dashboard`} test={isCreator}>
                     <DashboardRouter/>
                 </PrivateRoute>
-                <PrivateRoute path={`${path}/join`} test={props.isAuth}>
+                <PrivateRoute path={`${path}/join`} test={!isCreator}>
                     <CreatorForm/>
                 </PrivateRoute>
                 <Route path={`${path}/become`} component={CreatorsIntro}/>

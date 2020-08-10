@@ -107,8 +107,10 @@ export const editProfile = (updatedInfo) => {
                     res.data.isAdmin,
                     res.data.userData
                 )); 
-                dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
-                Your profile has been updated.`));
+                if(!updatedInfo.photo) {
+                    dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
+                    Your profile has been updated.`));
+                }
             }
         })
         .catch(err => {

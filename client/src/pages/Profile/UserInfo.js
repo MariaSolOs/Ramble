@@ -6,7 +6,6 @@ import {useForm} from 'react-hook-form';
 //Components
 import CustomScroll from 'react-custom-scroll';
 import FormControl from '@material-ui/core/FormControl';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
 import TextField from '../../components/Input/TextField';
 
 //Styles 
@@ -17,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
         height: 410,
         margin: '10px 0',
         width: '70%',
+        minWidth: 550,
         fontFamily: 'Helvetica, sans-serif',
         '& .rcs-custom-scrollbar': {
             opacity: 1,
@@ -40,33 +40,30 @@ const useStyles = makeStyles((theme) => ({
     label: {
         fontFamily: 'inherit',
         fontWeight: 'bold',
-        fontSize: '1.3rem',
+        fontSize: '1.2rem',
         letterSpacing: '-0.06rem',
         color: 'white'
     },
 
     submitButton: {
-        padding: '1%',
-        width: '9rem',
+        padding: '0.7rem 1rem',
         whiteSpace: 'nowrap',
         borderRadius: '0.7rem',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        color: '#5E5E5E',
+        color: '#FFF',
         background: 'radial-gradient(circle at 75%, #32D6A5C5, #1B8A63)',
         fontSize: '0.9rem',
         fontWeight: 'bold',
         letterSpacing: '-0.05rem',
         border: 'none',
         cursor: 'pointer',
+        float: 'right',
+        margin: '0.5rem 1rem 0 0',
         '&:focus': { outline: 'none' }
     }
 }));
 
 const validPhoneReg = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
 
-//TODO: Add change password and profile picture
 const UserInfo = (props) => {
     const classes = useStyles();
     
@@ -75,11 +72,10 @@ const UserInfo = (props) => {
     const {register, handleSubmit, errors} = useForm({defaultValues: {
         fstName: user.fstName,
         lstName: user.lstName,
-        photo: user.photo,
         city: user.city,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        birthday: user.birthday.split('T')[0]
+        birthday: user.birthday && user.birthday.split('T')[0]
     }});
 
     const onSubmit = (data) => {
@@ -90,17 +86,15 @@ const UserInfo = (props) => {
     }
 
     return (
-        <div className={classes.formContainer}>
+        <form 
+        className={classes.formContainer} 
+        onSubmit={handleSubmit(onSubmit)}>
             <CustomScroll heightRelativeToParent="80%">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className={classes.formRow} style={{ margin: 0 }}>
+                <div>
+                    <div className={classes.formRow} style={{ marginBottom: -15 }}>
                         <label htmlFor="fstName" className={classes.label}>
                             Name
                         </label>
-                        <button type="submit" className={classes.submitButton}>
-                            <BorderColorIcon/>
-                            Save changes
-                        </button>
                     </div>
                     <div className={classes.formRow}>
                         <FormControl className={classes.formGroup}>
@@ -167,9 +161,12 @@ const UserInfo = (props) => {
                             inputRef={register}/>
                         </FormControl>
                     </div>
-                </form>
+                </div>
             </CustomScroll>
-        </div>
+            <button type="submit" className={classes.submitButton}>
+                Save changes
+            </button>
+        </form>
     );
 }
 

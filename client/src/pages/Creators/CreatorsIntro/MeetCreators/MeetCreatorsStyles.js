@@ -6,10 +6,7 @@ const styles = (theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        '& > div': { 
-            position: 'relative',
-            width: '100%' 
-        }
+        position: 'relative'
     },
 
     //Title
@@ -23,8 +20,8 @@ const styles = (theme) => ({
         display: 'flex',
         position: 'absolute',
         marginTop: 0,
-        top: 0,
-        left: 0,
+        top: 30,
+        left: 10,
         justifyContent: 'space-between',
         [theme.breakpoints.down('sm')]: {
             top: 40,

@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {connect} from 'react-redux';
-import {deleteNotification} from '../../../../store/actions/user';
+import {deleteNotification} from '../../store/actions/user';
 
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
@@ -28,7 +28,9 @@ const Notifications = (props) => {
     }, []);   
 
     return (
-        <ul className={classes.notifList}>
+        <div className={classes.root}>
+            <div className={classes.shadowSeparator}/>
+            <ul className={classes.notifList}>
             {props.notifs.map(notif => (
                 <li 
                 key={notif._id}
@@ -43,7 +45,8 @@ const Notifications = (props) => {
                     onClick={props.deleteNotif(notif._id)}/>
                 </li>
             ))}
-        </ul>
+            </ul>
+        </div>
     );
 }
 

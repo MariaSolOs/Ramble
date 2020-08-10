@@ -11,6 +11,8 @@ import BookExperience from '../BookExperience/BookExperience';
 import FloatButtons from '../../../components/ShareSaveButtons';
 import Fab from '@material-ui/core/Fab';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Dialog from '@material-ui/core/Dialog';
+import ReferBox from '../../../components/ReferBox/ReferBox';
 import Experience from '../../../components/Experience/Experience';
 import Footer from './Footer';
 
@@ -53,11 +55,13 @@ const ShowExperience = (props) => {
     }, [userExps, exp]);
     const heartAction = saved? props.unsaveExp : props.saveExp;
     const handleHeartClick = (e) => {
-        //Don't show the experience page
-        e.stopPropagation();
         heartAction(exp._id);
         setSaved(!saved);
     }
+
+    //For sharing an experience
+    const [showShareDialog, setShowShareDialog] = useState(false);
+    const handleDialogChange = (newVal) => () => setShowShareDialog(newVal);
 
     //For booking an experience
     const [showBooking, setShowBooking] = useState(false);
@@ -90,6 +94,15 @@ const ShowExperience = (props) => {
         <div className={classes.root}>
             {exp && 
                 <>
+                <Dialog 
+                open={showShareDialog} 
+                className={classes.shareDialog}
+                onClose={handleDialogChange(false)}>
+                    <ReferBox shareUrl={`${
+                        process.env.REACT_APP_SHARE_LINK}experience/view/${
+                        exp._id
+                    }`}/>
+                </Dialog>
                 <Fab size="small" aria-label="go back" disableRipple
                 className={classes.goBackBtn} onClick={handleGoBack}>
                     <ChevronLeftIcon/>
@@ -99,7 +112,9 @@ const ShowExperience = (props) => {
                     <FloatButtons 
                     showSave={props.isAuth}
                     saved={saved}
-                    handleSave={handleHeartClick}/>}
+                    onSave={handleHeartClick}
+                    onShare={props.isAuth? handleDialogChange(true) : 
+                             props.dialogActions.openSignUpDialog}/>}
                 images={images}/>
                 <Footer price={exp.price.perPerson} onBooking={handleBooking}/>
                 </>}

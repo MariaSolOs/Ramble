@@ -26,7 +26,7 @@ const ExperienceCard = (props) => {
                 title={props.saved? 'Saved' : 'Save experience'}
                 classes={{
                     tooltip: classes.tooltip,
-                    tooltipPlacementTop: classes.tooltip_top
+                    tooltipPlacementTop: classes.tooltipTop
                 }}>
                     <Fab aria-label="save" disableRipple 
                     className={classes.saveButton} onClick={props.onHeartClick}>

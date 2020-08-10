@@ -54,12 +54,10 @@ const MeetCreators = () => {
     const classes = useStyles();
     return (
         <div className={classes.slide}>
-            <div>
-                <h1 className={classes.title}>
-                    Meet current <div className='underline'>Creators<span/></div>
-                </h1>
-                <CreatorCard />
-            </div>
+            <h1 className={classes.title}>
+                Meet current <div className='underline'>Creators<span/></div>
+            </h1>
+            <CreatorCard/>
         </div>
     );
 }

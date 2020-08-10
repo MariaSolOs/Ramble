@@ -43,10 +43,10 @@ const styles = () => ({
         maxHeight: 140,
         overflowY: 'scroll',
         minWidth: '0 !important',
-        width: 120,
+        width: 150,
         letterSpacing: '-0.05rem',
         marginTop: 10,
-        transform: 'translateX(-120px) !important',
+        transform: 'translateX(-150px) !important',
         '& .MuiMenuItem-root': {
             fontFamily: 'Helvetica',
             fontWeight: 'bold', 

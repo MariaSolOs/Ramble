@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import useNumberField from '../../../../../hooks/useNumberField';
 
 //Components and icons
@@ -15,15 +15,19 @@ const Age = ({ageRestricted, ageRequired, submitInput}) => {
     const classes = useStyles();
 
     //Manage input changes
+    const [showAgeReq, setShowAgeReq] = useState(ageRestricted);
+
     const handleAgeRestrChange = (e) => {
         if(e.target.name === 'ageTrue') {
             submitInput('ageRestricted', true);
+            setShowAgeReq(true);
         } else { //e.target.name === 'ageFalse'
             submitInput('ageRestricted', false);
+            setShowAgeReq(false);
         }
     }
     const [ageReq, ageReqField] = useNumberField({
-        min: 0, 
+        min: 5, 
         initval: ageRequired,
         step: 1,
         getlabel: () => 'years old', 
@@ -66,15 +70,16 @@ const Age = ({ageRestricted, ageRequired, submitInput}) => {
                     </div>
                 </div>
             </div>
-            <div className={classes.formGroup}>
-                <label 
-                htmlFor="ageRequired" 
-                className={classes.greyCaps}
-                style={{ display: 'block', margin: '1.5rem 0 0.5rem' }}>
-                    Age restriction
-                </label>
-                <div className={classes.numField}>{ageReqField}</div>
-            </div>
+            {showAgeReq &&
+                <div className={classes.formGroup}>
+                    <label 
+                    htmlFor="ageRequired" 
+                    className={classes.greyCaps}
+                    style={{ display: 'block', margin: '1rem 0 0.5rem' }}>
+                        Age restriction
+                    </label>
+                    <div className={classes.numField}>{ageReqField}</div>
+                </div>}
         </>
     );
 }

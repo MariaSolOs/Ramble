@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
         '& li': { 
             margin: '1.7rem 0',
+            height: 18,
             '& svg': { marginRight: 10 } 
         },
     },

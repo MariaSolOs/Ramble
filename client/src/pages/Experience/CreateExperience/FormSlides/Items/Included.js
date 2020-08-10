@@ -33,15 +33,20 @@ const Included = ({included, submitInput}) => {
         submitInput('included', items);
     }, [items, submitInput]);
 
+    //Add item if user presses enter
+    const handleEnter = (e) => {
+        if(e.keyCode === 13) { addItem(); }
+    }
+
     return (
-    <>
+    <div onKeyDown={handleEnter}>
         <div style={{marginBottom: '0.5rem'}}>
            <h1 className={classes.title}>What's included</h1>
            <p className={classes.description}>Please list the items you will provide your guests for this experience.</p>
            <Tip>If your guests build or create something they will leave with, list it on here too.</Tip>
         </div>
         <div>
-            <TextField label="I will include..." placeholder="Ex: Painting brushes" style={{width: 340}} 
+            <TextField label="I will provide..." placeholder="Ex: Paint brushes" style={{width: 340}} 
             value={formVal} onChange={handleFormChange}/>
             <AddCircleIcon className={classes.addIcon} onClick={addItem}/>
         </div>
@@ -54,7 +59,7 @@ const Included = ({included, submitInput}) => {
                 className="chip"/>
             ))}
         </div>
-    </>
+    </div>
    ); 
 }
 

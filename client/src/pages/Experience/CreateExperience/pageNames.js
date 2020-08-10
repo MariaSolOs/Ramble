@@ -13,6 +13,6 @@ export const INCLUDED = '/experience/new/included';
 export const BRING = '/experience/new/bring';
 export const PRICE = '/experience/new/price';
 export const SCHEDULE = '/experience/new/schedule';
-export const CAL_UPDATES = '/experience/new/cal-updates';
+export const CAL_UPDATES = '/experience/new/cal_updates';
 export const REVIEW = '/experience/new/review';
 export const SUBMITTED = '/experience/new/submitted';

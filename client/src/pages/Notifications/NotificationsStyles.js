@@ -1,8 +1,22 @@
 const styles = () => ({
+    root: {
+        display: 'flex',
+        minHeight: '70vh',
+        width: '90%',
+        margin: '10vh auto 5vh'
+    },
+    shadowSeparator: {
+        padding: 5,
+        borderRadius: '2rem',
+        marginRight: '3%',
+        background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
+    },
+
     notifList: {
         listStyle: 'none',
         padding: 0,
-        marginTop: '3rem'
+        marginTop: '3rem',
+        width: 'calc(100% - 10px - 3%)'
     },
     notif: {
         fontFamily: 'Helvetica, sans-serif',

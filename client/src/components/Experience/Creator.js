@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Collapse from '@material-ui/core/Collapse';
 
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
@@ -12,12 +10,6 @@ const useStyles = makeStyles(() => ({
         letterSpacing: '-0.05rem',
         color: '#FFF',
         marginBottom: 0
-    },
-    text: {
-        fontSize: '0.97rem',
-        letterSpacing: '-0.05rem',
-        color: '#C8C8C8',
-        lineHeight: 1.4
     },
     
     host: {
@@ -31,25 +23,31 @@ const useStyles = makeStyles(() => ({
             margin: '0 10px'
         }
     },
-    bioPanel: {
+
+    bioToggler: {
         backgroundColor: '#242424',
         borderRadius: '0.5rem',
         color: '#ECEBE5',
+        font: 'inherit',
         fontSize: '0.9rem',
         letterSpacing: '-0.05rem',
-        margin: '0 10px',
-        width: '60%',
-        '& .MuiExpansionPanelSummary-root.Mui-expanded': {
-            minHeight: 50
-        },
-        '& .MuiExpansionPanelSummary-content': {
-            justifyContent: 'center',
-            '&.Mui-expanded': { margin: '0 auto' }
-        },
-        '&.Mui-expanded': {
-            margin: '0 10px',
-            '& $text': { margin: 0 }
-        },
+        border: 'none',
+        marginLeft: 15,
+        padding: '0.8rem 0.9rem',
+        width: 130,
+        cursor: 'pointer',
+        '&:focus': { outline: 'none' }
+    },
+
+    bio: { 
+        display: 'flex',
+        '& .bio-text': {
+            fontSize: '0.97rem',
+            letterSpacing: '-0.05rem',
+            color: '#C8C8C8',
+            lineHeight: 1.4,
+            margin: '0.5rem 0'
+        } 
     }
 }));
 
@@ -63,23 +61,25 @@ const Creator = ({creator}) => {
     }
 
     return (
-        <><h3 className={classes.label}>Hosted by</h3>
-        <div className={classes.host}>
-            <Avatar src={creator.user.photo} alt="Experience creator"/>
-            <span className="creator-name">{creator.user.fstName}</span>
-            <ExpansionPanel expanded={expandedBio} onClick={handleBioToggle}
-            classes={{ root: classes.bioPanel }}
-            TransitionProps={{ timeout: { enter: 300, exit: 300 }}}>
-                <ExpansionPanelSummary 
-                aria-controls="bioPanel-content" 
-                id="bioPanel-header">
+        <>
+            <h3 className={classes.label}>Hosted by</h3>
+            <div className={classes.host}>
+                <Avatar src={creator.user.photo} alt="Experience creator"/>
+                <span className="creator-name">{creator.user.fstName}</span>
+                <button 
+                className={classes.bioToggler}
+                onClick={handleBioToggle}>
                     About creator
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <p className={classes.text}>{creator.bio}</p>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </div></>
+                </button>
+            </div>
+            <div className={classes.bio}>
+                <Collapse
+                in={expandedBio}
+                timeout={300}>
+                    <p className="bio-text">{creator.bio}</p>
+                </Collapse>
+            </div>
+        </>
     );
 }
 

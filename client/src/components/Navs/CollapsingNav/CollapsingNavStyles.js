@@ -77,6 +77,7 @@ const styles = (theme) => ({
             display: 'none'
         },
         display: 'flex',
+        alignItems: 'center',
         margin: '0 10px 0 0'
     }
 });

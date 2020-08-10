@@ -55,16 +55,16 @@ export const getTimeSlots = (duration) => {
 /*Transform data to display in experience page and 
 save in database*/
 export const prepareReview = (values, user) => {
-    const locArray = values.location.split(', ');
-    locArray.pop(); //Drop the country code
-    let endWeek = new Date(values.startDate);
-    let end2Weeks = new Date(values.startDate);
-    let endMonth = new Date(values.startDate);
-    endWeek.setDate(endWeek.getDate() + 7);
-    end2Weeks.setDate(end2Weeks.getDate() + 14);
-    endMonth.setMonth(endMonth.getMonth() + 1);
-
     try {
+        const locArray = values.location.split(', ');
+        locArray.pop(); //Drop the country code
+        let endWeek = new Date(values.startDate);
+        let end2Weeks = new Date(values.startDate);
+        let endMonth = new Date(values.startDate);
+        endWeek.setDate(endWeek.getDate() + 7);
+        end2Weeks.setDate(end2Weeks.getDate() + 14);
+        endMonth.setMonth(endMonth.getMonth() + 1);
+        
         const exp = {
             status: 'pending',
             location: {

@@ -26,6 +26,22 @@ const calculatePaymentAmount = async (expId, bookType, numGuests) => {
         throw new Error(`Couldn't calculate amount: ${err}`);
     }
 }
+const saveCard = async (payMethod, userId) => {
+    const user = await User.findById(userId, 'stripe');
+    //If the user doesn't have any saved cards,
+    if(!user.stripe.customerId) {
+        const customer = await stripe.customers.create({
+            payment_method: payMethod
+        });
+        user.stripe.customerId = customer.id;
+    } else { //Else add payment method
+        await stripe.paymentMethods.attach(
+            payMethod, { customer: user.stripe.customerId }
+        );
+    }
+    await user.save();
+    return user.stripe.customerId;
+}
 
 exports.connectCreatorToStripe = (req, res) => {
     const {code} = req.query;
@@ -71,30 +87,43 @@ exports.cancelPaymentIntent = (req, res) => {
 }
 
 exports.createPaymentIntent = async (req, res) => {
-    const payInfo = await calculatePaymentAmount(
-                          req.body.expId, 
-                          req.body.bookType, 
-                          +req.body.numGuests
-                    );
-    await stripe.paymentIntents.create({
-        amount: payInfo.amount,
-        currency: payInfo.currency,
-        application_fee_amount: payInfo.rambleFee,
-        capture_method: 'manual',
-        transfer_data: {
-            destination: req.body.transferId
-        },
-        metadata: {
-            creatorId: req.body.creatorId,
-            clientId: req.userId
+    try {
+        //Save payment method if applicable 
+        let customerSavedInfo = {};
+        if(req.body.newPayMethod) {
+            const customer = await saveCard(
+                req.body.newPayMethod, req.userId
+            );
+            customerSavedInfo = {
+                customer, 
+                payment_method: req.body.newPayMethod
+            }
         }
-    }).then((payIntent) => {
-        try {
-            return res.send({clientSecret: payIntent.client_secret});
-        } catch(err) {
-            return res.status(500).send({ err });
-        }
-    }).catch(err => res.status(500).send({ err }));
+
+        //Create payment intent
+        const payInfo = await calculatePaymentAmount(
+                            req.body.expId, 
+                            req.body.bookType, 
+                            +req.body.numGuests
+                        );
+        const payIntent = await stripe.paymentIntents.create({
+            ...customerSavedInfo,
+            amount: payInfo.amount,
+            currency: payInfo.currency,
+            application_fee_amount: payInfo.rambleFee,
+            capture_method: 'manual',
+            transfer_data: {
+                destination: req.body.transferId
+            },
+            metadata: {
+                creatorId: req.body.creatorId,
+                clientId: req.userId
+            }
+        });
+        return res.send({clientSecret: payIntent.client_secret});
+    } catch(err) {
+        res.status(500).send(err);
+    }
 }
 
 exports.stripeWebhook = async (req, res) => {

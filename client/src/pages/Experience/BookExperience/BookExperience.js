@@ -34,9 +34,8 @@ const BookExperience = ({exp, user, onClose}) => {
     useEffect(() => {
         if(state.form.date) {
             //Cut off the time from query
-            const dateQuery = state.form.date.split('T')[0];
             axios.get(`/api/occ/${exp._id}`, 
-            {params: {date: dateQuery}})
+            {params: {date: state.form.date}})
             .then(res => {
                 if(res.status === 200) {
                     dispatch({
@@ -62,13 +61,31 @@ const BookExperience = ({exp, user, onClose}) => {
     const handlePayment = async () => {
         dispatch({type: actions.PAY_INIT});
         try {
+            let newPayMethod = null;
             let clientSecret;
+            //Save payment information if user wants to
+            if(state.form.rememberCard) {
+                const createdPayMethod = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: elements.getElement(CardElement),
+                    billing_details: {
+                        name: `${user.fstName} ${user.lstName}`,
+                    }
+                });
+                if(createdPayMethod.error) {
+                    cancelBooking(createdPayMethod.error.message);
+                } else {
+                    newPayMethod = createdPayMethod.paymentMethod.id;
+                }
+            }
             //Create payment intent and get client secret 
             const payIntent = await axios.post('/api/stripe/payment-intent', {
                 expId: exp._id,
-                transferId: exp.creator.stripe.id,
+                transferId: exp.creator.stripe.accountId,
                 creatorId: exp.creator._id,
-                ...state.form
+                bookType: state.form.bookType,
+                numGuests: state.form.numGuests,
+                newPayMethod
             });
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
@@ -92,7 +109,9 @@ const BookExperience = ({exp, user, onClose}) => {
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
                 //Everything is good so far, now add booking to occurrence
                 axios.post(`/api/occ/${exp._id}/bookings`, {
-                    ...state.form,
+                    date: state.form.date,
+                    timeslot: state.form.timeslot,
+                    numGuests: state.form.numGuests,
                     stripeId: payConfirm.paymentIntent.id,
                     creatorProfit: payConfirm.paymentIntent.amount * 0.85
                 })
@@ -170,6 +189,7 @@ const BookExperience = ({exp, user, onClose}) => {
                         price: exp.price
                     }}
                     userEmail={user.email}
+                    savedCard={user.savedCard}
                     onChange={handleChange}
                     controls={{
                         goBack: setStep(steps.BOOK_TYPE),

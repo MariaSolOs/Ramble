@@ -39,8 +39,10 @@ export const fetchUserProfile = () => {
                     res.data.token,
                     res.data.isAdmin,
                     res.data.userData
-                ));   
-                dispatch(setNotifs(res.data.notifications));
+                )); 
+                if(!res.data.isAdmin) {
+                    dispatch(setNotifs(res.data.notifications));
+                }
                 dispatch(endLoading());  
             } else { dispatch(resetUser()); }
         })
@@ -55,7 +57,6 @@ export const fetchUserProfile = () => {
 //For admin authentication
 export const adminLogin = (adminInfo) => {
     return dispatch => {
-        dispatch(startLoading());
         axios.post(`/api/auth/admin-login`, adminInfo)
         .then(res => {
             if(res.status === 201 || res.status === 200) {
@@ -67,7 +68,6 @@ export const adminLogin = (adminInfo) => {
             console.log(`ADMIN AUTH FAILED: ${err}`); 
             dispatch(resetUser());
         });
-        dispatch(endLoading());  
     }
 }
 

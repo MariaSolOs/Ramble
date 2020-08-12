@@ -33,4 +33,9 @@ router.delete('/notifs/:notifId',
               authenticateToken,
               controllers.deleteNotification);
 
+//Get saved cards
+router.get('/payMethods',
+           authenticateToken,
+           controllers.getPaymentMethods);              
+
 module.exports = router;

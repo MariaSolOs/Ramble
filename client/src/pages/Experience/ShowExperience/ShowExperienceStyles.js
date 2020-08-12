@@ -15,9 +15,7 @@ const styles = (theme) => ({
     },
 
     shareDialog: {
-        '& .MuiDialog-paper': {
-            borderRadius: '1rem'
-        }
+        '& .MuiDialog-paper': { borderRadius: '1rem' }
     },
 
     goBackBtn: {

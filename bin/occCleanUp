@@ -7,18 +7,18 @@ const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
       User = require('../models/user'),
-      Creator = require('../models/creator');
+      Creator = require('../models/creator'),
+      endOfYesterday = require('date-fns/endOfYesterday');
 
 const occCleanUp = async () => {
     console.log('JOB STARTS: CLEAN OCCURRENCES');
     try {
         //Find all old occurrences
-        const yesterday = new Date();
-        yesterday.setDate(new Date().getDate() - 1);
-        const occs = await Occurrence.find({date: {$lte: yesterday}}).populate([
-                        { path: 'experience' },
-                        { path: 'bookings', select: 'client' }
+        const occs = await Occurrence.find({date: {$lt: endOfYesterday()}})
+                    .populate([{ path: 'experience', select: '_id' },
+                               { path: 'bookings', select: 'client' }
                     ]);
+
         const bookingsToDel = [];
         for(const occ of occs) {
             for(const booking of occ.bookings) {
@@ -28,11 +28,11 @@ const occCleanUp = async () => {
                 //Just to be sure, delete booking from creator's requests
                 await Creator.findOneAndUpdate({bookingRequests: booking._id}, 
                 {$pull: {bookingRequests: booking._id}});
-                bookingsToDel.push(bookingsToDel);
+                bookingsToDel.push(booking._id)
             }
         }
         const bookCount = await Booking.deleteMany({_id: {$in: bookingsToDel}});
-        const occCount = await Occurrence.deleteMany({date: {$lte: yesterday}});
+        const occCount = await Occurrence.deleteMany({date: {$lt: endOfYesterday()}});
         console.log(`JOB SUCCESS: CLEAN OCCURRENCES. DELETED OCC: ${
         occCount.deletedCount}, DELETED BOOKINGS: ${bookCount.deletedCount}`);
     } catch(err) {

@@ -11,7 +11,6 @@ import Register from '../pages/Admin/Register';
 import Maintenance from '../pages/Admin/Maintenance/Maintenance';
 import PrivateRoute from '../pages/PrivateRoute';
 
-//TODO: Add Homepage
 const AdminApp = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();

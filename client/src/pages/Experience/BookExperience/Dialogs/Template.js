@@ -15,9 +15,9 @@ const useStyles = makeStyles(() => ({
 
     continueButton: {
         display: 'block',
-        width: '85%',
+        width: '80%',
         margin: '0 auto',
-        padding: '0.6rem 0.75rem',
+        padding: '0.7rem 0',
         borderRadius: '0.4rem',
         border: 'none',
         background: 'radial-gradient(circle at -21.27%, #2BB282, #2D73EA)',
@@ -42,6 +42,7 @@ const useStyles = makeStyles(() => ({
  * @param {Boolean} open - When should the dialog open 
  * @param {Function} nextStep - Callback for switching dialogs 
  * @param {Boolean} showContinue - If true, display continue button
+ * @param {String} [continueMessage] - Text to display in the continue button
  * @param {Boolean} continueDisabled - If false, the user cannot continue
  */
 const Template = (props) => {
@@ -58,7 +59,8 @@ const Template = (props) => {
                 <button onClick={props.nextStep}
                 className={classes.continueButton}
                 disabled={props.continueDisabled}>
-                    Continue
+                    {props.continueMessage? props.continueMessage : 
+                                            'Continue'}
                 </button>}
         </Dialog>
     );

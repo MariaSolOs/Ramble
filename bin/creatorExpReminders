@@ -2,6 +2,7 @@
 
 require('dotenv').config({ path: '../.env' });
 require('../config/mongoose');
+const {startOfToday, endOfTomorrow} = require('date-fns');
 
 //Models
 const User = require('../models/user'),
@@ -13,22 +14,14 @@ const User = require('../models/user'),
 const creatorExpReminders = async () => {
     console.log('JOB START: CREATOR EXPERIENCE REMINDERS');
     try {
-        const oldNotifs = await Notification.find({
-                            category: 'Creator-ExperienceReminder'
-                        }).distinct('_id');
-        for(const notif of oldNotifs) {
-            await User.findOneAndUpdate({notifications: notif},
-            {$pull: {notifications: notif}});
-        }
-
         //Delete old reminders
-        await Notification.deleteMany({_id: {$in: oldNotifs}});
+        await Notification.deleteMany({category: 'Creator-ExperienceReminder'});
 
         //Get experiences happening in the next 2 days
         const occs = await Occurrence.find({
             date: {
-                $gte: new Date(), 
-                $lte: new Date().setDate(new Date().getDate() + 2)
+                $gte: startOfToday(), 
+                $lt: endOfTomorrow()
             }
         }, 'date timeslot').populate({
             path: 'experience',
@@ -49,9 +42,11 @@ const creatorExpReminders = async () => {
                 user: occ.experience.creator.user,
                 category: 'Creator-ExperienceReminder'
             });
-            await notif.save();
-            await User.findByIdAndUpdate(occ.experience.creator.user,
-            {$addToSet: {notifications: notif._id}});
+            const notifErr = notif.validateSync();
+            if(notifErr) {
+                delete notif;
+                throw new Error(notifErr.message);
+            } else { await notif.save(); }
         }
 
         console.log('JOB SUCCESS: CREATOR EXPERIENCE REMINDERS');

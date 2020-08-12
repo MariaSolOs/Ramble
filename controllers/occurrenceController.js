@@ -1,21 +1,16 @@
 //Models
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
-
-//To deal with Mongoose dates
-const extractDayFrame = (date) => {
-    const dayStart = new Date(date);
-    const day = (60 * 60 * 24 * 1000) - 1;
-    const dayEnd = new Date(dayStart.getTime() + day);
-    return [dayStart, dayEnd];
-}
+      Booking = require('../models/booking'),
+      {startOfDay, endOfDay} = require('date-fns');
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
-    const [dayStart, dayEnd] = extractDayFrame(req.query.date);
     Occurrence.find({experience: req.params.expId, 
-                     date: {$gte: dayStart, $lt: dayEnd}}, 
+                     date: {
+                        $gte: startOfDay(new Date(req.query.date)), 
+                        $lte: endOfDay(new Date(req.query.date))
+                    }}, 
     'timeslot spotsLeft', (err, occ) => {
         if(err || !occ) {
             res.status(404).send({err: "Couldn't find occurrences."});
@@ -30,18 +25,20 @@ exports.addBookingToOcurrence = async (req, res) => {
     try {
         const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
-        const [dayStart, dayEnd] = extractDayFrame(req.body.date);
 
         //Find or create the occurrence
         let occ = await Occurrence.findOne({
                             experience: experience._id,
-                            date: {$gte: dayStart, $lt: dayEnd},
+                            date: {
+                                $gte: startOfDay(new Date(req.body.date)), 
+                                $lte: endOfDay(new Date(req.body.date))
+                            },
                             timeslot: req.body.timeslot
                         });
         if(!occ) {
             occ = new Occurrence({
                 experience: experience._id,
-                date: dayStart,
+                date: startOfDay(new Date(req.body.date)),
                 timeslot: req.body.timeslot,
                 spotsLeft: experience.capacity,
                 creatorProfit: 0

@@ -12,13 +12,13 @@ const initialState = {
         phoneNumber: '',
         birthday: ''
     },
+    notifs: [],
     //Creator information
     creator: {
         id: null,
         stripeId: null,
         bio: ''
-    },
-    notifs: []
+    }
 }
 
 const authReducer = (state = initialState, action) => {

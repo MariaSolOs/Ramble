@@ -8,7 +8,9 @@ const initialState = {
         spotsLeft: null,
         bookType: null,
         numGuests: null,
-        email: null
+        email: null,
+        rememberCard: false,
+        cardToUse: null
     },
     step: steps.CALENDAR,
     slotsInfo: [],

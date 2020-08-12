@@ -1,4 +1,5 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('cloudinary').v2,
+      stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 //Models
 const User = require('../models/user'),
@@ -44,18 +45,17 @@ exports.getUserProfile = (req, res) => {
             }
         });
     } else {
-        req.user.populate('notifications')
-        .execPopulate().then(user => {
+        Notification.find({user: req.user._id}, (err, notifs) => {
+            if(err) {
+                return res.status(500).send({err: "Couldn't fetch notifications."});
+            }
             res.status(200).send({
                 isAdmin: false,
-                isCreator: Boolean(user.creator),
+                isCreator: Boolean(req.user.creator),
                 token:  req.token,
-                userData: getUserData(user),
-                notifications: user.notifications
+                userData: getUserData(req.user),
+                notifications: notifs
             });
-        })
-        .catch(err => {
-            res.status(500).send({err: "Couldn't fetch user profile."});
         });
     }
 }
@@ -115,7 +115,7 @@ exports.saveExperience = async (req, res) => {
             savedExp 
         });
     } catch(err) {
-        res.status(409).send({err: `Couldn't save experience: ${err}`});
+        res.status(409).send({err: "Couldn't save experience"});
     }
 }
 exports.unsaveExperience = async (req, res) => {
@@ -127,7 +127,7 @@ exports.unsaveExperience = async (req, res) => {
             message: 'Experience succesfully unsaved.'
         });
     } catch(err) {
-        res.status(409).send({err: `Couldn't unsave experience: ${err}`});
+        res.status(409).send({err: "Couldn't unsave experience"});
     }
 }
 
@@ -142,6 +142,27 @@ exports.deleteNotification = async (req, res) => {
             message: 'Notification deleted.'
         });
     } catch(err) {
-        res.status(409).send({err: `Couldn't delete notification: ${err}`});
+        res.status(409).send({err: "Couldn't delete notification"});
+    }
+}
+
+exports.getPaymentMethods = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId, 'stripe');
+        const stripeList = await stripe.paymentMethods.list({
+            customer: user.stripe.customerId,
+            type: 'card'
+        });
+        const paymentMethods = [];
+        for(const method of stripeList.data) {
+            paymentMethods.push({
+                id: method.id,
+                brand: method.card.brand,
+                last4: method.card.last4
+            });
+        }
+        res.status(200).send({ paymentMethods });
+    } catch(err) {
+        res.status(500).send(err);
     }
 }

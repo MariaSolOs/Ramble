@@ -1,28 +1,33 @@
 import React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     footer: {
         position: 'fixed',
         bottom: 0, left: 0, right: 0,
         padding: '0.65rem 2rem',
         display: 'flex',
-        justifyContent: 'center',
         height: 'auto',
         maxHeight: 60,
         zIndex: 5,
         fontFamily: 'Helvetica, sans-serif',
         backgroundColor: '#1C1C1C', 
         '& > div': {
-            width: 330,
             display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center'
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: 'calc(100vw - 24% - 45%)',
+            margin: '0 15% 0 auto',
+            [theme.breakpoints.down('sm')]: { 
+                width: '80%',
+                margin: '0 auto',
+                justifyContent: 'space-around'
+            }
         }
     },
 
     price: {
-        margin: '0 auto',
+        margin: 0,
         color: '#BFBFBF',
         fontSize: '0.9rem',
         fontWeight: 'bold',

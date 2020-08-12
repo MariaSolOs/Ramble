@@ -50,9 +50,9 @@ exports.approveExp = (req, res) => {
     Experience.findByIdAndUpdate(req.params.expId, {status: req.body.decision},
     async (err, exp) => {
         if(err || !exp) {
-            res.status(500).send({err: 'Failed to update experience request.'});
+            res.status(500).send({err: 'Failed to approve/disapprove experience.'});
         } else {
-            const creator = await User.findOne({creator: exp.creator._id});
+            const creator = await User.findOne({creator: exp.creator._id}, 'email');
             const notif = new Notification({
                 message: `Your experience "${exp.title}" has been ${
                 req.body.decision}.`,
@@ -60,8 +60,6 @@ exports.approveExp = (req, res) => {
                 category: 'Creator-ExperienceDecision'
             });
             await notif.save();
-            creator.notifications.push(notif);
-            await creator.save();
             res.status(200).send({
                 message: `Experience successfully ${req.body.decision}.`,
                 creatorEmail: creator.email
@@ -87,7 +85,7 @@ exports.deleteRejectedExps = async (req, res) => {
         const delResult = await Experience.deleteMany({status: 'rejected'});
         res.status(200).send({ delCount: delResult.deletedCount });
     } catch(err) {
-        res.status(409).send({ err });
+        res.status(409).send(err);
     }
 }
 

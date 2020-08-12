@@ -3,7 +3,7 @@ const styles = () => ({
         display: 'flex',
         minHeight: '70vh',
         width: '90%',
-        margin: '10vh auto 5vh'
+        margin: '12vh auto 5vh'
     },
     shadowSeparator: {
         padding: 5,
@@ -15,7 +15,7 @@ const styles = () => ({
     notifList: {
         listStyle: 'none',
         padding: 0,
-        marginTop: '3rem',
+        marginTop: '1.5rem',
         width: 'calc(100% - 10px - 3%)'
     },
     notif: {

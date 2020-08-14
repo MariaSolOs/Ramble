@@ -8,6 +8,20 @@ router.get('/creator-oauth',
             validateStripeState, 
             controllers.connectCreatorToStripe);
 
+//Add a new Stripe customer
+router.post('/customer',
+            authenticateToken,
+            controllers.addCustomer);
+
+//Manage user's payment methods
+router.post('/payment-method',
+            authenticateToken,
+            controllers.attachPaymentMethod);
+router.delete('/payment-method',
+             authenticateToken,
+             controllers.detachPaymentMethod);
+
+//Deal with payment intents
 router.post('/payment-intent', 
             authenticateToken, 
             controllers.createPaymentIntent);
@@ -17,6 +31,9 @@ router.post('/payment-intent/capture',
 router.post('/payment-intent/cancel',
             authenticateToken,
             controllers.cancelPaymentIntent);
+router.post('/payment-intent/saved-card',
+            authenticateToken,
+            controllers.payWithSavedCard);
 
 //Webhook
 router.post('/webhook', controllers.stripeWebhook);

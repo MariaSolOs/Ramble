@@ -6,6 +6,7 @@ import Layout from './Layout/Layout';
 import PastExperiences from './UserExperiences/UserPastExperiences';
 import SavedExperiences from './UserExperiences/UserSavedExperiences';
 import Info from './UserInfo';
+import PaymentInfo from './PaymentInfo/PaymentInfo';
 
 const Router = (props) => {
     const {path} = useRouteMatch();
@@ -22,6 +23,9 @@ const Router = (props) => {
                 </Route>
                 <Route path={`${path}/info`}>
                     <Info/>
+                </Route>
+                <Route path={`${path}/payInfo`}>
+                    <PaymentInfo/>
                 </Route>
             </Layout>
         </Switch>

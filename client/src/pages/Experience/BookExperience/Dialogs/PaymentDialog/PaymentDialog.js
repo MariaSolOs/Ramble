@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 
 //Components and icons
 import Template from '../Template';
@@ -20,20 +20,20 @@ const PaymentDialog = (props) => {
     const [enableSubmit, setEnableSubmit] = useState(false);
     const handleCanSubmit = (e) => { setEnableSubmit(true); }
 
+    const {onChange} = props;
     //In case the user wants to use a different email
     const handleChangeEmail = (e) => { 
-        props.onChange('email', e.target.value); 
+        onChange('email', e.target.value); 
     }
 
     //Allow user to save a card/use an existing card
     const handleRememberCardChange = (e) => {
-        props.onChange('rememberCard', e.target.checked);
+        onChange('rememberCard', e.target.checked);
     }  
-    const handleUseCardChange = (e) => {
-        console.log(e.target.value);
-        props.onChange('cardToUse', e.target.value);
+    const handleUseCardChange = useCallback((cardId) => {
+        onChange('cardToUse', cardId);
         setEnableSubmit(true);
-    }
+    }, [onChange]);
 
     return (
         <>
@@ -59,6 +59,7 @@ const PaymentDialog = (props) => {
                     exp={props.exp}/>
                 </div>
                 <PaymentMethod
+                cards={props.cards}
                 rememberCard={props.form.rememberCard}
                 onRememberCard={handleRememberCardChange}
                 onCardToUse={handleUseCardChange}
@@ -66,8 +67,12 @@ const PaymentDialog = (props) => {
                 <div className={classes.totalPrice}>
                     <p>Total ({props.exp.price.currency})</p>
                     <p>
-                        {props.form.numGuests} <span>x</span> ${(+props.exp.price.perPerson).toFixed(2)} =
-                        ${totalPrice.toFixed(2)}
+                        {props.form.bookType === 'private'?
+                        `$${props.exp.price.private}` : 
+                        <>{props.form.numGuests}<span> x </span> 
+                          {(+props.exp.price.perPerson).toFixed(2)}<> = </> 
+                          {totalPrice.toFixed(2)}
+                        </>}
                     </p>
                 </div>
                 <EmailForm 

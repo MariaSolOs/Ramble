@@ -66,6 +66,7 @@ const styles = () => ({
         padding: 6,
         borderRadius: 10,
         margin: '0 3% 100px 0',
+        minHeight: 300,
         background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
     },
 

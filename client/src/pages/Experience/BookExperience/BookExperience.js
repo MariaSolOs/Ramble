@@ -6,6 +6,7 @@ import useBookingReducer from './store/reducer';
 import {steps, actions} from './store/types';
 import {useDispatch} from 'react-redux';
 import {showError} from '../../../store/actions/ui';
+import useSavedCards from '../../../hooks/useSavedCards';
 
 import * as dialogs from './Dialogs';
 
@@ -55,46 +56,75 @@ const BookExperience = ({exp, user, onClose}) => {
     }, [state.form.date, exp._id, exp.avail.schedule, exp.capacity, 
         dispatch, cancelBooking]);
 
-    //Handling payment
+    //After payment is done, add booking to occurrence
+    const handleAddBookingToOcc = (payIntentId, cardToUse) => {
+        axios.post(`/api/occ/${exp._id}/bookings`, {
+            date: state.form.date,
+            timeslot: state.form.timeslot,
+            numGuests: state.form.numGuests,
+            bookType: state.form.bookType,
+            cardToUse,  //One of these will be null
+            payIntentId
+        }).then(res => {
+            if(res.status === 201) {
+                dispatch({
+                    type: actions.PAY_COMPLETE,
+                    msg: `Congrats ${user.fstName}! 
+                    Your booking was successfully completed.`
+                });
+            } else {
+                cancelBooking('Please contact us.');
+            }
+            setTimeout(() => { onClose(); }, 4000);
+        }).catch(err => { cancelBooking('Please contact us.'); });
+    }
+
+    //For handling payment
     const stripe = useStripe();
     const elements = useElements();
     const handlePayment = async () => {
         dispatch({type: actions.PAY_INIT});
         try {
-            let newPayMethod = null;
+            if(state.form.cardToUse) { //Then we can skip all this
+                return handleAddBookingToOcc(null, state.form.cardToUse); 
+            }
+
             let clientSecret;
-            //Save payment information if user wants to
+            let customerId;
+
+            //If user wants to save the card, create Stripe customer
             if(state.form.rememberCard) {
-                const createdPayMethod = await stripe.createPaymentMethod({
-                    type: 'card',
-                    card: elements.getElement(CardElement),
-                    billing_details: {
-                        name: `${user.fstName} ${user.lstName}`,
-                    }
-                });
-                if(createdPayMethod.error) {
-                    cancelBooking(createdPayMethod.error.message);
+                const newCustomer = await axios.post('/api/stripe/customer');
+                if(newCustomer.status === 201) {
+                    customerId = newCustomer.data.customerId;
                 } else {
-                    newPayMethod = createdPayMethod.paymentMethod.id;
+                    return cancelBooking("We couldn't save your card...");
                 }
             }
+
             //Create payment intent and get client secret 
-            const payIntent = await axios.post('/api/stripe/payment-intent', {
-                expId: exp._id,
-                transferId: exp.creator.stripe.accountId,
-                creatorId: exp.creator._id,
-                bookType: state.form.bookType,
-                numGuests: state.form.numGuests,
-                newPayMethod
-            });
+            const payIntent = await axios.post(
+                '/api/stripe/payment-intent', 
+                { expId: exp._id,
+                    transferId: exp.creator.stripe.accountId,
+                    creatorId: exp.creator._id,
+                    bookType: state.form.bookType,
+                    numGuests: state.form.numGuests,
+                    customerId }
+            );
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
             }
             if (!stripe || !elements || payIntent.status !== 200) { 
                 cancelBooking('Your booking cannot be completed right now.');
                 return; 
-            } 
+            }
+
             //Confirm payment with Stripe
+            const usage = {
+                setup_future_usage: state.form.rememberCard ? 'off_session' : 
+                                    undefined
+            }
             const payConfirm = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: elements.getElement(CardElement),
@@ -102,34 +132,21 @@ const BookExperience = ({exp, user, onClose}) => {
                         name: `${user.fstName} ${user.lstName}`,
                     }
                 },
-                receipt_email: state.form.email || user.email
+                receipt_email: state.form.email || user.email,
+                ...usage
             });
             if(payConfirm.error) {
                 cancelBooking(payConfirm.error.message);
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
-                //Everything is good so far, now add booking to occurrence
-                axios.post(`/api/occ/${exp._id}/bookings`, {
-                    date: state.form.date,
-                    timeslot: state.form.timeslot,
-                    numGuests: state.form.numGuests,
-                    stripeId: payConfirm.paymentIntent.id,
-                    creatorProfit: payConfirm.paymentIntent.amount * 0.85
-                })
-                .then(res => {
-                    if(res.status === 201) {
-                        dispatch({
-                            type: actions.PAY_COMPLETE,
-                            msg: `Congrats ${user.fstName}! 
-                            Your booking was successfully completed.`
-                        });
-                    } else {
-                        cancelBooking('Please contact us.');
-                    }
-                    setTimeout(() => { onClose(); }, 4000);
-                }).catch(err => { cancelBooking('Please contact us.'); });
+                return handleAddBookingToOcc(payConfirm.paymentIntent.id, null);
+            } else {
+                return cancelBooking("We couldn't complete your payment.");
             }
         } catch(err) { cancelBooking('Please contact us.'); }
     }
+
+    //Pass saved cards to payment dialog
+    const {cards} = useSavedCards();
 
     switch(state.step) {
         case steps.CALENDAR: 
@@ -189,7 +206,7 @@ const BookExperience = ({exp, user, onClose}) => {
                         price: exp.price
                     }}
                     userEmail={user.email}
-                    savedCard={user.savedCard}
+                    cards={cards}
                     onChange={handleChange}
                     controls={{
                         goBack: setStep(steps.BOOK_TYPE),

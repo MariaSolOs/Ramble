@@ -17,8 +17,9 @@ const TimeSlot = ({slot, spotsLeft, capacity, selected, onClick}) => {
     const [fromHour, fromTime, toHour, toTime] = getTimePieces(slot);
 
     const bookingIcon = (spotsLeft === capacity)? faCrown : faUsers;
+    const bookedSpots = capacity - spotsLeft;
     const bookingMsg = (spotsLeft === capacity)? 'Be the first to book' : 
-                        `Join ${spotsLeft} ${spotsLeft > 1? 'guests' : 'guest'}`;
+                        `Join ${bookedSpots} ${bookedSpots > 1? 'guests' : 'guest'}`;
 
     return (
         <button 

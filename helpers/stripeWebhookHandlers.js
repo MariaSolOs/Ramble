@@ -5,8 +5,14 @@ const Creator = require('../models/creator'),
 exports.handleSuccessfulPaymentIntent = async (intent) => {
     try {
         //Find booking
-        const booking = await Booking.findOne({'stripe.id': intent.id})
-                              .populate('occurrence');
+        let booking; 
+        if(intent.metadata.bookingId) {
+            booking = await Booking.findById(intent.metadata.bookingId)
+                      .populate('occurrence');
+        } else {
+            booking = await Booking.findOne({'stripe.paymentIntentId': intent.id})
+                      .populate('occurrence');
+        }
         if(!booking) { 
             return 'No booking found with a matching intent ID'; 
         }
@@ -28,7 +34,9 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
 exports.handleCancelledPaymentIntent = async (intent) => {
     try {
         //Find booking
-        const booking = await Booking.findOneAndDelete({'stripe.id': intent.id});
+        const booking = await Booking.findOneAndDelete(
+                            {'stripe.paymentIntentId': intent.id}
+                        );
         if(!booking) { 
             return 'No booking found with a matching intent ID'; 
         }

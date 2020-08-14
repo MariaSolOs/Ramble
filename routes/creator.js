@@ -25,4 +25,9 @@ router.patch('/:creatorId',
              authenticateToken,
              controllers.editCreatorProfile);
 
+//To delete bookings where no payment intent has been created
+router.delete('/bookingRequests/:bookId',
+              authenticateToken,
+              controllers.deleteBookingRequest);
+
 module.exports = router;

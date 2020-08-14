@@ -1,7 +1,9 @@
 const cloudinary = require('cloudinary').v2;
 
 //Models
-const Creator = require('../models/creator');
+const Creator = require('../models/creator'),
+      Occurrence = require('../models/occurrence'),
+      Booking = require('../models/booking');
 
 //Helpers
 const getCreatorProfile = (creator) => ({
@@ -30,11 +32,11 @@ exports.getBookingRequests = async (req, res) => {
                 path: 'bookingRequests',
                 populate: [
                 { path: 'experience',
-                  select: 'title images capacity' }, 
+                  select: 'title images capacity price' }, 
                 { path: 'occurrence',
                   select: 'date timeslot spotsLeft creatorProfit' },
                 { path: 'client',
-                  select: 'fstName city photo' }
+                  select: 'fstName city photo stripe' }
                 ]
             }).execPopulate();
             return res.status(200).send({ bookingRequests });
@@ -93,5 +95,24 @@ exports.editCreatorProfile = async (req, res) => {
         });
     } catch(err) {
         res.status(409).send({error: "Couldn't update creator."});
+    }
+}
+
+/*To delete a booking where the customer used a saved card
+we don't need Stripe */
+exports.deleteBookingRequest = async (req, res) => {
+    try {
+        const booking = await Booking.findByIdAndRemove(req.params.bookId);
+        //Update occurrence and creator's requests
+        await Creator.findOneAndUpdate({user: req.userId}, 
+              {$pull: {bookingRequests: booking._id}});
+        await Occurrence.findByIdAndUpdate(booking.occurrence, {
+            $pull: {bookings: booking._id},
+            $inc: {spotsLeft: booking.numPeople}
+        });
+
+        return res.status(200).send({message: 'Booking deleted'});
+    } catch(err) {
+        res.status(409).send({err: "Couldn't delete booking."});
     }
 }

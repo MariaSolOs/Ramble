@@ -22,10 +22,8 @@ const BookingSchema = new mongoose.Schema({
         min: 1
     },
     stripe: {
-        id: {
-            type: String,
-            required: true,
-        },
+        paymentIntentId: String, 
+        cardToUse: String,
         paymentCaptured: { //True after the creator approves it
             type: Boolean,
             required: true,

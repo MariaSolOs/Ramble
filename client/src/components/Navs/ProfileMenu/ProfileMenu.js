@@ -46,22 +46,23 @@ const ProfileMenu = (props) => {
         classes={{ paper: classes.menuPaper, list: classes.menuList }}>
             <MenuItem 
             component={NavLink} 
-            to="/notifications"
-            onClick={closeMenu}>
-                Notifications
-            </MenuItem>
-            <MenuItem 
-            component={NavLink} 
             to="/profile/exp/past"
             onClick={closeMenu}>
                 View Profile
             </MenuItem>
             <MenuItem 
             component={NavLink} 
-            to={props.isCreator? '/experience/new/intro' : '/creator/join'}
+            to="/notifications"
             onClick={closeMenu}>
-                New Experience
+                Notifications
             </MenuItem>
+            {props.isCreator && 
+                <MenuItem 
+                component={NavLink} 
+                to="/experience/new/intro"
+                onClick={closeMenu}>
+                    New Experience
+                </MenuItem>}
             <MenuItem component={Link} to="/" onClick={props.logoutUser}>
                 Logout
             </MenuItem>

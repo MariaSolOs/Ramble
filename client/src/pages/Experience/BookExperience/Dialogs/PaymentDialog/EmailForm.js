@@ -24,7 +24,7 @@ const EmailForm = (props) => {
                 <InputBase
                 value={props.newEmail}
                 onChange={props.onChange}
-                className={classes.emailInput}/>
+                className={classes.input}/>
             </div> :
             <div className={classes.emailForm}>
                 <p className={`${classes.label} email`}>

@@ -53,6 +53,8 @@ const BookTypeDialog = (props) => {
             </div>
         </button>;
 
+    const bookedSpots = props.exp.capacity - props.form.spotsLeft;
+
     return (
         <Template 
         open={props.open} 
@@ -80,16 +82,18 @@ const BookTypeDialog = (props) => {
                 <button className={`${classes.bookButton}
                                     ${privateEnabled && 'private'}
                                     ${props.form.bookType === 'public' && 'selected'}`} 
-                value="public" onClick={handleBookTypeChange('public')}>
+                value="public" 
+                onClick={handleBookTypeChange('public')}>
                     <h3 className={classes.bookTitle}>Book per person</h3>
-                    <p>Join other guests</p>
-                    <div className={classes.bookCapacity}>
-                        <FontAwesomeIcon icon={faUsers}/>
-                        <p>
-                            Join {props.form.spotsLeft} 
-                            {props.form.spotsLeft > 1? ' guests' : ' guest'}
-                        </p>
-                    </div>
+                        <p>Join other guests</p>
+                        {bookedSpots > 0 &&
+                        <div className={classes.bookCapacity}>
+                            <FontAwesomeIcon icon={faUsers}/>
+                            <p>
+                                Join {bookedSpots} 
+                                {bookedSpots > 1? ' guests' : ' guest'}
+                            </p>
+                        </div>}
                     <div className={classes.bookPrice}>
                         $<span>{props.exp.price.perPerson}</span> per person
                     </div>

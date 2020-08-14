@@ -1,13 +1,11 @@
-import React, {useState} from 'react';
-import useSavedCards from '../../../../../hooks/useSavedCards';
+import React, {useState, useEffect} from 'react';
 
 //Components and icons
-import {CardElement} from '@stripe/react-stripe-js';
+import StripeCardInput from '../../../../../components/StripeCardInput';
 import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '../../../../../components/Input/TextField';
+import Select from '@material-ui/core/Select';
+import InputBase from '@material-ui/core/InputBase';
 import Checkbox from '../../../../../components/Input/Checkbox';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCcVisa} from '@fortawesome/free-brands-svg-icons/faCcVisa';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';
@@ -15,64 +13,71 @@ const useStyles = makeStyles(styles);
 
 const PaymentMethod = (props) => {
     const classes = useStyles();
-    const stripeInputOptions = {
-        iconStyle: 'solid',
-        classes: { base: classes.stripeBase },
-        style: {
-            base: {
-                fontFamily: 'Helvetica, sans-serif',
-                fontWeight: 'bold',
-                letterSpacing: '-0.05rem',
-                fontSize: '17px',
-                color: '#FFF',
-                fontSmoothing: 'antialiased',
-                textShadow: 'none'
-            },
-            invalid: {
-                color: '#C70039',
-                iconColor: '#C70039',
-                textShadow: 'none'
-            }
-        }
-    }
 
-    const cards = useSavedCards();
-
-    const [showStripeInput, setShowStripeInput] = useState();
+    const {cards, onCardToUse} = props;
+    const [showStripeInput, setShowStripeInput] = useState(cards.length === 0);
     //If the user wants to use a new card
     const handleStripeInputChange = (e) => {
         if(e.complete) { props.onCanSubmit(); }
-    }   
+    }  
+    const handleUseSavedCard = (e) => {
+        onCardToUse(e.target.value);
+    } 
+    const handleUseUnsavedCard = (e) => {
+        if(e.target.checked) {
+            onCardToUse(null);
+            setShowStripeInput(true);
+        }
+    }
+
+    //By default use the first saved card
+    useEffect(() => {
+        if(cards.length > 0) {
+            onCardToUse(cards[0].id);
+        }
+    }, [cards, onCardToUse]);
 
     return (
         <div className={classes.payMethod}>
             <p className={classes.label}>Payment method</p>
             {cards.length > 0 && !showStripeInput?
-            <>
-                <TextField 
-                select
-                fullWidth
+            <div className={classes.savedCards}>
+                <Select
                 value={cards[0].id}
-                onChange={props.onCardToUse}>
-                    {cards.map(card => (
-                        <MenuItem 
-                        key={card.id}
-                        value={card.id}>
-                            {card.last4}
-                        </MenuItem> 
-                    ))}
-                </TextField>
+                onChange={handleUseSavedCard}
+                input={<InputBase className={classes.input}/>}
+                MenuProps={{
+                    getContentAnchorEl: null,
+                    anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'right'
+                    },
+                    classes: {paper: classes.savedCardsMenu}
+                }}>
+                {cards.map(card => (
+                    <MenuItem 
+                    key={card.id}
+                    value={card.id}>
+                        {card.icon}
+                        <span className="bullets">
+                            &bull;&bull;&bull;&bull; 
+                            &bull;&bull;&bull;&bull; 
+                            &bull;&bull;&bull;&bull;
+                        </span>
+                        {card.last4}
+                    </MenuItem> 
+                ))}
+                </Select>
                 <div className={classes.checkboxField}>
                     <p>Use a different card</p>
                     <Checkbox 
                     checked={showStripeInput}
-                    onChange={() => setShowStripeInput(true)}/>
+                    onChange={handleUseUnsavedCard}/>
                 </div>
-            </>
+            </div>
             : 
             <>
-                <CardElement 
-                options={stripeInputOptions} 
+                <StripeCardInput
                 onChange={handleStripeInputChange}/>
                 <div className={classes.checkboxField}>
                     <p>Remember my payment information</p>

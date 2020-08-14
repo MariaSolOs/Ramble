@@ -2,6 +2,7 @@
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
+      {calculatePaymentAmount} = require('../helpers/bookingHelpers'),
       {startOfDay, endOfDay} = require('date-fns');
 
 //Show occurrences for a certain experience
@@ -44,35 +45,45 @@ exports.addBookingToOcurrence = async (req, res) => {
                 creatorProfit: 0
             });
         }
-        await occ.save();
 
         //Create booking
+        const {amount} = await calculatePaymentAmount(
+                            experience.id, 
+                            req.body.bookType, 
+                            req.body.numGuests
+                        );
+        const stripeDetails = {
+            paymentIntentId: req.body.payIntentId,
+            cardToUse: req.body.cardToUse,
+            paymentCaptured: false,
+            creatorProfit: amount * 0.85
+        }
         const booking = new Booking({
             experience: experience._id,
             occurrence: occ._id,
             client: req.userId,
             numPeople: req.body.numGuests,
-            stripe: {
-                id: req.body.stripeId,
-                paymentCaptured: false,
-                creatorProfit: req.body.creatorProfit
-            }
+            stripe: { ...stripeDetails }
         });
-        await booking.save();
 
         //Add booking to occurrence and update
         occ.spotsLeft -= booking.numPeople;
         occ.bookings.push(booking);
-        await occ.save();
 
         //Add booking to creator's requests
         experience.creator.bookingRequests.push(booking);
-        await experience.creator.save();
 
-        res.status(201).send({ message: 'Successfully added booking to occurrence.' });
+        await occ.save();
+        await booking.save();
+        await experience.creator.save();
+        res.status(201).send({message: 'Successfully added booking.'});
     }
     catch(err) {
-        //If something goes wrong, cancel the intent
-        res.redirect(307, '/api/stripe/payment-intent/cancel');
+        //If something goes wrong, cancel the intent (if applicable)
+        if(req.body.payIntentId) {
+            res.redirect(307, '/api/stripe/payment-intent/cancel');
+        } else {
+            res.status(409).send({err: "Couldn't add booking."});
+        }
     }
 }

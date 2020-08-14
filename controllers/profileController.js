@@ -149,6 +149,9 @@ exports.deleteNotification = async (req, res) => {
 exports.getPaymentMethods = async (req, res) => {
     try {
         const user = await User.findById(req.userId, 'stripe');
+        if(!user.stripe.customerId) { //No saved payment methods
+            return res.status(200).send({ paymentMethods: [] }); 
+        }
         const stripeList = await stripe.paymentMethods.list({
             customer: user.stripe.customerId,
             type: 'card'
@@ -158,7 +161,8 @@ exports.getPaymentMethods = async (req, res) => {
             paymentMethods.push({
                 id: method.id,
                 brand: method.card.brand,
-                last4: method.card.last4
+                last4: method.card.last4,
+                expireDate: [method.card.exp_month, method.card.exp_year]
             });
         }
         res.status(200).send({ paymentMethods });

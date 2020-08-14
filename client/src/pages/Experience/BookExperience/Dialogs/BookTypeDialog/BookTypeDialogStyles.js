@@ -29,6 +29,7 @@ const styles = () => ({
     bookButton: {
         borderRadius: '1rem',
         width: '100%',
+        height: 96,
         marginBottom: '0.5rem',
         boxSizing: 'border-box',
         border: 'none',
@@ -41,6 +42,8 @@ const styles = () => ({
         letterSpacing: '-0.05rem',
         position: 'relative',
         transition: 'all 200ms ease-in-out',
+        display: 'flex',
+        flexDirection: 'column',
         '& p': {
             color: '#C8C8C8',
             fontSize: '0.95rem',

@@ -25,7 +25,7 @@ const Snackbar = (props) => {
         classes={{anchorOriginTopRight: classes.position}}
         open={props.open}
         onClose={props.onClose}
-        autoHideDuration={2700}
+        autoHideDuration={3000}
         message={props.message}/>
     );
 }

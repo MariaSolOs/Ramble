@@ -96,7 +96,7 @@ export const emailAuth = (userInfo, authType) => {
 }
 
 //For editing user info
-export const editProfile = (updatedInfo) => {
+export const editProfile = (updatedInfo, showSuccessSnackbar = false) => {
     return dispatch => {
         axios.put('/api/profile/edit', updatedInfo)
         .then(res => {
@@ -107,7 +107,7 @@ export const editProfile = (updatedInfo) => {
                     res.data.isAdmin,
                     res.data.userData
                 )); 
-                if(!updatedInfo.photo) {
+                if(showSuccessSnackbar) {
                     dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
                     Your profile has been updated.`));
                 }

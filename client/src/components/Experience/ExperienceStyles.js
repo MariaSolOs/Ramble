@@ -1,4 +1,4 @@
-const styles = (theme) => ({
+export const pageStyles = (theme) => ({
     body: {
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
@@ -55,4 +55,135 @@ const styles = (theme) => ({
         lineHeight: 1.4
     }
 });
-export default styles;
+
+export const creatorStyles = () => ({
+    label: {
+        fontSize: '1.2rem',
+        letterSpacing: '-0.05rem',
+        color: '#FFF',
+        marginBottom: 0
+    },
+    
+    host: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0.5rem 0',
+        '& .creator-name': {
+            fontSize: '0.9rem',
+            letterSpacing: '-0.05rem',
+            color: '#CBCBCB',
+            margin: '0 10px'
+        }
+    },
+
+    bioToggler: {
+        backgroundColor: '#242424',
+        borderRadius: '0.5rem',
+        color: '#ECEBE5',
+        font: 'inherit',
+        fontSize: '0.9rem',
+        letterSpacing: '-0.05rem',
+        border: 'none',
+        marginLeft: 15,
+        padding: '0.8rem 0.9rem',
+        width: 130,
+        cursor: 'pointer',
+        '&:focus': { outline: 'none' }
+    },
+
+    bio: { 
+        display: 'flex',
+        '& .bio-text': {
+            fontSize: '0.97rem',
+            letterSpacing: '-0.05rem',
+            color: '#C8C8C8',
+            lineHeight: 1.4,
+            margin: '0.5rem 0'
+        } 
+    }
+});
+
+export const descriptionStyles = () => ({
+    label: {
+        fontSize: '1.2rem',
+        letterSpacing: '-0.05rem',
+        color: '#FFF',
+        marginBottom: 0
+    },
+    text: {
+        fontSize: '0.97rem',
+        letterSpacing: '-0.05rem',
+        color: '#C8C8C8',
+        lineHeight: 1.4
+    },
+
+    listContainer: {
+        display: 'flex',
+        '& div:nth-of-type(1)': {
+            marginRight: '4rem' 
+        }
+    },
+    itemList: {
+        fontSize: '1rem',
+        letterSpacing: '-0.05rem',
+        color: '#C8C8C8',
+        listStylePosition: 'inside',
+        padding: 0,
+        marginTop: '0.5rem',
+        textTransform: 'capitalize',
+        '& li': {
+            padding: '0.2rem 0'
+        }
+    }
+});
+
+export const quickInfosStyles = () => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: props => 
+            props.numSlots === 4? '95%' : '85%',
+        backgroundColor: '#1C1C1C',
+        borderRadius: '1rem',
+        margin: '1rem 0',
+        cursor: 'default',
+        whiteSpace: 'nowrap',
+        padding: props => `0 ${5 + 5*(props.rootPadding)}px`,
+        '& > div': {
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            letterSpacing: '-0.05rem',
+            margin: props => 
+                props.numSlots === 4? '0.7rem' : '1rem',
+            '&:nth-child(3)': { //Allow languages to wrap
+                whiteSpace: 'pre-line' 
+            }
+        }
+    },
+    label: {
+        fontSize: '0.9rem',
+        color: '#717171',
+        textTransform: 'uppercase',
+        marginBottom: 3,
+        textAlign: 'center'
+    },
+    content: {
+        fontSize: '1.05rem',
+        color: '#DDDDDD',
+        textTransform: 'capitalize',
+        textAlign: 'center',
+    },
+    icon: {
+        backgroundColor: '#1C1C1C',
+        borderRadius: '50%',
+        position: 'absolute',
+        top: -28,
+        left: 'calc(50% - 14px)',
+        padding: 5,
+        '& svg': {
+            color: '#717171',
+            fontSize: '1.15rem',
+        }
+    }
+});

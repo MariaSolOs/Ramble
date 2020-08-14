@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../tokenizedAxios';
 import {useParams, useHistory} from 'react-router-dom';
-import uuid from 'react-uuid';
 
 //Components and icons
 import Button from '@material-ui/core/Button';
@@ -89,11 +88,6 @@ const ApprovalPage = (props) => {
                 <h4>More information...</h4>
                 <ul>
                     <li>
-                        <strong>Age restriction: </strong> 
-                        {exp.ageRestriction?
-                        exp.ageRestriction : 'none'}
-                    </li>
-                    <li>
                         <strong>Setting: </strong> {exp.setting}
                     </li>
                     <li>
@@ -104,15 +98,6 @@ const ApprovalPage = (props) => {
                     <li>
                         <strong>Currency: </strong> 
                         {exp.price.currency}
-                    </li>
-                    <li>
-                        <strong>To bring: </strong>
-                        {exp.toBring.length > 0 ? 
-                        <ul>
-                            {exp.toBring.map(item => (
-                            <li key={uuid()}>{item}</li>
-                            ))}
-                        </ul> : ' Nothing indicated'}
                     </li>
                 </ul>
                 <h4>The Creator</h4>

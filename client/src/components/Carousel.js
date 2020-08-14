@@ -7,7 +7,7 @@ import ImageGallery from 'react-image-gallery';
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     carousel: {
-        minHeight: 520,
+        //minHeight: 520,
         width: '60%',
         minWidth: 250,
         [theme.breakpoints.down('sm')]: { 

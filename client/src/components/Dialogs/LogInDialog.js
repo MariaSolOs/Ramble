@@ -38,7 +38,9 @@ const LogInDialog = (props) => {
     }
 
     return (
-        <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
+        <Dialog 
+        open={props.open} 
+        onClose={props.onClose} 
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
                 <CloseIcon onClick={props.onClose} className="closeIcon"/>

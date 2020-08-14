@@ -174,7 +174,7 @@ const mapStateToProps = (state) => ({
     user: state.user.profile
 });
 const mapDispatchToProps = (dispatch) => ({
-    editProfile: (updatedInfo) => dispatch(editProfile(updatedInfo))
+    editProfile: (updatedInfo) => dispatch(editProfile(updatedInfo, true))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);

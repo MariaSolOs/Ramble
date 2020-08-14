@@ -33,6 +33,26 @@ const styles = () => ({
         margin: 0
     },
 
+    photoField: {
+        width: '60vw',
+        minWidth: 370,
+        marginBottom: '3rem',
+        '& $dropzoneImg': {
+            borderRadius: '100%',
+            height: 200,
+            width: 200,
+            margin: '0 auto',
+            '& img': {
+                maxWidth: '75%'
+            },
+            '& $deleteIcon': { 
+                bottom: 5,
+                top: 'unset',
+                right: 'unset'
+            }
+        }
+    },
+
     aboutField: {
         marginBottom: '5rem',
         '& .MuiInputBase-root': {
@@ -98,7 +118,7 @@ const styles = () => ({
             objectFit: 'contain',
         }
     },
-    addID: {
+    addIcon: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

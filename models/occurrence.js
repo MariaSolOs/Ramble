@@ -6,7 +6,11 @@ const OccurrenceSchema = new mongoose.Schema({
         ref: 'Experience',
         required: true
     },
-    date: {
+    dateStart: {
+        type: Date,
+        required: true
+    },
+    dateEnd: {
         type: Date,
         required: true
     },

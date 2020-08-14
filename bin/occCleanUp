@@ -7,14 +7,18 @@ const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
       User = require('../models/user'),
-      Creator = require('../models/creator'),
-      endOfYesterday = require('date-fns/endOfYesterday');
+      Creator = require('../models/creator');
 
 const occCleanUp = async () => {
     console.log('JOB STARTS: CLEAN OCCURRENCES');
     try {
+        let yesterday = new Date();
+        yesterday.setDate(new Date().getDate() - 1);
+        yesterday.setUTCHours(23, 59, 59);
+
         //Find all old occurrences
-        const occs = await Occurrence.find({date: {$lt: endOfYesterday()}})
+        const occs = await Occurrence.find(
+                    {dateEnd: {$lt: yesterday}})
                     .populate([{ path: 'experience', select: '_id' },
                                { path: 'bookings', select: 'client' }
                     ]);
@@ -32,7 +36,7 @@ const occCleanUp = async () => {
             }
         }
         const bookCount = await Booking.deleteMany({_id: {$in: bookingsToDel}});
-        const occCount = await Occurrence.deleteMany({date: {$lt: endOfYesterday()}});
+        const occCount = await Occurrence.deleteMany({dateEnd: {$lt: yesterday}});
         console.log(`JOB SUCCESS: CLEAN OCCURRENCES. DELETED OCC: ${
         occCount.deletedCount}, DELETED BOOKINGS: ${bookCount.deletedCount}`);
     } catch(err) {

@@ -3,15 +3,44 @@ const styles = (theme) => ({
     root: {
         position: 'relative',
         margin: '12vh 0 0',
-        height: '88vh',
+        height: '84vh',
         width: '100vw',
-        padding: '2% 15% 2% 9%',
-        boxSizing: 'border-box',
+        padding: '2vh 15% 2vh 9%',
         display: 'flex',
         flexDirection: 'row',
-        overflowY: 'scroll',
         backgroundColor: '#151515',
-        [theme.breakpoints.down('sm')]: { flexDirection: 'column' },
+        [theme.breakpoints.down('sm')]: { 
+            flexDirection: 'column',
+            padding: '2% 10% 2% 10%',
+            boxSizing: 'border-box',
+            overflowY: 'scroll'
+        },
+
+        '& .image-gallery-slide .image-gallery-image': {
+            maxHeight: '70vh !important'
+        },
+
+        '& .image-gallery': {
+            position: 'sticky',
+            minWidth: '35%',
+            maxWidth: 490,
+            maxHeight: '80vh',
+            [theme.breakpoints.down('sm')]: { 
+                marginBottom: '4vh',
+                '& .image-gallery-image': {
+                    height: 400
+                }
+            }
+        }
+    },
+
+    experienceWrapper: {
+        overflowY: 'scroll',
+        display: 'flex',
+        marginBottom: 90,
+        [theme.breakpoints.down('sm')]: { 
+            overflowY: 'unset',
+        }
     },
 
     shareDialog: {

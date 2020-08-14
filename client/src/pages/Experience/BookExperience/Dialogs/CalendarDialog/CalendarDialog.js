@@ -5,11 +5,10 @@ import {getWeekdayKey} from '../../helpers';
 import Template from '../Template';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Calendar from 'react-calendar';
+import DatePicker from 'react-datepicker';
 
 //Styles
+import 'react-datepicker/dist/react-datepicker.css';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './CalendarDialogStyles';
 const useStyles = makeStyles(styles);
@@ -19,16 +18,13 @@ const CalendarDialog = (props) => {
 
     //Update date in form
     const handleDateChange = (newDate) => { 
-        props.onChange('date', newDate.toISOString()); 
+        props.onChange('date', newDate); 
     }
 
     //For calendar formatting
-    const getWeekdays = (locale, date) => (
-        ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()]
-    );
-    const getDisabledTiles = ({date}) => {
+    const getAvailableDays = (date) => {
         const currDay = getWeekdayKey(date);
-        return !props.availDays.includes(currDay);
+        return props.availDays.includes(currDay);
     }
 
     return (
@@ -41,17 +37,15 @@ const CalendarDialog = (props) => {
                 <CloseIcon onClick={props.controls.goBack} className="closeIcon"/>
                 <h5 className="title">We know why.<br/>Question is when?</h5>
             </div>
-            <DialogContent>
-                <Calendar onChange={handleDateChange}
-                className={classes.calendar}
-                formatShortWeekday={getWeekdays}
-                prevLabel={<ChevronLeftIcon/>}
-                nextLabel={<ChevronRightIcon/>}
-                prev2Label={null}
-                next2Label={null}
+            <DialogContent className={classes.content}>
+                <DatePicker
+                selected={props.date.selec}
+                onChange={handleDateChange}
                 minDate={props.date.min}
                 maxDate={props.date.max}
-                tileDisabled={getDisabledTiles}/> 
+                filterDate={getAvailableDays}
+                calendarClassName={classes.calendar}
+                inline/>
             </DialogContent>
         </Template>
     );

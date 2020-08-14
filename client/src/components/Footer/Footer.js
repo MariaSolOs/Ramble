@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 //Components and icons
+import CustomerServiceDialog from '../Dialogs/CustomerServiceDialog';
 import Chip from '@material-ui/core/Chip';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -17,22 +18,31 @@ const useStyles = makeStyles(styles);
 const Footer = () => {
     const classes = useStyles();
 
+    const [showCustService, setShowCustService] = useState(false);
+    const openCustService = () => { setShowCustService(true); }
+    const closeCustService = () => { setShowCustService(false); }
+
     return (
-        <footer className={classes.root}>
+        <>
+        <CustomerServiceDialog 
+        open={showCustService}
+        onClose={closeCustService}/>
+        <footer className={classes.footer}>
             <div className={classes.header}>ramble</div>
             <div className={classes.body}>
-                <div className="body-col">
+                <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Company</p>
                     {/* TODO: Add real links to pages here */}
                     <Link to="/about">About us</Link>
                     <Link to="/jobs">Jobs</Link>
                 </div>
-                <div className="body-col">
+                <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Support</p>
-                    {/* TODO: Add real links to pages here */}
-                    <Link to="/support">24/7 Customer Service</Link>
+                    <span className="open-dialog" onClick={openCustService}>
+                        24/7 Customer Service
+                    </span>
                 </div>
-                <div className="body-col">
+                <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Social</p>
                     <div>
                         <a href="/">
@@ -47,7 +57,7 @@ const Footer = () => {
                         </a>
                     </div>
                 </div>
-                <div className="body-col">
+                <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Language & Currency</p>
                     <div>
                         <Chip icon={<LanguageIcon/>} label="English" className={classes.chip}/>
@@ -65,6 +75,7 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
+        </>
     );
 }
 

@@ -2,7 +2,6 @@
 
 require('dotenv').config({ path: '../.env' });
 require('../config/mongoose');
-const {startOfToday, endOfTomorrow} = require('date-fns');
 
 //Models
 const User = require('../models/user'),
@@ -19,11 +18,9 @@ const creatorExpReminders = async () => {
 
         //Get experiences happening in the next 2 days
         const occs = await Occurrence.find({
-            date: {
-                $gte: startOfToday(), 
-                $lt: endOfTomorrow()
-            }
-        }, 'date timeslot').populate({
+            dateStart: new Date(new Date().setUTCHours(0, 0, 0)), 
+            dateEnd: new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setUTCHours(23, 59, 59))
+        }, 'dateStart timeslot').populate({
             path: 'experience',
             select: 'title',
             populate: {
@@ -34,7 +31,7 @@ const creatorExpReminders = async () => {
 
         //Update notifications
         for(const occ of occs) {
-            const when = occ.date.getDate() === new Date().getDate()? 
+            const when = occ.dateStart.getDate() === new Date().getDate()? 
                         'today' : 'tomorrow';
             const notif = new Notification({
                 message: `Your experience "${occ.experience.title}" is happening ${
@@ -42,11 +39,7 @@ const creatorExpReminders = async () => {
                 user: occ.experience.creator.user,
                 category: 'Creator-ExperienceReminder'
             });
-            const notifErr = notif.validateSync();
-            if(notifErr) {
-                delete notif;
-                throw new Error(notifErr.message);
-            } else { await notif.save(); }
+            await notif.save();
         }
 
         console.log('JOB SUCCESS: CREATOR EXPERIENCE REMINDERS');

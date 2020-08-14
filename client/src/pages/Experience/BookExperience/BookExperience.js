@@ -36,7 +36,7 @@ const BookExperience = ({exp, user, onClose}) => {
         if(state.form.date) {
             //Cut off the time from query
             axios.get(`/api/occ/${exp._id}`, 
-            {params: {date: state.form.date}})
+            {params: {date: state.form.date.toISOString().split('T')[0]}})
             .then(res => {
                 if(res.status === 200) {
                     dispatch({
@@ -59,7 +59,7 @@ const BookExperience = ({exp, user, onClose}) => {
     //After payment is done, add booking to occurrence
     const handleAddBookingToOcc = (payIntentId, cardToUse) => {
         axios.post(`/api/occ/${exp._id}/bookings`, {
-            date: state.form.date,
+            date: state.form.date.toISOString().split('T')[0],
             timeslot: state.form.timeslot,
             numGuests: state.form.numGuests,
             bookType: state.form.bookType,

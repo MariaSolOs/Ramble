@@ -4,52 +4,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Collapse from '@material-ui/core/Collapse';
 
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
-    label: {
-        fontSize: '1.2rem',
-        letterSpacing: '-0.05rem',
-        color: '#FFF',
-        marginBottom: 0
-    },
-    
-    host: {
-        display: 'flex',
-        alignItems: 'center',
-        margin: '0.5rem 0',
-        '& .creator-name': {
-            fontSize: '0.9rem',
-            letterSpacing: '-0.05rem',
-            color: '#CBCBCB',
-            margin: '0 10px'
-        }
-    },
-
-    bioToggler: {
-        backgroundColor: '#242424',
-        borderRadius: '0.5rem',
-        color: '#ECEBE5',
-        font: 'inherit',
-        fontSize: '0.9rem',
-        letterSpacing: '-0.05rem',
-        border: 'none',
-        marginLeft: 15,
-        padding: '0.8rem 0.9rem',
-        width: 130,
-        cursor: 'pointer',
-        '&:focus': { outline: 'none' }
-    },
-
-    bio: { 
-        display: 'flex',
-        '& .bio-text': {
-            fontSize: '0.97rem',
-            letterSpacing: '-0.05rem',
-            color: '#C8C8C8',
-            lineHeight: 1.4,
-            margin: '0.5rem 0'
-        } 
-    }
-}));
+import {creatorStyles} from './ExperienceStyles';
+const useStyles = makeStyles(creatorStyles);
 
 const Creator = ({creator}) => {
     const classes = useStyles();

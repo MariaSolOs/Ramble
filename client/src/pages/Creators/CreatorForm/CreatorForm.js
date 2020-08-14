@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {showSnackbar} from '../../../store/actions/ui';
-import {upgradeToCreator} from '../../../store/actions/user';
+import {upgradeToCreator, editProfile} from '../../../store/actions/user';
 import {useHistory} from 'react-router-dom';
 import Files from 'react-butterfiles';
 
@@ -26,9 +26,17 @@ const idSides = [
 ];
 const validPhoneReg = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
 
-//TODO: Hide this form from logged in creators
 const CreatorForm = (props) => {
     const classes = useStyles();
+
+    //Profile picture (if the user doesn't already have one)
+    const [profilePic, setProfilePic] = useState(null);
+    const handleAddProfilePic = (files) => { 
+        setProfilePic(files[0].src.base64);
+    }
+    const handleDeleteProfilePic = (e) => { 
+        setProfilePic(null);
+    }
 
     //Creator bio
     const [bio, setBio] = useState('');
@@ -37,6 +45,7 @@ const CreatorForm = (props) => {
             setBio(e.target.value);
         }
     }
+
     //Phone number
     const [phoneNumber, setPhoneNumber] = useState(props.userPhone);
     const [phoneErr, setPhoneErr] = useState(false);
@@ -78,8 +87,11 @@ const CreatorForm = (props) => {
         }
         props.upgradeToCreator({ 
             bio, 
-            phoneNumber: phoneNumber.replace(validPhoneReg, '($1) $2-$3'),
             id: [id.front, id.back]
+        });
+        props.updateProfile({
+            photo: profilePic,
+            phoneNumber: phoneNumber.replace(validPhoneReg, '($1) $2-$3')
         });
         history.push(props.backFromCreation? '/experience/new/submitted' :
                     '/experience/new/intro');
@@ -103,6 +115,31 @@ const CreatorForm = (props) => {
                     </h3>
                 </div>
             </div>
+            {!props.noPhoto && 
+                <div className={classes.photoField}>
+                    <label className={classes.title}>Profile picture</label>
+                    <h3 className={classes.subtitle}>Show us your best smile</h3>
+                    <Files
+                    convertToBase64
+                    accept={['image/jpg', 'image/jpeg', 'image/png']}
+                    onSuccess={handleAddProfilePic}
+                    onError={handleDropzoneErr}>
+                    {({browseFiles}) => (
+                        <div className={classes.dropzoneImg}>
+                        {profilePic && <HighlightOffIcon 
+                                    className={classes.deleteIcon}
+                                    onClick={handleDeleteProfilePic}/>}
+                        {profilePic ? 
+                            <img src={profilePic} alt="Creator"/> :
+                            <div className={classes.addIcon}>
+                                <AddCircleIcon 
+                                className="icon" 
+                                onClick={browseFiles}/>
+                            </div>}
+                        </div>
+                    )}
+                    </Files>
+                </div>}
             <div className={classes.aboutField}>
                 <label className={classes.title} htmlFor="bio">About you</label>
                 <h3 className={classes.subtitle}>
@@ -179,7 +216,7 @@ const CreatorForm = (props) => {
                                                   onClick={handleDeleteId(side)}/>}
                                     {id[side] ? 
                                         <img src={id[side]} alt="Submitted ID"/> :
-                                        <div className={classes.addID}>
+                                        <div className={classes.addIcon}>
                                             <AddCircleIcon 
                                             className="icon" 
                                             onClick={browseFiles}
@@ -215,11 +252,13 @@ const CreatorForm = (props) => {
 const mapStateToProps = (state) => ({
     userName: state.user.profile.fstName,
     userPhone: state.user.profile.phoneNumber,
+    noPhoto: state.user.profile.photo.includes('Ramble/Users/noPicUser.jpg'),
     backFromCreation: Object.keys(state.exp.savedExperienceForm).length > 0,
     creatorRegistered: state.user.creator.id !== null
 });
 const mapDispatchToProps = (dispatch) => ({
     upgradeToCreator: (info) => dispatch(upgradeToCreator(info)),
+    updateProfile: (info) => dispatch(editProfile(info)),
     showSnackbar: (msg) => dispatch(showSnackbar(msg))
 });
 

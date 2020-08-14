@@ -1,5 +1,5 @@
 const styles = (theme) => ({
-    root: {
+    footer: {
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
@@ -16,7 +16,7 @@ const styles = (theme) => ({
                 marginLeft: '5%', 
             }
         },
-        '& a': {
+        '& a, & .open-dialog': {
             color: '#C0BFBA',
             textDecoration: 'none',
             letterSpacing: '-0.05rem',
@@ -24,7 +24,6 @@ const styles = (theme) => ({
         }
     },
 
-    //ramble title
     header: {
         fontFamily: 'Futura',
         fontSize: '2rem',
@@ -36,17 +35,17 @@ const styles = (theme) => ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: '2rem 0 3rem',
-        '& .body-col': {
-            display: 'flex',
-            flexDirection: 'column',
-            '& > a': { 
-                display: 'block', 
-                lineHeight: 1.7,
-                transition: 'all 150ms ease-in-out',
-                '&:hover': { color: '#FFF' }
-            },
-        }
+        margin: '2rem 0 3rem'
+    },
+    bodyCol: {
+        display: 'flex',
+        flexDirection: 'column',
+        '& > a, & > span': { 
+            display: 'block', 
+            lineHeight: 1.7,
+            transition: 'all 150ms ease-in-out',
+            '&:hover': { color: '#FFF' }
+        },
     },
 
     colTitle: {

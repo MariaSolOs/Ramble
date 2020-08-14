@@ -21,69 +21,63 @@ const styles = () => ({
         }
     },
 
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+
     calendar: {
-        '&.react-calendar': {
-            width: 270,
-            margin: '15px auto 30px',
-            '& button': {
-                border: 'none',
-                backgroundColor: 'transparent',
-                '&:focus': { outline: 'none' }
+        '&.react-datepicker': {
+            backgroundColor: 'transparent',
+            border: 'none'
+        },
+        '& .react-datepicker__header': {
+            backgroundColor: 'transparent',
+            border: 'none',
+            marginBottom: 8,
+            '& .react-datepicker__current-month': {
+                color: '#FFF',
+                fontSize: '1.25rem',
+                marginBottom: 4
             }
         },
-        //Month and arrows
-        '& .react-calendar__navigation': {
-            height: 42,
-            '& button': {
-                fontFamily: 'Helvetica, sans-serif',
-                color: '#C4C4C5',
-                letterSpacing: '-0.05rem',
-                fontWeight: 'bold',
-                fontSize: '1.2rem',
-                '&:disabled': { opacity: 0 },
-                '&.react-calendar__navigation__arrow svg': {
-                    fontSize: '2rem'
-                }
-            }
-        },
-        //Weekdays and dates
-        '& .react-calendar__viewContainer': {
-            width: '85%',
-            margin: '0 auto'
-        },
-        '& .react-calendar__month-view__weekdays__weekday': {
-            fontFamily: 'Helvetica, sans-serif',
+        '& .react-datepicker__month-container': {
             fontSize: '1rem',
-            color: '#C4C4C5',
-            padding: 8,
-            textAlign: 'center',
-            '& abbr': { textDecoration: 'none' }
+            width: 300
         },
-        '& .react-calendar__tile, & .react-calendar__tile--now': {
-            fontFamily: 'Helvetica, sans-serif',
+        '& .react-datepicker__day-name': {
+            color: '#FFF',
+            fontWeight: 'bold'
+        },
+        '& .react-datepicker__navigation': {
+            '&:focus': { outline: 'none' }
+        },
+        '& .react-datepicker__month': {
+            marginTop: 0
+        },
+        '& .react-datepicker__day, & .react-datepicker__day--keyboard-selected': {
             fontWeight: 'bold',
-            color: '#C4C4C5',
+            color: '#ECEBE5',
             background: 'none',
-            transition: 'color 200ms ease-in-out',
-            fontSize: '1rem',
-            padding: '0.75em 0.5em',
-            cursor: 'pointer',
-            '&:disabled': { 
-                fontSize: '0.7rem',
-                color: 'rgba(196, 196, 197, 0.4)',
-                padding: '8.4px 5.6px',
-                cursor: 'default',
-                '&:hover': { 
-                    background: 'none', 
-                    color: 'rgba(196, 196, 197, 0.4)'
-                }
-             },
-            '&:focus': { background: 'none' },
-            '&:hover, &.react-calendar__tile--active': {
-                borderRadius: '100%',
-                color: '#151515',
-                background: 'radial-gradient(circle at center, #C4C4C5 0, transparent 60%)'
+            '&:hover': { 
+                backgroundColor: '#ECEBE5',
+                color: '#2B2B2B',
+            },
+            '&:focus': { outline: 'none' }
+        },
+        '& .react-datepicker__day--disabled': {
+            opacity: 0.5,
+            fontWeight: 200,
+            '&.react-datepicker__day:hover': {
+                backgroundColor: 'transparent',
+                color: '#ECEBE5'
             }
+        },
+        '& .react-datepicker__day--selected': {
+            backgroundColor: '#ECEBE5',
+            color: '#2B2B2B',
+            fontWeight: 'bold',
+            '&:hover': { backgroundColor: 'rgba(236, 235, 229, 0.4)' }
         }
     }
 });

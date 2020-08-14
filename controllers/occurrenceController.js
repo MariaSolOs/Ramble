@@ -2,15 +2,14 @@
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
-      {calculatePaymentAmount} = require('../helpers/bookingHelpers'),
-      {startOfDay, endOfDay} = require('date-fns');
+      {calculatePaymentAmount, timeDateConvert} = require('../helpers/bookingHelpers');
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
     Occurrence.find({experience: req.params.expId, 
-                     date: {
-                        $gte: startOfDay(new Date(req.query.date)), 
-                        $lte: endOfDay(new Date(req.query.date))
+                     dateStart: {
+                        $gte: new Date(new Date(req.query.date).setUTCHours(0, 0, 0)), 
+                        $lte: new Date(new Date(req.query.date).setUTCHours(23, 59, 59))
                     }}, 
     'timeslot spotsLeft', (err, occ) => {
         if(err || !occ) {
@@ -24,22 +23,23 @@ exports.getExpOcurrences = (req, res) => {
 //For adding a booking to an existing/new occurrence
 exports.addBookingToOcurrence = async (req, res) => {
     try {
+        const dateStart = timeDateConvert(req.body.date, req.body.timeslot.split('-')[0]);
+        const dateEnd = timeDateConvert(req.body.date, req.body.timeslot.split('-')[1]);
+
         const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
 
         //Find or create the occurrence
         let occ = await Occurrence.findOne({
                             experience: experience._id,
-                            date: {
-                                $gte: startOfDay(new Date(req.body.date)), 
-                                $lte: endOfDay(new Date(req.body.date))
-                            },
+                            dateStart,
                             timeslot: req.body.timeslot
                         });
         if(!occ) {
             occ = new Occurrence({
                 experience: experience._id,
-                date: startOfDay(new Date(req.body.date)),
+                dateStart,
+                dateEnd,
                 timeslot: req.body.timeslot,
                 spotsLeft: experience.capacity,
                 creatorProfit: 0
@@ -79,6 +79,7 @@ exports.addBookingToOcurrence = async (req, res) => {
         res.status(201).send({message: 'Successfully added booking.'});
     }
     catch(err) {
+        console.log(err)
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
             res.redirect(307, '/api/stripe/payment-intent/cancel');

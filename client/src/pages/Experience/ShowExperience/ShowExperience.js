@@ -14,6 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Dialog from '@material-ui/core/Dialog';
 import ReferBox from '../../../components/ReferBox/ReferBox';
 import Experience from '../../../components/Experience/Experience';
+import Carousel from '../../../components/Carousel';
 import Footer from './Footer';
 
 //Styles
@@ -107,15 +108,18 @@ const ShowExperience = (props) => {
                 className={classes.goBackBtn} onClick={handleGoBack}>
                     <ChevronLeftIcon/>
                 </Fab>
-                <Experience exp={exp} 
-                floatButtons={
-                    <FloatButtons 
-                    showSave={props.isAuth}
-                    saved={saved}
-                    onSave={handleHeartClick}
-                    onShare={props.isAuth? handleDialogChange(true) : 
-                             props.dialogActions.openSignUpDialog}/>}
-                images={images}/>
+                <Carousel images={images}/>
+                <div className={classes.experienceWrapper}>   
+                    <Experience exp={exp} 
+                    floatButtons={
+                        <FloatButtons 
+                        showSave={props.isAuth}
+                        saved={saved}
+                        onSave={handleHeartClick}
+                        onShare={props.isAuth? handleDialogChange(true) : 
+                                props.dialogActions.openSignUpDialog}/>}
+                    images={images}/>
+                </div>
                 <Footer price={exp.price.perPerson} onBooking={handleBooking}/>
                 </>}
             {showBooking && <BookExperience 

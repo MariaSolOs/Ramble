@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AppBar = (props) => {
     const classes = useStyles();
-    const scrolledNav = useScrollTrigger();
+    const scrolledNav = useScrollTrigger({disableHysteresis: true});
 
     const {pathname} = useLocation();
 

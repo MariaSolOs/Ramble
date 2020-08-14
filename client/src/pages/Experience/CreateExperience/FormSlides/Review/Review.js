@@ -5,6 +5,7 @@ import {saveExperienceForm} from '../../../../../store/actions/experiences';
 //Components
 import Experience from '../../../../../components/Experience/Experience';
 import FloatButtons from '../../../../../components/ShareSaveButtons';
+import Carousel from '../../../../../components/Carousel';
 
 //Styles 
 import {makeStyles} from '@material-ui/core/styles';
@@ -28,9 +29,10 @@ const Review = ({review, images}) => {
             <h1 className={classes.title}>Review & Submit</h1>
             {review ? 
             <div className={classes.experience}>
-                <Experience exp={review}
-                floatButtons={<FloatButtons showSave/>}
-                images={carouselImgs}/>
+                <Carousel images={carouselImgs}/>
+                <Experience 
+                exp={review}
+                floatButtons={<FloatButtons showSave/>}/>
             </div> : 
             <p className={classes.description}>
                 Your experience couldn't be submitted.<br/>

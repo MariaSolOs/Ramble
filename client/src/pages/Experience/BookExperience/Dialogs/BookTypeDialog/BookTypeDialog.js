@@ -26,6 +26,9 @@ const BookTypeDialog = (props) => {
         getlabel: (num) => num > 1? 'Guests' : 'Guest'
     });
 
+    const privateEnabled = props.exp.price.private && 
+                           (props.exp.capacity === props.form.spotsLeft);
+
     //For updating form values
     const {onChange} = props;
     const handleBookTypeChange = (type) => (e) => {
@@ -33,10 +36,14 @@ const BookTypeDialog = (props) => {
     }
     useEffect(() => {
         onChange('numGuests', numGuests);
-    }, [onChange, numGuests])
+    }, [onChange, numGuests]);
+    //If private bookings are disabled, set option
+    useEffect(() => {
+        if(!privateEnabled) {
+            onChange('bookType', 'public');
+        }
+    }, [privateEnabled, onChange]);
 
-    const privateEnabled = props.exp.price.private && 
-                          (props.exp.capacity === props.form.spotsLeft);
 
     const privateBooking = privateEnabled && 
         <button className={`${classes.bookButton} private

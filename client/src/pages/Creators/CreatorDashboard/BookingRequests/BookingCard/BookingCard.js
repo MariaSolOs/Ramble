@@ -45,7 +45,7 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                 <div className="row">
                     <p className={classes.greyText}>For</p>
                     <p className={classes.whiteText}>
-                        {helpers.getFormattedDate(booking.occurrence.date)}
+                        {helpers.getFormattedDate(booking.occurrence.dateStart)}
                     </p>
                 </div>
                 <div className={`${classes.bookDetails} row`}>
@@ -81,10 +81,10 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                 <div className="row">
                     <p className={classes.greyText}>Currently for</p>
                     <p className={classes.whiteText}>
-                        {helpers.getFormattedDate(booking.occurrence.date)}
+                        {helpers.getFormattedDate(booking.occurrence.dateStart)}
                     </p>
                     <p className={classes.whiteText}>
-                        {`${fromHour} ${fromTime} - ${toTime} ${toHour}`}
+                        {`${fromHour} ${fromTime} - ${toHour} ${toTime}`}
                     </p>
                 </div>
                 <div className={classes.currentBookInfo}>

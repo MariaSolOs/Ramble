@@ -21,3 +21,22 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests) => {
         throw new Error(`Couldn't calculate amount: ${err}`);
     }
 }
+
+exports.timeDateConvert = (inputDate, time) => {
+    let date = new Date(inputDate);
+    let hours;
+    if(time.includes('AM')) {
+        if(time.startsWith('12')) {
+            hours = 0;
+            date.setDate(date.getDate() + 1);
+        } else {
+            hours = +time.slice(0, time.length - 2);
+        }
+    } else { //PM time
+        hours = +time.slice(0, time.length - 2) + 12;
+    }
+
+    const minutes = time.includes(':30')? 30 : 0;
+
+    return new Date((date.setUTCHours(hours, minutes, 0)));
+}

@@ -34,7 +34,7 @@ exports.getBookingRequests = async (req, res) => {
                 { path: 'experience',
                   select: 'title images capacity price' }, 
                 { path: 'occurrence',
-                  select: 'date timeslot spotsLeft creatorProfit' },
+                  select: 'dateStart timeslot spotsLeft creatorProfit' },
                 { path: 'client',
                   select: 'fstName city photo stripe' }
                 ]
@@ -71,8 +71,6 @@ exports.upgradeUserToCreator = async (req, res) => {
             stripe: { id: null }
         });
         await creator.save();
-        //Update user's info
-        req.user.phoneNumber = req.body.phoneNumber;
         req.user.creator = creator._id;
         await req.user.save();
         res.status(201).send({

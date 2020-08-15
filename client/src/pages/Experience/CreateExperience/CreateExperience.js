@@ -8,7 +8,7 @@ import {prepareReview} from './helpers';
 //Pages and components
 import * as slides from './FormSlides';
 import Intro from './Intro/Intro';
-import Submitted from './Submitted';
+import Submitted from './Submitted/Submitted';
 import Layout from './Layout/Layout';
 
 const CreateExperience = (props) => {
@@ -274,6 +274,7 @@ const CreateExperience = (props) => {
                 <Route path={pages.SUBMITTED}>
                     <Submitted/>
                 </Route>}
+            <Redirect to="/"/>
         </Switch>
     );
 }

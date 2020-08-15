@@ -2,13 +2,16 @@ import React from 'react';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faPhoneAlt} from '@fortawesome/free-solid-svg-icons/faPhoneAlt';
+import {faEnvelope} from '@fortawesome/free-solid-svg-icons/faEnvelope';
 
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
     paper: {
         backgroundColor: 'rgb(30, 30, 30)',
         borderRadius: '1.1rem',
-        padding: '2%',
+        padding: '2% 6% 2% 2%',
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
         letterSpacing: '-0.05rem',
@@ -25,6 +28,17 @@ const useStyles = makeStyles(() => ({
             color: '#ECEBE5',
             margin: 0
         }
+    },
+    content: { padding: 8 },
+
+    contactInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        '& svg': {
+            color: '#C0BFBA',
+            fontSize: '1.25rem',
+            marginRight: '1rem'
+        }
     }
 }));
 
@@ -40,8 +54,15 @@ const CustomerServiceDialog = (props) => {
                 <h4 className="title">Customer service</h4>
                 <p>24/7 service to help you anywhere, anytime</p>
             </div>
-            <DialogContent>
-                
+            <DialogContent className={classes.content}>
+                <div className={classes.contactInfo}>
+                    <FontAwesomeIcon icon={faPhoneAlt}/>
+                    <p>+ 1 (514) 654-7156</p>
+                </div>
+                <div className={classes.contactInfo}>
+                    <FontAwesomeIcon icon={faEnvelope}/>
+                    <p>support@ramble.com</p>
+                </div>
             </DialogContent>
         </Dialog>
     );

@@ -43,7 +43,7 @@ const PaymentMethod = (props) => {
             {cards.length > 0 && !showStripeInput?
             <div className={classes.savedCards}>
                 <Select
-                value={cards[0].id}
+                value={props.cardToUse || cards[0].id}
                 onChange={handleUseSavedCard}
                 input={<InputBase className={classes.input}/>}
                 MenuProps={{

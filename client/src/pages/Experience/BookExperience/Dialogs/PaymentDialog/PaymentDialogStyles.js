@@ -21,10 +21,8 @@ const styles = () => ({
     },
 
     expWrapper: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        marginBottom: '1.5rem'
+        width: '90%',
+        margin: '0 auto 1.5rem',
     },
 
     payMethod: {

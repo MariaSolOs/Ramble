@@ -1,22 +1,13 @@
 import React from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
-
 import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         width: 'auto',
-        margin: '0 auto',
-        '& > img': {
-            borderRadius: '0.5rem',
-            minWidth: 100,
-            maxWidth: '35%',
-            height: 150,
-            marginRight: '0.5rem'
-        }
+        margin: '0 auto'
     },
-    details: {
+    body: {
         display: 'flex',
         flexDirection: 'column',
         fontFamily: 'Helvetica, sans-serif',
@@ -25,49 +16,32 @@ const useStyles = makeStyles(() => ({
     },
     title: {
         color: '#FFF',
-        margin: '4px 0 10px'
+        fontSize: '1.3rem',
+        margin: '4px 0'
     },
-    date: {
+    details: {
         color: '#C8C8C8',
-        margin: 0,
+        margin: '5px 0 0',
         whiteSpace: 'nowrap'
-    },
-    creator: {
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: 10,
-        '& .photo': {
-            width: 30,
-            height: 30,
-            marginRight: 4 
-        },
-        '& span': { 
-            color: '#C8C8C8',
-            fontSize: '0.9rem'
-        }
     }
 }));
 
 const ExperienceSummary = ({date, timeslot, exp}) => {
     const classes = useStyles();
 
-    //To format the occurrence
-    const format = {year: 'numeric', month: 'short', day: 'numeric'};
-    const occString = `${new Date(date)
-                        .toLocaleDateString('en-US', format)}, ${timeslot.split('-')[0]}`;
+    //To format the occurrence's date
+    const format = {month: 'long', day: 'numeric', weekday: 'long'};
+
+    const dateString = new Date(date).toLocaleDateString('en-US', format);
 
     return (
         <div className={classes.root}>
-            <img 
-            src={exp.img.replace('h_400', 'h_200')}
-            alt={`Experience - ${exp.title}`}/>
-            <div className={classes.details}>
+            <div className={classes.body}>
                 <h4 className={classes.title}>{exp.title}</h4>
-                <h4 className={classes.date}>{occString}</h4>
-                <div className={classes.creator}>
-                    <Avatar src={exp.creator.user.photo} alt="Experience creator" className="photo"/>
-                    <span>{exp.creator.user.fstName}</span>
-                </div>
+                <p className={classes.details}>{dateString}</p>
+                <p className={classes.details}>
+                    {`${timeslot.split('-')[0]} - ${timeslot.split('-')[1]}`}
+                </p>
             </div>
         </div>
     );

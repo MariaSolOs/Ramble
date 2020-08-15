@@ -60,6 +60,7 @@ const PaymentDialog = (props) => {
                 </div>
                 <PaymentMethod
                 cards={props.cards}
+                cardToUse={props.form.cardToUse}
                 rememberCard={props.form.rememberCard}
                 onRememberCard={handleRememberCardChange}
                 onCardToUse={handleUseCardChange}

@@ -80,7 +80,7 @@ const Landing = (props) => {
                         </button>
                     </div>
                 </div>
-            <ReferBox shareUrl={process.env.REACT_APP_SHARE_LINK}/>
+            <ReferBox shareUrl={process.env.REACT_APP_SERVER}/>
             </div>
             <div className={classes.image}>
                 <img src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,g_north,h_700,w_550/v1/Ramble/Homepage/fireBalloon.jpeg`}

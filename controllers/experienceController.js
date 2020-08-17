@@ -53,9 +53,12 @@ exports.approveExp = (req, res) => {
             res.status(500).send({err: 'Failed to approve/disapprove experience.'});
         } else {
             const creator = await User.findOne({creator: exp.creator._id}, 'email');
+            const message = req.body.decision === 'approved'? `Your experience "${
+            exp.title}" has been approved. You're now ready to host your first guests!`
+            : `Your experience ${exp.title} is not ready to go live yet.` + 
+            'Please check your email for our feedback.';
             const notif = new Notification({
-                message: `Your experience "${exp.title}" has been ${
-                req.body.decision}.`,
+                message,
                 user: creator._id,
                 category: 'Creator-ExperienceDecision'
             });

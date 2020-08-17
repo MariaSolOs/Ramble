@@ -9,7 +9,8 @@ const styles = () => ({
         borderRadius: '1.5rem',
         display: 'flex',
         alignItems: 'center',
-        border: 'none',
+        border: props => 
+            props.isCreator? 'solid 1px black' : 'none',
         cursor: 'pointer',
         '&:focus': { outline: 'none' },
         '& span': {
@@ -46,8 +47,13 @@ const styles = () => ({
             justifyContent: 'center',
             padding: '6px 20px',
             margin: '0 0 4px 0',
-            '&:last-child': { margin: 0 },
             borderRadius: '0.65rem',
+
+            '&:first-child': {
+                textIndent: props => 
+                    props.withNotifIcon && 35
+            },
+            '&:last-child': { margin: 0 },
         },
         '& a.active, & a:hover': {
             backgroundColor: props => 
@@ -55,6 +61,20 @@ const styles = () => ({
                                  'rgba(118, 118, 118, 0.96)',
             transition: 'all 0.3s ease-in-out'
         }
+    },
+
+    numNotifs: {
+        borderRadius: '50%',
+        backgroundColor: '#F93E35',
+        color: '#FFF',
+        fontSize: '1rem',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 20, height: 20,
+        padding: 2,
+        marginLeft: 15,
+        textIndent: 0
     }
 });
 

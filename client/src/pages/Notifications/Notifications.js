@@ -1,10 +1,11 @@
 import React, {useCallback} from 'react';
-import {connect} from 'react-redux';
-import {deleteNotification} from '../../store/actions/user';
+import {useSelector} from 'react-redux';
+import axios from '../../tokenizedAxios';
 
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import EventBusyIcon from '@material-ui/icons/EventBusy';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './NotificationsStyles';
@@ -22,16 +23,23 @@ const Notifications = (props) => {
                 return time.slice(0, -2);
             case 'Creator-ExperienceDecision': 
                 return <CheckIcon fontSize="large"/>
+            case 'User-BookingRejected': 
+                return <EventBusyIcon fontSize="large"/>
             default: 
                 return <CheckIcon fontSize="large"/>
         }
-    }, []);   
+    }, []); 
+    
+    const notifs = useSelector(state => state.user.notifs);
+    const deleteNotif = useCallback((notifId) => (e) => {
+        axios.delete(`/api/profile/notifs/${notifId}`);
+    }, []);
 
     return (
         <div className={classes.root}>
             <div className={classes.shadowSeparator}/>
             <ul className={classes.notifList}>
-            {props.notifs.map(notif => (
+            {notifs.map(notif => (
                 <li 
                 key={notif._id}
                 className={classes.notif}>
@@ -42,7 +50,7 @@ const Notifications = (props) => {
                     {notif.message}
                     <HighlightOffIcon 
                     classes={{root: classes.deleteIcon}}
-                    onClick={props.deleteNotif(notif._id)}/>
+                    onClick={deleteNotif(notif._id)}/>
                 </li>
             ))}
             </ul>
@@ -50,11 +58,4 @@ const Notifications = (props) => {
     );
 }
 
-const mapStateToProps = (state) => ({
-    notifs: state.user.notifs
-});
-const mapDispatchToProps = (dispatch) => ({
-    deleteNotif: (notifId) => (e) => dispatch(deleteNotification(notifId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default Notifications;

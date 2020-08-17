@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
-import {startLoading, endLoading, showError, showSnackbar} from '../../../../store/actions/ui';
+import {showError, showSnackbar} from '../../../../store/actions/ui';
+import {deleteBookingRequest} from '../../../../store/actions/user';
 
 import BookingCard from './BookingCard/BookingCard';
 
@@ -12,38 +13,30 @@ const useStyles = makeStyles(styles);
 const BookingRequests = (props) => {
     const classes = useStyles();
 
-    //Fetch bookings on mounting 
-    const {startLoading, endLoading, showError, 
-           showSnackbar, creatorId, stripeId} = props;
-    const [bookings, setBookings] = useState();
+    const {showError, showSnackbar, creatorId, stripeId, 
+           bookingRequests, deleteRequest} = props;
+
+    //Make a copy of the bookings so that we can sort
+    const [bookings, setBookings] = useState([]);
     useEffect(() => {
-        startLoading();
-        axios.get('/api/creator/bookingRequests')
-        .then(res => {
-            setBookings(res.data.bookingRequests);
-            endLoading();
-        }).catch(err => { 
-            showError("We couldn't get your booking requests.");
-            endLoading();
-        });
-    }, [startLoading, endLoading, showError]);
+        setBookings(bookingRequests);
+    }, [bookingRequests]);
 
     //Handle accept/decline requests
-    const handleDecisionUnsavedCard = useCallback((action, stripeId) => (e) => {
+    const handleDecisionUnsavedCard = useCallback((action, stripeId, bookId) => 
+    (e) => {
         showSnackbar('Processing your decision...');
         //Action is either capture or cancel
         axios.post(`/api/stripe/payment-intent/${action}`, {stripeId})
         .then(res => {
-            setBookings(bookings => bookings.filter(booking => 
-                booking.stripe.paymentIntentId !== stripeId
-            ));
+            deleteRequest(bookId);
             const decision = action === 'capture'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         })
         .catch(err => {
             showError("We couldn't process your decision...");
         });
-    }, [showSnackbar, showError]);
+    }, [showSnackbar, showError, deleteRequest]);
     const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => 
     async (e) => {
         try {
@@ -61,15 +54,13 @@ const BookingRequests = (props) => {
             } else {
                 await axios.delete(`/api/creator/bookingRequests/${bookId}`);
             }
-            setBookings(bookings => bookings.filter(booking => 
-                booking._id !== bookId
-            ));
+            deleteRequest(bookId);
             const decision = action === 'approve'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         } catch(err) {
             showError("We couldn't process your decision...");
         } 
-    }, [showSnackbar, showError, creatorId, stripeId]);
+    }, [showSnackbar, showError, creatorId, stripeId, deleteRequest]);
 
     //To handle the sorting
     const sortByBookDate = useCallback(() => {
@@ -86,9 +77,9 @@ const BookingRequests = (props) => {
     const sortByExpDate = useCallback(() => {
         const bookingsCopy = bookings.slice(0);
         bookingsCopy.sort((book1, book2) => {
-            if(book1.occurrence.date < book2.occurrence.date) {
+            if(book1.occurrence.dateStart > book2.occurrence.dateStart) {
                 return 1;
-            } else if(book1.occurrence.date > book2.occurrence.date){
+            } else if(book1.occurrence.dateStart < book2.occurrence.dateStart){
                 return -1;
             } else { return 0; }
         });
@@ -109,7 +100,11 @@ const BookingRequests = (props) => {
                     booking={booking}
                     onAccept={
                         booking.stripe.paymentIntentId?
-                        handleDecisionUnsavedCard('capture', booking.stripe.paymentIntentId) :
+                        handleDecisionUnsavedCard(
+                            'capture', 
+                            booking.stripe.paymentIntentId,
+                            booking._id
+                        ) :
                         handleDecisionSavedCard('approve', 
                         { customerId: booking.client.stripe.customerId,
                           currency: booking.experience.price.currency,
@@ -118,7 +113,11 @@ const BookingRequests = (props) => {
                     }
                     onDecline={
                         booking.stripe.paymentIntentId?
-                        handleDecisionUnsavedCard('cancel', booking.stripe.paymentIntentId) :
+                        handleDecisionUnsavedCard(
+                            'cancel', 
+                            booking.stripe.paymentIntentId,
+                            booking._id
+                        ) :
                         handleDecisionSavedCard('cancel', 
                         { customerId: booking.client.stripe.customerId,
                           currency: booking.experience.price.currency,
@@ -134,13 +133,13 @@ const BookingRequests = (props) => {
 
 const mapStateToProps = (state) => ({
     creatorId: state.user.creator.id,
-    stripeId: state.user.creator.stripeId
+    stripeId: state.user.creator.stripeId,
+    bookingRequests: state.user.creator.bookingRequests
 });
 const mapDispatchToProps = (dispatch) => ({
-    startLoading: () => dispatch(startLoading()),
-    endLoading: () => dispatch(endLoading()),
     showError: (msg) => dispatch(showError(msg)),
-    showSnackbar: (msg) => dispatch(showSnackbar(msg))
+    showSnackbar: (msg) => dispatch(showSnackbar(msg)),
+    deleteRequest: (id) => dispatch(deleteBookingRequest(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookingRequests);

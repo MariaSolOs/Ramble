@@ -8,6 +8,7 @@ const User = require('../models/user'),
 
 //Helpers
 const getUserData = (user) => ({
+    id: user._id,
     fstName: user.fstName,
     lstName: user.lstName,
     photo: user.photo,
@@ -45,7 +46,8 @@ exports.getUserProfile = (req, res) => {
             }
         });
     } else {
-        Notification.find({user: req.user._id}, (err, notifs) => {
+        Notification.find({user: req.user._id}).sort({createdAt: -1})
+        .exec((err, notifs) => {
             if(err) {
                 return res.status(500).send({err: "Couldn't fetch notifications."});
             }

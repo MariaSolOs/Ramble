@@ -12,7 +12,10 @@ import styles from './ProfileMenuStyles';
 const useStyles = makeStyles(styles);
 
 const ProfileMenu = (props) => {
-    const classes = useStyles({isCreator: props.isCreator});
+    const classes = useStyles({
+        withNotifIcon: props.numNotifs > 0,
+        isCreator: props.isCreator
+    });
     const {closeParentMenu} = props;
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -45,16 +48,20 @@ const ProfileMenu = (props) => {
         transitionDuration={500}
         classes={{ paper: classes.menuPaper, list: classes.menuList }}>
             <MenuItem 
+            component={NavLink}
+            to="/notifications"
+            onClick={closeMenu}>
+                Notifications
+                {props.numNotifs > 0 &&
+                <div className={classes.numNotifs}>
+                    {props.numNotifs}
+                </div>}
+            </MenuItem>
+            <MenuItem 
             component={NavLink} 
             to="/profile/exp/past"
             onClick={closeMenu}>
                 View Profile
-            </MenuItem>
-            <MenuItem 
-            component={NavLink} 
-            to="/notifications"
-            onClick={closeMenu}>
-                Notifications
             </MenuItem>
             {props.isCreator && 
                 <MenuItem 

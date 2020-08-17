@@ -56,6 +56,28 @@ export const pageStyles = (theme) => ({
     }
 });
 
+export const mapStyles = () => ({
+    wrapper: {
+        '& .mapboxgl-map': {
+            borderRadius: '1.7rem'
+        }
+    },
+
+    marker: {
+        backgroundColor: 'rgba(197, 197, 197, 0.4)',
+        width: 40, height: 40,
+        borderRadius: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '& > div': {
+            backgroundColor: '#FFF' ,
+            width: 15, height: 15,
+            borderRadius: '100%'
+        }
+    }
+});
+
 export const creatorStyles = () => ({
     label: {
         fontSize: '1.2rem',

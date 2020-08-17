@@ -100,7 +100,7 @@ const ShowExperience = (props) => {
                 className={classes.shareDialog}
                 onClose={handleDialogChange(false)}>
                     <ReferBox shareUrl={`${
-                        process.env.REACT_APP_SHARE_LINK}experience/view/${
+                        process.env.REACT_APP_SERVER}/experience/view/${
                         exp._id
                     }`}/>
                 </Dialog>

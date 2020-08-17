@@ -19,6 +19,7 @@ const CreateExperience = (props) => {
     const [values, setValues] = useState({
         location: null,
         meetPoint: null,
+        coordinates: [],
         title: '',
         categories: [],
         description: '',

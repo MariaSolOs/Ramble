@@ -22,6 +22,10 @@ const ExperienceSchema = new mongoose.Schema({
             type: String,
             required: true
         },
+        coordinates: {
+            lat: Number,
+            long: Number
+        }
     },
     title: {
         type: String,

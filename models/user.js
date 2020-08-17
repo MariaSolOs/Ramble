@@ -40,6 +40,10 @@ const UserSchema = new mongoose.Schema({
     membershipProviderId: String,
     stripe: {
         customerId: String
+    },
+    emailSuscriptions: {
+        type: [String],
+        default: ['CalendarUpdateReminder']
     }
 }, {timestamps: true});
 

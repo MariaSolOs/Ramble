@@ -73,7 +73,11 @@ export const prepareReview = (values, user) => {
                 displayLocation: locArray.length === 3? 
                                 `${locArray[0]}, ${locArray[2]}` : 
                                 `${locArray[0]}, ${locArray[1]}`,
-                meetPoint: values.meetPoint
+                meetPoint: values.meetPoint,
+                coordinates: {
+                    lat: values.coordinates[0],
+                    long: values.coordinates[1]
+                }
             },
 
             title: values.title,

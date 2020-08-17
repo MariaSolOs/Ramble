@@ -1,29 +1,75 @@
 #!/usr/bin/env node
 
 require('dotenv').config({ path: '../.env' });
-const nodemailer = require('nodemailer');
+require('../config/mongoose');
+
+const nodemailer = require('nodemailer'),
+      fs = require('fs'),
+      handlebars = require('handlebars');
+
+const Experience = require('../models/experience'),
+      Creator = require('../models/creator'),
+      User = require('../models/user');
 
 //TODO: Finish these
 const calendarUpdateReminders = async () => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: process.env.ZOHO_EMAIL, 
-            pass: process.env.ZOHO_PASSWORD
+    console.log('JOB STARTS: CALENDAR UPDATE REMINDERS');
+    try {
+        //Find all experiences where the availability is about to expire
+        const in3Days = new Date();
+        in3Days.setDate(new Date().getDate() + 3);
+        const exps = await Experience.find({
+                            'avail.to': {$lte: in3Days},
+                            status: 'approved'
+                    }, 'title creator avail images')
+                    .populate({
+                        path: 'creator', 
+                        select: 'user',
+                        populate: {
+                            path: 'user',
+                            select: 'email'
+                        }}
+                    );
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.zoho.com',
+            port: 465,
+            secure: true, 
+            auth: {
+                user: process.env.ZOHO_EMAIL, 
+                pass: process.env.ZOHO_PASSWORD
+            }
+        });
+
+        const source = fs.readFileSync('../emailTemplates/creatorCalendarUpdate.html',
+                       'utf-8').toString();              
+        const template = handlebars.compile(source);
+
+        for(const exp of exps) {
+            const htmlToSend = template({
+                expTitle: exp.title,
+                expImage: exp.images[0]
+            });
+            try {
+                await transporter.sendMail({
+                    from: process.env.ZOHO_EMAIL, 
+                    //to: exp.creator.user.email,
+                    to: 'majosolano99@gmail.com',
+                    subject: 'Time to update your calendar!', 
+                    text: '', 
+                    html: htmlToSend
+                });
+            } catch(err) { 
+                console.log(`ERROR SENDING EMAIL: ${err}`);
+                continue; 
+            }
         }
-    });
 
-    const info = await transporter.sendMail({
-        from: process.env.ZOHO_EMAIL, 
-        to: 'majosolano99@gmail.com', 
-        subject: 'Time to update your calendar!', 
-        text: 'Ramblastic', // plain text body
-        html: "<b>Ramblastic?</b>", // html body
-    });
-
-    console.log('Message sent:', info.messageId);
+        console.log('JOB SUCCESS: CALENDAR UPDATE REMINDERS');
+    } catch(err) {
+        console.log(`JOB FAILED: CALENDAR UPDATE REMINDERS - ${err}`);
+    }
+    process.exit();
 }
 
-calendarUpdateReminders().catch(console.error);
+calendarUpdateReminders();

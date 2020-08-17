@@ -3,7 +3,8 @@ const cloudinary = require('cloudinary').v2;
 //Models
 const Creator = require('../models/creator'),
       Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
+      Booking = require('../models/booking'),
+      Notification = require('../models/notification');
 
 //Helpers
 const getCreatorProfile = (creator) => ({
@@ -16,17 +17,6 @@ const getCreatorProfile = (creator) => ({
 exports.getCreatorProfile = (req, res) => {
     req.user.populate('creator').execPopulate()
     .then(async user => {
-        res.status(200).send({ 
-            creatorProfile: getCreatorProfile(user.creator)
-        });
-    })
-    .catch(err => {
-        res.status(500).send({err: "Couldn't fetch creator profile."});
-    });
-}
-exports.getBookingRequests = async (req, res) => {
-    req.user.populate('creator')
-    .execPopulate().then(async user => {
         try {
             const {bookingRequests} = await user.creator.populate({
                 path: 'bookingRequests',
@@ -39,12 +29,19 @@ exports.getBookingRequests = async (req, res) => {
                   select: 'fstName city photo stripe' }
                 ]
             }).execPopulate();
-            return res.status(200).send({ bookingRequests });
+
+            res.status(200).send({ 
+                creatorProfile: {
+                    ...getCreatorProfile(user.creator),
+                    bookingRequests
+                }
+            });
         } catch(err) {
             res.status(500).send({err: 'Failed to get booking requests.'});
         }
-    }).catch(err => {
-        res.status(500).send({err: 'Failed to get booking requests.'});
+    })
+    .catch(err => {
+        res.status(500).send({err: "Couldn't fetch creator profile."});
     });
 }
 
@@ -100,17 +97,28 @@ exports.editCreatorProfile = async (req, res) => {
 we don't need Stripe */
 exports.deleteBookingRequest = async (req, res) => {
     try {
-        const booking = await Booking.findByIdAndRemove(req.params.bookId);
+        const booking = await Booking.findByIdAndRemove(req.params.bookId, 
+                        {select: 'client experience numPeople'})
+                        .populate('experience', 'title');
         //Update occurrence and creator's requests
-        await Creator.findOneAndUpdate({user: req.userId}, 
-              {$pull: {bookingRequests: booking._id}});
+        const creator = await Creator.findOneAndUpdate({user: req.userId}, 
+                        {$pull: {bookingRequests: booking._id}}, {select: 'user'})
+                        .populate('user', 'fstName');
         await Occurrence.findByIdAndUpdate(booking.occurrence, {
             $pull: {bookings: booking._id},
             $inc: {spotsLeft: booking.numPeople}
         });
+        //Let the user know of the creator's decision
+        await Notification.create({
+            message: `${creator.user.fstName} had to cancel the booking for "${
+            booking.experience.title}".`,
+            user: booking.client,
+            category: 'User-BookingRejected'
+        });
 
         return res.status(200).send({message: 'Booking deleted'});
     } catch(err) {
+        console.log(err)
         res.status(409).send({err: "Couldn't delete booking."});
     }
 }

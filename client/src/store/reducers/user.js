@@ -4,6 +4,7 @@ const initialState = {
     token: null,
     isAdmin: false,
     profile: {
+        id: '',
         fstName: '',
         lstName: '',      
         photo: '',
@@ -17,7 +18,8 @@ const initialState = {
     creator: {
         id: null,
         stripeId: null,
-        bio: ''
+        bio: '',
+        bookingRequests: []
     }
 }
 
@@ -29,6 +31,7 @@ const authReducer = (state = initialState, action) => {
                 token: action.token,
                 isAdmin: action.isAdmin,
                 profile: { ...action.profile },
+                notifs: [...action.notifs]
             }
         }
         case types.SET_CREATOR_PROFILE: {
@@ -39,18 +42,29 @@ const authReducer = (state = initialState, action) => {
                 }
             }
         }
-        case types.SET_NOTIFICATIONS: {
+        case types.DELETE_BOOKING_REQUEST: {
             return {
                 ...state,
-                notifs: action.notifs.slice(0)
+                creator: {
+                    ...state.creator,
+                    bookingRequests: state.creator.bookingRequests.filter(req => (
+                        req._id !== action.bookingId
+                    ))
+                }
+            }
+        }
+        case types.ADD_NOTIFICATION: {
+            return {
+                ...state,
+                notifs: [...state.notifs, action.notif]
             }
         }
         case types.DELETE_NOTIFICATION: {
             return {
                 ...state,
-                notifs: state.notifs.filter(notif => 
-                            notif._id !== action.id
-                        )
+                notifs: state.notifs.filter((notif) => 
+                    notif._id !== action.notifId
+                )
             }
         }
         case types.RESET_USER: {

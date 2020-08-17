@@ -54,7 +54,7 @@ const styles = (theme) => ({
             fontWeight: 'bold',
             fontSize: '0.9rem',
             letterSpacing: '-0.07rem',
-            color: '#FFF',
+            color: '#E8E8E8',
             textAlign: 'center',
             justifyContent: 'center',
             borderRadius: '0.65rem',
@@ -79,6 +79,19 @@ const styles = (theme) => ({
         display: 'flex',
         alignItems: 'center',
         margin: '0 10px 0 0'
+    },
+
+    numBookings: {
+        borderRadius: '50%',
+        backgroundColor: '#F93E35',
+        color: '#FFF',
+        fontSize: '1rem',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 20, height: 20,
+        padding: 2,
+        marginRight: '0.3rem'    
     }
 });
 

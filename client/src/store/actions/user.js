@@ -3,17 +3,20 @@ import {startLoading, endLoading, showError, showSnackbar} from './ui';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const setProfile = (token, isAdmin, profile) => ({ 
-    type: types.SET_PROFILE, token, isAdmin, profile
+const setProfile = (token, isAdmin, profile, notifs) => ({ 
+    type: types.SET_PROFILE, token, isAdmin, profile, notifs
 });
 const setCreatorProfile = (creatorProfile) => ({
     type: types.SET_CREATOR_PROFILE, creatorProfile
 });
-const setNotifs = (notifs) => ({
-    type: types.SET_NOTIFICATIONS, notifs
+export const deleteBookingRequest = (bookingId) => ({
+    type: types.DELETE_BOOKING_REQUEST, bookingId
 });
-const deleteNotif = (id) => ({
-    type: types.DELETE_NOTIFICATION, id
+export const addNotif = (notif) => ({
+    type: types.ADD_NOTIFICATION, notif
+});
+export const deleteNotif = (notifId) => ({
+    type: types.DELETE_NOTIFICATION, notifId
 });
 
 const resetUser = () => ({ type: types.RESET_USER });
@@ -38,11 +41,9 @@ export const fetchUserProfile = () => {
                 dispatch(setProfile(
                     res.data.token,
                     res.data.isAdmin,
-                    res.data.userData
+                    res.data.userData,
+                    res.data.isAdmin? [] : res.data.notifications
                 )); 
-                if(!res.data.isAdmin) {
-                    dispatch(setNotifs(res.data.notifications));
-                }
                 dispatch(endLoading());  
             } else { dispatch(resetUser()); }
         })
@@ -129,19 +130,6 @@ export const upgradeToCreator = (creatorInfo) => {
         .catch(err => {
             console.log(`CREATOR CREATION FAILED: ${err}`);
             dispatch(showError("We couldn't submit your form..."));
-        });
-    }
-}
-
-export const deleteNotification = (notifId) => {
-    return dispatch => {
-        axios.delete(`/api/profile/notifs/${notifId}`)
-        .then(res => {
-            //Update notifications
-            dispatch(deleteNotif(notifId));
-        })
-        .catch(err => {
-            console.log(`COULDN'T DELETE NOTIFICATION: ${err}`);
         });
     }
 }

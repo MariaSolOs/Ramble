@@ -204,15 +204,15 @@ const expStatus = ['pending', 'approved', 'refused'];
 
 const seedDB = async () => {
     //Clear database
-    try {
-        await Booking.collection.drop();
-        await Occurrence.collection.drop();
-        await Experience.collection.drop();
-    } catch(err) {
-        console.log("Couldn't clear database.");
-        return;
-    }
-    console.log('Database cleared.');
+    // try {
+    //     await Booking.collection.drop();
+    //     await Occurrence.collection.drop();
+    //     await Experience.collection.drop();
+    // } catch(err) {
+    //     console.log("Couldn't clear database.");
+    //     return;
+    // }
+    // console.log('Database cleared.');
 
     // const creator = new Creator({
     //     name: 'Maria',
@@ -225,39 +225,46 @@ const seedDB = async () => {
     //     }
     // });
     // await creator.save();
-    const creator = await Creator.findById('5f21b3176a6c734261291a0a');
+    //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    [...experienceData, ...experienceData, ...experienceData]
-    .forEach(async seed => {
-        const exp = new Experience(seed);
-        exp.status = expStatus[Math.round(Math.random())]
-        exp.location.displayLocation = `${exp.location.city}, ${exp.location.region}`;
-        const randImgIndex = Math.floor(Math.random() * 6);
-        exp.images.push(images[randImgIndex]);
-        exp.images.push(images[(randImgIndex + 1) % 6]);
-        exp.images.push(images[(randImgIndex + 2) % 6]);
-        exp.location.meetPoint = 'McGill University';
-        exp.setting = 'semi-private';
-        exp.duration = 2;
-        exp.ageRestriction = 15;
-        exp.avail = {};
-        exp.avail.from = new Date('July July 27 2020');
-        exp.avail.to = new Date('Sunday August 30 2020');
-        exp.avail.schedule = {Tuesday: ['8AM-10AM'],
-                              Thursday: ['8AM-10AM', '2:30PM-4:30PM', '4:30PM-6:30PM'],
-                              Friday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM', '10PM-12AM'],
-                              Saturday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM']};
-        exp.price.currency = 'CAD';
-        exp.languages = ['English', 'Español'];
-        exp.capacity = Math.floor(Math.random() * 7) + 1;
-        exp.description = "Poutine chartreuse cray, pickled hoodie enamel pin quinoa fixie chicharrones vinyl. Scenester humblebrag hammock polaroid, poutine authentic church-key single-origin coffee paleo tofu iceland mixtape XOXO before they sold out hell of. Succulents 3 wolf moon keffiyeh tousled. Succulents chartreuse waistcoat, normcore cliche YOLO retro.",
-        exp.included = ['drinks', 'equipment', 'transport'];
-        exp.bring = ['stickers', 'spoons'];
-        exp.rating = 4.91;
-        //I create everything
-        exp.creator = creator._id;
-        await exp.save();
+    Experience.find({}, async (err, exps) => {
+        for(const exp of exps) {
+            exp.location.coordinates.lat = 37.7577;
+            exp.location.coordinates.long = -122.4376;
+            await exp.save();
+        }
     });
+    // [...experienceData, ...experienceData, ...experienceData]
+    // .forEach(async seed => {
+    //     const exp = new Experience(seed);
+    //     exp.status = expStatus[Math.round(Math.random())]
+    //     exp.location.displayLocation = `${exp.location.city}, ${exp.location.region}`;
+    //     const randImgIndex = Math.floor(Math.random() * 6);
+    //     exp.images.push(images[randImgIndex]);
+    //     exp.images.push(images[(randImgIndex + 1) % 6]);
+    //     exp.images.push(images[(randImgIndex + 2) % 6]);
+    //     exp.location.meetPoint = 'McGill University';
+    //     exp.setting = 'semi-private';
+    //     exp.duration = 2;
+    //     exp.ageRestriction = 15;
+    //     exp.avail = {};
+    //     exp.avail.from = new Date('July July 27 2020');
+    //     exp.avail.to = new Date('Sunday August 30 2020');
+    //     exp.avail.schedule = {Tuesday: ['8AM-10AM'],
+    //                           Thursday: ['8AM-10AM', '2:30PM-4:30PM', '4:30PM-6:30PM'],
+    //                           Friday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM', '10PM-12AM'],
+    //                           Saturday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM']};
+    //     exp.price.currency = 'CAD';
+    //     exp.languages = ['English', 'Español'];
+    //     exp.capacity = Math.floor(Math.random() * 7) + 1;
+    //     exp.description = "Poutine chartreuse cray, pickled hoodie enamel pin quinoa fixie chicharrones vinyl. Scenester humblebrag hammock polaroid, poutine authentic church-key single-origin coffee paleo tofu iceland mixtape XOXO before they sold out hell of. Succulents 3 wolf moon keffiyeh tousled. Succulents chartreuse waistcoat, normcore cliche YOLO retro.",
+    //     exp.included = ['drinks', 'equipment', 'transport'];
+    //     exp.bring = ['stickers', 'spoons'];
+    //     exp.rating = 4.91;
+    //     //I create everything
+    //     exp.creator = creator._id;
+    //     await exp.save();
+    // });
     console.log('Database populated.');
 }
 

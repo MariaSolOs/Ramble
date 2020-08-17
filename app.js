@@ -5,8 +5,8 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       morgan = require('morgan'),
       path = require('path'),
-      compression = require('compression'),
-      seedDB = require('./experienceSeeds');
+      compression = require('compression');
+      //seedDB = require('./experienceSeeds'),
 
 //Setting environment variables
 const PORT = process.env.PORT || 5000;
@@ -14,6 +14,11 @@ const PORT = process.env.PORT || 5000;
 //Global configurations
 require('./config/mongoose');
 require('./config/cloudinary');
+
+//Set up the socket for notifications
+const server = require('http').createServer(app),
+      io = require('socket.io')(server, {path: '/ramble/socket.io'});
+require('./config/socket')(io);
 
 //Seed experience database
 //seedDB();
@@ -71,7 +76,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Ramble app on port ${PORT}.`);
 });
 

@@ -6,6 +6,7 @@ import CategoryBox from '../CategoryBox';
 import QuickInfos from './QuickInfos';
 import CreatorInfo from './Creator';
 import Description from './Description';
+import ExperienceMap from './ExperienceMap';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -41,10 +42,8 @@ const Experience = ({exp, floatButtons}) => {
             description={exp.description} 
             includedItems={exp.included}
             toBringItems={exp.toBring}/>
-            <Description 
-            description={exp.description} 
-            includedItems={exp.included}
-            toBringItems={exp.toBring}/>
+            {exp.location.coordinates.lat && 
+                <ExperienceMap coordinates={exp.location.coordinates}/>}
         </div>
     );
 }

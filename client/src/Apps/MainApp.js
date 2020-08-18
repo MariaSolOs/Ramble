@@ -58,7 +58,7 @@ const MainApp = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.token !== null,
+    isAuth: state.user.profile.id !== null,
     isAdmin: state.user.isAdmin,
     loading: state.ui.loading,
     msg: state.ui.message,

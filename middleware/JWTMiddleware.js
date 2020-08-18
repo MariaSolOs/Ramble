@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken'),
       {generateAccessToken} = require('../helpers/JWTHelpers');
 
 exports.authenticateToken = (req, res, next) => {
+    let token;
     //Gather the jwt access token from the request header
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    token = authHeader && authHeader.split(' ')[1];
     if(!token) {
         return res.status(401).send({ error: 'Unauthorized.' });
     }
@@ -32,12 +33,13 @@ exports.authenticateToken = (req, res, next) => {
 }
 
 exports.validateStripeState = (req, res, next) => {
-    const stripeToken = req.query.state;
+    const stripeState = req.query.state;
     jwt.verify(stripeToken, process.env.JWT_SECRET, (err, decoded) => {
         if(err) { 
-            return res.status(403).json({error: `Incorrect state parameter: ${state}`});
-        } 
-        req.userId = decoded.userId;
-        next(); 
+            res.status(401).send({error: `Invalid state parameter: ${stripeState}`});
+        } else {
+            req.userId = decoded.userId;
+            next(); 
+        }
     });
 }

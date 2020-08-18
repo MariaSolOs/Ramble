@@ -3,13 +3,20 @@ const styles = () => ({
         display: 'flex',
         minHeight: '70vh',
         width: '90%',
-        margin: '12vh auto 5vh'
+        margin: '13vh auto 5vh',
+        '& .body': { width: '100%' }
     },
     shadowSeparator: {
         padding: 5,
         borderRadius: '2rem',
         marginRight: '3%',
         background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
+    },
+    title: {
+        fontFamily: 'Helvetica, sans-serif',
+        fontWeight: 'bold',
+        letterSpacing: '-0.05rem',
+        color: '#FFF'
     },
 
     notifList: {
@@ -31,7 +38,7 @@ const styles = () => ({
     notifIcon: {
         fontWeight: 'bold',
         marginRight: '1rem',
-        width: 50, height: 50,
+        width: 40, height: 40,
         cursor: 'default'
     },
     deleteIcon: {

@@ -125,8 +125,8 @@ const CollapsingNav = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: (state.user.token !== null),
-    isCreator: (state.user.creator.id !== null),
+    isAuth: state.user.profile.id !== null,
+    isCreator: state.user.creator.id !== null,
     numNotifs: state.user.notifs.length,
     numBookings: state.user.creator.bookingRequests.length,
     userName: state.user.profile.fstName,

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {editProfile} from '../../../store/actions/user';
+import {editUserProfile} from '../../../store/actions/user';
 import {showSnackbar} from '../../../store/actions/ui';
 import {useLocation} from 'react-router-dom';
 import Files from 'react-butterfiles';
@@ -74,7 +74,7 @@ const mapStateToProps = (state) => ({
     city: state.user.profile.city
 });
 const mapDispatchToProps = (dispatch) => ({
-    changeProfilePic: (photo) => dispatch(editProfile({photo})),
+    changeProfilePic: (photo) => dispatch(editUserProfile({photo})),
     showError: () => dispatch(showSnackbar("We couldn't change your profile picture..."))
 });
 

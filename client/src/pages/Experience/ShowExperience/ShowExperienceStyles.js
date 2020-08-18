@@ -5,7 +5,8 @@ const styles = (theme) => ({
         margin: '12vh 0 0',
         height: '84vh',
         width: '100vw',
-        padding: '2vh 15% 2vh 9%',
+        boxSizing: 'border-box',
+        padding: '2vh 12% 2vh 9%',
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: '#151515',
@@ -22,7 +23,7 @@ const styles = (theme) => ({
 
         '& .image-gallery': {
             position: 'sticky',
-            minWidth: '35%',
+            minWidth: '45%',
             maxWidth: 490,
             maxHeight: '80vh',
             [theme.breakpoints.down('sm')]: { 

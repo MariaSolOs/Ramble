@@ -281,7 +281,7 @@ const CreateExperience = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.token,
+    isAuth: state.user.profile.id,
     userProfile: state.user.profile,
     creatorId: state.user.creator.id,
     creatorBio: state.user.creator.bio

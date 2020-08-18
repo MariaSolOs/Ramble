@@ -18,7 +18,7 @@ const gridImages = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINA
 const BecomeACreator = (props) => {
     const classes = useStyles();
 
-    const isAuth = useSelector(state => state.user.token !== null);
+    const isAuth = useSelector(state => state.user.profile.id !== null);
     const isCreator = useSelector(state => state.user.creator.id !== null);
 
     return (

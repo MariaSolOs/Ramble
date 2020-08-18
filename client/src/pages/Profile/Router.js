@@ -5,9 +5,10 @@ import {useRouteMatch, Switch, Route, useLocation} from 'react-router-dom';
 import Layout from './Layout/Layout';
 import PastExperiences from './UserExperiences/UserPastExperiences';
 import SavedExperiences from './UserExperiences/UserSavedExperiences';
-import Info from './UserInfo';
+import Info from './UserInfo/UserInfo';
 import PaymentInfo from './PaymentInfo/PaymentInfo';
 
+//TODO: Add email suscriptions page
 const Router = (props) => {
     const {path} = useRouteMatch();
     const location = useLocation();

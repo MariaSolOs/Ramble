@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {showSnackbar} from '../../../store/actions/ui';
-import {upgradeToCreator, editProfile} from '../../../store/actions/user';
+import {upgradeToCreator, editUserProfile} from '../../../store/actions/user';
 import {useHistory} from 'react-router-dom';
 import Files from 'react-butterfiles';
 
@@ -258,7 +258,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     upgradeToCreator: (info) => dispatch(upgradeToCreator(info)),
-    updateProfile: (info) => dispatch(editProfile(info)),
+    updateProfile: (info) => dispatch(editUserProfile(info)),
     showSnackbar: (msg) => dispatch(showSnackbar(msg))
 });
 

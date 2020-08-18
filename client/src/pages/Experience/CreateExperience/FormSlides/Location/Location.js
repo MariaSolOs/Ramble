@@ -30,6 +30,7 @@ const Location = ({location, meetPoint, submitInput}) => {
         submitInput(type, '');
     }
 
+    //TODO: Filter address results better
     return (
         <>
             <div className={`${classes.location} ${classes.searchContainer}`}>

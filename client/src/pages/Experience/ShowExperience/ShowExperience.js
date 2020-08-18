@@ -23,6 +23,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);
 
+//TODO: See why Safari is weird in this page
 const ShowExperience = (props) => {
     const classes = useStyles();
 
@@ -131,7 +132,7 @@ const ShowExperience = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.token !== null,
+    isAuth: state.user.profile.id !== null,
     user: state.user.profile,
     userExps: state.exp.savedExps.map(exp => exp._id)
 });

@@ -1,3 +1,5 @@
+const {generateAccessToken} = require('../helpers/JWTHelpers');
+
 const User = require('../models/user'), 
       Admin = require('../models/admin');
 
@@ -57,6 +59,19 @@ exports.registerAdmin = (req, res, next) => {
             return res.status(201).send({message: 'Successfully added admin'});
         }
     }).catch(err => { next(err); });
+}
+
+exports.authenticateUserFromEmail = (req, res) => {
+    const token = generateAccessToken(req.params.userId, false, '12h');
+    res.cookie('token', token);
+    let redirectTo;
+    switch(req.params.emailType) {
+        case 'calendar-update':  
+            redirectTo = '/creator/dashboard/calendar';
+            break;
+        default: '';
+    }
+    return res.redirect(`${process.env.CLIENT_URL}${redirectTo}`);
 }
 
 //Logout route

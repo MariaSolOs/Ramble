@@ -3,7 +3,7 @@ import {startLoading, endLoading, showError, showSnackbar} from './ui';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const setProfile = (token, isAdmin, profile, notifs) => ({ 
+const setProfile = (token, isAdmin, profile, notifs = []) => ({ 
     type: types.SET_PROFILE, token, isAdmin, profile, notifs
 });
 const setCreatorProfile = (creatorProfile) => ({
@@ -97,7 +97,7 @@ export const emailAuth = (userInfo, authType) => {
 }
 
 //For editing user info
-export const editProfile = (updatedInfo, showSuccessSnackbar = false) => {
+export const editUserProfile = (updatedInfo, showSuccessSnackbar = false) => {
     return dispatch => {
         axios.put('/api/profile/edit', updatedInfo)
         .then(res => {
@@ -117,6 +117,19 @@ export const editProfile = (updatedInfo, showSuccessSnackbar = false) => {
         .catch(err => {
             console.log(`EDIT PROFILE FAILED: ${err}`);
             dispatch(showError("We couldn't update your profile..."));
+        });
+    }
+}
+export const editCreatorProfile = (updatedInfo, creatorId) => {
+    return dispatch => {
+        axios.patch(`/api/creator/${creatorId}`, updatedInfo)
+        .then(res => {
+            if(res.status === 201) {
+                dispatch(setCreatorProfile(res.data.profile));
+            }
+        })
+        .catch(err => {
+            console.log(`EDIT PROFILE FAILED: ${err}`);
         });
     }
 }

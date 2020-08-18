@@ -3,9 +3,10 @@ import {useSelector} from 'react-redux';
 import axios from '../../tokenizedAxios';
 
 import Fab from '@material-ui/core/Fab';
-import CheckIcon from '@material-ui/icons/Check';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import EventBusyIcon from '@material-ui/icons/EventBusy';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCheckCircle} from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './NotificationsStyles';
@@ -22,11 +23,11 @@ const Notifications = (props) => {
                 const time = notif.message.match(timeRegex)[0];
                 return time.slice(0, -2);
             case 'Creator-ExperienceDecision': 
-                return <CheckIcon fontSize="large"/>
+                return <FontAwesomeIcon icon={faCheckCircle}/>
             case 'User-BookingRejected': 
-                return <EventBusyIcon fontSize="large"/>
+                return <EventBusyIcon/>
             default: 
-                return <CheckIcon fontSize="large"/>
+                return <FontAwesomeIcon icon={faCheckCircle}/>
         }
     }, []); 
     
@@ -38,22 +39,29 @@ const Notifications = (props) => {
     return (
         <div className={classes.root}>
             <div className={classes.shadowSeparator}/>
-            <ul className={classes.notifList}>
-            {notifs.map(notif => (
-                <li 
-                key={notif._id}
-                className={classes.notif}>
-                    <Fab classes={{root: classes.notifIcon}}
-                    disableRipple>
-                        {getNotifIcon(notif)}
-                    </Fab>
-                    {notif.message}
-                    <HighlightOffIcon 
-                    classes={{root: classes.deleteIcon}}
-                    onClick={deleteNotif(notif._id)}/>
-                </li>
-            ))}
-            </ul>
+            <div className="body">
+                <h1 className={classes.title}>Notifications</h1>
+                <ul className={classes.notifList}>
+                {notifs.length > 0?
+                    notifs.map(notif => (
+                        <li 
+                        key={notif._id}
+                        className={classes.notif}>
+                            <Fab classes={{root: classes.notifIcon}}
+                            disableRipple>
+                                {getNotifIcon(notif)}
+                            </Fab>
+                            {notif.message}
+                            <HighlightOffIcon 
+                            classes={{root: classes.deleteIcon}}
+                            onClick={deleteNotif(notif._id)}/>
+                        </li>
+                    )) : 
+                    <h3 className={classes.title}>
+                        You're up to date!
+                    </h3>}
+                </ul>
+            </div>
         </div>
     );
 }

@@ -11,8 +11,7 @@ const Experience = require('../models/experience'),
       Creator = require('../models/creator'),
       User = require('../models/user');
 
-//TODO: Finish these
-const calendarUpdateReminders = async () => {
+const creatorCalendarUpdate = async () => {
     console.log('JOB STARTS: CALENDAR UPDATE REMINDERS');
     try {
         //Find all experiences where the availability is about to expire
@@ -21,7 +20,7 @@ const calendarUpdateReminders = async () => {
         const exps = await Experience.find({
                             'avail.to': {$lte: in3Days},
                             status: 'approved'
-                    }, 'title creator avail images')
+                    }, 'title creator avail images location')
                     .populate({
                         path: 'creator', 
                         select: 'user',
@@ -48,15 +47,22 @@ const calendarUpdateReminders = async () => {
         for(const exp of exps) {
             const htmlToSend = template({
                 expTitle: exp.title,
-                expImage: exp.images[0]
+                expImage: exp.images[0],
+                expLocation: exp.location.displayLocation,
+                authUrl: `https://reramble.herokuapp.com/api/auth/email-link/calendar-update/${
+                exp.creator.user._id}`
             });
             try {
                 await transporter.sendMail({
-                    from: process.env.ZOHO_EMAIL, 
-                    //to: exp.creator.user.email,
-                    to: 'majosolano99@gmail.com',
+                    from: {
+                        name: 'ramble',
+                        address: process.env.ZOHO_EMAIL
+                    }, 
+                    to: exp.creator.user.email,
                     subject: 'Time to update your calendar!', 
-                    text: '', 
+                    text: `Your availabilities for "${exp.title}" need to be updated. ` + 
+                          'Go to your Creator dashboard and list your availabilities' + 
+                          ' for the next period.', 
                     html: htmlToSend
                 });
             } catch(err) { 
@@ -72,4 +78,4 @@ const calendarUpdateReminders = async () => {
     process.exit();
 }
 
-calendarUpdateReminders();
+creatorCalendarUpdate();

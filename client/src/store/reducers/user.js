@@ -1,10 +1,9 @@
 import {userTypes as types} from '../actionTypes';
 
 const initialState = {
-    token: null,
     isAdmin: false,
     profile: {
-        id: '',
+        id: null,
         fstName: '',
         lstName: '',      
         photo: '',
@@ -38,7 +37,10 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 creator: {
-                    ...action.creatorProfile
+                    ...action.creatorProfile,
+                    bookingRequests: action.creatorProfile.bookingRequests?
+                                     action.creatorProfile.bookingRequests :
+                                     state.creator.bookingRequests
                 }
             }
         }
@@ -56,7 +58,7 @@ const authReducer = (state = initialState, action) => {
         case types.ADD_NOTIFICATION: {
             return {
                 ...state,
-                notifs: [...state.notifs, action.notif]
+                notifs: [action.notif, ...state.notifs]
             }
         }
         case types.DELETE_NOTIFICATION: {

@@ -4,8 +4,8 @@ export const pageStyles = (theme) => ({
         fontWeight: 'bold',
         display: 'flex',
         flexDirection: 'column',
-        width: '55%',
-        marginLeft: '3%',
+        width: '83%',
+        marginLeft: '4%',
         [theme.breakpoints.down('sm')]: { 
             width: '80%',
             margin: '0 auto'
@@ -60,7 +60,8 @@ export const mapStyles = () => ({
     wrapper: {
         '& .mapboxgl-map': {
             borderRadius: '1.7rem'
-        }
+        },
+        '& div > *': { cursor: 'default' }
     },
 
     marker: {

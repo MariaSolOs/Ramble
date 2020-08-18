@@ -2,6 +2,7 @@ const mongoose = require('mongoose'),
       db = mongoose.connection,
       jwt = require('jsonwebtoken');
 
+//TODO: Add live booking changes
 module.exports = (io) => {
     db.on('error', console.error.bind(console, 'Mongoose connection Error: '));
 
@@ -18,15 +19,15 @@ module.exports = (io) => {
               });
             }
             else { next(new Error('Socket authentication error')); }    
-          }).on('connection', (socket) => {    
-                console.log('New connection', socket.id)
-                changeStream.on('change', (change) => {
-                    if(change.operationType === 'insert') {
-                        socket.emit('notifAdded', change.fullDocument);
-                    } else if(change.operationType === 'delete') {
-                        socket.emit('notifDeleted', change.documentKey._id);
-                    }
-                });
+        }).on('connection', (socket) => {   
+            //Update notifications live
+            changeStream.on('change', (change) => {
+                if(change.operationType === 'insert') {
+                    socket.emit('notifAdded', change.fullDocument);
+                } else if(change.operationType === 'delete') {
+                    socket.emit('notifDeleted', change.documentKey._id);
+                }
+            });
         });
     });
 }

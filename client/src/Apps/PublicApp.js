@@ -18,8 +18,8 @@ const CreatorRouter = React.lazy(() => import('../pages/Creators/Router'));
 
 const PublicApp = (props) => {
     useNotifications();
-    
-    //Keep token updated
+
+    //Used for FB/Google redirects
     const cookieToken = Cookies.get('token');
     useEffect(() => {
         const storedToken = window.localStorage.getItem('token');
@@ -63,7 +63,7 @@ const PublicApp = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.token !== null,
+    isAuth: state.user.profile.id !== null,
     isAdmin: state.user.isAdmin
 });
 const mapDispatchToProps = (dispatch) => ({

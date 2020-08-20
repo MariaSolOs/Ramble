@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {editUserProfile, editCreatorProfile} from '../../../store/actions/user';
 import {useForm} from 'react-hook-form';
+import AlgoliaPlaces from 'algolia-places-react';
 
 //Components
 import CustomScroll from 'react-custom-scroll';
@@ -25,11 +26,16 @@ const UserInfo = (props) => {
     const {register, handleSubmit, errors} = useForm({defaultValues: {
         fstName: user.fstName,
         lstName: user.lstName,
-        city: user.city,
         email: user.email,
         phoneNumber: user.phoneNumber,
         birthday: user.birthday && user.birthday.split('T')[0]
     }});
+
+    //Handle city change separately
+    const [city, setCity] = useState(user.city);
+    const handleCityChange = ({suggestion}) => {
+        setCity(suggestion.name);
+    }
 
     //If the user is a creator, they can modify their bio
     const [creatorBio, setCreatorBio] = useState(props.creator.bio);
@@ -43,7 +49,10 @@ const UserInfo = (props) => {
         if(validPhoneReg.test(data.phoneNumber)) {
             data.phoneNumber = data.phoneNumber.replace(validPhoneReg, '($1) $2-$3');
         } else { return; }
-        props.editUserProfile(data);
+        props.editUserProfile({
+            ...data,
+            city: user.city !== city? city : user.city
+        });
         //Update creator info if applicable
         if(creatorBio !== props.creator.bio) {
             props.editCreatorProfile({bio: creatorBio}, props.creator.id);
@@ -81,10 +90,18 @@ const UserInfo = (props) => {
                         <label htmlFor="city" className={classes.label}>
                             I live in
                         </label>
-                        <TextField
-                        id="city" 
-                        name="city"
-                        inputRef={register}/>
+                        <AlgoliaPlaces
+                        placeholder=""
+                        defaultValue={user.city}
+                        options={{
+                            appId: process.env.REACT_APP_ALGOLIA_APP_ID,
+                            apiKey: process.env.REACT_APP_ALGOLIA_API_KEY,
+                            type: 'city',
+                            aroundLatLngViaIP: false,
+                            hitsPerPage: 3
+                        }}
+                        onChange={handleCityChange}
+                        onClear={() => setCity(user.city)}/>
                     </FormControl>
                 </div>
                 <div className={classes.formRow}>

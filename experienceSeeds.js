@@ -9,7 +9,7 @@ const experienceData = [
         perPerson: 40,
         private: 50
     },
-    categories: ['tastebuds'],
+    categories: ['taste'],
     location: {
         city: 'Montreal',
         region: 'Quebec',
@@ -18,7 +18,7 @@ const experienceData = [
     price: {
         perPerson: 25
     },
-    categories: ['tastebuds'],
+    categories: ['taste'],
     location: {
         city: 'Montreal',
         region: 'Quebec',
@@ -27,7 +27,7 @@ const experienceData = [
     price: {
         perPerson: 25
     },
-    categories: ['tastebuds'],
+    categories: ['taste'],
     location: {
         city: 'Montreal',
         region: 'Quebec',
@@ -37,7 +37,7 @@ const experienceData = [
         perPerson: 40,
         private: 50,
     },
-    categories: ['tastebuds'],
+    categories: ['taste'],
     location: {
         city: 'Montreal',
         region: 'Quebec',
@@ -47,7 +47,7 @@ const experienceData = [
     price: {
         perPerson: 30
     },
-    categories: ['entertainment'],
+    categories: ['relax'],
     location: {
         city: 'Toronto',
         region: 'Ontario',
@@ -56,7 +56,7 @@ const experienceData = [
     price: {
         perPerson: 50
     },
-    categories: ['entertainment'],
+    categories: ['relax'],
     location: {
         city: 'Toronto',
         region: 'Ontario',
@@ -65,7 +65,7 @@ const experienceData = [
     price: {
         perPerson: 30
     },
-    categories: ['entertainment'],
+    categories: ['relax'],
     location: {
         city: 'Toronto',
         region: 'Ontario',
@@ -75,7 +75,7 @@ const experienceData = [
     price: {
         perPerson: 30
     },
-    categories: ['family'],
+    categories: ['learn'],
     location: {
         city: 'St-Lambert',
         region: 'Quebec',
@@ -84,7 +84,7 @@ const experienceData = [
     price: {
         perPerson: 15
     },
-    categories: ['family'],
+    categories: ['learn'],
     location: {
         city: 'St-Lambert',
         region: 'Quebec',
@@ -93,7 +93,7 @@ const experienceData = [
     price: {
         perPerson: 35
     },
-    categories: ['family'],
+    categories: ['learn'],
     location: {
         city: 'St-Lambert',
         region: 'Quebec',
@@ -102,7 +102,7 @@ const experienceData = [
     price: {
         perPerson: 20
     },
-    categories: ['family'],
+    categories: ['learn'],
     location: {
         city: 'St-Lambert',
         region: 'Quebec',
@@ -112,7 +112,7 @@ const experienceData = [
     price: {
         perPerson: 15
     },
-    categories: ['outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -121,7 +121,7 @@ const experienceData = [
     price: {
         perPerson: 25
     },
-    categories: ['outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -130,7 +130,7 @@ const experienceData = [
     price: {
         perPerson: 45
     },
-    categories: ['outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -139,7 +139,7 @@ const experienceData = [
     price: {
         perPerson: 30
     },
-    categories: ['outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -149,7 +149,7 @@ const experienceData = [
     price: {
         perPerson: 20
     },
-    categories: ['gatherings', 'outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -158,7 +158,7 @@ const experienceData = [
     price: {
         perPerson: 20
     },
-    categories: ['gatherings', 'outdoors'],
+    categories: ['create'],
     location: {
         city: 'Long Island',
         region: 'New York',
@@ -168,7 +168,7 @@ const experienceData = [
     price: {
         perPerson: 40
     },
-    categories: ['culture', 'gatherings'],
+    categories: ['culture', 'move'],
     location: {
         city: 'Boston',
         region: 'Massachusetts',
@@ -227,14 +227,18 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
+    const categories = ['taste', 'create', 'relax', 'learn', 'move'];
     Experience.find({}, async (err, exps) => {
         for(const exp of exps) {
             exp.location.coordinates.lat = 37.7577;
             exp.location.coordinates.long = -122.4376;
+            const randInd = Math.floor(Math.random() * 5);
+            exp.categories = [categories[randInd]];
+            exp.categories = [categories[randInd + 1 % 5]];
             await exp.save();
         }
     });
-    // [...experienceData, ...experienceData, ...experienceData]
+    // [...experienceData, ...experienceData]
     // .forEach(async seed => {
     //     const exp = new Experience(seed);
     //     exp.status = expStatus[Math.round(Math.random())]
@@ -248,8 +252,8 @@ const seedDB = async () => {
     //     exp.duration = 2;
     //     exp.ageRestriction = 15;
     //     exp.avail = {};
-    //     exp.avail.from = new Date('July July 27 2020');
-    //     exp.avail.to = new Date('Sunday August 30 2020');
+    //     exp.avail.from = new Date('Wednesday August 19 2020');
+    //     exp.avail.to = new Date('Wednesday September 30 2020');
     //     exp.avail.schedule = {Tuesday: ['8AM-10AM'],
     //                           Thursday: ['8AM-10AM', '2:30PM-4:30PM', '4:30PM-6:30PM'],
     //                           Friday: ['8AM-10AM', '2:30PM-4:30PM', '8PM-10PM', '10PM-12AM'],

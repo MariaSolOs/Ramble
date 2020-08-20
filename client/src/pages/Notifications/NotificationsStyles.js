@@ -39,7 +39,10 @@ const styles = () => ({
         fontWeight: 'bold',
         marginRight: '1rem',
         width: 40, height: 40,
-        cursor: 'default'
+        cursor: 'default',
+        '& .fa-check-circle': {
+            fontSize: '2rem'
+        }
     },
     deleteIcon: {
         position: 'absolute',

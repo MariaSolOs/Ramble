@@ -1,6 +1,6 @@
 //Using indexes identify the selected category
-const categoryOptions = ['culture', 'gatherings', 'tastebuds',
-                         'entertainment', 'family', 'outdoors'];
+const categoryOptions = ['taste', 'create', 'relax',
+                         'learn', 'move'];
 
 //Helper function to ensure sorted timeslots                        
 const slotSort = (slot1, slot2) => {

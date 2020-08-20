@@ -53,7 +53,14 @@ const styles = () => ({
         '&.selected ': {
             filter: 'brightness(45%)',
         },
-        '& h5': { fontSize: '1.15rem' }
+        '& h5': { 
+            fontSize: '1.15rem',
+            margin: '5px 0'
+        },
+        '& img': {
+            width: 30,
+            height: 30
+        }
     },
 
     tip: { marginTop: 0 }

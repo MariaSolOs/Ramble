@@ -11,7 +11,47 @@ const styles = () => ({
         },
         '& .rcs-inner-handle': {
             background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
-        }
+        },
+
+        //City autocomplete
+        '& .ap-input': {
+            backgroundColor: '#2A2A2A',
+            color: '#FFF',
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            letterSpacing: '-0.05rem',
+            height: 56,
+            border: 'none',
+            '&:focus': { border: '2px solid #CDCDCD' }
+        },
+        '& .ap-dropdown-menu': {
+            backgroundColor: '#2A2A2A',
+            color: '#929293',
+            borderRadius: '1rem',
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '0.85rem',
+            letterSpacing: '-0.05rem',
+            width: '130%'
+        },
+        '& .ap-suggestion': {
+            height: 40,
+            backgroundColor: '#2A2A2A !important',
+            '&:hover': {
+                backgroundColor: '#2A2A2A',
+                color: '#FFF',
+                transition: 'all 200ms ease-in-out'
+            },
+            '&:focus': {
+                backgroundColor: '#2A2A2A',
+                color: '#FFF',
+                transition: 'all 200ms ease-in-out'
+            }
+        },
+        '& .ap-footer': { display: 'none' },
+        '& .ap-suggestion-icon': { display: 'none' },
+        '& .ap-icon-pin': { display: 'none' }
     },
     formRow: {
         margin: '15px 0',

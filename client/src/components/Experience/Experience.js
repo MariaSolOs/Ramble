@@ -2,7 +2,7 @@ import React from 'react';
 import uuid from 'react-uuid';
 
 //Components and icons
-import CategoryBox from '../CategoryBox';
+import CategoryBox from '../CategoryBox/CategoryBox';
 import QuickInfos from './QuickInfos';
 import CreatorInfo from './Creator';
 import Description from './Description';
@@ -26,10 +26,11 @@ const Experience = ({exp, floatButtons}) => {
             <div className={classes.categories}>
                 {exp.categories.map(categ => (
                     <CategoryBox 
+                    key={uuid()}
                     category={categ} 
+                    iconLocation="left"
                     height="35px" 
-                    width="130px" 
-                    key={uuid()}/>
+                    width="130px"/>
                 ))}
             </div>
             <QuickInfos 

@@ -33,8 +33,7 @@ const ExperienceSchema = new mongoose.Schema({
     },
     categories: [{
         type: String,
-        enum: ['culture', 'gatherings', 'tastebuds', 
-               'entertainment', 'family', 'outdoors']
+        enum: ['taste', 'create', 'relax', 'learn', 'move']
     }],
     description: {
         type: String,

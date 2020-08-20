@@ -139,13 +139,7 @@ export const descriptionStyles = () => ({
         color: '#C8C8C8',
         lineHeight: 1.4
     },
-
-    listContainer: {
-        display: 'flex',
-        '& div:nth-of-type(1)': {
-            marginRight: '4rem' 
-        }
-    },
+    
     itemList: {
         fontSize: '1rem',
         letterSpacing: '-0.05rem',

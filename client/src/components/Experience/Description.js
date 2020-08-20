@@ -11,26 +11,24 @@ const Description = ({description, includedItems, toBringItems}) => {
         <>
             <h3 className={classes.label}>Planning</h3>
             <p className={classes.text}>{description}</p>
-            <div className={classes.listContainer}>
-                {includedItems.length > 0 &&
-                    <div>
-                        <h3 className={classes.label}>What's included</h3>
-                        <ul className={classes.itemList}>
-                            {includedItems.map(item => (
-                                <li key={uuid()}>{item}</li>
-                            ))}
-                        </ul>
-                    </div>}
-                {toBringItems.length > 0 &&
+            {includedItems.length > 0 &&
                 <div>
-                    <h3 className={classes.label}>What to bring</h3>
-                    <ul className={classes.includedItems}>
-                        {toBringItems.map(item => (
+                    <h3 className={classes.label}>What's included</h3>
+                    <ul className={classes.itemList}>
+                        {includedItems.map(item => (
                             <li key={uuid()}>{item}</li>
                         ))}
                     </ul>
                 </div>}
-            </div>
+            {toBringItems.length > 0 &&
+            <div>
+                <h3 className={classes.label}>What to bring</h3>
+                <ul className={classes.itemList}>
+                    {toBringItems.map(item => (
+                        <li key={uuid()}>{item}</li>
+                    ))}
+                </ul>
+            </div>}
         </>
     );
 }

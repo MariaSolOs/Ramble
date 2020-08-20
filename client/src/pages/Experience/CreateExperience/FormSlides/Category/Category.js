@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 //Components
-import CategoryBox from '../../../../../components/CategoryBox';
+import CategoryBox from '../../../../../components/CategoryBox/CategoryBox';
 import Tip from '../../../../../components/Tip';
 
 //Styles
@@ -9,8 +9,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './CategoryStyles';
 const useStyles = makeStyles(styles);
 
-const options = ['culture', 'gatherings', 'tastebuds',
-                         'entertainment', 'family', 'outdoors'];
+const options = ['taste', 'create', 'relax', 'learn', 'move'];
 
 const Categories = ({categories, submitInput}) => {
     const classes = useStyles();
@@ -65,7 +64,8 @@ const Categories = ({categories, submitInput}) => {
                         styles={{ //To have square boxes
                             height: 0,
                             padding: '49% 0 50%'
-                        }}/>
+                        }}
+                        iconLocation="top"/>
                     </div>
                 ))}
             </div>

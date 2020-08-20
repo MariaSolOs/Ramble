@@ -101,10 +101,9 @@ exports.cancelPaymentIntent = (req, res) => {
 //Deal with payments using a saved card from the client
 exports.payWithSavedCard  = async (req, res) => {
     try {
-        console.log(req.body)
         const paymentIntent = await stripe.paymentIntents.create({
             amount: +req.body.amount,
-            application_fee_amount: (+req.body.amount) * 0.15,
+            application_fee_amount: (+req.body.amount) * 0.2,
             currency: req.body.currency,
             customer: req.body.customerId,
             payment_method: req.body.payMethodId,
@@ -119,7 +118,6 @@ exports.payWithSavedCard  = async (req, res) => {
                 bookingId: req.body.bookingId
             }
         });
-        console.log(paymentIntent)
         return res.status(201).send({message: 'Payment intent created.'});
     } catch(err) {
         console.log(err);

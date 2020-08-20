@@ -5,12 +5,13 @@ require('../config/mongoose');
 
 const nodemailer = require('nodemailer'),
       fs = require('fs'),
-      handlebars = require('handlebars');
+      {compile} = require('handlebars');
 
 const Experience = require('../models/experience'),
       Creator = require('../models/creator'),
       User = require('../models/user');
 
+//TODO: Add this job
 const creatorCalendarUpdate = async () => {
     console.log('JOB STARTS: CALENDAR UPDATE REMINDERS');
     try {
@@ -42,7 +43,7 @@ const creatorCalendarUpdate = async () => {
 
         const source = fs.readFileSync('../emailTemplates/creatorCalendarUpdate.html',
                        'utf-8').toString();              
-        const template = handlebars.compile(source);
+        const template = compile(source);
 
         for(const exp of exps) {
             const htmlToSend = template({

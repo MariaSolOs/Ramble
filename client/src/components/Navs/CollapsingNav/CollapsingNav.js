@@ -100,7 +100,7 @@ const CollapsingNav = (props) => {
                         Creator dashboard
                     </Link> : 
                     <Link 
-                    to="creator/become"
+                    to="/creator/become"
                     className={classes.navLink}
                     style={{ color: '#FFF' }}>
                         Become a Creator

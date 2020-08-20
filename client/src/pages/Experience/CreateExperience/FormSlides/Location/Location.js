@@ -12,7 +12,7 @@ const useStyles = makeStyles(styles);
 const Location = ({location, meetPoint, submitInput}) => {      
     const classes = useStyles();
 
-    //To format suggestion lists
+    //To format location suggestions
     const showLocSuggestion = (sugg) => {
         const suggAdmin = sugg.administrative? `${sugg.administrative},`: '';
         return `${sugg.name}, ${suggAdmin} ${sugg.country}`;
@@ -20,17 +20,17 @@ const Location = ({location, meetPoint, submitInput}) => {
 
     //For handling changes
     const handleLocationChange = ({suggestion}) => {
-        submitInput('coordinates', [suggestion.latlng.lat, suggestion.latlng.lng]);
         submitInput('location', `${suggestion.value}, ${suggestion.countryCode}`);
     }
     const handleMeetPointChange = ({suggestion}) => {
+        console.log(suggestion)
+        submitInput('coordinates', [suggestion.latlng.lat, suggestion.latlng.lng]);
         submitInput('meetPoint', suggestion.value);
     }
     const handleClear = (type) => () => {
         submitInput(type, '');
     }
 
-    //TODO: Filter address results better
     return (
         <>
             <div className={`${classes.location} ${classes.searchContainer}`}>

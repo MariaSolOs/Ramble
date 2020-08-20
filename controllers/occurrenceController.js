@@ -56,7 +56,7 @@ exports.addBookingToOcurrence = async (req, res) => {
             paymentIntentId: req.body.payIntentId,
             cardToUse: req.body.cardToUse,
             paymentCaptured: false,
-            creatorProfit: amount * 0.85
+            creatorProfit: amount * 0.8
         }
         const booking = new Booking({
             experience: experience._id,

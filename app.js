@@ -5,8 +5,8 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       morgan = require('morgan'),
       path = require('path'),
-      compression = require('compression');
-      //seedDB = require('./experienceSeeds'),
+      compression = require('compression'),
+      seedDB = require('./experienceSeeds');
 
 //Setting environment variables
 const PORT = process.env.PORT || 5000;

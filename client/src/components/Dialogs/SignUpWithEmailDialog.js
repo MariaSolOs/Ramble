@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
-import {useForm} from 'react-hook-form';
+import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import {emailAuth} from '../../store/actions/user';
 
 //MUI
@@ -19,7 +18,31 @@ const useStyles = makeStyles(styles);
 
 const SignUpWithEmailDialog = (props) => {
     const classes = useStyles();
-    const {register, handleSubmit} = useForm();
+    const dispatch = useDispatch();
+    
+    //Sign up form
+    const [values, setValues] = useState({
+        fstName: '',
+        lstName: '',
+        birthday: '',
+        email: '',
+        password: ''
+    });
+    const handleChange = (e) => {
+        //Capitalize names
+        setValues({
+            ...values,
+            [e.target.name]: 
+                (e.target.name === 'fstName' ||
+                 e.target.name === 'lstName')? 
+                 e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1) :
+                 e.target.value
+        });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(emailAuth(values, 'register'));
+    }
 
     //To return to the current page after signup
     useEffect(() => {
@@ -27,42 +50,72 @@ const SignUpWithEmailDialog = (props) => {
     }, [props.currentRoute]);
     
     return (
-        <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
+        <Dialog 
+        open={props.open} 
+        onClose={props.onClose}
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
                 <CloseIcon onClick={props.onClose} className="closeIcon"/>
                 <h5 className="title">Sign up</h5>
             </div>
             <DialogContent>
-                <form onSubmit={handleSubmit(props.registerUser)}>
+                <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="fstName">First name</FormLabel>
-                        <TextField name="fstName" inputRef={register({required: true})}/>
+                        <TextField 
+                        id="fstName" 
+                        name="fstName" 
+                        value={values.fstName}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="lstName">Last name</FormLabel>
-                        <TextField name="lstName" inputRef={register({required: true})}/>
+                        <TextField 
+                        id="lstName"
+                        name="lstName" 
+                        value={values.lstName}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="birthday">Birthday</FormLabel>
-                        <TextField type="date" name="birthday" inputRef={register}/>
+                        <TextField 
+                        type="date" 
+                        id="birthday"
+                        name="birthday" 
+                        value={values.birthday}
+                        onChange={handleChange}/>
                     </FormControl>
                     <div className={classes.formDivisor} style={{margin: '0 auto'}}/>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField name="email" type="email"
-                        inputRef={register({required: true})}/>
+                        <TextField
+                        type="email"
+                        id="email" 
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="password">Password</FormLabel>
-                        <TextField name="password" type="password"
-                        inputRef={register({required: true})}/>
+                        <TextField 
+                        type="password"
+                        id="password"
+                        name="password" 
+                        value={values.password}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <p className={classes.switchDialogsLink}>
                         Already have an account?&nbsp;&nbsp;
                         <span onClick={props.switchToLogin}>Log in</span>
                     </p> 
-                    <button type="submit" className={classes.submitButton} onClick={props.onClose}>
+                    <button 
+                    type="submit" 
+                    className={classes.submitButton} 
+                    onClick={props.onClose}>
                         Continue
                     </button>
                 </form>
@@ -71,9 +124,5 @@ const SignUpWithEmailDialog = (props) => {
     );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    registerUser: (userInfo) => dispatch(emailAuth(userInfo, 'register'))
-});
-
-export default connect(null, mapDispatchToProps)(SignUpWithEmailDialog);
+export default SignUpWithEmailDialog;
 

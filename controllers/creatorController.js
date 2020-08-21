@@ -10,39 +10,39 @@ const Creator = require('../models/creator'),
 const getCreatorProfile = (creator) => ({
     id: creator._id,
     stripeId: creator.stripe.accountId,
-    bio: creator.bio
+    bio: creator.bio,
+    numBookings: creator.bookingRequests.length
 });
 
 //For fetching profile information
 exports.getCreatorProfile = (req, res) => {
     req.user.populate('creator').execPopulate()
-    .then(async user => {
-        try {
-            const {bookingRequests} = await user.creator.populate({
-                path: 'bookingRequests',
-                populate: [
-                { path: 'experience',
-                  select: 'title images capacity price' }, 
-                { path: 'occurrence',
-                  select: 'dateStart timeslot spotsLeft creatorProfit' },
-                { path: 'client',
-                  select: 'fstName city photo stripe' }
-                ]
-            }).execPopulate();
-
-            res.status(200).send({ 
-                creatorProfile: {
-                    ...getCreatorProfile(user.creator),
-                    bookingRequests
-                }
-            });
-        } catch(err) {
-            res.status(500).send({err: 'Failed to get booking requests.'});
+    .then((user, err) => {
+        if(err || !user) {
+            return res.status(500).send({err: "Couldn't fetch creator profile."});
         }
-    })
-    .catch(err => {
-        res.status(500).send({err: "Couldn't fetch creator profile."});
+        res.status(200).send({ 
+            creatorProfile: {...getCreatorProfile(user.creator)}
+        })
     });
+}
+exports.getBookingRequests = async (req, res) => {
+    try {
+        const {bookingRequests} = await Creator.findOne({user: req.userId}).populate({
+            path: 'bookingRequests',
+            populate: [
+            { path: 'experience',
+              select: 'title images capacity price' }, 
+            { path: 'occurrence',
+              select: 'dateStart timeslot spotsLeft creatorProfit' },
+            { path: 'client',
+              select: 'fstName city photo stripe' }
+            ]
+        });
+        res.status(200).send({ bookingRequests });
+    } catch(err) {
+        res.status(500).send({err: 'Failed to get booking requests.'});
+    }
 }
 
 //Upgrade an user to a creator
@@ -98,7 +98,7 @@ we don't need Stripe */
 exports.deleteBookingRequest = async (req, res) => {
     try {
         const booking = await Booking.findByIdAndRemove(req.params.bookId, 
-                        {select: 'client experience numPeople'})
+                        {select: 'client experience numPeople occurrence'})
                         .populate('experience', 'title');
         //Update occurrence and creator's requests
         const creator = await Creator.findOneAndUpdate({user: req.userId}, 

@@ -1,4 +1,5 @@
-const {generateAccessToken} = require('../helpers/JWTHelpers');
+const {generateAccessToken} = require('../helpers/JWTHelpers'),
+      {generatePromoCode} = require('../helpers/profileHelpers');
 
 const User = require('../models/user'), 
       Admin = require('../models/admin');
@@ -6,7 +7,7 @@ const User = require('../models/user'),
 exports.registerUserWithEmail = (req, res, next) => {
     User.find({email: req.body.email,
                membershipProvider: 'email'}, 
-    (err, users) => {
+    async (err, users) => {
         if(err) {
             return res.status(404).send({error: 'Registration error'});
         } else if(users.length > 0) {
@@ -20,7 +21,11 @@ exports.registerUserWithEmail = (req, res, next) => {
                 birthday: req.body.birthday, 
                 email: req.body.email, 
                 password: req.body.password, 
-                membershipProvider: 'email'
+                membershipProvider: 'email',
+                promoCode: {
+                    code: await generatePromoCode(req.body.fstName),
+                    numUses: 0
+                }
             }).then(user => {
                 req.login(user, err => {
                     if(err) { 

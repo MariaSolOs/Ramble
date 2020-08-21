@@ -23,7 +23,6 @@ const Location = ({location, meetPoint, submitInput}) => {
         submitInput('location', `${suggestion.value}, ${suggestion.countryCode}`);
     }
     const handleMeetPointChange = ({suggestion}) => {
-        console.log(suggestion)
         submitInput('coordinates', [suggestion.latlng.lat, suggestion.latlng.lng]);
         submitInput('meetPoint', suggestion.value);
     }

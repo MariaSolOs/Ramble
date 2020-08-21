@@ -41,9 +41,20 @@ const UserSchema = new mongoose.Schema({
     stripe: {
         customerId: String
     },
-    emailSuscriptions: {
+    emailSubscriptions: {
         type: [String],
         default: ['CalendarUpdateReminder']
+    },
+    promoCode: {
+        code: {
+            type: String, 
+            required: true
+        },
+        numUses: {
+            type: Number,
+            min: 0,
+            max: 2
+        }
     }
 }, {timestamps: true});
 
@@ -60,3 +71,4 @@ UserSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
 module.exports = mongoose.model('User', UserSchema);
 
 //TODO: Write script to delete idle users
+//TODO: Deal with email subscriptions

@@ -91,7 +91,8 @@ const styles = (theme) => ({
         alignItems: 'center',
         width: 20, height: 20,
         padding: 2,
-        marginRight: '0.3rem'    
+        marginRight: '0.3rem',
+        textIndent: -1 
     }
 });
 

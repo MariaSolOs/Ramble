@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {useForm} from 'react-hook-form';
 import {emailAuth, adminLogin} from '../../store/actions/user';
 
 //MUI
@@ -19,22 +18,33 @@ const useStyles = makeStyles(styles);
 
 const LogInDialog = (props) => {
     const classes = useStyles();
-    const {register, handleSubmit} = useForm();
+    const dispatch = useDispatch();
 
     //To return to the current page after login
     useEffect(() => {
         window.localStorage.setItem('redirectURL', props.currentRoute);
     }, [props.currentRoute]);
     
-    const dispatch = useDispatch();
-    const handleLogIn = (data, e) => {
-        if(data.email.startsWith('RAMBLE_ADMIN__')) {
-            const username = data.email.replace('RAMBLE_ADMIN__', '');
+    //Log in form
+    const [values, setValues] = useState({
+        email: '',
+        password: ''
+    });
+    const handleChange = (e) => {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value
+        });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(values.email.startsWith('RAMBLE_ADMIN__')) {
+            const username = values.email.replace('RAMBLE_ADMIN__', '');
             dispatch(adminLogin({
                 username, 
-                password: data.password
+                password: values.password
             }));
-        } else { dispatch(emailAuth(data, 'login')); }
+        } else { dispatch(emailAuth(values, 'login')); }
     }
 
     return (
@@ -47,16 +57,25 @@ const LogInDialog = (props) => {
                 <h5 className="title">Log in</h5>
             </div>
             <DialogContent>
-                <form onSubmit={handleSubmit(handleLogIn)}>
+                <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField name="email"
-                        inputRef={register({required: true})}/>
+                        <TextField 
+                        id="email"
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
                         <FormLabel htmlFor="password">Password</FormLabel>
-                        <TextField name="password" type="password"
-                        inputRef={register({required: true})}/>
+                        <TextField 
+                        type="password"
+                        id="password"
+                        name="password" 
+                        value={values.password}
+                        onChange={handleChange}
+                        required/>
                     </FormControl>
                     <button type="submit" onClick={props.onClose}
                     className={classes.submitButton}>

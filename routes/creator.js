@@ -9,6 +9,9 @@ router.get('/',
             authenticateToken, 
             identifyUser,
             controllers.getCreatorProfile);
+router.get('/bookingRequests', 
+            authenticateToken, 
+            controllers.getBookingRequests);
 
 //Update user to creator
 router.post('/', 

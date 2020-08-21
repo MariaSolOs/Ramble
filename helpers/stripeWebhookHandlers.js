@@ -1,3 +1,9 @@
+const fs = require('fs'),
+      path = require('path'),
+      {compile} = require('handlebars'),
+      mjml2html = require('mjml'),
+      nodemailer = require('nodemailer');
+
 const Creator = require('../models/creator'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking');
@@ -17,6 +23,11 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             return 'No booking found with a matching intent ID'; 
         }
 
+        //Make sure we don't go through this twice
+        if(booking.stripe.paymentCaptured) {
+            return 'Payment intent was already managed.';
+        }
+
         //Update occurrence and creator's requests
         booking.occurrence.creatorProfit += booking.stripe.creatorProfit;
         booking.stripe.paymentCaptured = true;
@@ -24,6 +35,79 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         await booking.save();
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});
+
+        //Get information for confirmation email
+        await booking.populate([
+            { path: 'experience',
+              select: 'title images price creator toBring location',
+              populate: {
+                  path: 'creator',
+                  select: 'user',
+                  populate: {
+                      path: 'user',
+                      select: 'fstName photo phoneNumber'
+                  }
+              }}, 
+            { path: 'client',
+              select: 'email' }
+        ]).execPopulate();
+
+        //To format dates
+        const format = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+        const bookingDate = new Date(booking.createdAt)
+                            .toLocaleDateString('en-US', format);
+        const occDate = new Date(booking.occurrence.dateStart)
+                        .toLocaleDateString('en-US', format);
+
+        //Create mjml
+        const source = fs.readFileSync(path.resolve(__dirname, 
+                       '../emailTemplates/bookingConfirmation.mjml'), 'utf-8');              
+        const template = compile(source);
+        const mjml = template({
+            price: (booking.stripe.creatorProfit / 80).toFixed(2),
+            currency: booking.experience.price.currency,
+            bookingDate,
+            images: booking.experience.images,
+            expTitle: booking.experience.title,
+            occDate,
+            timeslot: booking.occurrence.timeslot,
+            numGuests: booking.numPeople,
+            hostPic: booking.experience.creator.user.photo,
+            hostName: booking.experience.creator.user.fstName,
+            hostPhone: booking.experience.creator.user.phoneNumber,
+            showToBring: booking.experience.toBring.length > 0,
+            toBringItems: booking.experience.toBring,
+            meetPoint: booking.experience.location.meetPoint
+        });
+
+        //Send confirmation email
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.zoho.com',
+            port: 465,
+            secure: true, 
+            auth: {
+                user: process.env.ZOHO_EMAIL, 
+                pass: process.env.ZOHO_PASSWORD
+            }
+        });
+        await transporter.sendMail({
+            from: {
+                name: 'ramble',
+                address: process.env.ZOHO_EMAIL
+            }, 
+            to: booking.client.email,
+            subject: 'Your booking is confirmed', 
+            text: `Your booking is confirmed!
+            You're all set for your experience "${booking.experience.title}" on ${
+            occDate} (${booking.occurrence.timeslot}). The meeting point is ${
+            booking.experience.location.meetPoint} and you will need to bring ${
+            booking.experience.toBring.length > 0 ?
+            booking.experience.toBring.join(', ') : 'a big smile'}.
+            Your host is ${booking.experience.creator.user.fstName} (phone number: ${
+            booking.experience.creator.user.phoneNumber}).
+            Thank you for experiencing with Ramble!`, 
+            html: mjml2html(mjml).html
+        });
 
         return 'Successfully handled payment intent.';
     } catch(err) {

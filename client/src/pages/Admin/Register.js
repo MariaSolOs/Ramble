@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from '../../tokenizedAxios';
-import {useForm} from 'react-hook-form';
 
 import TextField from '../../components/Input/TextField';
 import Checkbox from '../../components/Input/Checkbox';
@@ -39,18 +38,35 @@ const useStyles = makeStyles(() => ({
     permissionField: { marginTop: 10 }
 }));
 
+const initForm = {
+    username: '',
+    password: '',
+    addAdmin: false,
+    approveExp: false
+}
 
 const Register = (props) => {
     const classes = useStyles();
 
-    //For managing registration
-    const {register, handleSubmit, reset} = useForm();
-    const onSubmit = (values) => {
+    //Registration form
+    const [values, setValues] = useState({...initForm});
+    const handleChange = (e) => {
+        setValues({
+            ...values,
+            [e.target.name]: (e.target.name === 'addAdmin' ||
+                              e.target.name === 'approveExp')? e.target.checked :
+                              e.target.value
+        });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
         const permissions = [];
-        for(const perm in values.permissions) {
-            if(values.permissions[perm]) {
-                permissions.push(perm);
-            }
+        if(values.addAdmin) {
+            permissions.push('addAdmin');
+        }
+        if(values.approveExp) {
+            permissions.push('approveExp');
         }
         axios.post('/api/auth/admin-register', {
             username: values.username, 
@@ -63,7 +79,7 @@ const Register = (props) => {
         .catch(err => {
             props.showSnackbar(`FUUUUCKKKK ${err} 🤖`);
         });
-        reset({});
+        setValues({...initForm});
     }
 
     return (
@@ -71,30 +87,34 @@ const Register = (props) => {
             <h2 className={classes.title}>
                 Register a new user
             </h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit}>
                 <TextField 
                 label="Username"
                 fullWidth
                 style={{ marginBottom: '2rem' }}
                 name="username"
-                inputRef={register({ required: true })}/>
+                value={values.username}
+                onChange={handleChange}
+                required/>
                 <TextField 
                 label="Password"
                 fullWidth
                 type="password"
                 name="password"
-                inputRef={register({ required: true })}/>
+                value={values.password}
+                onChange={handleChange}
+                required/>
                 <div className={classes.permissionField}>
                     Give admin registration permissions
                     <Checkbox 
-                    name="permissions.addAdmin" 
-                    inputRef={register}/>
+                    name="addAdmin"
+                    onChange={handleChange}/>
                 </div>
                 <div className={classes.permissionField}>
                     Give experience approval permissions
                     <Checkbox 
-                    name="permissions.approveExp"
-                    inputRef={register}/>
+                    name="approveExp"
+                    onChange={handleChange}/>
                 </div>
                 <div className={classes.submitButton}>
                     <Button variant="contained" type="submit">

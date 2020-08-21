@@ -25,7 +25,7 @@ exports.addBookingToOcurrence = async (req, res) => {
     try {
         const dateStart = timeDateConvert(req.body.date, req.body.timeslot.split('-')[0]);
         const dateEnd = timeDateConvert(req.body.date, req.body.timeslot.split('-')[1]);
-
+        
         const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
 
@@ -79,7 +79,7 @@ exports.addBookingToOcurrence = async (req, res) => {
         res.status(201).send({message: 'Successfully added booking.'});
     }
     catch(err) {
-        console.log(err)
+        console.log(err);
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
             res.redirect(307, '/api/stripe/payment-intent/cancel');

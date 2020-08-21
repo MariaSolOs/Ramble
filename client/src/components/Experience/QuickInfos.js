@@ -61,7 +61,7 @@ const QuickInfos = (props) => {
                         Age restriction
                     </span>
                     <span className={classes.content}>
-                        {`${props.ageRestriction} years old`} 
+                        {`${props.ageRestriction} +`} 
                     </span>
                 </div>}
         </div>

@@ -20,9 +20,11 @@ exports.getLocations = (req, res) => {
 exports.getExps = (req, res) => {
     //We only need this for the gallery card
     const displayFields = 'title location.displayLocation images price rating';
-    Experience.find({ status: 'approved',
-                      'location.displayLocation': req.query.location, 
-                      capacity: {$gte: req.query.numPeople}},
+    //Get experiences with updated availabilites and approved status
+    Experience.find({status: 'approved',
+                    'location.displayLocation': req.query.location, 
+                    capacity: {$gte: req.query.numPeople},
+                    'avail.to': {$gte: new Date()}},
     displayFields, (err, exps) => {
         if(err) { 
             res.status(404).send({err: "Couldn't fetch experiences."});

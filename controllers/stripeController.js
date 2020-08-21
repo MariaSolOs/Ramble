@@ -103,7 +103,7 @@ exports.payWithSavedCard  = async (req, res) => {
     try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: +req.body.amount,
-            application_fee_amount: (+req.body.amount) * 0.2,
+            application_fee_amount: Math.round((+req.body.amount) * 0.2),
             currency: req.body.currency,
             customer: req.body.customerId,
             payment_method: req.body.payMethodId,

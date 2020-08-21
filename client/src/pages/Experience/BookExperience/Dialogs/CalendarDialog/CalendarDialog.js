@@ -27,6 +27,7 @@ const CalendarDialog = (props) => {
         return props.availDays.includes(currDay);
     }
 
+
     return (
         <Template 
         open={props.open}

@@ -18,7 +18,7 @@ const initialState = {
         id: null,
         stripeId: null,
         bio: '',
-        bookingRequests: []
+        numBookings: 0
     }
 }
 
@@ -36,23 +36,7 @@ const authReducer = (state = initialState, action) => {
         case types.SET_CREATOR_PROFILE: {
             return {
                 ...state,
-                creator: {
-                    ...action.creatorProfile,
-                    bookingRequests: action.creatorProfile.bookingRequests?
-                                     action.creatorProfile.bookingRequests :
-                                     state.creator.bookingRequests
-                }
-            }
-        }
-        case types.DELETE_BOOKING_REQUEST: {
-            return {
-                ...state,
-                creator: {
-                    ...state.creator,
-                    bookingRequests: state.creator.bookingRequests.filter(req => (
-                        req._id !== action.bookingId
-                    ))
-                }
+                creator: {...action.creatorProfile}
             }
         }
         case types.ADD_NOTIFICATION: {
@@ -67,6 +51,19 @@ const authReducer = (state = initialState, action) => {
                 notifs: state.notifs.filter((notif) => 
                     notif._id !== action.notifId
                 )
+            }
+        }
+        case types.SET_NUM_BOOKINGS: {
+            return {
+                ...state,
+                creator: {
+                    ...state.creator,
+                    numBookings: action.operation === 'inc'? 
+                                 state.creator.numBookings + 1 :
+                                 action.operation === 'dec'?
+                                 state.creator.numBookings - 1 : 
+                                 state.creator.numBookings
+                }
             }
         }
         case types.RESET_USER: {

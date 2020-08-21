@@ -5,6 +5,7 @@ require('../config/mongoose');
 
 const nodemailer = require('nodemailer'),
       fs = require('fs'),
+      path = require('path'),
       {compile} = require('handlebars');
 
 const Experience = require('../models/experience'),
@@ -41,8 +42,8 @@ const creatorCalendarUpdate = async () => {
             }
         });
 
-        const source = fs.readFileSync('../emailTemplates/creatorCalendarUpdate.html',
-                       'utf-8').toString();              
+        const source = fs.readFileSync(path.resolve(__dirname, 
+                       '../emailTemplates/creatorCalendarUpdate.html'), 'utf-8').toString();              
         const template = compile(source);
 
         for(const exp of exps) {

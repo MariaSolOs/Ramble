@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
-import {showError, showSnackbar} from '../../../../store/actions/ui';
-import {deleteBookingRequest} from '../../../../store/actions/user';
+import {setNumBookings} from '../../../../store/actions/user';
+import {showError, showSnackbar, startLoading, endLoading} from '../../../../store/actions/ui';
 
 import BookingCard from './BookingCard/BookingCard';
 
@@ -13,14 +13,22 @@ const useStyles = makeStyles(styles);
 const BookingRequests = (props) => {
     const classes = useStyles();
 
-    const {showError, showSnackbar, creatorId, stripeId, 
-           bookingRequests, deleteRequest} = props;
+    const {showError, showSnackbar, creatorId, 
+           stripeId, numBookings, decNumBookings} = props;
 
-    //Make a copy of the bookings so that we can sort
+    //Fetch creator bookings
     const [bookings, setBookings] = useState([]);
     useEffect(() => {
-        setBookings(bookingRequests);
-    }, [bookingRequests]);
+        startLoading();
+        axios.get('/api/creator/bookingRequests')
+        .then(res => {
+            setBookings(res.data.bookingRequests);
+        })
+        .catch(err => {
+            showError('We cannot get your bookings right now...');
+        });
+        endLoading();
+    }, [showError, numBookings]);
 
     //Handle accept/decline requests
     const handleDecisionUnsavedCard = useCallback((action, stripeId, bookId) => 
@@ -29,21 +37,26 @@ const BookingRequests = (props) => {
         //Action is either capture or cancel
         axios.post(`/api/stripe/payment-intent/${action}`, {stripeId})
         .then(res => {
-            deleteRequest(bookId);
+            setBookings((bookings) => (
+                bookings.filter(req => (
+                    req._id !== bookId
+                ))
+            ));
+            decNumBookings();
             const decision = action === 'capture'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         })
         .catch(err => {
             showError("We couldn't process your decision...");
         });
-    }, [showSnackbar, showError, deleteRequest]);
+    }, [showSnackbar, showError, decNumBookings]);
     const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => 
     async (e) => {
         try {
             showSnackbar('Processing your decision...');
             if(action === 'approve') {
                 await axios.post(`/api/stripe/payment-intent/saved-card`, {
-                    amount: Math.round(stripeInfo.creatorProfit / 85 * 100),
+                    amount: Math.round(stripeInfo.creatorProfit * 1.25),
                     currency: stripeInfo.currency,
                     customerId: stripeInfo.customerId,
                     payMethodId: stripeInfo.cardToUse,
@@ -54,13 +67,18 @@ const BookingRequests = (props) => {
             } else {
                 await axios.delete(`/api/creator/bookingRequests/${bookId}`);
             }
-            deleteRequest(bookId);
+            setBookings((bookings) => (
+                bookings.filter(req => (
+                    req._id !== bookId
+                ))
+            ));
+            decNumBookings();
             const decision = action === 'approve'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         } catch(err) {
             showError("We couldn't process your decision...");
         } 
-    }, [showSnackbar, showError, creatorId, stripeId, deleteRequest]);
+    }, [showSnackbar, showError, creatorId, stripeId, decNumBookings]);
 
     //To handle the sorting
     const sortByBookDate = useCallback(() => {
@@ -134,12 +152,14 @@ const BookingRequests = (props) => {
 const mapStateToProps = (state) => ({
     creatorId: state.user.creator.id,
     stripeId: state.user.creator.stripeId,
-    bookingRequests: state.user.creator.bookingRequests
+    numBookings: state.user.creator.numBookings
 });
 const mapDispatchToProps = (dispatch) => ({
+    startLoading: () => dispatch(startLoading()),
+    endLoading: () => dispatch(endLoading()),
     showError: (msg) => dispatch(showError(msg)),
     showSnackbar: (msg) => dispatch(showSnackbar(msg)),
-    deleteRequest: (id) => dispatch(deleteBookingRequest(id))
+    decNumBookings: () => dispatch(setNumBookings('dec'))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookingRequests);

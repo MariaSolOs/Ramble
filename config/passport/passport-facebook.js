@@ -1,6 +1,7 @@
 const passport = require('passport'),
       FacebookStrategy = require('passport-facebook').Strategy,
-      User = require('../../models/user');
+      User = require('../../models/user'),
+      {generatePromoCode} = require('../../helpers/profileHelpers');
 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
@@ -8,7 +9,7 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     profileFields: ['name', 'email', 'picture.type(large)'],
   }, function(accessToken, refreshToken, profile, done) {
-        User.findOne({membershipProviderId: profile.id}, (err, user) => {
+        User.findOne({membershipProviderId: profile.id}, async (err, user) => {
             if(err) { return done(err); }
             if(!user) {
                 const newUser = new User({
@@ -17,7 +18,11 @@ passport.use(new FacebookStrategy({
                     email: profile._json.email && profile._json.email,
                     photo: profile.photos && profile.photos[0].value,
                     membershipProvider: 'facebook',
-                    membershipProviderId: profile.id
+                    membershipProviderId: profile.id,
+                    promoCode: {
+                        code: await generatePromoCode(profile._json.first_name),
+                        numUses: 0
+                    }
                 });
                 newUser.save((err) => {
                     if (err){ console.log(err); }

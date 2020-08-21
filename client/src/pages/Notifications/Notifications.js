@@ -32,7 +32,7 @@ const Notifications = (props) => {
     }, []); 
     
     const notifs = useSelector(state => state.user.notifs);
-    const deleteNotif = useCallback((notifId) => (e) => {
+    const removeNotif = useCallback((notifId) => (e) => {
         axios.delete(`/api/profile/notifs/${notifId}`);
     }, []);
 
@@ -54,7 +54,7 @@ const Notifications = (props) => {
                             {notif.message}
                             <HighlightOffIcon 
                             classes={{root: classes.deleteIcon}}
-                            onClick={deleteNotif(notif._id)}/>
+                            onClick={removeNotif(notif._id)}/>
                         </li>
                     )) : 
                     <h3 className={classes.title}>

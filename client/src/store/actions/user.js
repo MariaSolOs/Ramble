@@ -3,20 +3,22 @@ import {startLoading, endLoading, showError, showSnackbar} from './ui';
 import axios from '../../tokenizedAxios';
 
 //Clean actions
-const setProfile = (token, isAdmin, profile, notifs = []) => ({ 
+const setProfile = (token, isAdmin, profile, notifs) => ({ 
     type: types.SET_PROFILE, token, isAdmin, profile, notifs
 });
 const setCreatorProfile = (creatorProfile) => ({
     type: types.SET_CREATOR_PROFILE, creatorProfile
 });
-export const deleteBookingRequest = (bookingId) => ({
-    type: types.DELETE_BOOKING_REQUEST, bookingId
-});
+
 export const addNotif = (notif) => ({
     type: types.ADD_NOTIFICATION, notif
 });
 export const deleteNotif = (notifId) => ({
     type: types.DELETE_NOTIFICATION, notifId
+});
+
+export const setNumBookings = (operation) => ({
+    type: types.SET_NUM_BOOKINGS, operation
 });
 
 const resetUser = () => ({ type: types.RESET_USER });

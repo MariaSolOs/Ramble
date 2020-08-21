@@ -74,7 +74,7 @@ const styles = () => ({
         width: 20, height: 20,
         padding: 2,
         marginLeft: 15,
-        textIndent: 0
+        textIndent: -1
     }
 });
 

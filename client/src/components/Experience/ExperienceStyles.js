@@ -39,43 +39,6 @@ export const pageStyles = (theme) => ({
         '& h5': {
             fontSize: '0.85rem'
         }
-    },
-
-    //For section labels and paragraphs
-    label: {
-        fontSize: '1.2rem',
-        letterSpacing: '-0.05rem',
-        color: '#FFF',
-        marginBottom: 0
-    },
-    text: {
-        fontSize: '0.97rem',
-        letterSpacing: '-0.05rem',
-        color: '#C8C8C8',
-        lineHeight: 1.4
-    }
-});
-
-export const mapStyles = () => ({
-    wrapper: {
-        '& .mapboxgl-map': {
-            borderRadius: '1.7rem'
-        },
-        '& div > *': { cursor: 'default' }
-    },
-
-    marker: {
-        backgroundColor: 'rgba(197, 197, 197, 0.4)',
-        width: 40, height: 40,
-        borderRadius: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        '& > div': {
-            backgroundColor: '#FFF' ,
-            width: 15, height: 15,
-            borderRadius: '100%'
-        }
     }
 });
 
@@ -126,34 +89,6 @@ export const creatorStyles = () => ({
     }
 });
 
-export const descriptionStyles = () => ({
-    label: {
-        fontSize: '1.2rem',
-        letterSpacing: '-0.05rem',
-        color: '#FFF',
-        marginBottom: 0
-    },
-    text: {
-        fontSize: '0.97rem',
-        letterSpacing: '-0.05rem',
-        color: '#C8C8C8',
-        lineHeight: 1.4
-    },
-    
-    itemList: {
-        fontSize: '1rem',
-        letterSpacing: '-0.05rem',
-        color: '#C8C8C8',
-        listStylePosition: 'inside',
-        padding: 0,
-        marginTop: '0.5rem',
-        textTransform: 'capitalize',
-        '& li': {
-            padding: '0.2rem 0'
-        }
-    }
-});
-
 export const quickInfosStyles = () => ({
     root: {
         display: 'flex',
@@ -201,6 +136,64 @@ export const quickInfosStyles = () => ({
         '& svg': {
             color: '#717171',
             fontSize: '1.15rem',
+        }
+    }
+});
+
+export const descriptionStyles = () => ({
+    label: {
+        fontSize: '1.2rem',
+        letterSpacing: '-0.05rem',
+        color: '#FFF',
+        margin: 0
+    },
+    text: {
+        fontSize: '0.97rem',
+        letterSpacing: '-0.05rem',
+        color: '#C8C8C8',
+        lineHeight: 1.4
+    },
+    
+    itemList: {
+        fontSize: '1rem',
+        letterSpacing: '-0.05rem',
+        color: '#C8C8C8',
+        listStylePosition: 'inside',
+        padding: 0,
+        marginTop: '0.5rem',
+        textTransform: 'capitalize',
+        '& li': {
+            padding: '0.2rem 0'
+        }
+    }
+});
+
+export const mapStyles = () => ({
+    label: {
+        fontSize: '1.2rem',
+        letterSpacing: '-0.05rem',
+        color: '#FFF',
+        margin: '10px 0'
+    },
+    
+    wrapper: {
+        '& .mapboxgl-map': {
+            borderRadius: '1.7rem'
+        },
+        '& div > *': { cursor: 'default' }
+    },
+
+    marker: {
+        backgroundColor: 'rgba(197, 197, 197, 0.4)',
+        width: 40, height: 40,
+        borderRadius: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '& > div': {
+            backgroundColor: '#FFF' ,
+            width: 15, height: 15,
+            borderRadius: '100%'
         }
     }
 });

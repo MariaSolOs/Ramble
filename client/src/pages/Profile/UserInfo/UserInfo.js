@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {editUserProfile, editCreatorProfile} from '../../../store/actions/user';
-import {useForm} from 'react-hook-form';
 import AlgoliaPlaces from 'algolia-places-react';
 
 //Components
@@ -23,20 +22,28 @@ const UserInfo = (props) => {
     
     //Set form based on saved user fields
     const user = props.user;
-    const {register, handleSubmit, errors} = useForm({defaultValues: {
+    const [values, setValues] = useState({
         fstName: user.fstName,
         lstName: user.lstName,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        birthday: user.birthday && user.birthday.split('T')[0]
-    }});
-
-    //Handle city change separately
-    const [city, setCity] = useState(user.city);
-    const handleCityChange = ({suggestion}) => {
-        setCity(suggestion.name);
+        birthday: user.birthday && user.birthday.split('T')[0],
+        city: user.city
+    });
+    const [phoneErr, setPhoneErr] = useState(false);
+    const handleChange = (e) => {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value
+        });
     }
-
+    //Handle city change separately
+    const handleCityChange = ({suggestion}) => {
+        setValues({
+            ...values,
+            city: suggestion.name
+        });
+    }
     //If the user is a creator, they can modify their bio
     const [creatorBio, setCreatorBio] = useState(props.creator.bio);
     const handleBioChange = (e) => {
@@ -45,13 +52,20 @@ const UserInfo = (props) => {
         }
     }
 
-    const onSubmit = (data) => {
-        if(validPhoneReg.test(data.phoneNumber)) {
-            data.phoneNumber = data.phoneNumber.replace(validPhoneReg, '($1) $2-$3');
-        } else { return; }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let phoneNumber;
+        if(validPhoneReg.test(values.phoneNumber)) {
+            phoneNumber = values.phoneNumber.replace(validPhoneReg, '($1) $2-$3');
+        } else { 
+            setPhoneErr(true);
+            return; 
+        }
         props.editUserProfile({
-            ...data,
-            city: user.city !== city? city : user.city
+            ...values,
+            phoneNumber,
+            city: user.city !== values.city? values.city : user.city
         });
         //Update creator info if applicable
         if(creatorBio !== props.creator.bio) {
@@ -62,7 +76,7 @@ const UserInfo = (props) => {
     return (
         <form 
         className={classes.formContainer} 
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit}>
             <CustomScroll heightRelativeToParent="80%">
                 <div className={classes.formRow} style={{ marginBottom: -15 }}>
                     <label htmlFor="fstName" className={classes.label}>
@@ -75,14 +89,16 @@ const UserInfo = (props) => {
                         id="fstName"
                         name="fstName"
                         placeholder="First name"
-                        inputRef={register}/>
+                        value={values.fstName}
+                        onChange={handleChange}/>
                     </FormControl>
                     <FormControl className={classes.formGroup}>
                         <TextField 
                         id="lstName"
                         name="lstName"
                         placeholder="Last name"
-                        inputRef={register}/>
+                        value={values.lstName}
+                        onChange={handleChange}/>
                     </FormControl>
                 </div>
                 <div className={classes.formRow}>
@@ -101,7 +117,7 @@ const UserInfo = (props) => {
                             hitsPerPage: 3
                         }}
                         onChange={handleCityChange}
-                        onClear={() => setCity(user.city)}/>
+                        onClear={() => setValues({...values, city: user.city})}/>
                     </FormControl>
                 </div>
                 <div className={classes.formRow}>
@@ -112,7 +128,8 @@ const UserInfo = (props) => {
                         <TextField
                         id="email" 
                         name="email"
-                        inputRef={register}/>
+                        value={values.email}
+                        onChange={handleChange}/>
                     </FormControl>
                 </div>
                 <div className={classes.formRow}>
@@ -124,10 +141,8 @@ const UserInfo = (props) => {
                         id="phoneNumber" 
                         name="phoneNumber"
                         type="tel"
-                        error={errors.phoneNumber}
-                        helperText={errors.phoneNumber && 
-                                    'Please enter a valid phone number'}
-                        inputRef={register({pattern: validPhoneReg})}/>
+                        helperText={phoneErr && 
+                                    'Please enter a valid phone number'}/>
                     </FormControl>
                 </div>
                 <div className={classes.formRow}>
@@ -139,7 +154,8 @@ const UserInfo = (props) => {
                         id="birthday" 
                         name="birthday"
                         type="date"
-                        inputRef={register}/>
+                        value={values.birthday}
+                        onChange={handleChange}/>
                     </FormControl>
                 </div>
                 {props.creator.id &&

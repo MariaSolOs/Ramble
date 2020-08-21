@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
-import useNotifications from '../hooks/useNotifications';
+import useSocket from '../hooks/useSocket';
 import {fetchExperiences} from '../store/actions/experiences';
 import {Route, Redirect, Switch} from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -17,7 +17,7 @@ const ProfileRouter = React.lazy(() => import('../pages/Profile/Router'));
 const CreatorRouter = React.lazy(() => import('../pages/Creators/Router'));
 
 const PublicApp = (props) => {
-    useNotifications();
+    useSocket();
 
     //Used for FB/Google redirects
     const cookieToken = Cookies.get('token');

@@ -26,7 +26,7 @@ const ReferBox = ({shareUrl}) => {
         <div className={classes.wrapper}>
             <div className={classes.root}>
                 <h3 className={classes.title1}>
-                    Invite friends & get <span>50</span>% off
+                    Invite friends & get <span>20</span>% off
                 </h3> 
                 <h4 className={classes.title2}>your next experience.</h4>
                 <div className={classes.body}>

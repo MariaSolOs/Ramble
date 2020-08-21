@@ -33,7 +33,6 @@ const styles = () => ({
     //Category boxes
     categoryDiv: {
         display: 'flex',
-        justifyContent: 'space-between',
         width: '50.2vw',
         maxWidth: 500,
         flexWrap: 'wrap',
@@ -44,7 +43,7 @@ const styles = () => ({
     categoryItem: {
         display: 'inline-block',
         width: '31%',
-        marginBottom: '2.6%',
+        margin: '0 10px 10px 0',
         '&:hover': {
             filter: 'brightness(45%)',
             transition: '300ms ease-in-out',

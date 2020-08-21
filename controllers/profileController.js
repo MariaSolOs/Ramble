@@ -61,6 +61,15 @@ exports.getUserProfile = (req, res) => {
         });
     }
 }
+exports.getNotifs = (req, res) => {
+    Notification.find({user: req.userId}).sort({createdAt: -1})
+    .exec((err, notifs) => {
+        if(err) {
+            return res.status(500).send({err: "Couldn't fetch notifications."});
+        }
+        res.status(200).send({notifs});
+    });
+}
 
 //Editing user info
 exports.editProfile = async (req, res) => {
@@ -136,8 +145,6 @@ exports.unsaveExperience = async (req, res) => {
 //For deleting notifications
 exports.deleteNotification = async (req, res) => {
     try {
-        await User.findByIdAndUpdate(req.userId, 
-              {$pull: {notifications: req.params.notifId}});
         await Notification.findByIdAndDelete(req.params.notifId);
         res.status(200).send({
             token: req.token,

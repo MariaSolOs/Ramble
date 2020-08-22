@@ -100,6 +100,40 @@ const styles = () => ({
         '& span': { fontSize: '0.9rem' }
     },
 
+    codeForm: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '90%',
+        margin: '0 auto',
+        '& $label': { margin: 0 },
+        flexDirection: props => 
+            props.showPromoForm? 'column' : 'row',
+        '& $checkboxField': { margin: '0.5rem 0 0' },
+        '& .code-input-row': {
+            display: 'flex',
+            '& button': {
+                border: 'none',
+                backgroundColor: 'transparent',
+                fontSize: '0.9rem',
+                font: 'inherit',
+                letterSpacing: '-0.04rem',
+                color: '#FFF',
+                textAlign: 'center',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                marginLeft: '1rem',
+                '&:focus': { outline: 'none' },
+            }
+        },
+        '& .code-err-msg': {
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '0.8rem',
+            color: '#D8246E',
+            margin: '5px 0 0'
+        }
+    },
+
     emailForm: {
         display: 'flex',
         alignItems: 'center',
@@ -110,7 +144,6 @@ const styles = () => ({
             props.showEmailForm? 'column' : 'row',
     },
 
-    //For the email form and payment method
     label: {
         margin: '0 0 10px',
         color: '#C8C8C8',
@@ -140,6 +173,12 @@ const styles = () => ({
             marginRight: 5
         },
         '& .MuiSelect-icon': { color: '#FFF' }
+    },
+
+    promoMsg: {
+        color: '#FFF',
+        fontSize: '0.9rem',
+        textAlign: 'center'
     },
 
     policyMessage: {

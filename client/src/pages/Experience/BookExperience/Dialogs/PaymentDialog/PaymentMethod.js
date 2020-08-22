@@ -18,7 +18,7 @@ const PaymentMethod = (props) => {
     const [showStripeInput, setShowStripeInput] = useState(cards.length === 0);
     //If the user wants to use a new card
     const handleStripeInputChange = (e) => {
-        if(e.complete) { props.onCanSubmit(); }
+        if(e.complete) { props.onCanSubmit(true); }
     }  
     const handleUseSavedCard = (e) => {
         onCardToUse(e.target.value);
@@ -27,6 +27,7 @@ const PaymentMethod = (props) => {
         if(e.target.checked) {
             onCardToUse(null);
             setShowStripeInput(true);
+            props.onCanSubmit(false);
         }
     }
 

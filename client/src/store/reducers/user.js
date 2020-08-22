@@ -10,7 +10,8 @@ const initialState = {
         city: '',
         email: '',
         phoneNumber: '',
-        birthday: ''
+        birthday: '',
+        promoCode: {}
     },
     notifs: [],
     //Creator information

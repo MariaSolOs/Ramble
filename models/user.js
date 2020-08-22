@@ -41,20 +41,15 @@ const UserSchema = new mongoose.Schema({
     stripe: {
         customerId: String
     },
-    emailSubscriptions: {
-        type: [String],
-        default: ['CalendarUpdateReminder']
-    },
     promoCode: {
         code: {
             type: String, 
             required: true
         },
-        numUses: {
-            type: Number,
-            min: 0,
-            max: 2
-        }
+        usedBy: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }]
     }
 }, {timestamps: true});
 

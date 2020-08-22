@@ -6,12 +6,18 @@ const express = require('express'),
       {sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
       controller = require('../controllers/authController');
 
+//In case email login fails
+router.get('/email-login-fail', (req, res) => {
+    res.status(401).send({message: 'Incorrect email/password'});
+});
+
 router.post('/email-register', 
             controller.registerUserWithEmail, 
             sendToken);
 router.post('/email-login', 
-            passport.authenticate('local', { failureRedirect: '/' }),
-            (req, res, next) => {
+            passport.authenticate('local', { 
+                failureRedirect: '/api/auth/email-login-fail' 
+            }), (req, res, next) => {
                 req.isAdmin = false;
                 next();
             }, 
@@ -40,8 +46,9 @@ router.get('/google/callback',
             redirectUserWithCookie);  
 
 router.post('/admin-login',
-            passport.authenticate('local-admin', {failureRedirect: '/'}), 
-            (req, res, next) => {
+            passport.authenticate('local-admin', {
+                failureRedirect: '/api/auth/email-login-fail'
+            }), (req, res, next) => {
                 req.isAdmin = true;
                 next();
             }, 

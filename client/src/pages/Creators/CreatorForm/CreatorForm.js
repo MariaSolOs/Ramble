@@ -235,13 +235,13 @@ const CreatorForm = (props) => {
             disabled={bio.length === 0 || 
                       phoneNumber.length === 0 ||  
                       !id.front || !id.back}
-            className={`${classes.submitButton} ${classes.gradientButton}`}>
+            className={`${classes.submitButton} ${classes.doneButton}`}>
                 Done
             </button>
             {!props.backFromCreation &&
                 <button
                 type="submit"
-                className={`${classes.doLaterButton} ${classes.gradientButton}`}
+                className={`${classes.doLaterButton} ${classes.doneButton}`}
                 onClick={handleSkip}>
                     Do this later 
                 </button>}

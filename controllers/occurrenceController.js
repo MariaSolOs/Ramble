@@ -2,6 +2,7 @@
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
+      User = require('../models/user'),
       {calculatePaymentAmount, timeDateConvert} = require('../helpers/bookingHelpers');
 
 //Show occurrences for a certain experience
@@ -47,22 +48,26 @@ exports.addBookingToOcurrence = async (req, res) => {
         }
 
         //Create booking
-        const {amount} = await calculatePaymentAmount(
+        const {amount, application_fee_amount} = await calculatePaymentAmount(
                             experience.id, 
                             req.body.bookType, 
-                            req.body.numGuests
+                            req.body.numGuests,
+                            req.body.promoCode
                         );
+
         const stripeDetails = {
             paymentIntentId: req.body.payIntentId,
             cardToUse: req.body.cardToUse,
             paymentCaptured: false,
-            creatorProfit: amount * 0.8
+            creatorProfit: application_fee_amount? amount * 0.8 : amount,
+            promoCode: req.body.promoCode
         }
         const booking = new Booking({
             experience: experience._id,
             occurrence: occ._id,
             client: req.userId,
             numPeople: req.body.numGuests,
+            bookType: req.body.bookType,
             stripe: { ...stripeDetails }
         });
 
@@ -72,6 +77,13 @@ exports.addBookingToOcurrence = async (req, res) => {
 
         //Add booking to creator's requests
         experience.creator.bookingRequests.push(booking);
+
+        //Update promo code use (if applicable)
+        if(req.body.promoCode.length > 0) {
+            await User.findOneAndUpdate({'promoCode.code': req.body.promoCode}, {
+                $addToSet: {'promoCode.usedBy': req.userId}
+            });
+        }
 
         await occ.save();
         await booking.save();

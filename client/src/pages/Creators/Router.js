@@ -4,9 +4,9 @@ import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-
 
 //Pages
 import Spinner from '../../components/Spinner';
-import CreatorsIntro from './CreatorsIntro/CreatorsIntro';
-import CreatorForm from './CreatorForm/CreatorForm';
 import PrivateRoute from '../PrivateRoute';
+const CreatorsIntro = React.lazy(() => import('./CreatorsIntro/CreatorsIntro'));
+const CreatorForm = React.lazy(() => import('./CreatorForm/CreatorForm'))
 const DashboardRouter = React.lazy(() => import('./CreatorDashboard/Router'));
 
 const Router = (props) => {

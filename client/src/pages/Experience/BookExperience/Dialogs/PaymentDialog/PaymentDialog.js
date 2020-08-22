@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 //Components and icons
 import Template from '../Template';
@@ -6,6 +6,7 @@ import ExperienceSummary from '../../ExperienceSummary';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PaymentMethod from './PaymentMethod';
+import PromoCode from './PromoCode';
 import EmailForm from './EmailForm';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -14,16 +15,22 @@ const useStyles = makeStyles(styles);
 
 const PaymentDialog = (props) => {
     const classes = useStyles();
-    const totalPrice = (props.form.numGuests * +props.exp.price.perPerson);
 
     //Can submit form once the card input is valid
     const [enableSubmit, setEnableSubmit] = useState(false);
-    const handleCanSubmit = (e) => { setEnableSubmit(true); }
+    const handleCanSubmit = (val) => { setEnableSubmit(val); }
+
+    //Initially set price according to numGuests and booking type
+    const [totalPrice, setTotalPrice] = useState(
+        props.form.bookType === 'public'?
+        props.form.numGuests * props.exp.price.perPerson : 
+        props.exp.price.private
+    );
 
     const {onChange} = props;
     //In case the user wants to use a different email
-    const handleChangeEmail = (e) => { 
-        onChange('email', e.target.value); 
+    const handleChangeEmail = (val) => { 
+        onChange('email', val); 
     }
 
     //Allow user to save a card/use an existing card
@@ -34,6 +41,19 @@ const PaymentDialog = (props) => {
         onChange('cardToUse', cardId);
         setEnableSubmit(true);
     }, [onChange]);
+
+    //If user referred a friend, apply promo
+    useEffect(() => {
+        if(props.userPromo.usedBy.length === 1) {
+            setTotalPrice(totalPrice => totalPrice * 0.8);
+            onChange('promoCode', props.userPromo.code);
+        }
+    }, [props.userPromo.usedBy, props.userPromo.code, onChange]); 
+    //If user has a discount code
+    const handleApplyPromo = (code) => {
+        onChange('promoCode', code);
+        setTotalPrice(totalPrice => totalPrice * 0.8);
+    }
 
     return (
         <>
@@ -65,27 +85,40 @@ const PaymentDialog = (props) => {
                 onRememberCard={handleRememberCardChange}
                 onCardToUse={handleUseCardChange}
                 onCanSubmit={handleCanSubmit}/>
+                {props.userPromo.usedBy.length === 1 ?
+                    <p className={classes.promoMsg}>
+                        Because you shared your code with a friend, you get 20% off!
+                    </p> :
+                    <PromoCode
+                    userCode={props.userPromo.code}
+                    promoCode={props.form.promoCode}
+                    applyPromo={handleApplyPromo}
+                    onCanSubmit={handleCanSubmit}/>}
                 <div className={classes.totalPrice}>
                     <p>Total ({props.exp.price.currency})</p>
                     <p>
                         {props.form.bookType === 'private'?
                         `$${props.exp.price.private}` : 
-                        <>{props.form.numGuests}<span> x </span> 
-                          {(+props.exp.price.perPerson).toFixed(2)}<> = </> 
-                          {totalPrice.toFixed(2)}
+                        <>
+                            {props.form.numGuests}<span> x </span> 
+                            {(+props.exp.price.perPerson).toFixed(2)}
+                            {(props.form.promoCode.length > 0)
+                                && <> - 20% </>} 
+                            <> = </>{totalPrice.toFixed(2)}
                         </>}
                     </p>
                 </div>
                 <EmailForm 
                 userEmail={props.userEmail} 
                 newEmail={props.form.email} 
-                onChange={handleChangeEmail}/>
-                {/* TODO: Replace this link with real one */}
+                onChange={handleChangeEmail}
+                onCanSubmit={handleCanSubmit}/>
                 <p className={classes.policyMessage}>
                     By confirming this purchase you agree to the 
                     User Conditions and Policies regarding booking.
                     {/* <a href="#"> User Conditions and Policies </a> 
                     regarding booking. */}
+                    {/* TODO: Replace this link with real one */}
                 </p>
             </DialogContent>
         </Template>

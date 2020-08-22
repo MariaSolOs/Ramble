@@ -48,6 +48,12 @@ const ProfileMenu = (props) => {
         transitionDuration={500}
         classes={{ paper: classes.menuPaper, list: classes.menuList }}>
             <MenuItem 
+            component={NavLink} 
+            to="/profile/exp/past"
+            onClick={closeMenu}>
+                View Profile
+            </MenuItem>
+            <MenuItem 
             component={NavLink}
             to="/notifications"
             onClick={closeMenu}>
@@ -56,12 +62,6 @@ const ProfileMenu = (props) => {
                 <div className={classes.numNotifs}>
                     {props.numNotifs}
                 </div>}
-            </MenuItem>
-            <MenuItem 
-            component={NavLink} 
-            to="/profile/exp/past"
-            onClick={closeMenu}>
-                View Profile
             </MenuItem>
             {props.isCreator && 
                 <MenuItem 

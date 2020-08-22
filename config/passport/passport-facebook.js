@@ -21,7 +21,6 @@ passport.use(new FacebookStrategy({
                     membershipProviderId: profile.id,
                     promoCode: {
                         code: await generatePromoCode(profile._json.first_name),
-                        numUses: 0
                     }
                 });
                 newUser.save((err) => {

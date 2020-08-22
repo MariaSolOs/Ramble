@@ -13,6 +13,11 @@ router.post('/customer',
             authenticateToken,
             controllers.addCustomer);
 
+//Check if the given promo code is valid
+router.post('/promo', 
+            authenticateToken,
+            controllers.applyPromo);
+
 //Manage user's payment methods
 router.post('/payment-method',
             authenticateToken,

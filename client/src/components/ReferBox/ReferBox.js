@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 //Components and icons
 import Avatar from '@material-ui/core/Avatar';
@@ -20,15 +21,19 @@ const referAvat = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINAR
 
 const ReferBox = ({shareUrl}) => {
     const classes = useStyles();
+
+    const promoCode = useSelector(state => state.user.profile.promoCode.code);
     
-    //TODO: Add refer codes here (discount for friend?)
     return (
         <div className={classes.wrapper}>
             <div className={classes.root}>
                 <h3 className={classes.title1}>
-                    Invite friends & get <span>20</span>% off
+                    Share your code with a friend. By using it for their first 
+                    booking, you’ll both get <span>20</span>% off
                 </h3> 
                 <h4 className={classes.title2}>your next experience.</h4>
+                {promoCode &&
+                    <h3 className={classes.promoCode}>Your code is: {promoCode}</h3>}
                 <div className={classes.body}>
                     <div className={classes.referAvatars}>
                         <Avatar src={referAvat[1]}

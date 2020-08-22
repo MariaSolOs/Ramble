@@ -24,7 +24,6 @@ exports.registerUserWithEmail = (req, res, next) => {
                 membershipProvider: 'email',
                 promoCode: {
                     code: await generatePromoCode(req.body.fstName),
-                    numUses: 0
                 }
             }).then(user => {
                 req.login(user, err => {

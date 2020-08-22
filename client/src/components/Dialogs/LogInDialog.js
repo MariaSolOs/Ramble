@@ -16,6 +16,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './AuthDialogStyles';
 const useStyles = makeStyles(styles);
 
+const initForm = {
+    email: '',
+    password: ''
+}
+
 const LogInDialog = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -26,10 +31,7 @@ const LogInDialog = (props) => {
     }, [props.currentRoute]);
     
     //Log in form
-    const [values, setValues] = useState({
-        email: '',
-        password: ''
-    });
+    const [values, setValues] = useState(initForm);
     const handleChange = (e) => {
         setValues({
             ...values,
@@ -45,6 +47,7 @@ const LogInDialog = (props) => {
                 password: values.password
             }));
         } else { dispatch(emailAuth(values, 'login')); }
+        setValues(initForm);
     }
 
     return (

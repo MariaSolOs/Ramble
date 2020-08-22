@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
-import {showError} from '../../../store/actions/ui';
+import {useSelector} from 'react-redux';
 import useSavedCards from '../../../hooks/useSavedCards';
 
 import CardInput from '../../../components/StripeCardInput';
@@ -17,6 +16,9 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June',
 const PaymentInfo = (props) => {
     const classes = useStyles();
 
+    const userName = useSelector(state => `${state.user.profile.fstName} ${
+                     state.user.profile.lstName}`);
+
     const [canSubmit, setCanSubmit] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
 
@@ -27,7 +29,7 @@ const PaymentInfo = (props) => {
     }
     const handleAddCard = () => {
         if(canSubmit) { 
-            saveCard(props.userName);
+            saveCard(userName);
         } else { setShowMessage(true); }
     }
     const handleDeleteCard = (cardId) => () => {
@@ -78,12 +80,5 @@ const PaymentInfo = (props) => {
     ); 
 }
 
-const mapStateToProps = (state) => ({
-    userName: `${state.user.profile.fstName} ${state.user.profile.lstName}`
-});
-const mapDispatchToProps = (dispatch) => ({
-    showError: (msg) => dispatch(showError(msg))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentInfo);
+export default PaymentInfo;
 

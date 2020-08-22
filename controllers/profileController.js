@@ -15,7 +15,8 @@ const getUserData = (user) => ({
     city: user.city,
     email: user.email,
     phoneNumber: user.phoneNumber,
-    birthday: user.birthday
+    birthday: user.birthday,
+    promoCode: user.promoCode
 });
 const changeProfilePhoto = async (oldPhoto, newPhoto) => {
     try {

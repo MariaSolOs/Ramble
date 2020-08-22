@@ -21,6 +21,11 @@ const BookingSchema = new mongoose.Schema({
         required: true,
         min: 1
     },
+    bookType: {
+        type: String,
+        required: true,
+        enum: ['public', 'private']
+    },
     stripe: {
         paymentIntentId: String, 
         cardToUse: String,
@@ -28,7 +33,11 @@ const BookingSchema = new mongoose.Schema({
             type: Boolean,
             required: true,
         },
-        creatorProfit: Number //This is in whatever units Stripe uses
+        creatorProfit: Number, //This is in whatever units Stripe uses
+        promoCode: {
+            type: String,
+            default: ''
+        }
     }
 }, {timestamps: true});
   

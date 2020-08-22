@@ -99,7 +99,6 @@ export const quickInfosStyles = () => ({
         borderRadius: '1rem',
         margin: '1rem 0',
         cursor: 'default',
-        whiteSpace: 'nowrap',
         padding: props => `0 ${5 + 5*(props.rootPadding)}px`,
         '& > div': {
             display: 'flex',

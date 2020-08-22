@@ -53,7 +53,7 @@ const ErrorDialog = (props) => {
                 Sorry 'bout that. 
             </div>
             <p className={classes.message}>
-                We f*cked up. {props.message}
+                {props.message}
             </p>
         </Dialog>
     );

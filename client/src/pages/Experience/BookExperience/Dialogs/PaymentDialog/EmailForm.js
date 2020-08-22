@@ -9,8 +9,18 @@ const useStyles = makeStyles(styles);
 
 const EmailForm = (props) => {
     //For handling form changes 
-    const [showEmailForm, setShowEmailForm] = useState(!props.userEmail);
-    const handleFormCheckbox = (e) => setShowEmailForm(e.target.checked); 
+    const [showEmailForm, setShowEmailForm] = useState(props.userEmail.length === 0);
+    const handleNewEmailChange = (e) => { props.onChange(e.target.value); }
+    const handleFormCheckbox = (e) => {
+        if(e.target.name === 'shower') {
+            setShowEmailForm(e.target.checked); 
+            props.onCanSubmit(false);
+        } else { //(e.target.name === 'hider')
+            props.onChange(''); //Clear new email input
+            setShowEmailForm(!e.target.checked); 
+            props.onCanSubmit(true);
+        }
+    }
 
     const classes = useStyles({showEmailForm});
     return (
@@ -23,15 +33,19 @@ const EmailForm = (props) => {
                 </p>
                 <InputBase
                 value={props.newEmail}
-                onChange={props.onChange}
+                onChange={handleNewEmailChange}
                 className={classes.input}/>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <p className={classes.label}>Use {props.userEmail}.</p>
+                    <Checkbox name="hider" onChange={handleFormCheckbox}/>
+                </div>
             </div> :
             <div className={classes.emailForm}>
                 <p className={`${classes.label} email`}>
                     We'll send your receipt to {props.userEmail}. Would you like 
                     to use a different email address?
                 </p>
-                <Checkbox onChange={handleFormCheckbox}/>
+                <Checkbox name="shower" onChange={handleFormCheckbox}/>
             </div>}
         </>
     );

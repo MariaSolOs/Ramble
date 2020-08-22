@@ -8,10 +8,13 @@ const local = new LocalStrategy({
       session: false
     }, (username, password, done) => {
         User.findOne({email: username}, (err, user) => {
-            if(err || !user.validPassword(password)) {
-                done(null, false);
-            } else { done(null, user); }
-        })
+            if(!err && user) {
+                user.validPassword(password).then(res => {
+                    if(res) { return done(null, user); }
+                    else { done(null, false); }
+                });
+            } else { done(null, false); }
+        });
     }
 );
 

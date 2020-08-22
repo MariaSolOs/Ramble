@@ -45,7 +45,9 @@ const Landing = (props) => {
         <div className={classes.root}>
             <div className={classes.body}>
                 <h1 className={classes.title}>Experience different.</h1>
-                <h5 className={classes.description}>Discover and attend unique experiences</h5>
+                <h5 className={classes.description}>
+                    Discover unique date friendly activities
+                </h5>
                 <div className={classes.row}>
                     <Autocomplete
                     id="location-search"

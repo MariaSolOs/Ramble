@@ -69,6 +69,9 @@ export const adminLogin = (adminInfo) => {
         })
         .catch(err => { 
             console.log(`ADMIN AUTH FAILED: ${err}`); 
+            if(err.response.status === 401) {
+                dispatch(showError('Invalid credentials'));
+            }
             dispatch(resetUser());
         });
     }
@@ -90,6 +93,8 @@ export const emailAuth = (userInfo, authType) => {
             console.log(`EMAIL AUTH FAILED: ${err}`); 
             if(err.response.status === 409) {
                 dispatch(showError('Someone is already using that email...'));
+            } else if(err.response.status === 401) {
+                dispatch(showError('Wrong email/password'));
             } else {
                 dispatch(showError('Something went wrong...'));
             }
@@ -144,7 +149,7 @@ export const upgradeToCreator = (creatorInfo) => {
         })
         .catch(err => {
             console.log(`CREATOR CREATION FAILED: ${err}`);
-            dispatch(showError("We couldn't submit your form..."));
+            dispatch(showError("We f*cked up. We couldn't submit your form..."));
         });
     }
 }

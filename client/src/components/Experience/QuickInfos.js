@@ -37,7 +37,7 @@ const QuickInfos = (props) => {
                     <FontAwesomeIcon icon={faUsers}/>
                 </div>
                 <span className={classes.label}>Up to</span>
-                <span className={classes.content}>
+                <span className={classes.content} style={{ whiteSpace: 'nowrap' }}>
                     {`${props.capacity} ${props.capacity > 1? 'People' : 'Person'}`}
                 </span>
             </div>

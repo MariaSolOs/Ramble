@@ -28,13 +28,18 @@ const styles = () => ({
     title1: {
         color: '#2B2B2B',
         margin: 0,
-        fontSize: '1.55rem',
-        '& span': { fontSize: '1.9rem' }
+        fontSize: '1.4rem',
+        whiteSpace: 'break-spaces',
+        '& span': { fontSize: '1.75rem' }
     },
     title2: {
         margin: '0 auto 8px 0',
         color: '#878788',
         fontSize: '1.4rem'
+    },
+    promoCode: {
+        margin: 0,
+        fontSize: '1rem'
     },
 
     referAvatars: {

@@ -20,7 +20,6 @@ passport.use(new GoogleStrategy({
                         membershipProviderId: profile.id,
                         promoCode: {
                             code: await generatePromoCode(profile._json.given_name),
-                            numUses: 0
                         }
                     });
                     newUser.save((err) => {

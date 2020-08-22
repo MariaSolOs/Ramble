@@ -25,7 +25,7 @@ const BookingRequests = (props) => {
             setBookings(res.data.bookingRequests);
         })
         .catch(err => {
-            showError('We cannot get your bookings right now...');
+            showError('We f*cked up. We cannot get your bookings right now...');
         });
         endLoading();
     }, [showError, numBookings]);
@@ -47,7 +47,7 @@ const BookingRequests = (props) => {
             showSnackbar(`The booking was ${decision}`);
         })
         .catch(err => {
-            showError("We couldn't process your decision...");
+            showError("We f*cked up. We couldn't process your decision...");
         });
     }, [showSnackbar, showError, decNumBookings]);
     const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => 
@@ -56,16 +56,21 @@ const BookingRequests = (props) => {
             showSnackbar('Processing your decision...');
             if(action === 'approve') {
                 await axios.post(`/api/stripe/payment-intent/saved-card`, {
-                    amount: Math.round(stripeInfo.creatorProfit * 1.25),
-                    currency: stripeInfo.currency,
+                    expId: stripeInfo.expId,
+                    bookType: stripeInfo.bookType,
+                    numGuests: stripeInfo.numGuests,
+                    promoCode: stripeInfo.promoCode,         
                     customerId: stripeInfo.customerId,
                     payMethodId: stripeInfo.cardToUse,
                     bookingId: bookId, 
                     transferId: stripeId,
                     creatorId
                 });
-            } else {
+                //TODO: Handle error here
+            } else if(action === 'cancel') {
                 await axios.delete(`/api/creator/bookingRequests/${bookId}`);
+            } else {
+                throw new Error('Invalid action');
             }
             setBookings((bookings) => (
                 bookings.filter(req => (
@@ -76,7 +81,7 @@ const BookingRequests = (props) => {
             const decision = action === 'approve'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         } catch(err) {
-            showError("We couldn't process your decision...");
+            showError("We f*cked up. We couldn't process your decision...");
         } 
     }, [showSnackbar, showError, creatorId, stripeId, decNumBookings]);
 
@@ -125,7 +130,9 @@ const BookingRequests = (props) => {
                         ) :
                         handleDecisionSavedCard('approve', 
                         { customerId: booking.client.stripe.customerId,
-                          currency: booking.experience.price.currency,
+                          expId: booking.experience._id,
+                          bookType: booking.bookType,
+                          numGuests: booking.numPeople,
                           ...booking.stripe }, 
                           booking._id)
                     }
@@ -136,11 +143,7 @@ const BookingRequests = (props) => {
                             booking.stripe.paymentIntentId,
                             booking._id
                         ) :
-                        handleDecisionSavedCard('cancel', 
-                        { customerId: booking.client.stripe.customerId,
-                          currency: booking.experience.price.currency,
-                          ...booking.stripe },
-                          booking._id)
+                        handleDecisionSavedCard('cancel', {}, booking._id)
                     }/>
                 </div>
             ))}

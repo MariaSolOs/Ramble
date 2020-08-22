@@ -63,6 +63,7 @@ const BookExperience = ({exp, user, onClose}) => {
             timeslot: state.form.timeslot,
             numGuests: state.form.numGuests,
             bookType: state.form.bookType,
+            promoCode: state.form.promoCode,
             cardToUse,  //One of these will be null
             payIntentId
         }).then(res => {
@@ -76,7 +77,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 cancelBooking('Please contact us.');
             }
             setTimeout(() => { onClose(); }, 4000);
-        }).catch(err => { cancelBooking('Please contact us.'); });
+        }).catch(err => { cancelBooking('We f*cked up. Please contact us.'); });
     }
 
     //For handling payment
@@ -98,7 +99,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 if(newCustomer.status === 201) {
                     customerId = newCustomer.data.customerId;
                 } else {
-                    return cancelBooking("We couldn't save your card...");
+                    return cancelBooking("We f*cked up. We couldn't save your card...");
                 }
             }
 
@@ -106,17 +107,18 @@ const BookExperience = ({exp, user, onClose}) => {
             const payIntent = await axios.post(
                 '/api/stripe/payment-intent', 
                 { expId: exp._id,
-                    transferId: exp.creator.stripe.accountId,
-                    creatorId: exp.creator._id,
-                    bookType: state.form.bookType,
-                    numGuests: state.form.numGuests,
-                    customerId }
+                 transferId: exp.creator.stripe.accountId,
+                 creatorId: exp.creator._id,
+                 bookType: state.form.bookType,
+                 numGuests: state.form.numGuests,
+                 promoCode: state.form.promoCode,
+                 customerId }
             );
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
             }
             if (!stripe || !elements || payIntent.status !== 200) { 
-                cancelBooking('Your booking cannot be completed right now.');
+                cancelBooking('We f*cked up. Your booking cannot be completed right now.');
                 return; 
             }
 
@@ -132,7 +134,8 @@ const BookExperience = ({exp, user, onClose}) => {
                         name: `${user.fstName} ${user.lstName}`,
                     }
                 },
-                receipt_email: state.form.email || user.email,
+                receipt_email: state.form.email.length > 0? 
+                               state.form.email : user.email,
                 ...usage
             });
             if(payConfirm.error) {
@@ -140,9 +143,9 @@ const BookExperience = ({exp, user, onClose}) => {
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
                 return handleAddBookingToOcc(payConfirm.paymentIntent.id, null);
             } else {
-                return cancelBooking("We couldn't complete your payment.");
+                return cancelBooking("We f*cked up. We couldn't complete your payment.");
             }
-        } catch(err) { cancelBooking('Please contact us.'); }
+        } catch(err) { cancelBooking('We f*cked up. Please contact us.'); }
     }
 
     //Pass saved cards to payment dialog
@@ -206,6 +209,7 @@ const BookExperience = ({exp, user, onClose}) => {
                         price: exp.price
                     }}
                     userEmail={user.email}
+                    userPromo={user.promoCode}
                     cards={cards}
                     onChange={handleChange}
                     controls={{

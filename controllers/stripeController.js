@@ -47,6 +47,19 @@ exports.addCustomer = async (req, res) => {
     }
 }
 
+exports.applyPromo = (req, res) => {
+    User.find({'promoCode.code': req.body.code}, (err, users) => {
+        if(!err && (users.length === 1)) {
+            //Only one friend can use the promo code
+            res.status(200).send({
+                valid: users[0].promoCode.usedBy.length === 0
+            });
+        } else {
+            res.status(500).send({err: 'Promo cannot be applied.'});
+        }
+    });
+}
+
 exports.attachPaymentMethod = async (req, res) => {
     try {
         const user = await User.findById(req.userId, 'fstName lstName email stripe');
@@ -101,10 +114,14 @@ exports.cancelPaymentIntent = (req, res) => {
 //Deal with payments using a saved card from the client
 exports.payWithSavedCard  = async (req, res) => {
     try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: +req.body.amount,
-            application_fee_amount: Math.round((+req.body.amount) * 0.2),
-            currency: req.body.currency,
+        const payInfo = await calculatePaymentAmount(
+            req.body.expId,
+            req.body.bookType,
+            req.body.numGuests,
+            req.body.promoCode
+        );
+        await stripe.paymentIntents.create({
+            ...payInfo,
             customer: req.body.customerId,
             payment_method: req.body.payMethodId,
             error_on_requires_action: true,
@@ -114,13 +131,14 @@ exports.payWithSavedCard  = async (req, res) => {
             },
             metadata: {
                 creatorId: req.body.creatorId,
-                clientId: req.userId,
+                clientId: req.body.customerId,
                 bookingId: req.body.bookingId
             }
         });
         return res.status(201).send({message: 'Payment intent created.'});
     } catch(err) {
         console.log(err);
+        res.status(500).send(err);
         //TODO: Handle error here
     }
 }
@@ -132,7 +150,8 @@ exports.createPaymentIntent = async (req, res) => {
         const payInfo = await calculatePaymentAmount(
             req.body.expId, 
             req.body.bookType, 
-            +req.body.numGuests
+            +req.body.numGuests,
+            req.body.promoCode
         );
 
         //Add the customer ID if applicable
@@ -142,9 +161,7 @@ exports.createPaymentIntent = async (req, res) => {
 
         //Create payment intent
         const payIntent = await stripe.paymentIntents.create({
-            amount: payInfo.amount,
-            currency: payInfo.currency,
-            application_fee_amount: payInfo.rambleFee,
+            ...payInfo,
             transfer_data: {
                 destination: req.body.transferId
             },

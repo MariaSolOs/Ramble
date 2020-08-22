@@ -2,7 +2,6 @@ const styles = () => ({
     //Dropdown button
     dropButton: {
         height: 45,
-        width: 100,
         padding: '1% 3%',
         backgroundColor: props =>
             props.isCreator? '#FFF' : 'rgba(65, 65, 65, 0.9)',
@@ -20,7 +19,7 @@ const styles = () => ({
             fontWeight: 'bold',
             fontSize: '1rem',
             letterSpacing: '-0.06rem',
-            marginLeft: '0.6rem'
+            margin: '0 0.5rem'
         }
     },
 

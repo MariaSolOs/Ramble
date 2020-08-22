@@ -146,7 +146,7 @@ const styles = () => ({
         '&:hover': { color: '#FFF' }
     },
 
-    gradientButton: {
+    doneButton: {
         border: 'none',
         borderRadius: '1.7rem',
         fontSize: '1.05rem',

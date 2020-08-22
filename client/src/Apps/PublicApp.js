@@ -11,7 +11,7 @@ import Footer from '../components/Footer/Footer';
 import Spinner from '../components/Spinner';
 import Home from '../pages/Home/Home';
 import PrivateRoute from '../pages/PrivateRoute';
-import Notifications from '../pages/Notifications/Notifications';
+const Notifications = React.lazy(() => import('../pages/Notifications/Notifications'));
 const ExperienceRouter = React.lazy(() => import('../pages/Experience/Router'));
 const ProfileRouter = React.lazy(() => import('../pages/Profile/Router'));
 const CreatorRouter = React.lazy(() => import('../pages/Creators/Router'));

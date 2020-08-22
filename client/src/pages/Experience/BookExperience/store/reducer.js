@@ -8,9 +8,10 @@ const initialState = {
         spotsLeft: null,
         bookType: null,
         numGuests: null,
-        email: null,
+        email: '',
         rememberCard: false,
-        cardToUse: null
+        cardToUse: null,
+        promoCode: ''
     },
     step: steps.CALENDAR,
     slotsInfo: [],

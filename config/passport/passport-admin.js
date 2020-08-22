@@ -7,12 +7,14 @@ const local = new LocalStrategy({
       passwordField: 'password',
       session: false
     }, (username, password, done) => {
-        Admin.findOne({username})
-        .then(admin => {
-            if (!admin || !admin.validPassword(password)) {
-                done(null, false);
-            } else { done(null, admin); }
-        }).catch(e => done(e));
+        Admin.findOne({username}, (err, admin) => {
+            if(!err && admin) {
+                admin.validPassword(password).then(res => {
+                    if(res) { return done(null, admin); }
+                    else { done(null, false); }
+                });
+            } else { done(null, false); }
+        });
 });
 
 passport.use('local-admin', local);

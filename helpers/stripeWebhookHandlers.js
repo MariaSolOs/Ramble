@@ -36,6 +36,8 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});
 
+        console.log('BOOKING', booking)
+
         //Get information for confirmation email
         await booking.populate([
             { path: 'experience',
@@ -64,7 +66,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
                        '../emailTemplates/bookingConfirmation.mjml'), 'utf-8');              
         const template = compile(source);
         const mjml = template({
-            price: (booking.stripe.creatorProfit / 80).toFixed(2),
+            price: (intent.amount / 100).toFixed(2),
             currency: booking.experience.price.currency,
             bookingDate,
             images: booking.experience.images,

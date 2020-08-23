@@ -69,7 +69,8 @@ const styles = () => ({
         fontWeight: 'bold',
         fontSize: '1.2rem',
         letterSpacing: '-0.06rem',
-        color: 'white'
+        color: 'white',
+        marginBottom: 10
     },
 
     submitButton: {

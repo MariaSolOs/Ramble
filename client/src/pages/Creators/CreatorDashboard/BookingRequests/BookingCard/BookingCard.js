@@ -4,6 +4,7 @@ import * as helpers from './helpers';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCrown} from '@fortawesome/free-solid-svg-icons/faCrown';
 import {faClock} from '@fortawesome/free-regular-svg-icons/faClock';
 import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
 import {faDollarSign} from '@fortawesome/free-solid-svg-icons/faDollarSign';
@@ -17,6 +18,7 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
     const [fromHour, fromTime, toHour, toTime] = 
         helpers.getTimePieces(booking.occurrence.timeslot);
 
+    console.log(booking)
     return (
         <div className={classes.root}>
             <div className={classes.header}>
@@ -31,6 +33,11 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                 </h3>
             </div>
             <div className={classes.body}>
+                {(booking.bookType === 'private') &&
+                    <div className={classes.private}>
+                        <FontAwesomeIcon icon={faCrown}/>
+                        <span>Private booking</span>
+                    </div>}
                 <div className={classes.clientInfo}>
                     <Avatar src={booking.client.photo}/>
                     <div>
@@ -48,6 +55,9 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                         {helpers.getFormattedDate(booking.occurrence.dateStart)}
                     </p>
                 </div>
+                <h4 className={classes.expTitle}>
+                    {booking.experience.title}
+                </h4>
                 <div className={`${classes.bookDetails} row`}>
                     <Fab size="small" disableRipple>
                         <FontAwesomeIcon icon={faClock}/>
@@ -69,14 +79,6 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                     <span className={`${classes.whiteText} ${classes.withLargeNum}`}>
                         $ <span>{(booking.stripe.creatorProfit / 100).toFixed(2)}</span>
                     </span>
-                </div>
-                <div className={classes.experience}>
-                    <img 
-                    src={booking.experience.images[0].replace('h_400', 'h_150')} 
-                    alt={booking.experience.title}/>
-                    <h4 className={classes.whiteText}>
-                        {booking.experience.title}
-                    </h4>
                 </div>
                 <div className="row">
                     <p className={classes.greyText}>Currently for</p>

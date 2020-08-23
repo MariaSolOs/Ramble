@@ -71,6 +71,10 @@ const CollapsingNav = (props) => {
                         to={props.isCreator? '/creator/dashboard/bookings' : 
                                              '/creator/become'}
                         onClick={closeMenu}>
+                            {props.isCreator && 
+                            <div className={classes.numBookings}>
+                                {props.numBookings}
+                            </div>}
                             {props.isCreator? 'Creator dashboard': 'Become a Creator'}
                         </MenuItem>
                         {props.isAuth? 

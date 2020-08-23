@@ -159,9 +159,9 @@ const UserInfo = (props) => {
                     </FormControl>
                 </div>
                 {props.creator.id &&
-                    <div className={classes.formRow} style={{ display: 'block' }}>
+                    <div className={classes.formRow} style={{ flexDirection: 'column' }}>
                         <label htmlFor="creatorBio" className={classes.label}>
-                            Bio
+                            About you
                         </label>
                         <TextField 
                         multiline 

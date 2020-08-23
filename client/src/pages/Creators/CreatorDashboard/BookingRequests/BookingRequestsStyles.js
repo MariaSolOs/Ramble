@@ -9,7 +9,7 @@ const styles = () => ({
         alignItems: 'center',
         width: '38%',
         minWidth: 380,
-        marginTop: '1.5rem',
+        marginTop: 20,
         '& button': {
             color: '#FFF',
             backgroundColor: '#2D2E2E',
@@ -28,13 +28,13 @@ const styles = () => ({
 
     requests: {
         display: 'flex',
-        flexWrap: 'wrap',
         width: '100%',
-        marginTop: -10
+        height: 'calc(84vh - 28px - 29px - 24px)',
+        marginTop: -10,
+        overflowX: 'scroll'
     },
     request: { 
-        marginTop: 20,
-        '&:nth-child(2n)': { marginLeft: 50 }
+        margin: '10px 40px 0 0'
     }
 });
 export default styles;

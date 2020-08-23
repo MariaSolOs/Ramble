@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {NavLink, Link} from 'react-router-dom';
+import {NavLink, Link, useLocation} from 'react-router-dom';
 
 //MUI
 import Menu from '@material-ui/core/Menu';
@@ -12,8 +12,10 @@ import styles from './ProfileMenuStyles';
 const useStyles = makeStyles(styles);
 
 const ProfileMenu = (props) => {
+    const {pathname} = useLocation();
+    const showNotif = props.numNotifs > 0 && pathname !== '/notifications';
     const classes = useStyles({
-        withNotifIcon: props.numNotifs > 0,
+        withNotifIcon: showNotif,
         isCreator: props.isCreator
     });
     const {closeParentMenu} = props;
@@ -34,6 +36,7 @@ const ProfileMenu = (props) => {
     return (
         <div className={classes.root}>
             <button onClick={openMenu} className={classes.dropButton}>
+                {showNotif && <div className={classes.notifDot}/>}
                 <Avatar src={props.userPic} alt="Profile picture"/>
                 <span>{props.userName}</span>
             </button>
@@ -58,10 +61,10 @@ const ProfileMenu = (props) => {
             to="/notifications"
             onClick={closeMenu}>
                 Notifications
-                {props.numNotifs > 0 &&
-                <div className={classes.numNotifs}>
-                    {props.numNotifs}
-                </div>}
+                {showNotif && 
+                    <div className={classes.numNotifs}>
+                        {props.numNotifs}
+                    </div>}
             </MenuItem>
             {props.isCreator && 
                 <MenuItem 

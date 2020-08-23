@@ -7,16 +7,18 @@ const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         minHeight: '70vh',
-        width: '90%',
-        margin: '13vh auto 5vh'
+        maxHeight: '84vh',
+        width: '100vw',
+        margin: '13vh 0 3vh'
     },
     page: {
-        width: 'calc(100% - 10px - 3%)'
+        width: 'calc(100% - 10px - 6%)',
+        maxHeight: '100%'
     },
     shadowSeparator: {
         padding: 5,
         borderRadius: '2rem',
-        marginRight: '3%',
+        margin: '0 3%',
         background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
     }
 }));

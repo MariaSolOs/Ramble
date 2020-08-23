@@ -25,19 +25,17 @@ const useStyles = makeStyles(() => ({
 const NavRow = () => {
     const classes = useStyles();
     return (
-        <div>
-            <Breadcrumbs separator="" classes={{ root: classes.nav }}>
-                <NavLink to="/creator/dashboard/bookings">
-                    Booking requests
-                </NavLink>
-                <NavLink to="/creator/dashboard/payments">
-                    Payments
-                </NavLink>
-                <NavLink to="/creator/dashboard/calendar">
-                    My calendar
-                </NavLink>
-            </Breadcrumbs>
-        </div>
+        <Breadcrumbs separator="" classes={{ root: classes.nav }}>
+            <NavLink to="/creator/dashboard/bookings">
+                Booking requests
+            </NavLink>
+            <NavLink to="/creator/dashboard/payments">
+                Payments
+            </NavLink>
+            <NavLink to="/creator/dashboard/calendar">
+                My calendar
+            </NavLink>
+        </Breadcrumbs>
     );
 }
 export default React.memo(NavRow);

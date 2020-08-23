@@ -20,7 +20,15 @@ const styles = () => ({
             fontSize: '1rem',
             letterSpacing: '-0.06rem',
             margin: '0 0.5rem'
-        }
+        },
+        position: 'relative'
+    },
+    notifDot: {
+        borderRadius: '50%',
+        backgroundColor: '#F93E35',
+        position: 'absolute',
+        top: 2, right: 0,
+        height: 11, width: 11
     },
 
     menuPaper: {
@@ -48,7 +56,7 @@ const styles = () => ({
             margin: '0 0 4px 0',
             borderRadius: '0.65rem',
 
-            '&:first-child': {
+            '&:nth-child(2)': {
                 textIndent: props => 
                     props.withNotifIcon && 35
             },

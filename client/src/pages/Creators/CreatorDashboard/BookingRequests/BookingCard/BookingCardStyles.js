@@ -3,11 +3,12 @@ const styles = () => ({
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
         letterSpacing: '-0.05rem',
-        width: '35%',
-        minWidth: 400,
+        width: '45%',
+        minWidth: 430,
         '& p': { margin: 0 }
     },
 
+    //Used through the entire card
     greyText: { 
         color: '#ACACAC',
         fontSize: '0.95rem'
@@ -25,10 +26,10 @@ const styles = () => ({
     },
 
     header: {
-        padding: '1rem 5px 1.5rem',
+        padding: '1rem 5px 5px',
         '& $whiteText': {
             margin: '5px 0',
-            fontSize: '1.25rem'
+            fontSize: '1.2rem'
         }
     },
     body: {
@@ -36,9 +37,10 @@ const styles = () => ({
         borderRadius: '1.4rem',
         display: 'flex',
         flexDirection: 'column',
-        padding: '1rem 1.4rem 1.3rem',
+        padding: '1rem 1.4rem',
+        position: 'relative',
 
-        '& > .row': { margin: '10px 0' },
+        '& > .row': { margin: '8px 0' },
 
         '& .MuiFab-root': {
             backgroundColor: '#2D2E2E',
@@ -52,15 +54,31 @@ const styles = () => ({
         }
     },
 
+    private: {
+        position: 'absolute',
+        top: '1rem', right: '1.4rem',
+        color: '#FFF',
+        '& svg': {
+            fontSize: '1.5rem',
+            display: 'block',
+            margin: '0 auto 5px',
+        }
+    },
+
     clientInfo: {
         display: 'flex',
         alignItems: 'center',
-        margin: '0 0 10px -5px',
+        marginLeft: -5,
         '& .MuiAvatar-root': { 
             marginRight: 10,
-            width: 50, height: 50,
+            width: 45, height: 45,
         },
         '& $whiteText': { fontSize: '1.25rem' }
+    },
+    expTitle: {
+        color: '#FFF',
+        fontSize: '1.25rem',
+        margin: '0 0 10px'
     },
     bookDetails: {
         display: 'flex',
@@ -68,29 +86,16 @@ const styles = () => ({
         alignItems: 'center',
         whiteSpace: 'nowrap'
     },
-    experience: {
-        display: 'flex',
-        margin: '1.2rem 0',
-        '& img': {
-            borderRadius: '0.8rem',
-            height: 110,
-            objectFit: 'contain',
-            marginRight: 10
-        },
-        '& h4': { 
-            marginTop: 8,
-            fontSize: '1.2rem' 
-        }
-    },
     currentBookInfo: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        marginTop: 5
     },
     actions: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '2rem',
+        marginTop: '1.5rem',
         '& button': {
             color: '#FFF',
             font: 'inherit',
@@ -107,12 +112,17 @@ const styles = () => ({
     },
     acceptButton: {
         backgroundColor: '#08E1AE',
-        backgroundImage: 'linear-gradient(315deg, #08E1AE 0%, #98DE5B 74%)',
-        marginRight: '1.5rem'
+        backgroundImage: 'linear-gradient(to right, #76B852 0%, #8DC26F 51%, #76B852 100%)',
+        marginRight: '1rem',
+        '&:hover': {
+            backgroundPosition: 'right center'
+        }
     },
     declineButton: {
-        backgroundColor: '#990000',
-        backgroundImage: 'linear-gradient(147deg, #990000 0%, #FF0000 74%)'
+        backgroundImage: 'linear-gradient(to right, #E53935 0%, #E35D5B 51%, #E53935 100%)',
+        '&:hover': {
+            backgroundPosition: 'right center'
+        }
     }
 });
 export default styles;

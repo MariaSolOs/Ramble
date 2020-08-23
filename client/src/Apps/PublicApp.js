@@ -35,6 +35,17 @@ const PublicApp = (props) => {
         if(isAuth) { fetchExps(); }
     }, [isAuth, fetchExps]);
 
+    //Change favicon when there's a notification
+    useEffect(() => {
+        if(props.numNotifs > 0) {
+            document.querySelector('#dynamic-favicon-32').href = '/favicon/notif-favicon-32x32.png';
+            document.querySelector('#dynamic-favicon-16').href = '/favicon/notif-favicon-16x16.png';
+        } else {
+            document.querySelector('#dynamic-favicon-32').href = '/favicon/favicon-32x32.png';
+            document.querySelector('#dynamic-favicon-16').href = '/favicon/favicon-16x16.png';
+        }
+    }, [props.numNotifs]);
+
     //The isAuth prop is passed to the page routers to filter routes
     return (
         <React.Suspense fallback={<Spinner/>}>
@@ -64,7 +75,8 @@ const PublicApp = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.user.profile.id !== null,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    numNotifs: state.user.notifs.length
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchExps: () => dispatch(fetchExperiences())

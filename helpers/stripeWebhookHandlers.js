@@ -36,8 +36,6 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});
 
-        console.log('BOOKING', booking)
-
         //Get information for confirmation email
         await booking.populate([
             { path: 'experience',

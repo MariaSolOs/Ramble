@@ -32,7 +32,7 @@ exports.getBookingRequests = async (req, res) => {
             path: 'bookingRequests',
             populate: [
             { path: 'experience',
-              select: 'title images capacity price' }, 
+              select: 'title capacity price' }, 
             { path: 'occurrence',
               select: 'dateStart timeslot spotsLeft creatorProfit' },
             { path: 'client',

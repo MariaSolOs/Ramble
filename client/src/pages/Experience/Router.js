@@ -7,6 +7,7 @@ import SearchExperiences from './SearchExperiences/SearchExperiences';
 import ShowExperience from './ShowExperience/ShowExperience';
 import PrivateRoute from '../PrivateRoute';
 const CreateExperience = React.lazy(() => import('./CreateExperience/CreateExperience'));
+const BookingSubmitted = React.lazy(() => import('./BookExperience/BookingSubmitted/BookingSubmitted'));
 
 const Router = (props) => {
     const {path} = useRouteMatch();
@@ -15,11 +16,15 @@ const Router = (props) => {
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Switch location={location}>
+                <Route path={`${path}/search`} component={SearchExperiences}/>
                 <PrivateRoute path={`${path}/new`} test={props.isAuth}>
                     <CreateExperience/>
                 </PrivateRoute>
-                <Route path={`${path}/search`} component={SearchExperiences}/>
                 <Route path={`${path}/view/:id`} component={ShowExperience}/>
+                {/* <Route path={`${path}/booking-submitted`} component={BookingSubmitted}/> */}
+                <PrivateRoute path={`${path}/booking-submitted`} test={props.isAuth}>
+                    <BookingSubmitted/>
+                </PrivateRoute>
                 <Redirect to="/"/>
             </Switch>
         </React.Suspense>

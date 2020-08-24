@@ -2,8 +2,8 @@ const styles = (theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'scroll',
-        marginBottom: '3%'
+        marginBottom: '3%',
+        maxHeight: 'calc(85vh - 44px - 41px - 20px)'
     },
 
     //General text
@@ -30,8 +30,11 @@ const styles = (theme) => ({
     experience: {
         position: 'relative',
         display: 'flex',
-        margin: '0 auto',
-        transform: 'scale(0.8)',
+        margin: '20px 0',
+        height: '90%',
+        transform: 'scale(0.8) translate(-70px -50px)',
+        '& .image-gallery': { position: 'sticky' },
+        '& .exp-wrapper': { overflowY: 'scroll' }
     }
 });
 export default styles;

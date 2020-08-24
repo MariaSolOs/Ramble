@@ -48,13 +48,6 @@ export default function useBookingReducer() {
                     payProcessing: true,
                     payMsg: 'Processing your payment...'
                 }
-            case actions.PAY_COMPLETE: 
-                return {
-                    ...state,
-                    payDone: true,
-                    payProcessing: false,
-                    payMsg: action.msg
-                }
             default: { return state; } 
         }
     }, []);

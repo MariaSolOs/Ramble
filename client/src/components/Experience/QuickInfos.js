@@ -52,7 +52,7 @@ const QuickInfos = (props) => {
                     {props.languages.join(', ')}
                 </span>
             </div>
-            {props.ageRestriction &&
+            {props.ageRestriction ?
                 <div>
                     <div className={classes.icon}>
                         <FontAwesomeIcon icon={faUserPlus}/>
@@ -63,7 +63,7 @@ const QuickInfos = (props) => {
                     <span className={classes.content}>
                         {`${props.ageRestriction} +`} 
                     </span>
-                </div>}
+                </div> : null}
         </div>
     );
 }

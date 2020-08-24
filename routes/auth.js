@@ -32,8 +32,7 @@ router.get('/facebook',
                         next();
                     });
                 })(req, res, next); 
-            }, 
-            redirectUserWithCookie);
+            }, redirectUserWithCookie);
 
 router.get('/google', 
             passport.authenticate('google', {
@@ -58,10 +57,6 @@ router.post('/admin-register',
             authenticateToken,
             identifyUser,
             controller.registerAdmin);
-
-//For users that authenticate with email link
-router.get('/email-link/:emailType/:userId',
-            controller.authenticateUserFromEmail);
             
 router.get('/logout', controller.logout);
        

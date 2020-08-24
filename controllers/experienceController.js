@@ -17,19 +17,23 @@ exports.getLocations = (req, res) => {
 }
 
 //Get experiences based on location and number of people
-exports.getExps = (req, res) => {
-    //We only need this for the gallery card
-    const displayFields = 'title location.displayLocation images price rating';
-    //Get experiences with updated availabilites and approved status
-    Experience.find({status: 'approved',
-                    'location.displayLocation': req.query.location, 
-                    capacity: {$gte: req.query.numPeople},
-                    'avail.to': {$gte: new Date()}},
-    displayFields, (err, exps) => {
-        if(err) { 
-            res.status(404).send({err: "Couldn't fetch experiences."});
-        } else { res.status(200).send({ exps }); }
-    });
+exports.getExps = async (req, res) => {
+    try {
+        //We only need this for the gallery card
+        const displayFields = 'title location.displayLocation images price rating creator';
+        //Get experiences with updated availabilites and approved status
+        let exps = await Experience.find({
+                            status: 'approved',
+                            'location.displayLocation': req.query.location, 
+                            capacity: {$gte: req.query.numPeople},
+                            'avail.to': {$gte: new Date()
+                        }}, displayFields).populate('creator', 'stripe');
+        //Make sure only creators that have a Stripe account are showed
+        exps = exps.filter(exp => exp.creator.stripe.accountId);
+        res.status(200).send({ exps });
+    } catch(err) {
+        res.status(404).send({err: "Couldn't fetch experiences."});
+    }
 }
 
 //For all the approving/dissapproving drama
@@ -57,7 +61,7 @@ exports.approveExp = (req, res) => {
             const creator = await User.findOne({creator: exp.creator._id}, 'email');
             const message = req.body.decision === 'approved'? `Your experience "${
             exp.title}" has been approved. You're now ready to host your first guests!`
-            : `Your experience ${exp.title} is not ready to go live yet.` + 
+            : `Your experience ${exp.title} is not ready to go live yet. ` + 
             'Please check your email for our feedback.';
             const notif = new Notification({
                 message,
@@ -116,7 +120,10 @@ exports.createExperience = async (req, res) => {
         await createdExp.save();
         res.status(201).send({
             message: 'Experience successfully created.',
-            title: createdExp.title
+            exp: {
+                _id: createdExp._id,
+                title: createdExp.title
+            }
         });
     } catch(err) {
         res.status(409).send({err: "Couldn't create experience."});
@@ -129,7 +136,7 @@ exports.getExp = (req, res) => {
         path: 'creator',
         populate: {
             path: 'user',
-            select: 'fstName photo'
+            select: 'fstName photo phoneNumber'
         }
     }).exec((err, exp) => {
         if(err || !exp) { 

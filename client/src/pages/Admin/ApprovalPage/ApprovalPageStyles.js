@@ -7,7 +7,7 @@ const styles = (theme) => ({
         position: 'relative',
         marginTop: '12vh',
         width: '100vw',
-        padding: '2% 15% 2% 15%',
+        padding: '2% 12%',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'row',
@@ -17,7 +17,7 @@ const styles = (theme) => ({
     },
     extraInfo: {
         width: 'auto',
-        margin: '0 auto 12vh',
+        margin: '0 auto 12vh 3rem',
         color: '#FFF',
         letterSpacing: '-0.05rem',
         fontSize: '1.1rem',
@@ -56,6 +56,7 @@ const styles = (theme) => ({
         justifyContent: 'center',
         marginLeft: -20,
         backgroundColor: '#242424',
+        zIndex: 5,
         '& button': {
             fontWeight: 'bold',
             '&:first-child': {

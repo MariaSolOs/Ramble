@@ -65,19 +65,6 @@ exports.registerAdmin = (req, res, next) => {
     }).catch(err => { next(err); });
 }
 
-exports.authenticateUserFromEmail = (req, res) => {
-    const token = generateAccessToken(req.params.userId, false, '12h');
-    res.cookie('token', token);
-    let redirectTo;
-    switch(req.params.emailType) {
-        case 'calendar-update':  
-            redirectTo = '/creator/dashboard/calendar';
-            break;
-        default: '';
-    }
-    return res.redirect(`${process.env.CLIENT_URL}${redirectTo}`);
-}
-
 //Logout route
 exports.logout = (req, res) => {
     req.logout();

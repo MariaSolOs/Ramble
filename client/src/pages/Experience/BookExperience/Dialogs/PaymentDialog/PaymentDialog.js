@@ -79,6 +79,7 @@ const PaymentDialog = (props) => {
                     exp={props.exp}/>
                 </div>
                 <PaymentMethod
+                creatorName={props.exp.creator.user.fstName}
                 cards={props.cards}
                 cardToUse={props.form.cardToUse}
                 rememberCard={props.form.rememberCard}

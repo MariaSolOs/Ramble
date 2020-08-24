@@ -72,6 +72,9 @@ app.use('/api/profile', profileRoutes);
 const creatorRoutes = require('./routes/creator');
 app.use('/api/creator', creatorRoutes);
 
+const emailRoutes = require('./routes/email');
+app.use('/api/email', emailRoutes);
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });

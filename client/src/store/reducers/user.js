@@ -11,7 +11,10 @@ const initialState = {
         email: '',
         phoneNumber: '',
         birthday: '',
-        promoCode: {}
+        promoCode: {
+            code: '',
+            usedBy: []
+        }
     },
     notifs: [],
     //Creator information

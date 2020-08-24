@@ -5,9 +5,8 @@ const styles = () => ({
         width: '70%',
         minWidth: 550,
         fontFamily: 'Helvetica, sans-serif',
-        '& .rcs-custom-scrollbar': {
+        '& .rcs-custom-scroll .rcs-custom-scrollbar': {
             opacity: 1,
-            paddingBottom: 100
         },
         '& .rcs-inner-handle': {
             background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'

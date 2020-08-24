@@ -15,8 +15,7 @@ const styles = () => ({
         fontWeight: 'bold',
         fontSize: '1.2rem',
         letterSpacing: '-0.05rem',
-        marginTop: 0,
-        marginBottom: '1rem',
+        margin: '0 0 10px',
         color: '#CDCDCD',
         lineHeight: 1.5,
         cursor: 'default'

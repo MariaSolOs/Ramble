@@ -11,25 +11,26 @@ import {faCcAmex} from '@fortawesome/free-brands-svg-icons/faCcAmex';
 import {faCcDinersClub} from '@fortawesome/free-brands-svg-icons/faCcDinersClub';
 import {faCcDiscover} from '@fortawesome/free-brands-svg-icons/faCcDiscover';
 import {faCreditCard} from '@fortawesome/free-solid-svg-icons/faCreditCard';
-const getCardBrandIcon = (brand) => {
-    let icon;
-    switch(brand) {
-        case 'visa': icon = faCcVisa;
-                     break;
-        case 'mastercard': icon = faCcMastercard;
-                           break;
-        case 'amex': icon = faCcAmex;
-                     break;
-        case 'diners_club': icon = faCcDinersClub;
-                            break;
-        case 'discover': icon = faCcDiscover;
-                         break;
-        default: icon = faCreditCard;
-    }
-    return <FontAwesomeIcon icon={icon} className="credit-card-icon"/>
-}
 
 export default function useSavedCards(props) {
+    const getCardBrandIcon = useCallback((brand) => {
+        let icon;
+        switch(brand) {
+            case 'visa': icon = faCcVisa;
+                         break;
+            case 'mastercard': icon = faCcMastercard;
+                               break;
+            case 'amex': icon = faCcAmex;
+                         break;
+            case 'diners_club': icon = faCcDinersClub;
+                                break;
+            case 'discover': icon = faCcDiscover;
+                             break;
+            default: icon = faCreditCard;
+        }
+        return <FontAwesomeIcon icon={icon} className="credit-card-icon"/>
+    }, []);
+
     const [cards, setCards] = useState([]);
 
     const dispatch = useDispatch();
@@ -63,7 +64,7 @@ export default function useSavedCards(props) {
                 card.clear();
             }
         });
-    }, [dispatch, stripe, elements]);
+    }, [dispatch, stripe, elements, getCardBrandIcon]);
 
     const unsaveCard = useCallback((cardId) => {
         axios.delete('/api/stripe/payment-method', {
@@ -76,6 +77,7 @@ export default function useSavedCards(props) {
     }, [dispatch]);
 
     useEffect(() => {
+        if(!window.localStorage.getItem('token')) { return; }
         axios.get('/api/profile/payMethods')
         .then(res => {
             const data = [];
@@ -88,7 +90,7 @@ export default function useSavedCards(props) {
             setCards(data);
         })
         .catch(err => { setCards([]); });
-    }, []);
+    }, [getCardBrandIcon]);
 
-    return { cards, saveCard, unsaveCard };
+    return { cards, saveCard, unsaveCard, getCardBrandIcon };
 }

@@ -15,7 +15,6 @@ import Dialog from '@material-ui/core/Dialog';
 import ReferBox from '../../../components/ReferBox/ReferBox';
 import Experience from '../../../components/Experience/Experience';
 import Carousel from '../../../components/Carousel';
-import Footer from './Footer';
 
 //Styles
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -121,7 +120,16 @@ const ShowExperience = (props) => {
                                 props.dialogActions.openSignUpDialog}/>}
                     images={images}/>
                 </div>
-                <Footer price={exp.price.perPerson} onBooking={handleBooking}/>
+                <div className={classes.footer}>
+                    <div>
+                        <p className={classes.price}>
+                            <span>${exp.price.perPerson}</span>PER PERSON
+                        </p>
+                        <button className={classes.bookButton} onClick={handleBooking}>
+                            Book experience
+                        </button>
+                    </div>
+                </div>
                 </>}
             {showBooking && <BookExperience 
                             exp={exp}

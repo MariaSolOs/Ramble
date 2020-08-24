@@ -1,0 +1,11 @@
+const express = require('express'),
+      router  = express.Router(),
+      {cookieFromEmailLink} = require('../middleware/authMiddleware'),
+      controller = require('../controllers/emailController');
+
+//For users that authenticate with email link
+router.get('/calendar-update/:userId',
+            cookieFromEmailLink,
+            controller.updateCreatorCalendar);
+
+module.exports = router;

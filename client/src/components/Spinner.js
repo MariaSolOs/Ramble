@@ -7,7 +7,8 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        zIndex: 100
     },
     spinner: {
         width: '100%',

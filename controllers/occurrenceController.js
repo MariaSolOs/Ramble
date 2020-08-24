@@ -1,9 +1,11 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
+      {calculatePaymentAmount, timeDateConvert} = require('../helpers/bookingHelpers');
+
 //Models
 const Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
-      User = require('../models/user'),
-      {calculatePaymentAmount, timeDateConvert} = require('../helpers/bookingHelpers');
+      User = require('../models/user');
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res) => {
@@ -85,13 +87,30 @@ exports.addBookingToOcurrence = async (req, res) => {
             });
         }
 
+        //Send card info to display in the booking submitted page
+        let cardInfo = {};
+        if(req.body.payIntentId) {
+            const {payment_method} = await stripe.paymentIntents.retrieve(
+                req.body.payIntentId, 
+                {expand: ['payment_method']}
+            );
+            cardInfo = {
+                brand: payment_method.card.brand,
+                last4: payment_method.card.last4
+            }
+        }
+
+        //Save all changes
         await occ.save();
         await booking.save();
         await experience.creator.save();
-        res.status(201).send({message: 'Successfully added booking.'});
+
+        res.status(201).send({
+            message: 'Successfully added booking.',
+            cardInfo
+        });
     }
     catch(err) {
-        console.log(err);
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
             res.redirect(307, '/api/stripe/payment-intent/cancel');

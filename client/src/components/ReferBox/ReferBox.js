@@ -55,7 +55,7 @@ const ReferBox = ({shareUrl}) => {
                             <img src={mailIcon} alt="Refer with email"/>
                         </EmailShareButton>
                         <WhatsappShareButton url={shareUrl}>
-                            <img src={whatsAppIcon} alt="Facebook Messenger"/>
+                            <img src={whatsAppIcon} alt="Refer with Whatsapp"/>
                         </WhatsappShareButton>
                     </div>
                 </div>

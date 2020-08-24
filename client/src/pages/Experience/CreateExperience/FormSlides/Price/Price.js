@@ -75,7 +75,7 @@ const Price = ({price, privatePrice, currency, capacity, submitInput}) => {
                     </div>
                     <div className="num-guests">
                         <p className={classes.description}>
-                            X {capacity} Guests =
+                            X {capacity} {capacity > 1? 'Guests' : 'Guest'} =
                         </p>
                     </div>
                     <div className={classes.field}>

@@ -5,6 +5,7 @@ import {getWeekdayKey, getSlotsInfo} from './helpers';
 import useBookingReducer from './store/reducer';
 import {steps, actions} from './store/types';
 import {useDispatch} from 'react-redux';
+import {useHistory} from 'react-router-dom';
 import {showError} from '../../../store/actions/ui';
 import useSavedCards from '../../../hooks/useSavedCards';
 
@@ -56,7 +57,11 @@ const BookExperience = ({exp, user, onClose}) => {
     }, [state.form.date, exp._id, exp.avail.schedule, exp.capacity, 
         dispatch, cancelBooking]);
 
+    //We pass user's saved cards to payment dialog
+    const {cards} = useSavedCards();
+
     //After payment is done, add booking to occurrence
+    const history = useHistory();
     const handleAddBookingToOcc = (payIntentId, cardToUse) => {
         axios.post(`/api/occ/${exp._id}/bookings`, {
             date: state.form.date.toISOString().split('T')[0],
@@ -68,16 +73,41 @@ const BookExperience = ({exp, user, onClose}) => {
             payIntentId
         }).then(res => {
             if(res.status === 201) {
-                dispatch({
-                    type: actions.PAY_COMPLETE,
-                    msg: `Congrats ${user.fstName}! 
-                    Your booking was successfully completed.`
+                history.push({
+                    pathname: '/experience/booking-submitted',
+                    state: {
+                        exp: {
+                            title: exp.title,
+                            img: exp.images[0],
+                            creator: {
+                                name: exp.creator.user.fstName,
+                                img: exp.creator.user.photo,
+                                phoneNumber: exp.creator.user.phoneNumber
+                            },
+                            toBring: exp.toBring,
+                            meetPoint: exp.location.meetPoint,
+                            price: exp.price
+                        },
+                        occ: {
+                            date: state.form.date,
+                            timeslot: state.form.timeslot
+                        },
+                        booking: {
+                            numGuests: state.form.numGuests,
+                            bookType: state.form.bookType,
+                            payInfo: {
+                                savedCardUsed: cardToUse,
+                                cardInfo: res.data.cardInfo
+                            } 
+                        }
+                    }
                 });
             } else {
                 cancelBooking('Please contact us.');
             }
-            setTimeout(() => { onClose(); }, 4000);
-        }).catch(err => { cancelBooking('We f*cked up. Please contact us.'); });
+        }).catch(err => { 
+            cancelBooking('We f*cked up. Please contact us.'); 
+        });
     }
 
     //For handling payment
@@ -107,12 +137,12 @@ const BookExperience = ({exp, user, onClose}) => {
             const payIntent = await axios.post(
                 '/api/stripe/payment-intent', 
                 { expId: exp._id,
-                 transferId: exp.creator.stripe.accountId,
-                 creatorId: exp.creator._id,
-                 bookType: state.form.bookType,
-                 numGuests: state.form.numGuests,
-                 promoCode: state.form.promoCode,
-                 customerId }
+                  transferId: exp.creator.stripe.accountId,
+                  creatorId: exp.creator._id,
+                  bookType: state.form.bookType,
+                  numGuests: state.form.numGuests,
+                  promoCode: state.form.promoCode,
+                  customerId }
             );
             if(payIntent.status === 200) {
                 clientSecret = payIntent.data.clientSecret;
@@ -147,9 +177,6 @@ const BookExperience = ({exp, user, onClose}) => {
             }
         } catch(err) { cancelBooking('We f*cked up. Please contact us.'); }
     }
-
-    //Pass saved cards to payment dialog
-    const {cards} = useSavedCards();
 
     switch(state.step) {
         case steps.CALENDAR: 

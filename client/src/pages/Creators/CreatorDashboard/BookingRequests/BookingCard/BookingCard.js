@@ -18,7 +18,6 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
     const [fromHour, fromTime, toHour, toTime] = 
         helpers.getTimePieces(booking.occurrence.timeslot);
 
-    console.log(booking)
     return (
         <div className={classes.root}>
             <div className={classes.header}>

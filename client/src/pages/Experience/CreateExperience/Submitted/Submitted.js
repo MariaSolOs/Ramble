@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
-import {showError} from '../../../../store/actions/ui';
-import {Link} from 'react-router-dom';
+import {showError, startLoading, endLoading} from '../../../../store/actions/ui';
+import {Link, useHistory} from 'react-router-dom';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faStripe} from '@fortawesome/free-brands-svg-icons/faStripe';
@@ -20,27 +20,46 @@ const Submitted = (props) => {
         const token = window.localStorage.getItem('token');
         setStripeState(token);
     }, []);
+
     //Create experience when here
-    const {savedForm, showError, creatorId} = props;
+    const [exp, setExp] = useState(null);
+    const [error, setError] = useState(false);
+    const {savedForm, showError, creatorId, startLoading, endLoading} = props;
     useEffect(() => {
-        const form = {
-            ...savedForm,
-            creator: creatorId
-        };
+        startLoading();
+        const form = {...savedForm, creator: creatorId}
+        if(!form.images) { return setError(true); }
         const images = form.images.slice(0);
         delete form.images;
         axios.post('/api/exp', {form, images})
-        .catch(err => {
-            showError("We couldn't submit your experience...");
+        .then(res => { 
+            setExp(res.data.exp); 
+            endLoading();
+        })
+        .catch(err => { 
+            setError(true); 
+            endLoading();
         });
-    }, [savedForm, showError, creatorId]);
+    }, [savedForm, creatorId, startLoading, endLoading]);
+
+    //On error, show message and redirect 
+    const history = useHistory();
+    useEffect(() => {
+        if(error) {
+            showError("We couldn't submit your experience...");
+            setTimeout(() => {
+                history.push('/');
+            }, 4000);
+        }
+    }, [error, showError, history]);
 
     return (
         <div className={classes.root}>
+        {exp &&
             <div>
                 <h1 className={classes.title}>Your experience was submitted</h1>
                 <p>
-                    Your experience<strong> {props.savedForm.title} </strong>
+                    Your experience<strong> {exp.title} </strong>
                     was submitted successfully.<br/>
                     We'll review it and get back to you shortly so you can get 
                     your act out there as soon as possible.
@@ -68,7 +87,7 @@ const Submitted = (props) => {
                         <FontAwesomeIcon icon={faStripe}/>
                     </a>
                 </div></>}
-            </div>
+            </div>}
         </div>
     );
 }
@@ -79,6 +98,8 @@ const mapStateToProps = (state) => ({
     hasStripe: state.user.creator.stripeId !== null
 });
 const mapDispatchToProps = (dispatch) => ({
+    startLoading: () => dispatch(startLoading()),
+    endLoading: () => dispatch(endLoading()),
     showError: (msg) => dispatch(showError(msg))
 });
 

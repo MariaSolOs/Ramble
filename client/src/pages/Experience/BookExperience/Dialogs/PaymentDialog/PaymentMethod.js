@@ -40,7 +40,10 @@ const PaymentMethod = (props) => {
 
     return (
         <div className={classes.payMethod}>
-            <p className={classes.label}>Payment method</p>
+            <p className={classes.label} style={{marginBottom: 5}}>Payment method</p>
+            <p className={classes.label} style={{fontWeight: 400}}>
+                We won't charge you until {props.creatorName} accepts your request.
+            </p>
             {cards.length > 0 && !showStripeInput?
             <div className={classes.savedCards}>
                 <Select

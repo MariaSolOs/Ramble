@@ -29,8 +29,8 @@ const PublicApp = (props) => {
         }
     }, [cookieToken]);
 
-    const {isAuth, fetchExps} = props;
     //Fetch user experiences if logged in 
+    const {isAuth, fetchExps} = props;
     useEffect(() => {
         if(isAuth) { fetchExps(); }
     }, [isAuth, fetchExps]);
@@ -46,7 +46,7 @@ const PublicApp = (props) => {
         }
     }, [props.numNotifs]);
 
-    //The isAuth prop is passed to the page routers to filter routes
+    //isAuth and isCreator are passed to the page routers to filter routes
     return (
         <React.Suspense fallback={<Spinner/>}>
             <Nav/>
@@ -58,10 +58,13 @@ const PublicApp = (props) => {
                     <ProfileRouter/>
                 </PrivateRoute>
                 <Route path="/experience">
-                    <ExperienceRouter isAuth={isAuth}/>
+                    <ExperienceRouter 
+                    isAuth={isAuth} 
+                    isCreator={props.isCreator}/>
                 </Route>
                 <Route path="/creator">
-                    <CreatorRouter isAuth={isAuth}/>
+                    <CreatorRouter 
+                    isAuth={isAuth}/>
                 </Route>
                 <Route exact path="/">
                     <Home/>
@@ -75,6 +78,7 @@ const PublicApp = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.user.profile.id !== null,
+    isCreator: state.user.creator.id !== null,
     isAdmin: state.user.isAdmin,
     numNotifs: state.user.notifs.length
 });

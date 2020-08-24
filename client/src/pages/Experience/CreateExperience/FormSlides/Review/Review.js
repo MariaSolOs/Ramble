@@ -30,9 +30,11 @@ const Review = ({review, images}) => {
             {review ? 
             <div className={classes.experience}>
                 <Carousel images={carouselImgs}/>
-                <Experience 
-                exp={review}
-                floatButtons={<FloatButtons showSave/>}/>
+                <div className="exp-wrapper">
+                    <Experience 
+                    exp={review}
+                    floatButtons={<FloatButtons showSave/>}/>
+                </div>
             </div> : 
             <p className={classes.description}>
                 Your experience couldn't be submitted.<br/>

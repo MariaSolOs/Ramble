@@ -8,6 +8,7 @@ import FloatButtons from '../../../components/ShareSaveButtons';
 import Fab from '@material-ui/core/Fab';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Experience from '../../../components/Experience/Experience';
+import Carousel from '../../../components/Carousel';
 
 //Styles
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -76,13 +77,13 @@ const ApprovalPage = (props) => {
                 className={classes.goBackBtn} onClick={handleGoBack}>
                     <ChevronLeftIcon/>
                 </Fab>
+                <Carousel images={images}/>
                 <Experience 
                 exp={exp} 
                 floatButtons={
                     <FloatButtons 
                     showSave
-                    onSave={() => {}}/>}
-                images={images}/>
+                    onSave={() => {}}/>}/>
             </div>
             <div className={classes.extraInfo}>
                 <h4>More information...</h4>

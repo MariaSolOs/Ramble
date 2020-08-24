@@ -28,51 +28,51 @@ const CalendarUpdates = ({startDate, updateFreq, submitInput}) => {
     }
 
     return (
-        <>
-        <h1 className={classes.title}>Availability updates</h1>
-        <div style={{ marginBottom: 20 }}>
-            <p className={classes.description}>
-                At which frequency would you like to update your availabilities?
-            </p>
-            <div className={classes.input}>
-                <TextField 
-                select 
-                value={updateFreq}
-                onChange={handleFreqChange}
-                SelectProps={{
-                    MenuProps: {
-                        classes: { paper: classes.select_menu },
-                        getContentAnchorEl: null,
-                        anchorOrigin: {
-                            vertical: 'bottom',
-                            horizontal: 'right'
-                        }
-                    },
-                    IconComponent: KeyboardArrowDownIcon
-                }}>
-                    <MenuItem value='weekly'>Every week</MenuItem>
-                    <MenuItem value='biweekly'>Every two weeks</MenuItem>
-                    <MenuItem value='monthly'>Every month</MenuItem>
-                </TextField>
+        <div style={{ overflowY: 'scroll' }}>
+            <h1 className={classes.title}>Availability updates</h1>
+            <div style={{ marginBottom: 20 }}>
+                <p className={classes.description}>
+                    At which frequency would you like to update your availabilities?
+                </p>
+                <div className={classes.input}>
+                    <TextField 
+                    select 
+                    value={updateFreq}
+                    onChange={handleFreqChange}
+                    SelectProps={{
+                        MenuProps: {
+                            classes: { paper: classes.select_menu },
+                            getContentAnchorEl: null,
+                            anchorOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'right'
+                            }
+                        },
+                        IconComponent: KeyboardArrowDownIcon
+                    }}>
+                        <MenuItem value='weekly'>Every week</MenuItem>
+                        <MenuItem value='biweekly'>Every two weeks</MenuItem>
+                        <MenuItem value='monthly'>Every month</MenuItem>
+                    </TextField>
+                </div>
+            </div>
+            <div>
+                <p className={classes.description}>
+                    When would you like to start hosting your experience?
+                </p>
+                <Tip className={classes.tip}>
+                    A week / two weeks / a month after this date, you'll have to update 
+                    your schedule for the next week / two weeks / month.
+                </Tip>
+                <DatePicker
+                selected={startDate}
+                onChange={handleDateChange}
+                minDate={new Date()}
+                maxDate={inOneMonth}
+                calendarClassName={classes.calendar}
+                inline/>
             </div>
         </div>
-        <div>
-            <p className={classes.description}>
-                When would you like to start hosting your experience?
-            </p>
-            <Tip className={classes.tip}>
-                A week / two weeks / a month after this date, you'll have to update 
-                your schedule for the next week / two weeks / month.
-            </Tip>
-            <DatePicker
-            selected={startDate}
-            onChange={handleDateChange}
-            minDate={new Date()}
-            maxDate={inOneMonth}
-            calendarClassName={classes.calendar}
-            inline/>
-        </div>
-        </>
     );
 }
 

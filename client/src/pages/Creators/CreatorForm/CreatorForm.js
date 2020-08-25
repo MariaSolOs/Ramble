@@ -115,7 +115,7 @@ const CreatorForm = (props) => {
                     </h3>
                 </div>
             </div>
-            {!props.noPhoto && 
+            {props.noPhoto && 
                 <div className={classes.photoField}>
                     <label className={classes.title}>Profile picture</label>
                     <h3 className={classes.subtitle}>Show us your best smile</h3>

@@ -6,7 +6,7 @@ const passport = require('passport'),
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
     }, (accessToken, refreshToken, profile, done) => {
             User.findOne({membershipProviderId: profile.id}, async (err, user) => {
                 if(err) { return done(err); } 
@@ -14,7 +14,7 @@ passport.use(new GoogleStrategy({
                     const newUser = new User({
                         fstName: profile._json.given_name,
                         lstName: profile._json.family_name,
-                        photo: profile._json.image.url,
+                        photo: profile._json.picture,
                         email: profile._json.email,
                         membershipProvider: 'google',
                         membershipProviderId: profile.id,

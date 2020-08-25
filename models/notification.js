@@ -13,8 +13,8 @@ const NotificationSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Creator-ExperienceReminder', 'Creator-ExperienceDecision',
-               'User-BookingRejected']
+        enum: ['Creator-ExperienceReminder', 'Creator-ExperienceApproved',
+               'Creator-ExperienceRejected', 'User-BookingRejected']
     }
 }, {timestamps: true});
   

@@ -8,4 +8,8 @@ router.get('/calendar-update/:userId',
             cookieFromEmailLink,
             controller.updateCreatorCalendar);
 
+router.get('/connect-stripe/:userId',
+           cookieFromEmailLink,
+           controller.connectWithStripe);
+
 module.exports = router;

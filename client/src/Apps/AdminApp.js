@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {showSnackbar} from '../store/actions/ui';
 import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 
 //Pages and layout
@@ -8,7 +7,7 @@ import Nav from '../components/Navs/AdminNav';
 import ApproveExps from '../pages/Admin/ApproveExps';
 import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
 import Register from '../pages/Admin/Register';
-import Maintenance from '../pages/Admin/Maintenance/Maintenance';
+import Maintenance from '../pages/Admin/Maintenance';
 import PrivateRoute from '../pages/PrivateRoute';
 
 const AdminApp = (props) => {
@@ -23,16 +22,16 @@ const AdminApp = (props) => {
         canMaintain={props.canMaintain}/>
         <Switch location={location}>
             <PrivateRoute path={`${path}/approveExps`} test={props.canApproveExps}>
-                <ApproveExps showSnackbar={props.showSnackbar}/>
+                <ApproveExps/>
             </PrivateRoute>
             <PrivateRoute path={`${path}/approveExp/:id`} test={props.canApproveExps}>
-                <ApprovalPage showSnackbar={props.showSnackbar}/>
+                <ApprovalPage/>
             </PrivateRoute>
             <PrivateRoute path={`${path}/register`} test={props.canRegister}>
-                <Register showSnackbar={props.showSnackbar}/>
+                <Register/>
             </PrivateRoute>
             <PrivateRoute path={`${path}/maintenance`} test={props.canMaintain}>
-                <Maintenance showSnackbar={props.showSnackbar}/>
+                <Maintenance/>
             </PrivateRoute>
             <Route component={ApproveExps}/>
         </Switch>
@@ -45,8 +44,5 @@ const mapStateToProps = (state) => ({
     canApproveExps: state.user.profile.permissions.includes('approveExp'),
     canMaintain: state.user.profile.permissions.includes('maintenance')
 });
-const mapDispatchToProps = (dispatch) => ({
-    showSnackbar: (msg) => dispatch(showSnackbar(msg))
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminApp);
+export default connect(mapStateToProps, null)(AdminApp);

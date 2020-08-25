@@ -6,7 +6,7 @@ const passport = require('passport'),
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+    callbackURL: `${process.env.SERVER_URL}/api/auth/facebook/`,
     profileFields: ['name', 'email', 'picture.type(large)'],
   }, function(accessToken, refreshToken, profile, done) {
         User.findOne({membershipProviderId: profile.id}, async (err, user) => {

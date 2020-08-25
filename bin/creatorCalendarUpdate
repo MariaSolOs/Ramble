@@ -52,7 +52,7 @@ const creatorCalendarUpdate = async () => {
                     expTitle: exp.title,
                     expImage: exp.images[0],
                     expLocation: exp.location.displayLocation,
-                    calendarUrl: `https://reramble.herokuapp.com/api/email/calendar-update/${
+                    calendarUrl: `${process.env.CLIENT_URL}/api/email/calendar-update/${
                     exp.creator.user._id}`
                 });
                 await transporter.sendMail({

@@ -7,6 +7,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import EventBusyIcon from '@material-ui/icons/EventBusy';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCheckCircle} from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import {faTasks} from '@fortawesome/free-solid-svg-icons/faTasks';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './NotificationsStyles';
@@ -22,8 +23,10 @@ const Notifications = (props) => {
             case 'Creator-ExperienceReminder':
                 const time = notif.message.match(timeRegex)[0];
                 return time.slice(0, -2);
-            case 'Creator-ExperienceDecision': 
+            case 'Creator-ExperienceApproved': 
                 return <FontAwesomeIcon icon={faCheckCircle}/>
+            case 'Creator-ExperienceRejected': 
+                return <FontAwesomeIcon icon={faTasks}/>
             case 'User-BookingRejected': 
                 return <EventBusyIcon/>
             default: 

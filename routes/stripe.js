@@ -3,10 +3,10 @@ const express = require('express'),
       {validateStripeState, authenticateToken} = require('../middleware/JWTMiddleware'),
       controllers = require('../controllers/stripeController');
 
-//After creator signs up with stripe they get redirected here
-router.get('/creator-oauth', 
+//Stripe onboarding for creators
+router.get('/creator/oauth-return', 
             validateStripeState, 
-            controllers.connectCreatorToStripe);
+            controllers.completeCreatorOnboarding);
 
 //Add a new Stripe customer
 router.post('/customer',

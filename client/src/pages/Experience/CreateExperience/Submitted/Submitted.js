@@ -42,7 +42,7 @@ const Submitted = (props) => {
         });
     }, [savedForm, creatorId, startLoading, endLoading]);
 
-    //On error, show message and redirect 
+    // //On error, show message and redirect 
     const history = useHistory();
     useEffect(() => {
         if(error) {
@@ -82,7 +82,9 @@ const Submitted = (props) => {
                     are handled and processed by Stripe&trade;</strong>
                 </p>
                 <div className={classes.stripeLink}>
-                    <a href={`https://connect.stripe.com/express/oauth/authorize?client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&state=${stripeState}&redirect_uri=${process.env.REACT_APP_STRIPE_OAUTH_REDIRECT}`}>
+                    <a href={`https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${
+                    process.env.REACT_APP_STRIPE_CLIENT_ID}&scope=read_write&state=${
+                    stripeState}&redirect_uri=${process.env.REACT_APP_STRIPE_OAUTH_REDIRECT}`}>
                         <p>Continue with</p>
                         <FontAwesomeIcon icon={faStripe}/>
                     </a>
@@ -95,7 +97,7 @@ const Submitted = (props) => {
 const mapStateToProps = (state) => ({
     savedForm: state.exp.savedExperienceForm,
     creatorId: state.user.creator.id,
-    hasStripe: state.user.creator.stripeId !== null
+    hasStripe: state.user.creator.stripeId
 });
 const mapDispatchToProps = (dispatch) => ({
     startLoading: () => dispatch(startLoading()),

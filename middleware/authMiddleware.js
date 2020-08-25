@@ -14,6 +14,7 @@ exports.sendToken = (req, res) => {
 
 exports.cookieFromEmailLink = (req, res, next) => {
     const token = generateAccessToken(req.params.userId, false, '12h');
+    req.token = token;
     res.cookie('token', token);
     next();
 }

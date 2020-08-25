@@ -34,7 +34,7 @@ exports.authenticateToken = (req, res, next) => {
 
 exports.validateStripeState = (req, res, next) => {
     const stripeState = req.query.state;
-    jwt.verify(stripeToken, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(stripeState, process.env.JWT_SECRET, (err, decoded) => {
         if(err) { 
             res.status(401).send({error: `Invalid state parameter: ${stripeState}`});
         } else {

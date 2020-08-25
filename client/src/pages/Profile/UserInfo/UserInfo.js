@@ -27,7 +27,7 @@ const UserInfo = (props) => {
         lstName: user.lstName,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        birthday: user.birthday && user.birthday.split('T')[0],
+        birthday: user.birthday ? user.birthday.split('T')[0] : '',
         city: user.city
     });
     const [phoneErr, setPhoneErr] = useState(false);

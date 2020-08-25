@@ -29,9 +29,6 @@ const NavRow = () => {
             <NavLink to="/creator/dashboard/bookings">
                 Booking requests
             </NavLink>
-            <NavLink to="/creator/dashboard/payments">
-                Payments
-            </NavLink>
             <NavLink to="/creator/dashboard/calendar">
                 My calendar
             </NavLink>

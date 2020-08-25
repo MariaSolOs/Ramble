@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
 
 const User = require('../models/user');
 
-exports.connectCreatorToStripe = (req, res) => {
+exports.completeCreatorOnboarding = (req, res) => {
     const {code} = req.query;
     //Send the authorization code to Stripe's API
     stripe.oauth.token({grant_type: 'authorization_code', code})

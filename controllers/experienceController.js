@@ -1,4 +1,9 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('cloudinary').v2,
+      fs = require('fs'),
+      path = require('path'),
+      {compile} = require('handlebars'),
+      mjml2html = require('mjml'),
+      nodemailer = require('nodemailer');
 
 //Models
 const Experience = require('../models/experience'),
@@ -56,23 +61,71 @@ exports.approveExp = (req, res) => {
     Experience.findByIdAndUpdate(req.params.expId, {status: req.body.decision},
     async (err, exp) => {
         if(err || !exp) {
-            res.status(500).send({err: 'Failed to approve/disapprove experience.'});
-        } else {
+            return res.status(500).send({err: 'Failed to approve/disapprove experience.'});
+        } 
+        if(req.body.decision === 'rejected') {
+            //Just create notification
             const creator = await User.findOne({creator: exp.creator._id}, 'email');
-            const message = req.body.decision === 'approved'? `Your experience "${
-            exp.title}" has been approved. You're now ready to host your first guests!`
-            : `Your experience ${exp.title} is not ready to go live yet. ` + 
+            const message = `Your experience ${exp.title} is not ready to go live yet. ` + 
             'Please check your email for our feedback.';
             const notif = new Notification({
                 message,
                 user: creator._id,
-                category: 'Creator-ExperienceDecision'
+                category: 'Creator-ExperienceRejected'
             });
             await notif.save();
             res.status(200).send({
                 message: `Experience successfully ${req.body.decision}.`,
                 creatorEmail: creator.email
             });
+        } else if(req.body.decision === 'approved') {
+            //Send notification
+            const creator = await User.findOne({creator: exp.creator._id}, 
+                            'email stripe creator').populate('creator', 'stripe');
+            const message = `Your experience "${exp.title}" has been approved. ` +
+            "You're now ready to host your first guests!";
+            const notif = new Notification({
+                message,
+                user: creator._id,
+                category: 'Creator-ExperienceApproved'
+            });
+            await notif.save();
+
+            //Create mjml
+            const source = fs.readFileSync(path.resolve(__dirname, 
+                           '../emailTemplates/experienceApproved.mjml'), 'utf-8');              
+            const template = compile(source);
+            const mjml = template({
+                expTitle: exp.title,
+                shareUrl: `${process.env.CLIENT_URL}/experience/view/${exp._id}`,
+                showStripe: !creator.creator.stripe.accountId,
+                stripeRedirectUrl: `${process.env.SERVER_URL}/api/email/connect-stripe/${
+                                    creator._id}`
+            });
+            //Send email
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.zoho.com',
+                port: 465,
+                secure: true, 
+                auth: {
+                    user: process.env.ZOHO_EMAIL, 
+                    pass: process.env.ZOHO_PASSWORD
+                }
+            });
+            await transporter.sendMail({
+                from: {
+                    name: 'ramble',
+                    address: process.env.ZOHO_EMAIL
+                }, 
+                to: creator.email,
+                subject: 'Your experience was approved', 
+                text: `Congrats! Your experience "${exp.title}" was approved and ` +
+                "is ready to go live. Make sure you've completed your Stripe profile!", 
+                html: mjml2html(mjml).html
+            });
+            res.status(200).send({message: 'Experience successfully approved.'});
+        } else {
+            res.status(400).send({err: 'Invalid decision.'});
         }
     });
 }

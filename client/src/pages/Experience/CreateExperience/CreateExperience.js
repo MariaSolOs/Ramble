@@ -271,10 +271,13 @@ const CreateExperience = (props) => {
                     </>
                 );
             }}/>            
-            {props.creatorId && 
                 <Route path={pages.SUBMITTED}>
                     <Submitted/>
-                </Route>}
+                </Route>
+            {/* {props.creatorId && 
+                <Route path={pages.SUBMITTED}>
+                    <Submitted/>
+                </Route>} */}
             <Redirect to="/"/>
         </Switch>
     );

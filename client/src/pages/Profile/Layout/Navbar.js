@@ -5,7 +5,6 @@ import {NavLink} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faIcons} from '@fortawesome/free-solid-svg-icons/faIcons';
 import {faUser} from '@fortawesome/free-solid-svg-icons/faUser';
-import {faReceipt} from '@fortawesome/free-solid-svg-icons/faReceipt';
 import {faCreditCard} from '@fortawesome/free-solid-svg-icons/faCreditCard';
 
 //Styles
@@ -47,9 +46,6 @@ const profilePages = [
     { name: 'Personal information', 
       icon: faUser,
       route: '/profile/info' },
-    { name: 'Receipts', 
-      icon: faReceipt,
-      route: '/profile/receipts' },
     { name: 'Payment information', 
       icon: faCreditCard,
       route: '/profile/payInfo' },

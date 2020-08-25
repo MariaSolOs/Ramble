@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from '../../../tokenizedAxios';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../../store/actions/ui';
 import {useParams, useHistory} from 'react-router-dom';
 
 //Components and icons
@@ -22,37 +24,43 @@ const ApprovalPage = (props) => {
     //Fetch the requested experience
     const {id} = useParams();
     const [exp, setExp] = useState(null);
-    const {showSnackbar} = props;
+    const dispatch = useDispatch();
     useEffect(() => {
         axios.get(`/api/exp/${id}`)
         .then(res => setExp(res.data.exp))
         .catch(err => {
-            showSnackbar(`LOL try again 👾 ${err}`);
+            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
         });
-    }, [id, showSnackbar]);
+    }, [id, dispatch]);
 
     //To notify the creator about the decision
     const [creatorEmail, setCreatorEmail] = useState('');
 
     //Deal with the approval decision
     const handleDecision = (decision, verifyCreator) => (e) => {
+        dispatch(showSnackbar('Processing your decision...'));
         axios.post(`/api/exp/${exp._id}/approve`, { decision })
         .then(res => {
-            setCreatorEmail(res.data.creatorEmail);
-            if(verifyCreator) {
-                axios.patch(`/api/creator/${exp.creator._id}`, {verified: true})
-                .then(res => {
-                    showSnackbar(`Awesome, you successfully ${decision} this 
-                    experience and verified the Creator 🌝`);
-                }).catch(err => {
-                    showSnackbar(`The Creator couldn't be verified 😰: ${err}`);
-                });
-            } else {
-                showSnackbar(`Awesome, you successfully ${decision} this 
-                experience 🌝`);
+            if(decision === 'rejected') {
+                setCreatorEmail(res.data.creatorEmail);
+                dispatch(showSnackbar('You rejected this experience. ' + 
+                'Send your feedback to the creator! 📩'));
+            } else { //decision === 'approved'
+                if(verifyCreator) {
+                    axios.patch(`/api/creator/${exp.creator._id}`, {verified: true})
+                    .then(res => {
+                        dispatch(showSnackbar('Awesome, you approved this experience' + 
+                        ' and the email to the (now verified) creator was sent. 🌝'));
+                    }).catch(err => {
+                        dispatch(showSnackbar(`The Creator couldn't be verified 😰: ${err}`));
+                    });
+                } else {
+                    dispatch(showSnackbar('Awesome, you approved this experience' + 
+                    ' and the email to the creator was sent. 🌝'));
+                }
             }
         }).catch(err => {
-            showSnackbar(`LOL try again 👾 ${err}`);
+            dispatch(showSnackbar(`LOL try again 👾 ${err}`));
         });
     }
 
@@ -134,7 +142,7 @@ const ApprovalPage = (props) => {
                 style={{backgroundColor: '#68DAF9'}}
                 size="large"
                 href={`mailto:${creatorEmail}`}>
-                    Notify the creator about your decision
+                    Send your feedback to the creator
                 </Button> :
                 <><Button 
                 variant="contained" 

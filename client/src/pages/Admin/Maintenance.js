@@ -1,5 +1,7 @@
 import React, {useCallback} from 'react';
-import axios from '../../../tokenizedAxios';
+import axios from '../../tokenizedAxios';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../store/actions/ui';
 
 import Fab from '@material-ui/core/Fab';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
@@ -38,17 +40,17 @@ const useStyles = makeStyles(() => ({
 const Maintenance = (props) => {
     const classes = useStyles();
 
-    const {showSnackbar} = props;
+    const dispatch = useDispatch();
     const handleDeleteRejectedExps = useCallback(() => {
         axios.delete('/api/exp/rejected')
         .then(res => {
-            showSnackbar(`You just deleted ${res.data.delCount}
-            experience(s). 🚮`)
+            dispatch(showSnackbar(`You just deleted ${res.data.delCount}
+            experience(s). 🚮`));
         })
         .catch(err => {
-            showSnackbar(`Ha... ${err} 🐲`)            
+            dispatch(showSnackbar(`Ha... ${err} 🐲`));        
         });
-    }, [showSnackbar]);
+    }, [dispatch]);
 
     return (
         <div className={classes.root}>

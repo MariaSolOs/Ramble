@@ -34,7 +34,8 @@ const authReducer = (state = initialState, action) => {
                 token: action.token,
                 isAdmin: action.isAdmin,
                 profile: { ...action.profile },
-                notifs: [...action.notifs]
+                notifs: action.notifs? [...action.notifs] :
+                        state.notifs
             }
         }
         case types.SET_CREATOR_PROFILE: {

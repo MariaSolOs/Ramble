@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import axios from '../../tokenizedAxios';
+import {useDispatch} from 'react-redux';
+import {showSnackbar} from '../../store/actions/ui';
 
 import TextField from '../../components/Input/TextField';
 import Checkbox from '../../components/Input/Checkbox';
@@ -48,6 +50,7 @@ const initForm = {
 const Register = (props) => {
     const classes = useStyles();
 
+    const dispatch = useDispatch();
     //Registration form
     const [values, setValues] = useState({...initForm});
     const handleChange = (e) => {
@@ -74,10 +77,10 @@ const Register = (props) => {
             permissions
         })
         .then(res => {
-            props.showSnackbar('Successfully created admin 🥳');
+            dispatch(showSnackbar('Successfully created admin 🥳'));
         })
         .catch(err => {
-            props.showSnackbar(`FUUUUCKKKK ${err} 🤖`);
+            dispatch(showSnackbar(`FUUUUCKKKK ${err} 🤖`));
         });
         setValues({...initForm});
     }

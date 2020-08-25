@@ -21,7 +21,6 @@ const Router = (props) => {
                     <CreateExperience/>
                 </PrivateRoute>
                 <Route path={`${path}/view/:id`} component={ShowExperience}/>
-                {/* <Route path={`${path}/booking-submitted`} component={BookingSubmitted}/> */}
                 <PrivateRoute path={`${path}/booking-submitted`} test={props.isAuth}>
                     <BookingSubmitted/>
                 </PrivateRoute>

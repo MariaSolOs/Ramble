@@ -227,14 +227,12 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    const categories = ['taste', 'create', 'relax', 'learn', 'move'];
     Experience.find({}, async (err, exps) => {
         for(const exp of exps) {
-            exp.location.coordinates.lat = 37.7577;
-            exp.location.coordinates.long = -122.4376;
-            const randInd = Math.floor(Math.random() * 5);
-            exp.categories = [categories[randInd]];
-            exp.categories = [categories[randInd + 1 % 5]];
+            exp.rating = {
+                value: 4.91,
+                numRatings: 11
+            }
             await exp.save();
         }
     });
@@ -263,8 +261,11 @@ const seedDB = async () => {
     //     exp.capacity = Math.floor(Math.random() * 7) + 1;
     //     exp.description = "Poutine chartreuse cray, pickled hoodie enamel pin quinoa fixie chicharrones vinyl. Scenester humblebrag hammock polaroid, poutine authentic church-key single-origin coffee paleo tofu iceland mixtape XOXO before they sold out hell of. Succulents 3 wolf moon keffiyeh tousled. Succulents chartreuse waistcoat, normcore cliche YOLO retro.",
     //     exp.included = ['drinks', 'equipment', 'transport'];
-    //     exp.bring = ['stickers', 'spoons'];
-    //     exp.rating = 4.91;
+        // exp.bring = ['stickers', 'spoons'];
+        // exp.rating = {
+        //     value: 4.91,
+        //     numRatings: 11
+        // }
     //     //I create everything
     //     exp.creator = creator._id;
     //     await exp.save();

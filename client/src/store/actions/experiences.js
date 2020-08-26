@@ -5,8 +5,8 @@ import axios from '../../tokenizedAxios';
 const setLocations = (locations) => ({
     type: types.SET_LOCATIONS, locations
 });
-const setExps = (pastExps, savedExps) => ({
-    type: types.SET_EXPS, pastExps, savedExps
+const setExps = (bookedExps, savedExps) => ({
+    type: types.SET_EXPS, bookedExps, savedExps
 });
 const saveExp = (exp) => ({ type: types.SAVE_EXP, exp });
 const unsaveExp = (expId) => ({ type: types.UNSAVE_EXP, expId });
@@ -29,7 +29,7 @@ export const fetchExperiences = () => {
         axios.get('/api/profile/exps')
         .then(res => {
             dispatch(setExps(
-                res.data.pastExperiences,
+                res.data.bookedExperiences,
                 res.data.savedExperiences
             ));
         })

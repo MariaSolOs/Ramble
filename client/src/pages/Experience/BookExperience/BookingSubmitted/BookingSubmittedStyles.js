@@ -28,10 +28,13 @@ const styles = (theme) => ({
             borderRadius: '3rem',
             marginRight: '1rem'
         },
-        '& $white': { margin: '3px 0 0' },
+        '& $white': { 
+            fontSize: '1.8rem',
+            margin: '3px 0 0' 
+        },
         '& $grey': { 
-            margin: '5px 0',
-            fontSize: '1.4rem' 
+            margin: '5px 0 4px',
+            fontSize: '1.3rem' 
         }
     },
 

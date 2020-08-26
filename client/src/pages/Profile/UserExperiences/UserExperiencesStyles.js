@@ -10,9 +10,10 @@ const styles = (theme) => ({
     //Experience cards
     gallery: {
         overflowY: 'scroll',
-        width: '75%',
+        width: '70%',
+        padding: '4%',
         display: 'block',
-        margin: '2% auto 3%'
+        margin: '0 auto 3%'
     },
     card: {
         borderRadius: '1.5rem',
@@ -22,7 +23,7 @@ const styles = (theme) => ({
         minWidth: 170,
         height: 270,
         position: 'relative',
-        margin: '1% 4%',
+        margin: '0 4% 4% 0',
         '&:hover': {
             transform: 'scale(1.02)',
             transition: 'transform 0.5s'

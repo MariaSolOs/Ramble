@@ -27,14 +27,16 @@ const ReferBox = ({shareUrl}) => {
     return (
         <div className={classes.wrapper}>
             <div className={classes.root}>
-                <h3 className={classes.title1}>
-                    Share your code with a friend. By using it for their first 
-                    booking, you’ll both get <span>20</span>% off
-                </h3> 
-                <h4 className={classes.title2}>your next experience.</h4>
                 {promoCode &&
-                    <h3 className={classes.promoCode}>Your code is: {promoCode}</h3>}
-                <div className={classes.body}>
+                <>
+                    <h5 className={classes.greyText}>Your code</h5>
+                    <h3 className={classes.code}>{promoCode}</h3>
+                </>}
+                <h3 className={classes.instruction}>
+                    Share this code with a friend. When they use it for their first booking,
+                    you'll both get 20% off your next experience.
+                </h3> 
+                <div className={classes.shareOptions}>
                     <div className={classes.referAvatars}>
                         <Avatar src={referAvat[1]}
                         alt="Refer a friend"/>
@@ -44,6 +46,7 @@ const ReferBox = ({shareUrl}) => {
                         alt="Refer a friend"/>
                     </div>
                     <div className={classes.referMedia}>
+                        <p className={classes.greyText}>Share with</p>
                         <FacebookMessengerShareButton 
                         appId={process.env.REACT_APP_FACEBOOK_ID} 
                         url={shareUrl}>

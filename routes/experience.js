@@ -22,6 +22,11 @@ router.delete('/rejected',
               identifyUser,
               controllers.deleteRejectedExps);
 
+//Review an experience
+router.post('/review/:expId',
+             authenticateToken,
+             controllers.reviewExperience);
+
 //For creators to create an experience
 router.post('/', authenticateToken, controllers.createExperience);
 

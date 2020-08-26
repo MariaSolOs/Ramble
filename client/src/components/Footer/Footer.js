@@ -31,12 +31,6 @@ const Footer = () => {
             <div className={classes.header}>ramble</div>
             <div className={classes.body}>
                 <div className={classes.bodyCol}>
-                    <p className={classes.colTitle}>Company</p>
-                    {/* TODO: Add real links to pages here */}
-                    <Link to="/about">About us</Link>
-                    <Link to="/jobs">Jobs</Link>
-                </div>
-                <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Support</p>
                     <span className="open-dialog" onClick={openCustService}>
                         24/7 Customer Service
@@ -69,7 +63,6 @@ const Footer = () => {
                 <p>&copy; 2020 Ramble Technologies Inc</p>
                 <div>
                     {/* TODO: Add real links to pages here */}
-                    <p>+1 514 654-7156</p>
                     <Link to="/terms">Terms of service</Link>
                     <Link to="/privPolicy">Privacy Policy</Link>
                 </div>

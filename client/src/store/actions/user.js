@@ -116,8 +116,7 @@ export const editUserProfile = (updatedInfo, showSuccessSnackbar = false) => {
                     res.data.userData
                 )); 
                 if(showSuccessSnackbar) {
-                    dispatch(showSnackbar(`Hey ${res.data.userData.fstName}! 
-                    Your profile has been updated.`));
+                    dispatch(showSnackbar('Your profile has been updated.'));
                 }
             }
         })

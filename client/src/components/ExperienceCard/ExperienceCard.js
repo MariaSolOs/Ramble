@@ -39,7 +39,9 @@ const ExperienceCard = (props) => {
                 <div className={classes.body}>
                     <p className={classes.title}>{props.exp.title}</p>
                     <p className={classes.location}>{props.exp.location.displayLocation}</p>
-                    <p className={classes.rating}>{props.exp.rating}<StarRateIcon/></p>
+                    <p className={classes.rating}>
+                        {props.exp.rating.value.toFixed(2)}<StarRateIcon/>
+                    </p>
                     <p className={classes.price}>
                         <span>${props.exp.price.perPerson}</span> PER PERSON
                     </p>

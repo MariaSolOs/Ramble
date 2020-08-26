@@ -12,9 +12,9 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './UserExperiencesStyles';
 const useStyles = makeStyles(styles);
 
-const UserPastExperiences = (props) => {
+const UserBookedExperiences = (props) => {
     const classes = useStyles();
-    const pastExps = useSelector(state => state.exp.pastExps);
+    const bookedExps = useSelector(state => state.exp.bookedExps);
 
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {
@@ -25,13 +25,13 @@ const UserPastExperiences = (props) => {
         <div className={classes.root}>
             <NavRow/>
             <div className={classes.gallery}>
-                {pastExps.length > 0? 
-                    pastExps.map(exp => (
+                {bookedExps.length > 0? 
+                    bookedExps.map(booking => (
                         <ExperienceCard
-                        key={exp._id}
-                        exp={exp}
+                        key={booking._id}
+                        exp={booking.experience}
                         className={classes.card}
-                        onCardClick={handleViewExp(exp._id)}/>
+                        onCardClick={handleViewExp(booking.experience._id)}/>
                     )) : 
                     <h2 className={classes.exploreLink}>
                         <Link to="/experience/search">Start exploring</Link>
@@ -41,5 +41,5 @@ const UserPastExperiences = (props) => {
     ); 
 }
 
-export default UserPastExperiences;
+export default UserBookedExperiences;
 

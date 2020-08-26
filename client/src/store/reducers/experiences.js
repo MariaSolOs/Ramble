@@ -2,7 +2,7 @@ import {experienceTypes as types} from '../actionTypes';
 
 const initialState = {
     locations: [],
-    pastExps: [],
+    bookedExps: [],
     savedExps: [],
     savedExperienceForm: {}
 }
@@ -18,7 +18,7 @@ const authReducer = (state = initialState, action) => {
         case types.SET_EXPS: {
             return {
                 ...state,
-                pastExps: action.pastExps.slice(0),
+                bookedExps: action.bookedExps.slice(0),
                 savedExps: action.savedExps.slice(0),
             }
         }

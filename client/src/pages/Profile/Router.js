@@ -3,7 +3,7 @@ import {useRouteMatch, Switch, Route, useLocation} from 'react-router-dom';
 
 //Pages
 import Layout from './Layout/Layout';
-import PastExperiences from './UserExperiences/UserPastExperiences';
+import BookedExperiences from './UserExperiences/UserBookedExperiences';
 import SavedExperiences from './UserExperiences/UserSavedExperiences';
 import Info from './UserInfo/UserInfo';
 import PaymentInfo from './PaymentInfo/PaymentInfo';
@@ -17,7 +17,7 @@ const Router = (props) => {
         <Switch location={location}>
             <Layout>
                 <Route path={`${path}/exp/past`}>
-                    <PastExperiences/>
+                    <BookedExperiences/>
                 </Route>
                 <Route path={`${path}/exp/saved`}>
                     <SavedExperiences/>

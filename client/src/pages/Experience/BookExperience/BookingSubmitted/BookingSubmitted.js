@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import uuid from 'react-uuid';
 import useSavedCards from '../../../../hooks/useSavedCards';
-import {useLocation} from 'react-router-dom';
+import {useLocation, Link} from 'react-router-dom';
 
 import CustomScroll from 'react-custom-scroll';
 import Avatar from '@material-ui/core/Avatar';
@@ -151,7 +151,9 @@ const BookingSubmitted = (props) => {
                 </div>
             </div>
             <div className={classes.footer}>
-                <button>Got it</button>
+                <Link to="/">
+                    <button>Got it</button>
+                </Link>
             </div>
         </div>
     );

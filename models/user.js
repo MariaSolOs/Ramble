@@ -20,10 +20,6 @@ const UserSchema = new mongoose.Schema({
         default: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg`
     },
     city: String,
-    pastExperiences: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Experience'
-    }],
     savedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'

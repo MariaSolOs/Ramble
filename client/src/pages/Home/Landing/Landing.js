@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import useNumberField from '../../../hooks/useNumberField';
 import useLocations from '../../../hooks/useLocations';
 
@@ -40,6 +41,10 @@ const Landing = (props) => {
     const handleSearch = () => {
         history.push(`/experience/search?location=${location}&numPeople=${numPeople}`);
     }
+
+    const codeUsed = useSelector(state => 
+                        state.user.profile.promoCode.usedBy.length > 0
+                    );
 
     return (
         <div className={classes.root}>
@@ -82,7 +87,7 @@ const Landing = (props) => {
                         </button>
                     </div>
                 </div>
-            <ReferBox shareUrl={process.env.REACT_APP_SERVER}/>
+            {!codeUsed && <ReferBox shareUrl={process.env.REACT_APP_SERVER}/>}
             </div>
             <div className={classes.image}>
                 <img src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,g_north,h_700,w_550/v1/Ramble/Homepage/fireBalloon.jpeg`}

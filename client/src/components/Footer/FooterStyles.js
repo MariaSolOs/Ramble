@@ -5,7 +5,7 @@ const styles = (theme) => ({
         width: '100vw',
         cursor: 'default',
         '& $header, & $body': {
-            width: '50%',
+            width: '45%',
             marginLeft: '15%', 
             [theme.breakpoints.down('sm')]: {
                 width: '75%',

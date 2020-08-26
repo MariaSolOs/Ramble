@@ -77,9 +77,15 @@ const ExperienceSchema = new mongoose.Schema({
         schedule: {type: Map, required: true}
     },
     rating: {
-        type: Number,
-        min: 1, 
-        max: 5
+        value: {
+            type: Number,
+            min: 1, 
+            max: 5
+        },
+        numRatings: {
+            type: Number,
+            min: 0
+        }
     },
     creator: {
         type: mongoose.Schema.Types.ObjectId,

@@ -28,7 +28,7 @@ const UserExperiencesNavRow = () => {
     return (
         <div>
             <Breadcrumbs separator="" classes={{ root: classes.nav }}>
-                <NavLink to="/profile/exp/past">Past experiences</NavLink>
+                <NavLink to="/profile/exp/past">Booked experiences</NavLink>
                 <NavLink to="/profile/exp/saved">Saved</NavLink>
             </Breadcrumbs>
         </div>

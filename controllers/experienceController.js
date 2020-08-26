@@ -25,7 +25,8 @@ exports.getLocations = (req, res) => {
 exports.getExps = async (req, res) => {
     try {
         //We only need this for the gallery card
-        const displayFields = 'title location.displayLocation images price rating creator';
+        const displayFields = 'title location.displayLocation images price ' +
+                              'rating.value creator';
         //Get experiences with updated availabilites and approved status
         let exps = await Experience.find({
                             status: 'approved',
@@ -148,6 +149,21 @@ exports.deleteRejectedExps = async (req, res) => {
         res.status(200).send({ delCount: delResult.deletedCount });
     } catch(err) {
         res.status(409).send(err);
+    }
+}
+
+//Edit an experience 
+exports.reviewExperience = async (req, res) => {
+    try {
+        const exp = await Experience.findById(req.params.expId, 'rating');
+        const newRating = ((exp.rating.value * exp.rating.numRatings) + req.body.rating) /
+                          (exp.rating.numRatings + 1);
+        exp.rating.value = newRating;
+        exp.rating.numRatings = exp.rating.numRatings + 1;
+        await exp.save();
+        res.status(201).send({message: 'Review successfully submitted.'});
+    } catch(err) {
+        res.status(409).send({error: "Couldn't submit review."});
     }
 }
 

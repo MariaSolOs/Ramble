@@ -33,16 +33,16 @@ const styles = () => ({
         fontSize: '1.15rem',
         lineHeight: 2,
         marginBottom: '1rem',
-        position: 'relative'
+        position: 'relative',
+        '&.link-notif': { cursor: 'pointer' }
     },
     notifIcon: {
         fontWeight: 'bold',
         marginRight: '1rem',
         width: 40, height: 40,
         cursor: 'default',
-        '& .fa-check-circle': {
-            fontSize: '2rem'
-        }
+        '& .fa-check-circle': { fontSize: '2rem' },
+        '& .fa-star': { fontSize: '1.6rem' }
     },
     deleteIcon: {
         position: 'absolute',

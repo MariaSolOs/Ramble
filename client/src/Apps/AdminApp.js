@@ -5,6 +5,7 @@ import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 //Pages and layout
 import Nav from '../components/Navs/AdminNav';
 import ApproveExps from '../pages/Admin/ApproveExps';
+import ExpReviews from '../pages/Admin/ExpReviews';
 import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
 import Register from '../pages/Admin/Register';
 import Maintenance from '../pages/Admin/Maintenance';
@@ -16,13 +17,13 @@ const AdminApp = (props) => {
 
     return (
         <>
-        <Nav 
-        canRegister={props.canRegister} 
-        canApproveExps={props.canApproveExps}
-        canMaintain={props.canMaintain}/>
+        <Nav permissions={props.permissions}/>
         <Switch location={location}>
             <PrivateRoute path={`${path}/approveExps`} test={props.canApproveExps}>
                 <ApproveExps/>
+            </PrivateRoute>
+            <PrivateRoute path={`${path}/exp-reviews`} test={props.canSeeReviews}>
+                <ExpReviews/>
             </PrivateRoute>
             <PrivateRoute path={`${path}/approveExp/:id`} test={props.canApproveExps}>
                 <ApprovalPage/>
@@ -40,8 +41,10 @@ const AdminApp = (props) => {
 }
 
 const mapStateToProps = (state) => ({
+    permissions: state.user.profile.permissions,
     canRegister: state.user.profile.permissions.includes('addAdmin'),
     canApproveExps: state.user.profile.permissions.includes('approveExp'),
+    canSeeReviews: state.user.profile.permissions.includes('seeReviews'),
     canMaintain: state.user.profile.permissions.includes('maintenance')
 });
 

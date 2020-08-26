@@ -38,15 +38,19 @@ const AdminNav = (props) => {
     return (
         <AppBar onRambleClick={logoutAdmin}>
             <div className={classes.root}>
-                {props.canRegister && 
+                {props.permissions.includes('addAdmin') && 
                     <Link to="/admin/register" className={classes.navLink}>
                         Register a new admin
                     </Link>}
-                {props.canApproveExps && 
+                {props.permissions.includes('approveExp') && 
                     <Link to="/admin/approveExps" className={classes.navLink}>
                         Approve experiences
                     </Link>}
-                {props.canMaintain && 
+                {props.permissions.includes('seeReviews') && 
+                    <Link to="/admin/exp-reviews" className={classes.navLink}>
+                        See experience reviews
+                    </Link>}
+                {props.permissions.includes('maintenance') && 
                     <Link to="/admin/maintenance" className={classes.navLink}>
                         App maintenance
                     </Link>}

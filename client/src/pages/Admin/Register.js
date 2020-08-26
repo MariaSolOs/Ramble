@@ -56,20 +56,19 @@ const Register = (props) => {
     const handleChange = (e) => {
         setValues({
             ...values,
-            [e.target.name]: (e.target.name === 'addAdmin' ||
-                              e.target.name === 'approveExp')? e.target.checked :
-                              e.target.value
+            [e.target.name]: e.target.name.includes('perm-')? e.target.checked :
+                             e.target.value
         });
     }
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const permissions = [];
-        if(values.addAdmin) {
-            permissions.push('addAdmin');
-        }
-        if(values.approveExp) {
+        if(values['perm-approveExp']) {
             permissions.push('approveExp');
+        }
+        if(values['perm-seeReviews']) {
+            permissions.push('seeReviews');
         }
         axios.post('/api/auth/admin-register', {
             username: values.username, 
@@ -108,15 +107,15 @@ const Register = (props) => {
                 onChange={handleChange}
                 required/>
                 <div className={classes.permissionField}>
-                    Give admin registration permissions
+                    Give experience approval permissions
                     <Checkbox 
-                    name="addAdmin"
+                    name="perm-approveExp"
                     onChange={handleChange}/>
                 </div>
                 <div className={classes.permissionField}>
-                    Give experience approval permissions
+                    Give review permissions
                     <Checkbox 
-                    name="approveExp"
+                    name="perm-seeReviews"
                     onChange={handleChange}/>
                 </div>
                 <div className={classes.submitButton}>

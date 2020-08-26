@@ -9,7 +9,8 @@ const cloudinary = require('cloudinary').v2,
 const Experience = require('../models/experience'),
       User = require('../models/user'),
       Creator = require('../models/creator'),
-      Notification = require('../models/notification');
+      Notification = require('../models/notification'),
+      Review = require('../models/review');
 
 //Fetch cities stored in database
 exports.getLocations = (req, res) => {
@@ -38,7 +39,7 @@ exports.getExps = async (req, res) => {
         exps = exps.filter(exp => exp.creator.stripe.accountId);
         res.status(200).send({ exps });
     } catch(err) {
-        res.status(404).send({err: "Couldn't fetch experiences."});
+        res.status(500).send({err: "Couldn't fetch experiences."});
     }
 }
 
@@ -47,11 +48,11 @@ exports.getUnapprovedExps = (req, res) => {
     if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
         return res.status(401).send({err: 'Unauthorized.'});
     }
-    const displayFields = 'title location.displayLocation images price rating';
+    const displayFields = 'title location.displayLocation images price rating.value';
     Experience.find({ status: 'pending' }, displayFields,
     (err, exps) => {
         if(err) { 
-            res.status(404).send({err: "Couldn't fetch experiences."});
+            res.status(500).send({err: "Couldn't fetch experiences."});
         } else { res.status(200).send({ exps }); }
     });
 }
@@ -152,19 +153,42 @@ exports.deleteRejectedExps = async (req, res) => {
     }
 }
 
-//Edit an experience 
+//Review an experience 
 exports.reviewExperience = async (req, res) => {
     try {
+        //Update experience rating
         const exp = await Experience.findById(req.params.expId, 'rating');
         const newRating = ((exp.rating.value * exp.rating.numRatings) + req.body.rating) /
                           (exp.rating.numRatings + 1);
         exp.rating.value = newRating;
         exp.rating.numRatings = exp.rating.numRatings + 1;
+
+        //If applicable, create a review
+        if(req.body.review.length > 0) {
+            const review = new Review({
+                body: req.body.review,
+                about: req.params.expId,
+                onModel: 'Experience'
+            });
+            await review.save();
+        }
+
         await exp.save();
         res.status(201).send({message: 'Review successfully submitted.'});
     } catch(err) {
         res.status(409).send({error: "Couldn't submit review."});
     }
+}
+exports.getReviews = (req, res) => {
+    const expFields = 'title location.displayLocation images price rating.value';
+    Review.find({onModel: 'Experience'}).populate('about', expFields)
+    .exec((err, reviews) => {
+        if(err || !reviews) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send({ reviews });
+        }
+    });
 }
 
 //Create an experience (unapproved status)

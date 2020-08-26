@@ -33,7 +33,11 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 token: action.token,
                 isAdmin: action.isAdmin,
-                profile: { ...action.profile },
+                profile: { 
+                    ...action.profile,
+                    promoCode: action.isAdmin? state.profile.promoCode :
+                               action.profile.promoCode
+                },
                 notifs: action.notifs? [...action.notifs] :
                         state.notifs
             }

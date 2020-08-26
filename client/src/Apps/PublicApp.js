@@ -30,10 +30,10 @@ const PublicApp = (props) => {
     }, [cookieToken]);
 
     //Fetch user experiences if logged in 
-    const {isAuth, fetchExps} = props;
+    const {isAuth, fetchExps, isAdmin} = props;
     useEffect(() => {
-        if(isAuth) { fetchExps(); }
-    }, [isAuth, fetchExps]);
+        if(isAuth && !isAdmin) { fetchExps(); }
+    }, [isAuth, fetchExps, isAdmin]);
 
     //Change favicon when there's a notification
     useEffect(() => {

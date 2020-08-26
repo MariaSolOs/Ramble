@@ -26,6 +26,11 @@ router.delete('/rejected',
 router.post('/review/:expId',
              authenticateToken,
              controllers.reviewExperience);
+//Get all reviews (for admins)
+router.get('/reviews',
+           authenticateToken,
+           identifyUser,
+           controllers.getReviews);
 
 //For creators to create an experience
 router.post('/', authenticateToken, controllers.createExperience);

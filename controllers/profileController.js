@@ -44,8 +44,7 @@ exports.getUserProfile = (req, res) => {
             token: req.token,
             userData: {
                 username: req.user.username,
-                permissions: req.user.permissions,
-                promoCode: {}
+                permissions: req.user.permissions
             }
         });
     } else {

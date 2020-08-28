@@ -28,19 +28,32 @@ const styles = () => ({
         backgroundClip: 'text',
         '-webkit-background-clip': 'text',
         '-webkit-text-fill-color': 'transparent',
-        margin: '0 0 0.8rem'
+        margin: '0 0 8px'
     },
 
+    //Header
     instruction: {
         color: '#2B2B2B',
         margin: 0,
         fontSize: '1.2rem',
         whiteSpace: 'break-spaces',
     },
+    title1: {
+        color: '#2B2B2B',
+        margin: 0,
+        fontSize: '1.4rem',
+        whiteSpace: 'break-spaces',
+        '& span': { fontSize: '1.75rem' }
+    },
+    title2: {
+        margin: '0 auto 5px 0',
+        color: '#878788',
+        fontSize: '1.4rem'
+    },
 
     shareOptions: {
         display: 'flex',
-        marginTop: '1.5rem'
+        marginTop: '1rem'
     },
     referAvatars: {
         backgroundColor: '#E1E2E2',
@@ -58,6 +71,9 @@ const styles = () => ({
     },
     referMedia: {
         marginRight: 20,
+        display: props => !props.loggedUser && 'flex',
+        alignItems: props => !props.loggedUser && 'flex-end',
+        cursor: props => !props.loggedUser && 'pointer',
         '& $greyText': { marginBottom: 5 },
         '& img': { 
             width: 35,

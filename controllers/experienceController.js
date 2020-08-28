@@ -3,10 +3,12 @@ const cloudinary = require('cloudinary').v2,
       path = require('path'),
       {compile} = require('handlebars'),
       mjml2html = require('mjml'),
-      nodemailer = require('nodemailer');
+      nodemailer = require('nodemailer'),
+      {createExpOccurrences} = require('../helpers/experienceHelpers');
 
 //Models
 const Experience = require('../models/experience'),
+      Occurrence = require('../models/occurrence'),
       User = require('../models/user'),
       Creator = require('../models/creator'),
       Notification = require('../models/notification'),
@@ -125,6 +127,10 @@ exports.approveExp = (req, res) => {
                 "is ready to go live. Make sure you've completed your Stripe profile!", 
                 html: mjml2html(mjml).html
             });
+
+            //Create all occurrences
+            await createExpOccurrences(exp);
+
             res.status(200).send({message: 'Experience successfully approved.'});
         } else {
             res.status(400).send({err: 'Invalid decision.'});
@@ -180,8 +186,7 @@ exports.reviewExperience = async (req, res) => {
     }
 }
 exports.getReviews = (req, res) => {
-    const expFields = 'title location.displayLocation images price rating.value';
-    Review.find({onModel: 'Experience'}).populate('about', expFields)
+    Review.find({onModel: 'Experience'}).populate('about', 'title images')
     .exec((err, reviews) => {
         if(err || !reviews) {
             res.status(500).send(err);
@@ -206,11 +211,13 @@ exports.createExperience = async (req, res) => {
             });
             expImages.push(upload.eager[0].secure_url);
         }
+        //Create experience
         const createdExp = new Experience({
             ...req.body.form,
             images: expImages
         });
         await createdExp.save();
+
         res.status(201).send({
             message: 'Experience successfully created.',
             exp: {

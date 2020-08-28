@@ -24,6 +24,12 @@ router.patch('/:creatorId',
              authenticateToken,
              controllers.editCreatorProfile);
 
+//Get created experiences 
+router.get('/:creatorId/experiences',
+           authenticateToken,
+           identifyUser,
+           controllers.getCreatedExperiences);
+
 //To delete bookings where no payment intent has been created
 router.delete('/bookingRequests/:bookId',
               authenticateToken,

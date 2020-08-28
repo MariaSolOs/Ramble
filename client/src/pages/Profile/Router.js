@@ -16,7 +16,7 @@ const Router = (props) => {
     return (
         <Switch location={location}>
             <Layout>
-                <Route path={`${path}/exp/past`}>
+                <Route path={`${path}/exp/booked`}>
                     <BookedExperiences/>
                 </Route>
                 <Route path={`${path}/exp/saved`}>

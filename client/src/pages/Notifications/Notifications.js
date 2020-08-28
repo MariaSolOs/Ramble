@@ -40,6 +40,7 @@ const Notifications = (props) => {
     
     const notifs = useSelector(state => state.user.notifs);
     const removeNotif = useCallback((notifId) => (e) => {
+        e.stopPropagation();
         axios.delete(`/api/profile/notifs/${notifId}`);
     }, []);
 

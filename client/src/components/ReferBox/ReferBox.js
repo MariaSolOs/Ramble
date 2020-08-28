@@ -1,5 +1,6 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import withAuthDialogs from '../../hoc/withAuthDialogs/withAuthDialogs';
 
 //Components and icons
 import Avatar from '@material-ui/core/Avatar';
@@ -19,23 +20,30 @@ const referAvat = [`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINAR
                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_2.jpeg`,
                    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_3.jpeg`];
 
-const ReferBox = ({shareUrl}) => {
-    const classes = useStyles();
+const ReferBox = (props) => {    
+    const classes = useStyles({loggedUser: props.loggedUser});
 
-    const promoCode = useSelector(state => state.user.profile.promoCode.code);
-    
     return (
         <div className={classes.wrapper}>
             <div className={classes.root}>
-                {promoCode &&
+                {props.promoCode &&
                 <>
                     <h5 className={classes.greyText}>Your code</h5>
-                    <h3 className={classes.code}>{promoCode}</h3>
+                    <h3 className={classes.code}>{props.promoCode}</h3>
                 </>}
-                <h3 className={classes.instruction}>
-                    Share this code with a friend. When they use it for their first booking,
-                    you'll both get 20% off your next experience.
-                </h3> 
+                {props.loggedUser? 
+                    <h3 className={classes.instruction}>
+                        Share this code with a friend. When they use it for their first 
+                        booking, you'll both get 20% off your next experience.
+                    </h3> : 
+                    <>
+                    <h3 className={classes.title1}>
+                        Share your code with a friend. By using it for their first 
+                        booking, you’ll both get <span>20</span>% off
+                    </h3> 
+                    <h4 className={classes.title2}>your next experience.</h4>
+                    </>
+                }
                 <div className={classes.shareOptions}>
                     <div className={classes.referAvatars}>
                         <Avatar src={referAvat[1]}
@@ -46,20 +54,31 @@ const ReferBox = ({shareUrl}) => {
                         alt="Refer a friend"/>
                     </div>
                     <div className={classes.referMedia}>
-                        <p className={classes.greyText}>Share with</p>
-                        <FacebookMessengerShareButton 
-                        appId={process.env.REACT_APP_FACEBOOK_ID} 
-                        url={shareUrl}>
+                        {props.loggedUser && <p className={classes.greyText}>Share with</p>}
+                        {props.loggedUser?
+                        <>
+                            <FacebookMessengerShareButton 
+                            appId={process.env.REACT_APP_FACEBOOK_ID} 
+                            url={props.shareUrl}>
+                                <img src={messengerIcon} alt="Refer with Messenger"/>
+                            </FacebookMessengerShareButton>
+                            <EmailShareButton 
+                            url={props.shareUrl}
+                            subject="Ramble - Experience different"
+                            body={'Feel like trying something new? Use my Ramble promo ' +
+                            `code ${props.promoCode} to get 20% off your next experience:`}>
+                                <img src={mailIcon} alt="Refer with email"/>
+                            </EmailShareButton>
+                            <WhatsappShareButton url={props.shareUrl}>
+                                <img src={whatsAppIcon} alt="Refer with Whatsapp"/>
+                            </WhatsappShareButton>
+                        </> : 
+                        <div onClick={props.dialogActions && 
+                                      props.dialogActions.openSignUpDialog}>
                             <img src={messengerIcon} alt="Refer with Messenger"/>
-                        </FacebookMessengerShareButton>
-                        <EmailShareButton 
-                        url={shareUrl}>
-                            {/* TODO: Add subject and body */}
                             <img src={mailIcon} alt="Refer with email"/>
-                        </EmailShareButton>
-                        <WhatsappShareButton url={shareUrl}>
                             <img src={whatsAppIcon} alt="Refer with Whatsapp"/>
-                        </WhatsappShareButton>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -67,4 +86,9 @@ const ReferBox = ({shareUrl}) => {
     );
 }
 
-export default ReferBox;
+const mapStateToProps = (state) => ({
+    loggedUser: state.user.profile.id,
+    promoCode: state.user.profile.promoCode.code
+});
+
+export default connect(mapStateToProps, null)(withAuthDialogs(ReferBox));

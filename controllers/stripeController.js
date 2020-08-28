@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
       handlers = require('../helpers/stripeWebhookHandlers'),
-      {calculatePaymentAmount} = require('../helpers/bookingHelpers');
+      {calculatePaymentAmount} = require('../helpers/experienceHelpers');
 
 const User = require('../models/user');
 

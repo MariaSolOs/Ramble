@@ -106,8 +106,9 @@ exports.getUserExperiences = async (req, res) => {
         //We only need this for experience cards
         const expFields = 'title location.displayLocation images price rating';
         //Saved experiences
-        const {savedExperiences} = 
-            await req.user.populate('savedExperiences', expFields).execPopulate();
+        const {savedExperiences, pastExperiences} = 
+            await req.user.populate('savedExperiences pastExperiences', expFields)
+            .execPopulate();
         //Booked experiences
         const bookedExperiences = await Booking.find({client: req.user._id}, 
                                   'experience occurrence').populate([
@@ -117,7 +118,7 @@ exports.getUserExperiences = async (req, res) => {
                                       select: 'dateEnd' }
                                 ]);
         res.status(200).send({
-            bookedExperiences, 
+            bookedExperiences: [...bookedExperiences, pastExperiences], 
             savedExperiences
         });
     } catch(err) {

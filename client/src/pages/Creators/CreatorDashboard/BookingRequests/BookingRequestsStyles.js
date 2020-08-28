@@ -1,4 +1,22 @@
 const styles = () => ({
+    root: {
+        display: 'flex',
+        minHeight: '70vh',
+        maxHeight: '84vh',
+        width: '100vw',
+        margin: '13vh 0 3vh'
+    },
+    page: {
+        width: 'calc(100% - 10px - 6%)',
+        maxHeight: '100%'
+    },
+    shadowSeparator: {
+        padding: 5,
+        borderRadius: '2rem',
+        margin: '0 3%',
+        background: 'linear-gradient(to bottom, #1A1A1A, #5B5B5B)'
+    },
+    
     sortBar: {
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
@@ -34,7 +52,10 @@ const styles = () => ({
         overflowX: 'scroll'
     },
     request: { 
-        margin: '10px 40px 0 0'
+        margin: '10px 40px 0 0',
+        '&:last-child': {
+            paddingRight: 40 
+        }
     }
 });
 export default styles;

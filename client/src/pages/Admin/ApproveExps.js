@@ -36,7 +36,7 @@ const ApproveExps = (props) => {
 
     const history = useHistory();
     const handleViewExp = (expId) => (e) => {
-        history.push(`/admin/approveExp/${expId}`)
+        history.push(`/admin/approveExp/${expId}`);
     }
 
     return (

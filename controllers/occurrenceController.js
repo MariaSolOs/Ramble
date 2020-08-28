@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
-      {calculatePaymentAmount, timeDateConvert} = require('../helpers/bookingHelpers');
+      {calculatePaymentAmount, timeDateConvert} = require('../helpers/experienceHelpers');
 
 //Models
 const Experience = require('../models/experience'),
@@ -27,27 +27,16 @@ exports.getExpOcurrences = (req, res) => {
 exports.addBookingToOcurrence = async (req, res) => {
     try {
         const dateStart = timeDateConvert(req.body.date, req.body.timeslot.split('-')[0]);
-        const dateEnd = timeDateConvert(req.body.date, req.body.timeslot.split('-')[1]);
         
         const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
 
-        //Find or create the occurrence
-        let occ = await Occurrence.findOne({
+        //Find the occurrence
+        const occ = await Occurrence.findOne({
                             experience: experience._id,
                             dateStart,
                             timeslot: req.body.timeslot
                         });
-        if(!occ) {
-            occ = new Occurrence({
-                experience: experience._id,
-                dateStart,
-                dateEnd,
-                timeslot: req.body.timeslot,
-                spotsLeft: experience.capacity,
-                creatorProfit: 0
-            });
-        }
 
         //Create booking
         const {amount, application_fee_amount} = await calculatePaymentAmount(

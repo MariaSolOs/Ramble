@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {setNumBookings} from '../../../../store/actions/user';
 import {showError, showSnackbar, startLoading, endLoading} from '../../../../store/actions/ui';
 
+import NavRow from '../NavRow';
 import BookingCard from './BookingCard/BookingCard';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -111,42 +112,46 @@ const BookingRequests = (props) => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.sortBar}>
-                Sort by
-                <button onClick={sortByBookDate}>Booking date</button>
-                <button onClick={sortByExpDate}>Experience date</button>
-            </div>
-            <div className={classes.requests}> 
-            {bookings && bookings.map(booking => (
-                <div key={booking._id} className={classes.request}>
-                    <BookingCard 
-                    booking={booking}
-                    onAccept={
-                        booking.stripe.paymentIntentId?
-                        handleDecisionUnsavedCard(
-                            'capture', 
-                            booking.stripe.paymentIntentId,
-                            booking._id
-                        ) :
-                        handleDecisionSavedCard('approve', 
-                        { customerId: booking.client.stripe.customerId,
-                          expId: booking.experience._id,
-                          bookType: booking.bookType,
-                          numGuests: booking.numPeople,
-                          ...booking.stripe }, 
-                          booking._id)
-                    }
-                    onDecline={
-                        booking.stripe.paymentIntentId?
-                        handleDecisionUnsavedCard(
-                            'cancel', 
-                            booking.stripe.paymentIntentId,
-                            booking._id
-                        ) :
-                        handleDecisionSavedCard('cancel', {}, booking._id)
-                    }/>
+            <div className={classes.shadowSeparator}/>
+            <div className={classes.page}>
+                <NavRow/>
+                <div className={classes.sortBar}>
+                    Sort by
+                    <button onClick={sortByBookDate}>Booking date</button>
+                    <button onClick={sortByExpDate}>Experience date</button>
                 </div>
-            ))}
+                <div className={classes.requests}> 
+                {bookings && bookings.map(booking => (
+                    <div key={booking._id} className={classes.request}>
+                        <BookingCard 
+                        booking={booking}
+                        onAccept={
+                            booking.stripe.paymentIntentId?
+                            handleDecisionUnsavedCard(
+                                'capture', 
+                                booking.stripe.paymentIntentId,
+                                booking._id
+                            ) :
+                            handleDecisionSavedCard('approve', 
+                            { customerId: booking.client.stripe.customerId,
+                            expId: booking.experience._id,
+                            bookType: booking.bookType,
+                            numGuests: booking.numPeople,
+                            ...booking.stripe }, 
+                            booking._id)
+                        }
+                        onDecline={
+                            booking.stripe.paymentIntentId?
+                            handleDecisionUnsavedCard(
+                                'cancel', 
+                                booking.stripe.paymentIntentId,
+                                booking._id
+                            ) :
+                            handleDecisionSavedCard('cancel', {}, booking._id)
+                        }/>
+                    </div>
+                ))}
+                </div>
             </div>
         </div>
     );

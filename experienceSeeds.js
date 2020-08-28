@@ -3,6 +3,8 @@ const Experience = require('./models/experience'),
       Booking = require('./models/booking'),
       Creator = require('./models/creator');
 
+const {createExpOccurrences} = require('./helpers/experienceHelpers');
+
 const experienceData = [
     {title: 'Amazing food city tour',
     price: {
@@ -227,13 +229,9 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    Experience.find({}, async (err, exps) => {
+    await Experience.find({}, async (err, exps) => {
         for(const exp of exps) {
-            exp.rating = {
-                value: 4.91,
-                numRatings: 11
-            }
-            await exp.save();
+            await createExpOccurrences(exp);
         }
     });
     // [...experienceData, ...experienceData]

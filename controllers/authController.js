@@ -1,5 +1,4 @@
-const {generateAccessToken} = require('../helpers/JWTHelpers'),
-      {generatePromoCode} = require('../helpers/profileHelpers');
+const {generatePromoCode} = require('../helpers/profileHelpers');
 
 const User = require('../models/user'), 
       Admin = require('../models/admin');

@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],
+    pastExperiences: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Experience'
+    }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Creator'

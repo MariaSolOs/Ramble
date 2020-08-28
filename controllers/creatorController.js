@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 
 //Models
 const Creator = require('../models/creator'),
+      Experience = require('../models/experience'),
       Occurrence = require('../models/occurrence'),
       Booking = require('../models/booking'),
       Notification = require('../models/notification');
@@ -91,6 +92,29 @@ exports.editCreatorProfile = async (req, res) => {
     } catch(err) {
         res.status(409).send({error: "Couldn't update creator."});
     }
+}
+
+exports.getCreatedExperiences = (req, res) => {
+    //Find experiences
+    Experience.find({creator: req.params.creatorId}, 
+    'title avail duration images', async (err, exps) => {
+        try {
+            if(err || !exps) {
+                res.status(500).send({err: "Couldn't find creator's experiences"});
+            } else {
+                const expInfo = [];
+                //Find all occurrences
+                for(const exp of exps) {
+                    const occs = await Occurrence.find({experience: exp._id}, 
+                                 'dateStart bookings').populate('bookings');
+                    expInfo.push({exp, occs});
+                }
+                res.status(200).send({ expInfo });
+            }
+        } catch(err) {
+            res.status(500).send({err: "Couldn't get creator calendar."});
+        }
+    });
 }
 
 /*To delete a booking where the customer used a saved card

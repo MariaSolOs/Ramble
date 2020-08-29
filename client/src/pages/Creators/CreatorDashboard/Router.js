@@ -10,6 +10,7 @@ import {actions} from './store/types';
 //Pages and layout
 import BookingRequests from './BookingRequests/BookingRequests';
 import Calendar from './Calendar/Calendar';
+import NoCreatedExps from './Calendar/NoCreatedExps';
 
 const Router = (props) => {
     const {path} = useRouteMatch();
@@ -41,10 +42,19 @@ const Router = (props) => {
         startLoading();
         axios.get(`/api/creator/${creatorId}/experiences`)
         .then(res => {
+            console.log(res.data);
             dispatch({
                 type: actions.SET_CREATED_EXPS,
-                exps: res.data.expInfo
+                exps: res.data.exps
             });
+            //The default experience will be the first one
+            if(res.data.exps.length > 0) {
+                dispatch({
+                    type: actions.SET_EDITING_EXP,
+                    exp: res.data.exps[0],
+                    date: new Date()
+                });
+            }
             endLoading();
         }).catch(err => {
             endLoading();
@@ -53,10 +63,19 @@ const Router = (props) => {
         });
     }, [creatorId, startLoading, endLoading, showError, history, dispatch]);
 
+    //Booking requests actions
     const deleteRequest = useCallback((id) => {
         dispatch({type: actions.DELETE_BOOKING_REQUEST, id});
         decNumBookings();
     }, [dispatch, decNumBookings]);
+
+    //Calendar actions
+    const handleEditExp = useCallback((exp) => {
+        dispatch({type: actions.CHANGE_EDIT_EXP, exp});
+    }, [dispatch]);
+    const handleEditDate = useCallback((date) => {
+        dispatch({type: actions.CHANGE_EDIT_DATE, date});
+    }, [dispatch]);
 
     return (
         <Switch location={location}>
@@ -68,9 +87,15 @@ const Router = (props) => {
                 </Route>}
             {state.createdExps &&
                 <Route path={`${path}/calendar`}>
+                {state.createdExps.length > 0?
                     <Calendar 
+                    createdExps={state.createdExps}
                     bookingRequests={state.bookingRequests}
-                    experiences={state.createdExps}/>
+                    exp={state.editExp}
+                    date={state.editDate}
+                    onExpChange={handleEditExp}
+                    onDateChange={handleEditDate}/> :
+                    <NoCreatedExps/>}
                 </Route>}
         </Switch>
     );

@@ -17,7 +17,7 @@ const ExpNav = (props) => {
 
     return (
         <div className={classes.expNav}>
-            {props.experiences.map(({exp, occs}) => (
+            {props.experiences.map(exp => (
                 <Tooltip 
                 key={exp._id}
                 disableFocusListener
@@ -28,7 +28,7 @@ const ExpNav = (props) => {
                     <img 
                     src={exp.images[0]} 
                     alt={exp.title}
-                    onClick={handleExpClick({exp, occs})}/>
+                    onClick={handleExpClick(exp)}/>
                 </Tooltip>
             ))}
         </div>

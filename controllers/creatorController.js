@@ -96,23 +96,12 @@ exports.editCreatorProfile = async (req, res) => {
 
 exports.getCreatedExperiences = (req, res) => {
     //Find experiences
-    Experience.find({creator: req.params.creatorId}, 
-    'title avail duration images', async (err, exps) => {
-        try {
-            if(err || !exps) {
-                res.status(500).send({err: "Couldn't find creator's experiences"});
-            } else {
-                const expInfo = [];
-                //Find all occurrences
-                for(const exp of exps) {
-                    const occs = await Occurrence.find({experience: exp._id}, 
-                                 'dateStart bookings').populate('bookings');
-                    expInfo.push({exp, occs});
-                }
-                res.status(200).send({ expInfo });
-            }
-        } catch(err) {
-            res.status(500).send({err: "Couldn't get creator calendar."});
+    Experience.find({creator: req.params.creatorId},
+    'title images duration avail.to', (err, exps) => {
+        if(err || !exps) {
+            res.status(500).send({err: "Couldn't find creator's experiences"});
+        } else {
+            res.status(200).send({ exps }); 
         }
     });
 }

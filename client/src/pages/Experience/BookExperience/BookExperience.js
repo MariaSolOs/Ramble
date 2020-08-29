@@ -44,7 +44,7 @@ const BookExperience = ({exp, user, onClose}) => {
                         type: actions.SET_SLOTS_INFO,
                         slotsInfo: getSlotsInfo(
                             exp.avail.schedule[getWeekdayKey(state.form.date)], 
-                            res.data.occ, 
+                            res.data.occs, 
                             exp.capacity
                         )
                     });

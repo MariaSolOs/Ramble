@@ -13,12 +13,11 @@ exports.getExpOcurrences = (req, res) => {
                      dateStart: {
                         $gte: new Date(new Date(req.query.date).setUTCHours(0, 0, 0)), 
                         $lte: new Date(new Date(req.query.date).setUTCHours(23, 59, 59))
-                    }}, 
-    'timeslot spotsLeft', (err, occ) => {
-        if(err || !occ) {
+    }}, (err, occs) => {
+        if(err || !occs) {
             res.status(404).send({err: "Couldn't find occurrences."});
         } else {
-            res.status(200).send({ occ });
+            res.status(200).send({ occs });
         }
     });
 }
@@ -113,55 +112,50 @@ exports.addBookingToOcurrence = async (req, res) => {
 exports.editExpOccs = async (req, res) => {
     try {
         //Get necessary info to create occurrences
-        const exp = await Experience.findById(req.params.expId, 'capacity avail.schedule');
-        console.log(exp.avail.schedule);
+        const exp = await Experience.findById(req.params.expId, 'capacity');
 
         let createdCount = 0;
         const deleteIds = [];
-        for(const date of Object.keys(req.body.changes)) {
-            const {toAdd, toDel} = req.body.changes[date];
-            console.log(req.body.changes[date])
-            //Add occurrences
-            for(const slot of toAdd) {
-                const occExists = await Occurrence.exists({
-                    experience: exp._id,
-                    dateStart: {
-                        $gte: new Date(new Date(date).setUTCHours(0, 0, 0)), 
-                        $lte: new Date(new Date(date).setUTCHours(23, 59, 59))
-                    },
-                    timeslot: slot
-                });
-                if(occExists) { continue; }
-                else {
-                    const created = await Occurrence.create({
-                        experience: exp._id,
-                        dateStart: timeDateConvert(date, slot.split('-')[0]),
-                        dateEnd: timeDateConvert(date, slot.split('-')[1]),
-                        timeslot: slot,
-                        spotsLeft: exp.capacity,
-                        creatorProfit: 0
-                    });
-                    console.log(created)
-                    createdCount += 1;
-                }
-            }
 
-            //Find occurrences that can be deleted
-            for(const slot of toDel) {
-                const occ = await Occurrence.findOne({
+        //Add occurrences
+        for(const slot of req.body.changes.toAdd) {
+            const occExists = await Occurrence.exists({
+                experience: exp._id,
+                dateStart: {
+                    $gte: new Date(new Date(req.body.date).setUTCHours(0, 0, 0)), 
+                    $lte: new Date(new Date(req.body.date).setUTCHours(23, 59, 59))
+                },
+                timeslot: slot
+            });
+            if(occExists) { continue; }
+            else {
+                await Occurrence.create({
                     experience: exp._id,
-                    dateStart: {
-                        $gte: new Date(new Date(date).setUTCHours(0, 0, 0)), 
-                        $lte: new Date(new Date(date).setUTCHours(23, 59, 59))
-                    },
-                    timeslot: slot
-                }, 'bookings');
-                if(!occ || 
-                    occ.bookings.length > 0 || 
-                    req.body.requestsOccs.includes(occ._id)) { 
-                    continue; 
-                } else { delIds.push(occ._id); }
+                    dateStart: timeDateConvert(req.body.date, slot.split('-')[0]),
+                    dateEnd: timeDateConvert(req.body.date, slot.split('-')[1]),
+                    timeslot: slot,
+                    spotsLeft: exp.capacity,
+                    creatorProfit: 0
+                });
+                createdCount += 1;
             }
+        }
+
+        //Find occurrences that can be deleted
+        for(const slot of req.body.changes.toDel) {
+            const occ = await Occurrence.findOne({
+                experience: exp._id,
+                dateStart: {
+                    $gte: new Date(new Date(req.body.date).setUTCHours(0, 0, 0)), 
+                    $lte: new Date(new Date(req.body.date).setUTCHours(23, 59, 59))
+                },
+                timeslot: slot
+            }, 'bookings');
+            if(!occ || 
+                occ.bookings.length > 0 || 
+                req.body.requestsOccs.includes(occ._id)) { 
+                continue; 
+            } else { deleteIds.push(occ._id); }
         }
 
         //Delete occurrences
@@ -169,6 +163,6 @@ exports.editExpOccs = async (req, res) => {
 
         res.status(200).send({deletedCount, createdCount});
     } catch(err) {
-        res.status(500).send(err);
+        res.status(500).send({err: err.message});
     }
 }

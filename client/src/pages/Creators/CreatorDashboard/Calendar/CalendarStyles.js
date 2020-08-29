@@ -52,8 +52,8 @@ const styles = (theme) => ({
     },
 
     body: {
-        width: '55vw',
         minWidth: 560,
+        maxWidth: 670,
         margin: '0 auto'
     },
     shadowSeparator: {
@@ -67,7 +67,9 @@ const styles = (theme) => ({
     },
     calendar: {
         display: 'flex',
-        marginTop: '2rem'
+        justifyContent: 'space-evenly',
+        marginTop: '2rem',
+        maxWidth: 670
     },
 
     datePicker: {
@@ -164,8 +166,8 @@ const styles = (theme) => ({
     },
 
     footer: {
-        width: '100%',
-        marginTop: '2rem',
+        width: 'calc(570px + 9%)',
+        margin: '10px 0 3vh',
         height: 40,
         '& button': {
             width: 130,

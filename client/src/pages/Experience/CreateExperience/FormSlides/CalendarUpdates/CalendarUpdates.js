@@ -13,6 +13,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './CalendarUpdatesStyles';
 const useStyles = makeStyles(styles);
 
+//TODO: Make this to fixed monthly
 const CalendarUpdates = ({startDate, updateFreq, submitInput}) => {
     const classes = useStyles();
 

@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const Booking = require('./booking');
-
 const OccurrenceSchema = new mongoose.Schema({
     experience: {
         type: mongoose.Schema.Types.ObjectId,

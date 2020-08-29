@@ -12,4 +12,10 @@ router.post('/:expId/bookings',
             authenticateToken, 
             controllers.addBookingToOcurrence);
 
+
+//To add or delete occurrences of an experience
+router.post('/:expId',
+             authenticateToken,
+             controllers.editExpOccs);
+
 module.exports = router;

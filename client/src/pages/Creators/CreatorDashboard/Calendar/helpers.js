@@ -17,7 +17,8 @@ export const generateTimeSlots = (duration) => {
                 time: end >= 12 && end !== 24? 'PM' : 'AM'
             }
         }
-        slots.push(slot);
+        slots.push(`${slot.from.hour}${slot.from.time}-${
+        slot.to.hour}${slot.to.time}`);
     }
     return slots;
 }

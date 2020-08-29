@@ -56,7 +56,7 @@ exports.createExpOccurrences = async (exp) => {
                   'Thursday', 'Friday', 'Saturday'];
     
     const endDate = new Date(exp.avail.to);
-    for(const date = new Date(exp.avail.from); 
+    for(const date = new Date(Math.max(new Date(exp.avail.from), new Date())); 
         date <= endDate; date.setDate(date.getDate() + 1)) {
         const timeslots = exp.avail.schedule.get(days[date.getDay()]);
         if(timeslots) {

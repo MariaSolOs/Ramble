@@ -37,7 +37,6 @@ const styles = (theme) => ({
 
     experienceWrapper: {
         overflowY: 'scroll',
-        display: 'flex',
         marginBottom: 90,
         [theme.breakpoints.down('sm')]: { 
             overflowY: 'unset',

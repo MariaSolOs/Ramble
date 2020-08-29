@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {connect} from 'react-redux';
-import {startLoading, endLoading, showError} from '../../../../store/actions/ui';
-import {useHistory, Link} from 'react-router-dom';
-import axios from '../../../../tokenizedAxios';
+import {Link} from 'react-router-dom';
 import uuid from 'react-uuid';
 import {generateTimeSlots, getFormattedDate} from './helpers';
+import {useDispatch} from 'react-redux';
+import {showError} from '../../../../store/actions/ui';
+import axios from '../../../../tokenizedAxios';
 
 import NavRow from '../NavRow';
+import ExpNav from './ExpNav';
 import DatePicker from 'react-datepicker';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -20,94 +21,138 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
 
 const Calendar = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
-    const [experiences, setExperiences] = useState(null);
     const [currExperience, setCurrExperience] = useState(null);
     const [date, setDate] = useState(null);
-
-    /*The original timeslots are saved but we also 
-    generate all possible timeslots*/
+    const [affectedBookings, setAffectedBookings] = useState([]);
+    const [changes, setChanges] = useState({});
+    const [changesSaved, setChangesSaved] = useState(true);
+    //We generate all possible timeslots
     const [timeslots, setTimeslots] = useState(null);
-    const [origTimeslots, setOrigTimeslots] = useState(null);
 
-    //Fetch creator's experiences
-    const {creatorId, startLoading, endLoading, showError} = props;
-    const history = useHistory();
+    const {experiences, bookingRequests} = props;
+    //Set default experience to the first one
     useEffect(() => {
-        startLoading();
-        axios.get(`/api/creator/${creatorId}/experiences`)
-        .then(res => {
-            setExperiences(res.data.expInfo);
-            if(res.data.expInfo.length > 0) {
-                //Default is first experience
-                setCurrExperience(res.data.expInfo[0]);
-            }
-            endLoading();
-        })
-        .catch(err => {
-            endLoading();
-            showError("Your calendar isn't available right now.");
-            setTimeout(() => { history.push('/'); }, 3000);
-        });
-    }, [creatorId, startLoading, endLoading, showError, history]);
+        if(experiences.length > 0) {
+            setCurrExperience(experiences[0]);
+        } else { //Return a link to creation
+            return (
+                <div className={classes.root}>
+                    <h1 className={classes.title}>
+                        <Link to="/experience/new/intro">
+                            Start creating
+                        </Link>
+                    </h1>
+                </div>
+            );
+        }
+    }, [experiences, classes.title, classes.root]);
 
     //Manage which experience to display
-    const handleExpChange = useCallback((exp) => (e) => {
+    const handleExpChange = useCallback((exp) => {
         setCurrExperience(exp);
     }, []);
     useEffect(() => {
-        if(currExperience) {
-            setDate(new Date(currExperience.occs[0].dateStart));
-            setOrigTimeslots(currExperience.exp.avail.schedule[
-                days[new Date(currExperience.occs[0].dateStart).getDay()]
-            ]);
+        if(currExperience && currExperience.occs.length > 0) {
+            const initDate = new Date(Math.max(
+                new Date(currExperience.occs[0].dateStart),
+                new Date()
+            ));
+            setDate(initDate);
             setTimeslots(generateTimeSlots(currExperience.exp.duration));
+            setAffectedBookings(bookingRequests.filter(req => 
+                req.experience._id === currExperience.exp._id
+            ));
+            setChanges(changes => ({
+                ...changes,
+                [initDate]: {
+                    toAdd: currExperience.exp.avail.schedule[
+                        days[new Date(currExperience.occs[0].dateStart).getDay()]
+                    ],
+                    toAdd: Object.keys(currExperience.exp.avail.schedule)
+                           .includes(days[initDate.getDay()])?
+                           currExperience.exp.avail.schedule[days[initDate.getDay()]] 
+                           : [],
+                    toDel: []
+                }
+            }));
         }
-    }, [currExperience]);
+    }, [currExperience, bookingRequests]);
 
-    //Manage date change
     const handleDateChange = useCallback((date) => {
         setDate(date);
+        //Check if the weekday exists and update affected bookings
         if(currExperience.exp.avail.schedule[days[date.getDay()]]) {
-            setOrigTimeslots(currExperience.exp.avail.schedule[days[date.getDay()]]);
+            setChanges(changes => ({
+                ...changes,
+                [date]: {
+                    toAdd: currExperience.exp.avail.schedule[days[date.getDay()]],
+                    toDel: []
+                }
+            }));
+            setAffectedBookings(bookings => bookings.filter(book => 
+                book.occurrence.dateStart.toISOString().split('T') === 
+                date.toISOString().split('T')
+            ));
         } else {
-            setOrigTimeslots([]);
+            setChanges(changes => ({
+                ...changes,
+                [date]: {
+                    toAdd: [],
+                    toDel: []
+                }
+            }));
         }
     }, [currExperience]);
 
     //The Creator can add or delete occurrences
-    const [addDates, setAddDates] = useState([]);
-    const [delDates, setDelDates] = useState([]);
-    const handleDeleteSlot = useCallback((slot) => (e) => {
+    const handleSlotChange = useCallback((slot, action) => (e) => {
+        setChangesSaved(false);
+        let addChange, delChange;
+        if(action === 'add') {
+            addChange = [...changes[date].toAdd, slot];
+            delChange = changes[date].toDel.filter(s => s !== slot );
+        } else { //action === 'del'
+            delChange = [...changes[date].toDel, slot];
+            addChange = changes[date].toAdd.filter(s => s !== slot );
+        }
+        setChanges(changes => ({
+            ...changes,
+            [date]: {
+                toAdd: addChange,
+                toDel: delChange
+            }
+        }));
+    }, [date, changes]);
+    const handleSaveChanges = useCallback(() => {
+        axios.post(`/api/occ/${currExperience.exp._id}`, {
+            changes,
+            requestsOccs: props.bookingRequests.map(req => req.occurrence._id)
+        }).then(res => {
+            console.log(res);
+            setChangesSaved(true);
+        }).catch(err => {
+            dispatch(showError("We couldn't update your availabilities..."));
+        });
+    }, [currExperience, changes, props.bookingRequests, dispatch]);
 
-    }, []);
-    const handleAddSlot = useCallback((slot) => (e) => {
-
-    }, []);
-
-    console.log(currExperience)
+    //To show the busy occ tooltip
+    const [openBusyTooltip, setOpenBusyTooltip] = useState(false);
+    const handleOpenBusyTooltip = () => { setOpenBusyTooltip(true); }
+    const handleCloseBusyTooltip = () => { setOpenBusyTooltip(false); }
 
     return (
         <>
-        {experiences?
-            currExperience? 
+        {props.experiences?
             <div className={classes.root}>
+               {currExperience &&
+                <>
                 <NavRow/>
-                <div className={classes.expNav}>
-                    {experiences.map(({exp, occs}) => (
-                        <Tooltip 
-                        key={exp._id}
-                        disableFocusListener
-                        placement="top"
-                        title={exp.title}
-                        classes={{tooltip: classes.tooltip}}>
-                            <img 
-                            src={exp.images[0]} 
-                            alt={exp.title}
-                            onClick={handleExpChange({exp, occs})}/>
-                        </Tooltip>
-                    ))}
-                </div>
+                <ExpNav
+                experiences={props.experiences}
+                changesSaved={changesSaved}
+                onExpChange={handleExpChange}/>
                 <div className={classes.body}>
                     <h1 className={classes.title}>{currExperience.exp.title}</h1>
                     <h3 className={classes.subtitle}>
@@ -118,7 +163,10 @@ const Calendar = (props) => {
                         <DatePicker
                         selected={date}
                         onChange={handleDateChange}
-                        minDate={new Date(currExperience.exp.avail.from)}
+                        minDate={new Date(Math.max(
+                            new Date(currExperience.exp.avail.from),
+                            new Date()
+                        ))}
                         maxDate={new Date(currExperience.exp.avail.to)}
                         calendarClassName={classes.datePicker}
                         inline/>
@@ -131,39 +179,58 @@ const Calendar = (props) => {
                                 Select the time slots you want to add or remove for 
                                 this date.
                             </p>
-                            {timeslots && timeslots.map(({from, to}) => {
-                                const slot = `${from.hour}${from.time}-${to.hour}${to.time}`;
+                            {timeslots && timeslots.map(slot => {
+                            if(affectedBookings.map(book => book.occurrence.timeslot)
+                               .includes(slot)) {
+                                return (
+                                    <Tooltip
+                                    PopperProps={{disablePortal: true}}
+                                    open={openBusyTooltip}
+                                    onClose={handleCloseBusyTooltip}
+                                    disableFocusListener
+                                    disableHoverListener
+                                    disableTouchListener
+                                    placement="top"
+                                    title="You already have bookings for this time slot"
+                                    classes={{tooltip: classes.tooltip}}>
+                                        <button 
+                                        className={`${classes.slotButton} disabled`}
+                                        onClick={handleOpenBusyTooltip}
+                                        onMouseLeave={handleCloseBusyTooltip}>
+                                            {slot.split('-')[0]}<span> - </span>
+                                            {slot.split('-')[1]}
+                                        </button>
+                                    </Tooltip>
+                                );
+                            } else {
+                                const selected = (changes[date] && 
+                                                  changes[date].toAdd.includes(slot));
                                 return (
                                     <button 
                                     key={uuid()}
                                     className={`${classes.slotButton}
-                                                ${origTimeslots.includes(slot) ?
-                                                'selected' : 'unselected'}`}
-                                    onClick={origTimeslots.includes(slot)? 
-                                             handleDeleteSlot(slot) : handleAddSlot(slot)}>
-                                        {from.hour}{from.time}<span> - </span>
-                                        {to.hour}{to.time}
+                                                ${selected ?  
+                                                 'selected': 'unselected'}`}
+                                    onClick={selected? 
+                                             handleSlotChange(slot, 'del') : 
+                                             handleSlotChange(slot, 'add')}>
+                                        {slot.split('-')[0]}<span> - </span>
+                                        {slot.split('-')[1]}
                                     </button>
                                 );
-                            })}
+                            }})}
                         </div>
                     </div>
+                    <div className={classes.footer}>
+                        <button onClick={handleSaveChanges}>
+                            Save changes
+                        </button>
+                    </div>
                 </div>
-            </div> : 
-            <h1 className={classes.title}>
-                <Link to="/experience/new/intro">Start creating</Link>
-            </h1> : null}
+                </>}
+            </div> : null}
         </>
     )
 }
 
-const mapStateToProps = (state) => ({
-    creatorId: state.user.creator.id
-});
-const mapDispatchToProps = (dispatch) => ({
-    startLoading: () => dispatch(startLoading()),
-    endLoading: () => dispatch(endLoading()),
-    showError: (msg) => dispatch(showError(msg))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
+export default Calendar;

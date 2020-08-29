@@ -19,15 +19,10 @@ const styles = () => ({
             margin: 4,
             border: 'none',
             borderRadius: '0.77rem',
-            fontSize: '0.7rem',
+            fontSize: '0.8rem',
             textAlign: 'center',
             transition: 'background-color 400ms ease-in-out',
             '&.day-button': { fontSize: '0.9rem' },
-            //Make numbers larger
-            '& span': { 
-                fontSize: '0.88rem',
-                marginRight: 3 
-            },
             '&:focus': { outline: 'none' },
         }
     },

@@ -22,7 +22,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);
 
-//TODO: See why Safari is weird in this page
 const ShowExperience = (props) => {
     const classes = useStyles();
 

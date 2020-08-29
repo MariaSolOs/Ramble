@@ -43,7 +43,6 @@ const WeeklyCalendar = ({avail, duration, onChange}) => {
         onChange(avail);
     }
 
-    console.log(avail)
     return (
         <div className={classes.weekSlots}>
             {timeslots && days.map(day => (
@@ -60,21 +59,17 @@ const WeeklyCalendar = ({avail, duration, onChange}) => {
                     in={avail.has(day)}
                     component="ul"
                     timeout={500}>
-                    {timeslots.map(({from, to}) => {
-                        const slot = `${from.hour}${from.time}-${to.hour}${to.time}`;
-                        return (
-                            <li key={uuid()}>
-                            <button
-                            className={avail.has(day) && 
-                                       avail.get(day).includes(slot)?
-                                       classes.selectedButton : classes.unselectedButton}
-                            onClick={handleSelectSlot(day, slot)}>
-                                <span>{from.hour}</span>{from.time}&emsp;-&emsp;
-                                <span>{to.hour}</span>{to.time}
-                            </button>
-                            </li>
-                        );
-                    })}
+                    {timeslots.map(slot => (
+                        <li key={uuid()}>
+                        <button
+                        className={avail.has(day) && 
+                                   avail.get(day).includes(slot)?
+                                   classes.selectedButton : classes.unselectedButton}
+                        onClick={handleSelectSlot(day, slot)}>
+                            {slot.split('-')[0]}<span> - </span>{slot.split('-')[1]}
+                        </button>
+                        </li>
+                    ))}
                     </Collapse>
                 </div>
             ))}

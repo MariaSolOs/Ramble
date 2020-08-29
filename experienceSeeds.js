@@ -229,11 +229,8 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    await Experience.find({}, async (err, exps) => {
-        for(const exp of exps) {
-            await createExpOccurrences(exp);
-        }
-    });
+    const {deletedCount} = await Occurrence.deleteMany({timeslot: "4:30PM-6:30PM"});
+    console.log(deletedCount)
     // [...experienceData, ...experienceData]
     // .forEach(async seed => {
     //     const exp = new Experience(seed);

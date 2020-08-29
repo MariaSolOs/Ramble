@@ -26,25 +26,27 @@ exports.getExpOcurrences = (req, res) => {
 //For adding a booking to an existing/new occurrence
 exports.addBookingToOcurrence = async (req, res) => {
     try {
-        const dateStart = timeDateConvert(req.body.date, req.body.timeslot.split('-')[0]);
-        
         const experience = await Experience.findById(req.params.expId, 'capacity creator')
                                  .populate('creator');
 
         //Find the occurrence
         const occ = await Occurrence.findOne({
-                            experience: experience._id,
-                            dateStart,
-                            timeslot: req.body.timeslot
-                        });
+                        experience: experience._id,
+                        dateStart: {
+                            $gte: new Date(new Date(req.body.date).setUTCHours(0, 0, 0)), 
+                            $lte: new Date(new Date(req.body.date).setUTCHours(23, 59, 59))
+                        },
+                        timeslot: req.body.timeslot
+                    });
 
         //Create booking
-        const {amount, application_fee_amount} = await calculatePaymentAmount(
-                            experience.id, 
-                            req.body.bookType, 
-                            req.body.numGuests,
-                            req.body.promoCode
-                        );
+        const {amount, application_fee_amount} = 
+            await calculatePaymentAmount(
+                experience.id, 
+                req.body.bookType, 
+                req.body.numGuests,
+                req.body.promoCode
+            );
 
         const stripeDetails = {
             paymentIntentId: req.body.payIntentId,
@@ -98,13 +100,75 @@ exports.addBookingToOcurrence = async (req, res) => {
             message: 'Successfully added booking.',
             cardInfo
         });
-    }
-    catch(err) {
+    } catch(err) {
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
             res.redirect(307, '/api/stripe/payment-intent/cancel');
         } else {
             res.status(409).send({err: "Couldn't add booking."});
         }
+    }
+}
+
+exports.editExpOccs = async (req, res) => {
+    try {
+        //Get necessary info to create occurrences
+        const exp = await Experience.findById(req.params.expId, 'capacity avail.schedule');
+        console.log(exp.avail.schedule);
+
+        let createdCount = 0;
+        const deleteIds = [];
+        for(const date of Object.keys(req.body.changes)) {
+            const {toAdd, toDel} = req.body.changes[date];
+            console.log(req.body.changes[date])
+            //Add occurrences
+            for(const slot of toAdd) {
+                const occExists = await Occurrence.exists({
+                    experience: exp._id,
+                    dateStart: {
+                        $gte: new Date(new Date(date).setUTCHours(0, 0, 0)), 
+                        $lte: new Date(new Date(date).setUTCHours(23, 59, 59))
+                    },
+                    timeslot: slot
+                });
+                if(occExists) { continue; }
+                else {
+                    const created = await Occurrence.create({
+                        experience: exp._id,
+                        dateStart: timeDateConvert(date, slot.split('-')[0]),
+                        dateEnd: timeDateConvert(date, slot.split('-')[1]),
+                        timeslot: slot,
+                        spotsLeft: exp.capacity,
+                        creatorProfit: 0
+                    });
+                    console.log(created)
+                    createdCount += 1;
+                }
+            }
+
+            //Find occurrences that can be deleted
+            for(const slot of toDel) {
+                const occ = await Occurrence.findOne({
+                    experience: exp._id,
+                    dateStart: {
+                        $gte: new Date(new Date(date).setUTCHours(0, 0, 0)), 
+                        $lte: new Date(new Date(date).setUTCHours(23, 59, 59))
+                    },
+                    timeslot: slot
+                }, 'bookings');
+                if(!occ || 
+                    occ.bookings.length > 0 || 
+                    req.body.requestsOccs.includes(occ._id)) { 
+                    continue; 
+                } else { delIds.push(occ._id); }
+            }
+        }
+
+        //Delete occurrences
+        const {deletedCount} = await Occurrence.deleteMany({_id: {$in: deleteIds}});
+
+        res.status(200).send({deletedCount, createdCount});
+    } catch(err) {
+        res.status(500).send(err);
     }
 }

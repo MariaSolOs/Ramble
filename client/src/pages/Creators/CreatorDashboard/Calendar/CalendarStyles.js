@@ -156,6 +156,32 @@ const styles = (theme) => ({
         '&.unselected': {
             color: '#ECEBE5', 
             backgroundColor: '#2A2A2A'
+        },
+        '&.disabled': {
+            filter: 'brightness(70%)',
+            cursor: 'not-allowed'
+        }
+    },
+
+    footer: {
+        width: '100%',
+        marginTop: '2rem',
+        height: 40,
+        '& button': {
+            width: 130,
+            height: '100%',
+            float: 'right',
+            marginRight: 25,
+            borderRadius: '2rem',
+            border: 'none',
+            background: 'radial-gradient(circle at 298%, #F7521E, #AC9EFF)',
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '0.95rem',
+            letterSpacing: '-0.04rem',
+            color: '#ECEBE5',
+            cursor: 'pointer',
+            '&:focus': { outline: 'none' }
         }
     }
 });

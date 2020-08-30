@@ -26,12 +26,12 @@ const UserBookedExperiences = (props) => {
             <NavRow/>
             <div className={classes.gallery}>
                 {bookedExps.length > 0? 
-                    bookedExps.map(booking => (
+                    bookedExps.map(exp => (
                         <ExperienceCard
-                        key={booking._id}
-                        exp={booking.experience}
+                        key={exp._id}
+                        exp={exp}
                         className={classes.card}
-                        onCardClick={handleViewExp(booking.experience._id)}/>
+                        onCardClick={handleViewExp(exp._id)}/>
                     )) : 
                     <h2 className={classes.exploreLink}>
                         <Link to="/experience/search">Start exploring</Link>

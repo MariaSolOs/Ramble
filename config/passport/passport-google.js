@@ -15,7 +15,10 @@ passport.use(new GoogleStrategy({
                         fstName: profile._json.given_name,
                         lstName: profile._json.family_name,
                         photo: profile._json.picture,
-                        email: profile._json.email,
+                        email: {
+                            address: profile._json.email,
+                            verified: false
+                        },
                         membershipProvider: 'google',
                         membershipProviderId: profile.id,
                         promoCode: {

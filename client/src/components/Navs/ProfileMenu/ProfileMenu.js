@@ -52,7 +52,7 @@ const ProfileMenu = (props) => {
         classes={{ paper: classes.menuPaper, list: classes.menuList }}>
             <MenuItem 
             component={NavLink} 
-            to="/profile/exp/past"
+            to="/profile/exp/booked"
             onClick={closeMenu}>
                 View Profile
             </MenuItem>

@@ -14,7 +14,7 @@ const getUserData = (user) => ({
     lstName: user.lstName,
     photo: user.photo,
     city: user.city,
-    email: user.email,
+    email: user.email.address,
     phoneNumber: user.phoneNumber,
     birthday: user.birthday,
     promoCode: user.promoCode
@@ -109,19 +109,26 @@ exports.getUserExperiences = async (req, res) => {
         const {savedExperiences, pastExperiences} = 
             await req.user.populate('savedExperiences pastExperiences', expFields)
             .execPopulate();
+        console.log(savedExperiences)
+        console.log(pastExperiences)
         //Booked experiences
-        const bookedExperiences = await Booking.find({client: req.user._id}, 
+        const booked = await Booking.find({client: req.user._id}, 
                                   'experience occurrence').populate([
-                                    { path: 'experience',
-                                      select: expFields },
-                                    { path: 'occurrence',
-                                      select: 'dateEnd' }
+                                  { path: 'experience',
+                                    select: expFields },
+                                  { path: 'occurrence',
+                                    select: 'dateEnd' }
                                 ]);
+        const bookedExperiences = [];
+        for(const booking of booked) {
+            bookedExperiences.push(booking.experience);
+        }
         res.status(200).send({
-            bookedExperiences: [...bookedExperiences, pastExperiences], 
+            bookedExperiences: [...bookedExperiences, ...pastExperiences], 
             savedExperiences
         });
     } catch(err) {
+        console.log(err)
         res.status(500).send({err: "Couldn't fetch user experiences."});
     }
 }

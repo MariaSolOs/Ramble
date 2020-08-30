@@ -15,7 +15,10 @@ passport.use(new FacebookStrategy({
                 const newUser = new User({
                     fstName: profile._json.first_name,
                     lstName: profile._json.last_name,
-                    email: profile._json.email && profile._json.email,
+                    email: {
+                        address: profile._json.email && profile._json.email,
+                        verified: false
+                    },
                     photo: profile.photos && profile.photos[0].value,
                     membershipProvider: 'facebook',
                     membershipProviderId: profile.id,

@@ -4,8 +4,8 @@ const User = require('../models/user'),
       Admin = require('../models/admin');
 
 exports.registerUserWithEmail = (req, res, next) => {
-    User.find({email: req.body.email,
-               membershipProvider: 'email'}, 
+    User.find({'email.address': req.body.email,
+                membershipProvider: 'email'}, 
     async (err, users) => {
         if(err) {
             return res.status(404).send({error: 'Registration error'});
@@ -18,7 +18,10 @@ exports.registerUserWithEmail = (req, res, next) => {
                 fstName: req.body.fstName, 
                 lstName: req.body.lstName,
                 birthday: req.body.birthday, 
-                email: req.body.email, 
+                email: {
+                    address: req.body.email,
+                    verified: false
+                }, 
                 password: req.body.password, 
                 membershipProvider: 'email',
                 promoCode: {

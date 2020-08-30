@@ -9,7 +9,10 @@ const UserSchema = new mongoose.Schema({
     },
     lstName: String,
     birthday: Date,
-    email: String,
+    email: {
+        address: String,
+        verified: Boolean
+    },
     phoneNumber: {
         type: String,
         validate: /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/
@@ -61,7 +64,7 @@ UserSchema.virtual('password').set(function(value) {
     this.passwordHash = bcrypt.hashSync(value, 10);
 });
 
-UserSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
+UserSchema.plugin(passportLocalMongoose, {usernameField: 'email.address'});
   
 module.exports = mongoose.model('User', UserSchema);
 

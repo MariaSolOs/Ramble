@@ -7,7 +7,7 @@ const local = new LocalStrategy({
       passwordField: 'password',
       session: false
     }, (username, password, done) => {
-        User.findOne({email: username}, (err, user) => {
+        User.findOne({'email.address': username}, (err, user) => {
             if(!err && user) {
                 user.validPassword(password).then(res => {
                     if(res) { return done(null, user); }

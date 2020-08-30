@@ -1,6 +1,6 @@
 const express = require('express'),
       router  = express.Router(),
-      {authenticateToken} = require('../middleware/JWTMiddleware'),
+      {authenticateToken} = require('../middleware/authMiddleware'),
       {identifyUser} = require('../middleware/userMiddleware'),
       controllers = require('../controllers/experienceController');
 
@@ -35,7 +35,7 @@ router.get('/reviews',
 //For creators to create an experience
 router.post('/', authenticateToken, controllers.createExperience);
 
-//Show experience page
+//Get experience info
 router.get('/:expId', controllers.getExp);
 
 //Get experiences based on location and number of people

@@ -70,8 +70,8 @@ exports.approveExp = (req, res) => {
         if(req.body.decision === 'rejected') {
             //Just create notification
             const creator = await User.findOne({creator: exp.creator._id}, 'email');
-            const message = `Your experience ${exp.title} is not ready to go live yet. ` + 
-            'Please check your email for our feedback.';
+            const message = `Your experience ${exp.title} is not ready to go live ` + 
+            'yet. Please check your email for our feedback.';
             const notif = new Notification({
                 message,
                 user: creator._id,
@@ -80,16 +80,15 @@ exports.approveExp = (req, res) => {
             await notif.save();
             res.status(200).send({
                 message: `Experience successfully ${req.body.decision}.`,
-                creatorEmail: creator.email
+                creatorEmail: creator.email.address
             });
         } else if(req.body.decision === 'approved') {
             //Send notification
             const creator = await User.findOne({creator: exp.creator._id}, 
                             'email stripe creator').populate('creator', 'stripe');
-            const message = `Your experience "${exp.title}" has been approved. ` +
-            "You're now ready to host your first guests!";
             const notif = new Notification({
-                message,
+                message: `Your experience "${exp.title}" has been approved. ` +
+                "You're now ready to host your first guests!",
                 user: creator._id,
                 category: 'Creator-ExperienceApproved'
             });
@@ -116,16 +115,20 @@ exports.approveExp = (req, res) => {
                     pass: process.env.ZOHO_PASSWORD
                 }
             });
+
             await transporter.sendMail({
                 from: {
                     name: 'ramble',
                     address: process.env.ZOHO_EMAIL
                 }, 
-                to: creator.email,
+                to: creator.email.address,
                 subject: 'Your experience was approved', 
                 text: `Congrats! Your experience "${exp.title}" was approved and ` +
                 "is ready to go live. Make sure you've completed your Stripe profile!", 
-                html: mjml2html(mjml).html
+                html: mjml2html(mjml, {
+                    filePath: path.resolve(__dirname, 
+                    '../emailTemplates/experienceApproved.mjml'),
+                }).html
             });
 
             //Create all occurrences

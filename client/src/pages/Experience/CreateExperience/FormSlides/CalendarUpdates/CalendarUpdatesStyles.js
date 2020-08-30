@@ -21,41 +21,6 @@ const styles = () => ({
         cursor: 'default'
     },
 
-    //Frequency textfield
-    input: { 
-        display: 'flex',
-        width: 180,
-        '& .MuiFormControl-root': { width: '100%' },
-        '& .MuiSelect-root, & .MuiInputBase-input': { 
-            textAlign: 'center',
-            fontSize: '1rem',
-            paddingTop: 12,
-            paddingBottom: 12,
-            lineHeight: '1.1876em'
-        }
-    },
-    select_menu: {
-        backgroundColor: '#2A2A2A',
-        color: '#929293',
-        borderRadius: '1rem',
-        fontSize: '0.85rem',
-        maxHeight: 140,
-        overflowY: 'scroll',
-        minWidth: '0 !important',
-        width: 150,
-        letterSpacing: '-0.05rem',
-        marginTop: 10,
-        transform: 'translateX(-150px) !important',
-        '& .MuiMenuItem-root': {
-            fontFamily: 'Helvetica',
-            fontWeight: 'bold', 
-            letterSpacing: '-0.05rem',
-            justifyContent: 'center',
-            padding: '4px 16px'
-        }
-    },
-
-    tip: { marginTop: -10 },
     calendar: {
         '&.react-datepicker': {
             backgroundColor: '#2F2E2E',

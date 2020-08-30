@@ -1,6 +1,6 @@
 const express = require('express'),
       router  = express.Router(),
-      {authenticateToken} = require('../middleware/JWTMiddleware'),
+      {authenticateToken} = require('../middleware/authMiddleware'),
       controllers = require('../controllers/occurrenceController');
 
 

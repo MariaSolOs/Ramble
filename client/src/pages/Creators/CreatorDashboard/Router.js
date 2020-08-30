@@ -11,6 +11,7 @@ import {actions} from './store/types';
 import BookingRequests from './BookingRequests/BookingRequests';
 import Calendar from './Calendar/Calendar';
 import NoCreatedExps from './Calendar/NoCreatedExps';
+import ExpSchedule from './ExpSchedule/ExpSchedule';
 
 const Router = (props) => {
     const {path} = useRouteMatch();
@@ -42,7 +43,6 @@ const Router = (props) => {
         startLoading();
         axios.get(`/api/creator/${creatorId}/experiences`)
         .then(res => {
-            console.log(res.data);
             dispatch({
                 type: actions.SET_CREATED_EXPS,
                 exps: res.data.exps
@@ -97,6 +97,7 @@ const Router = (props) => {
                     onDateChange={handleEditDate}/> :
                     <NoCreatedExps/>}
                 </Route>}
+            <Route path={`${path}/:id/schedule`} component={ExpSchedule}/>
         </Switch>
     );
 }

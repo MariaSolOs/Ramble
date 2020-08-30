@@ -1,9 +1,8 @@
 const Experience = require('./models/experience'),
       Occurrence = require('./models/occurrence'),
       Booking = require('./models/booking'),
-      Creator = require('./models/creator');
-
-const {createExpOccurrences} = require('./helpers/experienceHelpers');
+      Creator = require('./models/creator'),
+      User = require('./models/user');
 
 const experienceData = [
     {title: 'Amazing food city tour',
@@ -229,8 +228,16 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    const {deletedCount} = await Occurrence.deleteMany({timeslot: "4:30PM-6:30PM"});
-    console.log(deletedCount)
+    await User.find({}, 'email', async (err, users) => {
+        for(const user of users) {
+            user.email = {
+                address: user.email,
+                verified: true
+            }
+            await user.save();
+        }
+    });
+
     // [...experienceData, ...experienceData]
     // .forEach(async seed => {
     //     const exp = new Experience(seed);

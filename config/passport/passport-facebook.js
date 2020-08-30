@@ -1,7 +1,7 @@
 const passport = require('passport'),
       FacebookStrategy = require('passport-facebook').Strategy,
       User = require('../../models/user'),
-      {generatePromoCode} = require('../../helpers/profileHelpers');
+      {generatePromoCode, verifyUserEmail} = require('../../helpers/profileHelpers');
 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
@@ -27,8 +27,9 @@ passport.use(new FacebookStrategy({
                     }
                 });
                 newUser.save((err) => {
-                    if (err){ console.log(err); }
-                    return done(err, newUser);
+                    if(err){ return done(err); }
+                    verifyUserEmail(newUser.email, newUser._id);
+                    return done(null, newUser);
                 });
             } else { return done(err, user); }
         });

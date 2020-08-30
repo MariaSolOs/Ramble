@@ -1,7 +1,7 @@
 const passport = require('passport'),
       GoogleStrategy = require('passport-google-oauth20').Strategy,
       User = require('../../models/user'),
-      {generatePromoCode} = require('../../helpers/profileHelpers');
+      {generatePromoCode, verifyUserEmail} = require('../../helpers/profileHelpers');
 
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -26,7 +26,8 @@ passport.use(new GoogleStrategy({
                         }
                     });
                     newUser.save((err) => {
-                        if (err){ console.log(err); }
+                        if (err){ return done(err); }
+                        verifyUserEmail(newUser.email, newUser._id);
                         return done(err, newUser);
                     });
                 } else { return done(err, user); }

@@ -25,8 +25,8 @@ exports.getExpOcurrences = (req, res) => {
 //For adding a booking to an existing/new occurrence
 exports.addBookingToOcurrence = async (req, res) => {
     try {
-        const experience = await Experience.findById(req.params.expId, 'capacity creator')
-                                 .populate('creator');
+        const experience = await Experience.findById(req.params.expId, 
+                           'capacity creator').populate('creator', 'bookingRequests');
 
         //Find the occurrence
         const occ = await Occurrence.findOne({

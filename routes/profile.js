@@ -1,6 +1,6 @@
 const express = require('express'),
       router  = express.Router(),
-      {authenticateToken} = require('../middleware/JWTMiddleware'),
+      {authenticateToken} = require('../middleware/authMiddleware'),
       {identifyUser} = require('../middleware/userMiddleware'),
       controllers = require('../controllers/profileController'); 
 

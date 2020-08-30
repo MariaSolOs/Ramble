@@ -109,8 +109,6 @@ exports.getUserExperiences = async (req, res) => {
         const {savedExperiences, pastExperiences} = 
             await req.user.populate('savedExperiences pastExperiences', expFields)
             .execPopulate();
-        console.log(savedExperiences)
-        console.log(pastExperiences)
         //Booked experiences
         const booked = await Booking.find({client: req.user._id}, 
                                   'experience occurrence').populate([
@@ -128,7 +126,6 @@ exports.getUserExperiences = async (req, res) => {
             savedExperiences
         });
     } catch(err) {
-        console.log(err)
         res.status(500).send({err: "Couldn't fetch user experiences."});
     }
 }

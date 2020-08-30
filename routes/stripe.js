@@ -1,6 +1,6 @@
 const express = require('express'),
       router = express.Router(),
-      {validateStripeState, authenticateToken} = require('../middleware/JWTMiddleware'),
+      {validateStripeState, authenticateToken} = require('../middleware/authMiddleware'),
       controllers = require('../controllers/stripeController');
 
 //Stripe onboarding for creators

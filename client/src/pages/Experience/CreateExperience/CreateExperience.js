@@ -36,8 +36,7 @@ const CreateExperience = (props) => {
         privatePrice: 0, //for private bookings
         currency: 'CAD',
         schedule: new Map(),
-        startDate: null,
-        scheduleUpdateFreq: 'weekly'
+        startDate: null
     });
     //Called after validation
     const submitInput = useCallback((name, newVal) => {
@@ -244,7 +243,6 @@ const CreateExperience = (props) => {
                 nextLink={pages.REVIEW}>
                     <slides.CalendarUpdates
                     startDate={values.startDate}
-                    updateFreq={values.scheduleUpdateFreq}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>

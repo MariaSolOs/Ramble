@@ -1,4 +1,4 @@
-const {generatePromoCode} = require('../helpers/profileHelpers');
+const {generatePromoCode, verifyUserEmail} = require('../helpers/profileHelpers');
 
 const User = require('../models/user'), 
       Admin = require('../models/admin');
@@ -28,6 +28,7 @@ exports.registerUserWithEmail = (req, res, next) => {
                     code: await generatePromoCode(req.body.fstName),
                 }
             }).then(user => {
+                verifyUserEmail(user.email, user._id);
                 req.login(user, err => {
                     if(err) { 
                         res.status(404).send({error: 'Registration error'}); 

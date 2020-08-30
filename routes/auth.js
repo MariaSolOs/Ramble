@@ -1,9 +1,8 @@
 const express = require('express'),
       router  = express.Router(),
       passport = require('passport'),
-      {authenticateToken} = require('../middleware/JWTMiddleware'),
       {identifyUser} = require('../middleware/userMiddleware'),
-      {sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
+      {authenticateToken, sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
       controller = require('../controllers/authController');
 
 //In case email login fails

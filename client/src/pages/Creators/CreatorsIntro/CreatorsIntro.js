@@ -6,15 +6,9 @@ import MeetCreators from './MeetCreators/MeetCreators';
 import GetYourActOut from './GetYourActOut/GetYourActOut';
 import Footer from '../../../components/Footer/Footer';
 
-//Styles
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles((theme) => ({
-    root: {
-        minWidth: '100vw',
-        minHeight: '100vh',
-        boxSizing: 'border-box',
-    }
-}));
+import styles from './CreatorsIntroStyles';
+const useStyles = makeStyles(styles);
 
 const CreatorsIntro = (props) => {
     const classes = useStyles();

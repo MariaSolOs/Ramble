@@ -12,6 +12,7 @@ import BookingRequests from './BookingRequests/BookingRequests';
 import Calendar from './Calendar/Calendar';
 import NoCreatedExps from './Calendar/NoCreatedExps';
 import ExpSchedule from './ExpSchedule/ExpSchedule';
+import Page404 from '../../Page404/Page404'; 
 
 const Router = (props) => {
     const {path} = useRouteMatch();
@@ -64,7 +65,7 @@ const Router = (props) => {
     }, [creatorId, startLoading, endLoading, showError, history, dispatch]);
 
     //Booking requests actions
-    const deleteRequest = useCallback((id) => {
+    const handleDeleteRequest = useCallback((id) => {
         dispatch({type: actions.DELETE_BOOKING_REQUEST, id});
         decNumBookings();
     }, [dispatch, decNumBookings]);
@@ -83,7 +84,7 @@ const Router = (props) => {
                 <Route path={`${path}/bookings`}>
                     <BookingRequests 
                     bookingRequests={state.bookingRequests}
-                    deleteRequest={deleteRequest}/>
+                    deleteRequest={handleDeleteRequest}/>
                 </Route>}
             {state.createdExps &&
                 <Route path={`${path}/calendar`}>
@@ -98,6 +99,7 @@ const Router = (props) => {
                     <NoCreatedExps/>}
                 </Route>}
             <Route path={`${path}/:id/schedule`} component={ExpSchedule}/>
+            <Route component={Page404}/>
         </Switch>
     );
 }

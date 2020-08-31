@@ -7,7 +7,7 @@ import uuid from 'react-uuid';
 //Components
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

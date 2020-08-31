@@ -11,45 +11,36 @@ router.get('/email-login-fail', (req, res) => {
 });
 
 router.post('/email-register', 
-            controller.registerUserWithEmail, 
+            controller.emailRegister, 
             sendToken);
 router.post('/email-login', 
             passport.authenticate('local', { 
                 failureRedirect: '/api/auth/email-login-fail' 
-            }), (req, res, next) => {
-                req.isAdmin = false;
-                next();
-            }, 
+            }), 
+            controller.emailLogin, 
             sendToken);
                  
 router.get('/facebook', 
-            (req, res, next) => {
-                passport.authenticate('facebook', { session: false }, (err, user, info) => {
-                    if(err || !user) { return next(err); }
-                    req.logIn(user, (err) => {
-                        if(err) { return next(err); }
-                        next();
-                    });
-                })(req, res, next); 
-            }, redirectUserWithCookie);
+           controller.facebookAuth, 
+           redirectUserWithCookie);
 
 router.get('/google', 
-            passport.authenticate('google', {
-                scope: ['profile', 'email'],
-                prompt: 'consent',
-                session: false
-            }));
+            controller.googleAuth);
 router.get('/google/callback', 
             passport.authenticate('google'),
+            (req, res, next) => {
+                if(req.newUser) {
+                    res.cookie('userCreatedDate', new Date().toISOString());
+                }
+                next();
+            },
             redirectUserWithCookie);  
 
 router.post('/admin-login',
             passport.authenticate('local-admin', {
                 failureRedirect: '/api/auth/email-login-fail'
-            }), (req, res, next) => {
-                req.isAdmin = true;
-                next();
-            }, 
+            }), 
+            controller.loginAdmin, 
             sendToken);
 //Only users with respective permissions can register new admins
 router.post('/admin-register', 

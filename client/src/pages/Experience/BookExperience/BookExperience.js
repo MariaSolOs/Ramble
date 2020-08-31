@@ -1,7 +1,6 @@
 import React, {useEffect, useCallback} from 'react';
 import axios from '../../../tokenizedAxios';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
-import {getWeekdayKey, getSlotsInfo} from './helpers';
 import useBookingReducer from './store/reducer';
 import {steps, actions} from './store/types';
 import {useDispatch} from 'react-redux';
@@ -42,11 +41,10 @@ const BookExperience = ({exp, user, onClose}) => {
                 if(res.status === 200) {
                     dispatch({
                         type: actions.SET_SLOTS_INFO,
-                        slotsInfo: getSlotsInfo(
-                            exp.avail.schedule[getWeekdayKey(state.form.date)], 
-                            res.data.occs, 
-                            exp.capacity
-                        )
+                        slotsInfo: res.data.occs.map(occ => ({
+                            slot: occ.timeslot, 
+                            spotsLeft: occ.spotsLeft
+                        }))
                     });
                 }
             })

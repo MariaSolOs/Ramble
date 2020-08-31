@@ -10,6 +10,7 @@ import * as slides from './FormSlides';
 import Intro from './Intro/Intro';
 import Submitted from './Submitted/Submitted';
 import Layout from './Layout/Layout';
+import Page404 from '../../Page404/Page404';
 
 const CreateExperience = (props) => {
     const location = useLocation();
@@ -269,14 +270,11 @@ const CreateExperience = (props) => {
                     </>
                 );
             }}/>            
+            {props.creatorId && 
                 <Route path={pages.SUBMITTED}>
                     <Submitted/>
-                </Route>
-            {/* {props.creatorId && 
-                <Route path={pages.SUBMITTED}>
-                    <Submitted/>
-                </Route>} */}
-            <Redirect to="/"/>
+                </Route>}
+            <Route component={Page404}/>
         </Switch>
     );
 }

@@ -9,25 +9,27 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 
-import TextField from '../../components/Input/TextField';
+import TextField from '../../components/Input/TextField/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './AuthDialogStyles';
 const useStyles = makeStyles(styles);
 
+const initForm = {
+    fstName: '',
+    lstName: '',
+    birthday: '',
+    email: '',
+    password: ''
+}
+
 const SignUpWithEmailDialog = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     
     //Sign up form
-    const [values, setValues] = useState({
-        fstName: '',
-        lstName: '',
-        birthday: '',
-        email: '',
-        password: ''
-    });
+    const [values, setValues] = useState(initForm);
     const handleChange = (e) => {
         //Capitalize names
         setValues({
@@ -39,9 +41,14 @@ const SignUpWithEmailDialog = (props) => {
                  e.target.value
         });
     }
+    const handleClose = () => {
+        setValues(initForm);
+        props.onClose();
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(emailAuth(values, 'register'));
+        handleClose();
     }
 
     //To return to the current page after signup
@@ -52,10 +59,10 @@ const SignUpWithEmailDialog = (props) => {
     return (
         <Dialog 
         open={props.open} 
-        onClose={props.onClose}
+        onClose={handleClose}
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
-                <CloseIcon onClick={props.onClose} className="closeIcon"/>
+                <CloseIcon onClick={handleClose} className="closeIcon"/>
                 <h5 className="title">Sign up</h5>
             </div>
             <DialogContent>
@@ -114,8 +121,7 @@ const SignUpWithEmailDialog = (props) => {
                     </p> 
                     <button 
                     type="submit" 
-                    className={classes.submitButton} 
-                    onClick={props.onClose}>
+                    className={classes.submitButton}>
                         Continue
                     </button>
                 </form>

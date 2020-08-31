@@ -6,8 +6,8 @@ import {useHistory} from 'react-router-dom';
 import Files from 'react-butterfiles';
 
 //Components
-import Tip from '../../../components/Tip';
-import TextField from '../../../components/Input/TextField';
+import Tip from '../../../components/Tip/Tip';
+import TextField from '../../../components/Input/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {faLock} from '@fortawesome/free-solid-svg-icons/faLock';
 import AddCircleIcon from '@material-ui/icons/AddCircle';

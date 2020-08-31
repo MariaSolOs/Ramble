@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TextField from '../../../../../components/Input/TextField';
+import TextField from '../../../../../components/Input/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 //Styles

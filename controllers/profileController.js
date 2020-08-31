@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary').v2,
-      stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
+      {verifyUserEmail} = require('../helpers/profileHelpers');
 
 //Models
 const User = require('../models/user'),
@@ -17,7 +18,8 @@ const getUserData = (user) => ({
     email: user.email.address,
     phoneNumber: user.phoneNumber,
     birthday: user.birthday,
-    promoCode: user.promoCode
+    promoCode: user.promoCode,
+    createdAt: user.createdAt
 });
 const changeProfilePhoto = async (oldPhoto, newPhoto) => {
     try {
@@ -76,6 +78,10 @@ exports.getNotifs = (req, res) => {
 //Editing user info
 exports.editProfile = async (req, res) => {
     try {
+        const newEmail = (req.user.email.length === 0) &&
+                         (req.body.email && req.body.email.length > 0);
+
+        //Update user info
         for(const field in req.body) {
             if(field === 'photo') {
                 const newPhoto = await changeProfilePhoto(
@@ -88,6 +94,13 @@ exports.editProfile = async (req, res) => {
                 req.user[field] = req.body[field];
             }
         }
+
+        /*If the user had no email before, send verification
+        email*/
+        if(newEmail) { 
+            verifyUserEmail(req.body.email, req.user._id); 
+        }
+
         await req.user.save();
         res.status(201).send({ 
             token: req.token,

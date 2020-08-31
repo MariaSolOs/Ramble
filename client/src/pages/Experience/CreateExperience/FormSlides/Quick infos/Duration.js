@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

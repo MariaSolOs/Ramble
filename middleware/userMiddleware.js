@@ -18,3 +18,4 @@ exports.identifyUser = async (req, res, next) => {
         res.status(401).send({err: "User couldn't be identified."});
     }
 }
+

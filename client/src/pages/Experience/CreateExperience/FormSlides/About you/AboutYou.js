@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Tip from '../../../../../components/Tip';
-import TextField from '../../../../../components/Input/TextField';
+import Tip from '../../../../../components/Tip/Tip';
+import TextField from '../../../../../components/Input/TextField/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

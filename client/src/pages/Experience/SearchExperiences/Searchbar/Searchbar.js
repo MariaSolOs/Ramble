@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import useNumberField from '../../../../hooks/useNumberField';
+import useNumberField from '../../../../hooks/useNumberField/useNumberField';
 import useLocations from '../../../../hooks/useLocations';
 
 //Components and icons

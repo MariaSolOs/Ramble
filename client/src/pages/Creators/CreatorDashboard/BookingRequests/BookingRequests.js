@@ -3,7 +3,7 @@ import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
 import {showError, showSnackbar} from '../../../../store/actions/ui';
 
-import NavRow from '../NavRow';
+import NavRow from '../NavRow/NavRow';
 import BookingCard from './BookingCard/BookingCard';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -59,7 +59,7 @@ const BookingRequests = (props) => {
             } else {
                 throw new Error('Invalid action');
             }
-            deleteRequest();
+            deleteRequest(bookId);
             const decision = action === 'approve'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         } catch(err) {

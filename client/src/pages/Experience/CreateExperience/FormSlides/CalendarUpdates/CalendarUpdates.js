@@ -1,7 +1,7 @@
 import React from 'react';
 
 //Components and icons
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 import DatePicker from 'react-datepicker';
 
 //Styles

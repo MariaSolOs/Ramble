@@ -2,13 +2,15 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import useSocket from '../hooks/useSocket';
 import {fetchExperiences} from '../store/actions/experiences';
-import {Route, Redirect, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 //Pages and layout
+import Page404 from '../pages/Page404/Page404';
 import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/Spinner/Spinner';
+import EmailVerificationDialog from '../components/Dialogs/EmailVerificationDialog/EmailVerificationDialog';
 import Home from '../pages/Home/Home';
 import PrivateRoute from '../pages/PrivateRoute';
 const Notifications = React.lazy(() => import('../pages/Notifications/Notifications'));
@@ -49,6 +51,7 @@ const PublicApp = (props) => {
     //isAuth and isCreator are passed to the page routers to filter routes
     return (
         <React.Suspense fallback={<Spinner/>}>
+            <EmailVerificationDialog/>
             <Nav/>
             <Switch>
                 <PrivateRoute path="/notifications" test={isAuth}>
@@ -70,7 +73,7 @@ const PublicApp = (props) => {
                     <Home/>
                     <Footer/>
                 </Route>
-                <Redirect to="/"/>
+                <Route component={Page404}/>
             </Switch>
         </React.Suspense>
     );

@@ -1,4 +1,4 @@
-const styles = () => ({
+export const layoutStyles = () => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -75,4 +75,34 @@ const styles = () => ({
         minWidth: 190
     }
 });
-export default styles;
+
+export const navbarStyles = () => ({
+    root: {
+        listStyle: 'none',
+        padding: 0,
+        margin: 0,
+        fontFamily: 'Helvetica, sans-serif',
+        fontWeight: 'bold',
+        fontSize: '1rem',
+        letterSpacing: '-0.05rem',
+        whiteSpace: 'nowrap',
+
+        '& li': { 
+            margin: '1.7rem 0',
+            height: 18,
+            '& svg': { marginRight: 10 } 
+        },
+    },
+
+    navLink: {
+        textDecoration: 'none',
+        color: '#ACACAC',
+        '&.active, &:active, &:hover': {
+            color: '#FFF',
+            fontSize: '1.05rem',
+            transition: 'all 200ms ease-in-out',
+            textDecoration: 'none'
+        }
+    }
+});
+

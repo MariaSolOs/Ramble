@@ -7,7 +7,7 @@ import AlgoliaPlaces from 'algolia-places-react';
 import CustomScroll from 'react-custom-scroll';
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '../../../components/Input/TextField';
+import TextField from '../../../components/Input/TextField/TextField';
 
 //Styles 
 import 'react-custom-scroll/dist/customScroll.css';

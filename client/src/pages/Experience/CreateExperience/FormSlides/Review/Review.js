@@ -4,8 +4,8 @@ import {saveExperienceForm} from '../../../../../store/actions/experiences';
 
 //Components
 import Experience from '../../../../../components/Experience/Experience';
-import FloatButtons from '../../../../../components/ShareSaveButtons';
-import Carousel from '../../../../../components/Carousel';
+import FloatButtons from '../../../../../components/ShareSaveButtons/ShareSaveButtons';
+import Carousel from '../../../../../components/Carousel/Carousel';
 
 //Styles 
 import {makeStyles} from '@material-ui/core/styles';

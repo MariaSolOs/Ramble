@@ -1,10 +1,11 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-dom';
+import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 
 //Pages
-import Spinner from '../../components/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import PrivateRoute from '../PrivateRoute';
+import Page404 from '../Page404/Page404';
 const CreatorsIntro = React.lazy(() => import('./CreatorsIntro/CreatorsIntro'));
 const CreatorForm = React.lazy(() => import('./CreatorForm/CreatorForm'))
 const DashboardRouter = React.lazy(() => import('./CreatorDashboard/Router'));
@@ -25,7 +26,7 @@ const Router = (props) => {
                     <CreatorForm/>
                 </PrivateRoute>
                 <Route path={`${path}/become`} component={CreatorsIntro}/>
-                <Redirect to="/"/>
+                <Route component={Page404}/>
             </Switch>
         </React.Suspense>
     );

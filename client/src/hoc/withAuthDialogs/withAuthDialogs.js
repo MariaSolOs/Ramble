@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
-import useAuthDialogReducer from './authDialogReducer';
+import useAuthDialogReducer from './reducer';
 
 import SignUpDialog from '../../components/Dialogs/SignUpDialog';
 import SignUpWithEmailDialog from '../../components/Dialogs/SignUpWithEmailDialog';

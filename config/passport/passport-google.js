@@ -7,8 +7,12 @@ passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
-    }, (accessToken, refreshToken, profile, done) => {
-            User.findOne({membershipProviderId: profile.id}, async (err, user) => {
+        passReqToCallback: true
+    }, (req, accessToken, refreshToken, profile, done) => {
+            User.findOne({
+                membershipProviderId: profile.id,
+                membershipProvider: 'google'
+            }, async (err, user) => {
                 if(err) { return done(err); } 
                 if(!user) {
                     const newUser = new User({
@@ -28,6 +32,7 @@ passport.use(new GoogleStrategy({
                     newUser.save((err) => {
                         if (err){ return done(err); }
                         verifyUserEmail(newUser.email, newUser._id);
+                        req.newUser = true;
                         return done(err, newUser);
                     });
                 } else { return done(err, user); }

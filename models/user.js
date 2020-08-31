@@ -5,12 +5,19 @@ const mongoose = require('mongoose'),
 const UserSchema = new mongoose.Schema({
     fstName: {
         type: String,
-        required: true
+        required: true,
+        default: ''
     },
-    lstName: String,
+    lstName: {
+        type: String,
+        default: ''
+    },
     birthday: Date,
     email: {
-        address: String,
+        address: {
+            type: String,
+            default: ''
+        },
         verified: Boolean
     },
     phoneNumber: {
@@ -22,7 +29,10 @@ const UserSchema = new mongoose.Schema({
         type: String, 
         default: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg`
     },
-    city: String,
+    city: {
+        type: String,
+        default: ''
+    },
     savedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
@@ -42,7 +52,10 @@ const UserSchema = new mongoose.Schema({
     },
     membershipProviderId: String,
     stripe: {
-        customerId: String
+        customerId: {
+            type: String,
+            default: ''
+        }
     },
     promoCode: {
         code: {

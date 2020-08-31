@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {showError, showSnackbar} from '../../../../store/actions/ui';
 import axios from '../../../../tokenizedAxios';
 
-import NavRow from '../NavRow';
+import NavRow from '../NavRow/NavRow';
 import ExpNav from './ExpNav';
 import DatePicker from 'react-datepicker';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -52,7 +52,6 @@ const Calendar = (props) => {
     }, [exp, date, dispatch, bookingRequests]);
 
     const handleDateChange = useCallback((date) => {
-        setChangesSaved(false);
         onDateChange(date);
     }, [onDateChange]);
 
@@ -113,14 +112,15 @@ const Calendar = (props) => {
                 </h3>
                 <div className={classes.calendar}>
                     <div onClick={handleOpenSaveCalMsg}>
-                        <DatePicker
-                        readOnly={!changesSaved}
-                        selected={date}
-                        onChange={handleDateChange}
-                        minDate={new Date()}
-                        maxDate={new Date(exp.avail.to)}
-                        calendarClassName={classes.datePicker}
-                        inline/>
+                        <div style={{ pointerEvents: !changesSaved && 'none' }}>
+                            <DatePicker
+                            selected={date}
+                            onChange={handleDateChange}
+                            minDate={new Date()}
+                            maxDate={new Date(exp.avail.to)}
+                            calendarClassName={classes.datePicker}
+                            inline/>
+                        </div>
                     </div>
                     <div className={classes.shadowSeparator}/>
                     <div style={{ width: 300 }}>

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 //Components
 import CategoryBox from '../../../../../components/CategoryBox/CategoryBox';
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

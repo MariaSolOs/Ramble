@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 
 //Components and icons
-import StripeCardInput from '../../../../../components/StripeCardInput';
+import StripeCardInput from '../../../../../components/StripeCardInput/StripeCardInput';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputBase from '@material-ui/core/InputBase';
-import Checkbox from '../../../../../components/Input/Checkbox';
+import Checkbox from '../../../../../components/Input/Checkbox/Checkbox';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';

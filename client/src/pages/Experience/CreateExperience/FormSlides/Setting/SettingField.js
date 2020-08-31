@@ -1,8 +1,8 @@
 import React from 'react';
 
 //Components and icons
-import Checkbox from '../../../../../components/Input/Checkbox';
-import Chip from '../../../../../components/Input/IconChip';
+import Checkbox from '../../../../../components/Input/Checkbox/Checkbox';
+import Chip from './Chip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import axios from 'axios';
+import axios from '../../../tokenizedAxios';
 import useSearchReducer from './store/reducer';
 import * as actions from './store/actionTypes';
 import {connect} from 'react-redux';
@@ -7,22 +7,12 @@ import {saveExperience, unsaveExperience} from '../../../store/actions/experienc
 import {showError} from '../../../store/actions/ui';
 import {useHistory, useLocation} from 'react-router-dom';
 
-//Components
 import Searchbar from './Searchbar/Searchbar';
-import Gallery from '../../../components/ExperiencesGallery';
+import Gallery from '../../../components/ExperiencesGallery/ExperiencesGallery';
 
-//Styles
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles((theme) => ({
-    root: {
-        minWidth: '100vw',
-        minHeight: '85vh',
-        margin: '15vh 0 0',
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column'
-    }
-}));
+import styles from './SearchExperiencesStyles';
+const useStyles = makeStyles(styles);
 
 const SearchExperiences = (props) => {
     const classes = useStyles();

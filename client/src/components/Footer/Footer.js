@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 //Components and icons
-import CustomerServiceDialog from '../Dialogs/CustomerServiceDialog';
+import CustomerServiceDialog from '../Dialogs/CustomerServiceDialog/CustomerServiceDialog';
 import Chip from '@material-ui/core/Chip';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import LanguageIcon from '@material-ui/icons/Language';

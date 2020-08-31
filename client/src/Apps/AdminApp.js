@@ -3,13 +3,14 @@ import {connect} from 'react-redux';
 import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 
 //Pages and layout
-import Nav from '../components/Navs/AdminNav';
-import ApproveExps from '../pages/Admin/ApproveExps';
-import ExpReviews from '../pages/Admin/ExpReviews';
+import Nav from '../components/Navs/AdminNav/AdminNav';
+import ApproveExps from '../pages/Admin/ApproveExps/ApproveExps';
+import ExpReviews from '../pages/Admin/ExpReviews/ExpReviews';
 import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
-import Register from '../pages/Admin/Register';
-import Maintenance from '../pages/Admin/Maintenance';
+import Register from '../pages/Admin/Register/Register';
+import Maintenance from '../pages/Admin/Maintenance/Maintenance';
 import PrivateRoute from '../pages/PrivateRoute';
+import Page404 from '../pages/Page404/Page404';
 
 const AdminApp = (props) => {
     const {path} = useRouteMatch();
@@ -34,7 +35,7 @@ const AdminApp = (props) => {
             <PrivateRoute path={`${path}/maintenance`} test={props.canMaintain}>
                 <Maintenance/>
             </PrivateRoute>
-            <Route component={ApproveExps}/>
+            <Route component={Page404}/>
         </Switch>
         </>
     );

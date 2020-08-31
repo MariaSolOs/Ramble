@@ -1,6 +1,5 @@
 import React from 'react';
 import uuid from 'react-uuid';
-import {getDatePieces} from '../../helpers';
 
 //Components and icons
 import Template from '../Template';
@@ -11,6 +10,13 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './TimesDialogStyles';
 const useStyles = makeStyles(styles);
+
+//To get a nice long date
+const getDatePieces = (date) => {
+    const format = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    const dateString = new Date(date).toLocaleDateString('en-US', format).replace(/,/g, '');
+    return dateString.split(' ');
+}
 
 const TimesDialog = (props) => {
     const classes = useStyles();

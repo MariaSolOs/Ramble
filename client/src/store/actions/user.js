@@ -94,7 +94,7 @@ export const emailAuth = (userInfo, authType) => {
             if(err.response.status === 409) {
                 dispatch(showError('Someone is already using that email...'));
             } else if(err.response.status === 401) {
-                dispatch(showError('Wrong email/password'));
+                dispatch(showError("That email / password is incorrect."));
             } else {
                 dispatch(showError('Something went wrong...'));
             }

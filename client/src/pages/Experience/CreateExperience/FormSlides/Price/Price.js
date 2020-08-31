@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
 //Components 
-import Tip from '../../../../../components/Tip';
-import TextField from '../../../../../components/Input/TextField';
+import Tip from '../../../../../components/Tip/Tip';
+import TextField from '../../../../../components/Input/TextField/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';

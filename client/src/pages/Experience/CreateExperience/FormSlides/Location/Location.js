@@ -2,7 +2,7 @@ import React from 'react';
 import AlgoliaPlaces from 'algolia-places-react';
 
 //Components
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

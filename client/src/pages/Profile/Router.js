@@ -1,7 +1,6 @@
 import React from 'react';
 import {useRouteMatch, Switch, Route, useLocation} from 'react-router-dom';
 
-//Pages
 import Layout from './Layout/Layout';
 import BookedExperiences from './UserExperiences/UserBookedExperiences';
 import SavedExperiences from './UserExperiences/UserSavedExperiences';

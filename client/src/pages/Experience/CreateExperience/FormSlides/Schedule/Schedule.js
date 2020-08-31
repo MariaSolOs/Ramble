@@ -2,7 +2,7 @@ import React from 'react';
 import {copyMap} from '../../helpers';
 
 //Components
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 import WeeklyCalendar from '../../../../../components/WeeklyCalendar/WeeklyCalendar';
 
 //Styles 

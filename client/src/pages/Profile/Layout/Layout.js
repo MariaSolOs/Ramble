@@ -5,14 +5,12 @@ import {showSnackbar} from '../../../store/actions/ui';
 import {useLocation} from 'react-router-dom';
 import Files from 'react-butterfiles';
 
-//Components
 import Navbar from './Navbar';
 import Tooltip from '@material-ui/core/Tooltip';
 
-//Styles
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './LayoutStyles';
-const useStyles = makeStyles(styles);
+import {layoutStyles} from './LayoutStyles';
+const useStyles = makeStyles(layoutStyles);
 
 const Layout = (props) => {
     const classes = useStyles();

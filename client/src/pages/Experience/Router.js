@@ -1,11 +1,12 @@
 import React from 'react';
-import {useRouteMatch, useLocation, Switch, Route, Redirect} from 'react-router-dom';
+import {useRouteMatch, useLocation, Switch, Route} from 'react-router-dom';
 
 //Pages
-import Spinner from '../../components/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import SearchExperiences from './SearchExperiences/SearchExperiences';
 import ShowExperience from './ShowExperience/ShowExperience';
 import PrivateRoute from '../PrivateRoute';
+import Page404 from '../Page404/Page404';
 const CreateExperience = React.lazy(() => import('./CreateExperience/CreateExperience'));
 const ReviewExperience = React.lazy(() => import('./ReviewExperience/ReviewExperience'));
 const BookingSubmitted = React.lazy(() => import('./BookExperience/BookingSubmitted/BookingSubmitted'));
@@ -28,7 +29,7 @@ const Router = (props) => {
                 <PrivateRoute path={`${path}/booking-submitted`} test={props.isAuth}>
                     <BookingSubmitted/>
                 </PrivateRoute>
-                <Redirect to="/"/>
+                <Route component={Page404}/>
             </Switch>
         </React.Suspense>
     );

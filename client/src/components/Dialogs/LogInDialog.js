@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 
-import TextField from '../Input/TextField';
+import TextField from '../Input/TextField/TextField';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -38,6 +38,10 @@ const LogInDialog = (props) => {
             [e.target.name]: e.target.value
         });
     }
+    const handleClose = () => {
+        setValues(initForm);
+        props.onClose();
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         if(values.email.startsWith('RAMBLE_ADMIN__')) {
@@ -47,16 +51,16 @@ const LogInDialog = (props) => {
                 password: values.password
             }));
         } else { dispatch(emailAuth(values, 'login')); }
-        setValues(initForm);
+        handleClose();
     }
 
     return (
         <Dialog 
         open={props.open} 
-        onClose={props.onClose} 
+        onClose={handleClose} 
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
-                <CloseIcon onClick={props.onClose} className="closeIcon"/>
+                <CloseIcon onClick={handleClose} className="closeIcon"/>
                 <h5 className="title">Log in</h5>
             </div>
             <DialogContent>
@@ -80,7 +84,8 @@ const LogInDialog = (props) => {
                         onChange={handleChange}
                         required/>
                     </FormControl>
-                    <button type="submit" onClick={props.onClose}
+                    <button 
+                    type="submit"
                     className={classes.submitButton}>
                         Log in
                     </button>

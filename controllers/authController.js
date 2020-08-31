@@ -1,9 +1,10 @@
-const {generatePromoCode, verifyUserEmail} = require('../helpers/profileHelpers');
+const {generatePromoCode, verifyUserEmail} = require('../helpers/profileHelpers'),
+       passport = require('passport');
 
 const User = require('../models/user'), 
       Admin = require('../models/admin');
 
-exports.registerUserWithEmail = (req, res, next) => {
+exports.emailRegister = (req, res, next) => {
     User.find({'email.address': req.body.email,
                 membershipProvider: 'email'}, 
     async (err, users) => {
@@ -33,6 +34,7 @@ exports.registerUserWithEmail = (req, res, next) => {
                     if(err) { 
                         res.status(404).send({error: 'Registration error'}); 
                     } else { 
+                        res.cookie('userCreatedDate', new Date().toISOString());
                         req.userId = user._id;
                         req.isAdmin = false;
                         next();
@@ -43,6 +45,24 @@ exports.registerUserWithEmail = (req, res, next) => {
             });
         }
     });
+}
+
+exports.emailLogin = (req, res, next) => {
+    req.isAdmin = false;
+    next();
+}
+
+exports.facebookAuth = (req, res, next) => {
+    passport.authenticate('facebook', { session: false }, (err, user, info) => {
+        if(err || !user) { return next(err); }
+        if((Date.now() - new Date(user.createdAt).getTime()) < 60000) {
+            res.cookie('userCreatedDate', new Date().toISOString());
+        }
+        req.logIn(user, (err) => {
+            if(err) { return next(err); }
+            next();
+        });
+    })(req, res, next); 
 }
 
 exports.googleAuth = (req, res, next) => {
@@ -66,6 +86,10 @@ exports.registerAdmin = (req, res, next) => {
             return res.status(201).send({message: 'Successfully added admin'});
         }
     }).catch(err => { next(err); });
+}
+exports.loginAdmin = (req, res, next) => {
+    req.isAdmin = true;
+    next();
 }
 
 //Logout route

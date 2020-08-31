@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import uuid from 'react-uuid';
 
 //Components
-import Tip from '../../../../../components/Tip';
-import TextField from '../../../../../components/Input/TextField';
+import Tip from '../../../../../components/Tip/Tip';
+import TextField from '../../../../../components/Input/TextField/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Chip from '@material-ui/core/Chip';
 

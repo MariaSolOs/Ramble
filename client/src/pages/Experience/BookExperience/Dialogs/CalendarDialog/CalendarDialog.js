@@ -1,5 +1,4 @@
 import React from 'react';
-import {getWeekdayKey} from '../../helpers';
 
 //Components
 import Template from '../Template';
@@ -12,6 +11,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './CalendarDialogStyles';
 const useStyles = makeStyles(styles);
+
+const getWeekdayKey = (date) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 
+                  'Thursday', 'Friday', 'Saturday'];
+    return days[new Date(date).getDay()];
+}
 
 const CalendarDialog = (props) => {
     const classes = useStyles();

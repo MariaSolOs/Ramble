@@ -2,19 +2,19 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {saveExperience, unsaveExperience} from '../../../store/actions/experiences';
 import {showError} from '../../../store/actions/ui';
-import axios from 'axios';
+import axios from '../../../tokenizedAxios';
 import {useParams, useHistory} from 'react-router-dom';
 import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
 
 //Components and icons
 import BookExperience from '../BookExperience/BookExperience';
-import FloatButtons from '../../../components/ShareSaveButtons';
+import FloatButtons from '../../../components/ShareSaveButtons/ShareSaveButtons';
 import Fab from '@material-ui/core/Fab';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Dialog from '@material-ui/core/Dialog';
 import ReferBox from '../../../components/ReferBox/ReferBox';
 import Experience from '../../../components/Experience/Experience';
-import Carousel from '../../../components/Carousel';
+import Carousel from '../../../components/Carousel/Carousel';
 
 //Styles
 import 'react-image-gallery/styles/css/image-gallery.css';

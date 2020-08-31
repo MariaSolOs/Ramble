@@ -1,6 +1,6 @@
 import axios from 'axios';
-const instance = axios.create();
 
+const instance = axios.create();
 instance.interceptors.request.use((config) => {
     const token = window.localStorage.getItem('token');
     config.headers.Authorization = token ? `JWT ${token}`: '';
@@ -14,6 +14,11 @@ instance.interceptors.response.use((res) => {
         window.localStorage.setItem('token', res.data.token);
     }
     return res;
+}, (err) => {
+    if(err.response.status === 404) {
+        window.localStorage.setItem('redirectURL', '/404Page');
+    }
+    return Promise.reject(err);
 });
 
 export default instance;

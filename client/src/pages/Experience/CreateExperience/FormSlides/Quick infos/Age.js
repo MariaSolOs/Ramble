@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import useNumberField from '../../../../../hooks/useNumberField';
+import useNumberField from '../../../../../hooks/useNumberField/useNumberField';
 
 //Components and icons
-import Checkbox from '../../../../../components/Input/Checkbox';
+import Checkbox from '../../../../../components/Input/Checkbox/Checkbox';
 import PersonIcon from '@material-ui/icons/Person';
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';

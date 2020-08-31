@@ -6,11 +6,11 @@ import {useParams, useHistory} from 'react-router-dom';
 
 //Components and icons
 import Button from '@material-ui/core/Button';
-import FloatButtons from '../../../components/ShareSaveButtons';
+import FloatButtons from '../../../components/ShareSaveButtons/ShareSaveButtons';
 import Fab from '@material-ui/core/Fab';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Experience from '../../../components/Experience/Experience';
-import Carousel from '../../../components/Carousel';
+import Carousel from '../../../components/Carousel/Carousel';
 
 //Styles
 import 'react-image-gallery/styles/css/image-gallery.css';

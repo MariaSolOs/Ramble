@@ -4,9 +4,9 @@ import {fetchUserProfile} from '../store/actions/user';
 import {messageShown} from '../store/actions/ui';
 import {Route, Switch, useHistory} from 'react-router-dom';
 
-import Snackbar from '../components/Snackbar';
+import Snackbar from '../components/Snackbar/Snackbar';
 import ErrorDialog from '../components/Dialogs/ErrorDialog/ErrorDialog';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/Spinner/Spinner';
 import IdleTimer from '../components/IdleTimer/IdleTimer';
 import PublicApp from './PublicApp';
 import PrivateRoute from '../pages/PrivateRoute';

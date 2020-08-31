@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 
 //Components and icons
 import Template from '../Template';
-import ExperienceSummary from '../../ExperienceSummary';
+import ExperienceSummary from '../../ExperienceSummary/ExperienceSummary';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PaymentMethod from './PaymentMethod';

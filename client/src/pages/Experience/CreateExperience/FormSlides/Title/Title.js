@@ -1,8 +1,8 @@
 import React from 'react';
 
 //Components
-import TextField from '../../../../../components/Input/TextField';
-import Tip from '../../../../../components/Tip';
+import TextField from '../../../../../components/Input/TextField/TextField';
+import Tip from '../../../../../components/Tip/Tip';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 //Styles

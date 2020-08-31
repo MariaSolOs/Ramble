@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import useNumberField from '../../../hooks/useNumberField';
+import useNumberField from '../../../hooks/useNumberField/useNumberField';
 import useLocations from '../../../hooks/useLocations';
 
 //Components and icons

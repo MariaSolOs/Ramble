@@ -7,6 +7,23 @@ const styles = (theme) => ({
         alignItems: 'center',
     },
 
+    nav: {
+        display: 'flex',
+        marginLeft: -100,
+        '& a': {
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            letterSpacing: '-0.05rem',
+            textDecoration: 'none',
+            color: '#ACACAC',
+            '&.active, &:active, &:hover': {
+                color: '#FFF',
+                textDecoration: 'none'
+            }
+        }
+    },
+    
     //Experience cards
     gallery: {
         overflowY: 'scroll',

@@ -1,20 +1,12 @@
 import React, {useRef} from 'react';
 
-//Views
 import Landing from './Landing/Landing';
 import Partake from './Gallery/Partake';
 import Adventure from './Gallery/Adventure';
 
-//Styles
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
-    root: {
-        minWidth: '100vw',
-        minHeight: '100vh',
-        margin: '100px 0 0',
-        boxSizing: 'border-box',
-    }
-}));
+import styles from './HomeStyles';
+const useStyles = makeStyles(styles);
 
 const Home = (props) => {
     const classes = useStyles();

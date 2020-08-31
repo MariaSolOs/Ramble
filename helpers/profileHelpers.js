@@ -57,6 +57,9 @@ exports.verifyUserEmail = async (email, userId) => {
         subject: 'Verify your email address', 
         text: 'To start experiencing, we want to make sure we ' +
         'have the right email address.', 
-        html: mjml2html(mjml).html
+        html: mjml2html(mjml, {
+            filePath: path.resolve(__dirname, 
+            '../emailTemplates/emailAddressVerification.mjml')
+        }).html
     });
 }

@@ -14,6 +14,9 @@ exports.connectWithStripe = (req, res) => {
 exports.verifyEmailAddress = (req, res) => {
     User.findByIdAndUpdate(req.params.userId, {'email.verified': true},
     (err, user) => {
+        if(!err && user) {
+            res.cookie('emailVerifiedDate', new Date().toISOString());
+        }
         res.redirect(process.env.CLIENT_URL);
     });
 }

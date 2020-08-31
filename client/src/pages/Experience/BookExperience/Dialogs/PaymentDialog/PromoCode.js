@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import axios from '../../../../../tokenizedAxios';
 
 import InputBase from '@material-ui/core/InputBase';
-import Checkbox from '../../../../../components/Input/Checkbox';
+import Checkbox from '../../../../../components/Input/Checkbox/Checkbox';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';

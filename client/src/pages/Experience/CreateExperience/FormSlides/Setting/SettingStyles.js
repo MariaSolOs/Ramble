@@ -65,6 +65,17 @@ const styles = () => ({
         letterSpacing: '-0.05rem',
         color: '#CDCDCD',
         cursor: 'default'
+    },
+    chipRoot: {
+        backgroundColor: '#2F2E2E',
+        padding: '1px 10px',
+        height: 28
+    },
+    chipLabel: { display: 'none' },
+    chipIcon: {
+        margin: '0 auto',
+        color: '#CDCDCD'
     }
 });
+
 export default styles;

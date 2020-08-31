@@ -5,7 +5,7 @@ import {showError} from '../../../store/actions/ui';
 import axios from '../../../tokenizedAxios';
 
 import ShowExperience from '../ShowExperience/ShowExperience';
-import TextField from '../../../components/Input/TextField';
+import TextField from '../../../components/Input/TextField/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Rating from '@material-ui/lab/Rating';

@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import useNumberField from '../../../../../hooks/useNumberField';
+import useNumberField from '../../../../../hooks/useNumberField/useNumberField';
 
 //Components and icons
 import Template from '../Template';
-import ExperienceSummary from '../../ExperienceSummary';
+import ExperienceSummary from '../../ExperienceSummary/ExperienceSummary';
 import Collapse from '@material-ui/core/Collapse';
 import DialogContent from '@material-ui/core/DialogContent';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';

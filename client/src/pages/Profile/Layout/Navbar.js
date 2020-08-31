@@ -1,43 +1,14 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
-//Navbar icons
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faIcons} from '@fortawesome/free-solid-svg-icons/faIcons';
 import {faUser} from '@fortawesome/free-solid-svg-icons/faUser';
 import {faCreditCard} from '@fortawesome/free-solid-svg-icons/faCreditCard';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles'
-const useStyles = makeStyles((theme) => ({
-    root: {
-        listStyle: 'none',
-        padding: 0,
-        margin: 0,
-        fontFamily: 'Helvetica, sans-serif',
-        fontWeight: 'bold',
-        fontSize: '1rem',
-        letterSpacing: '-0.05rem',
-        whiteSpace: 'nowrap',
-
-        '& li': { 
-            margin: '1.7rem 0',
-            height: 18,
-            '& svg': { marginRight: 10 } 
-        },
-    },
-
-    navLink: {
-        textDecoration: 'none',
-        color: '#ACACAC',
-        '&.active, &:active, &:hover': {
-            color: '#FFF',
-            fontSize: '1.05rem',
-            transition: 'all 200ms ease-in-out',
-            textDecoration: 'none'
-        }
-    }
-}));
+import {makeStyles} from '@material-ui/core/styles';
+import {navbarStyles} from './LayoutStyles';
+const useStyles = makeStyles(navbarStyles);
 
 const profilePages = [
     { name: 'Experiences',

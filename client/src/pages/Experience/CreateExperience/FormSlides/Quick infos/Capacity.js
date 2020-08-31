@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import useNumberField from '../../../../../hooks/useNumberField';
+import useNumberField from '../../../../../hooks/useNumberField/useNumberField';
 
-import Tip from '../../../../../components/Tip';
+import Tip from '../../../../../components/Tip/Tip';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './QuickInfosStyles';

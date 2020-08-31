@@ -1,27 +1,12 @@
 import React from 'react';
 
-//Components
-import Navbar from './Navbar/Navbar';
-import NavDots from '../../../../components/NavDots';
+import Navbar from './Navbar';
+import NavDots from '../../../../components/NavDots/NavDots';
 import Footer from './Footer';
 
-//Styles
 import {makeStyles} from '@material-ui/core/styles';
-const useStyles = makeStyles(() => ({
-    root: {
-        margin: '15vh auto 0',
-        display: 'flex',
-        width: '90%',
-        height: '85vh'
-    },
-    content: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '70%',
-        marginLeft: '3vw',
-    },
-    navDots: { marginBottom: '1.5rem' }
-}));
+import {layoutStyles} from './LayoutStyles';
+const useStyles = makeStyles(layoutStyles);
 
 const Layout = (props) => {
     const classes = useStyles();

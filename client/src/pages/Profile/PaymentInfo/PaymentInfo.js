@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import useSavedCards from '../../../hooks/useSavedCards';
 
-import CardInput from '../../../components/StripeCardInput';
+import CardInput from '../../../components/StripeCardInput/StripeCardInput';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 

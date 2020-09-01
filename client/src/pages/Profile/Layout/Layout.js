@@ -7,6 +7,7 @@ import Files from 'react-butterfiles';
 
 import Navbar from './Navbar';
 import Tooltip from '@material-ui/core/Tooltip';
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
 import {makeStyles} from '@material-ui/core/styles';
 import {layoutStyles} from './LayoutStyles';
@@ -34,7 +35,7 @@ const Layout = (props) => {
                 onSuccess={handlePhotoChange}
                 onError={props.showError}>
                 {({browseFiles}) => (
-                    <>
+                    <div className={classes.imageDropbox}>
                         <Tooltip 
                         title="Change my profile picture"
                         placement="right-start"
@@ -42,10 +43,11 @@ const Layout = (props) => {
                             tooltip: classes.tooltip,
                             tooltipPlacementRight: classes.tooltipPlacement
                         }}>
-                            <img src={photo} alt="User avatar"
+                            <AddAPhotoIcon
                             onClick={browseFiles}/>
                         </Tooltip>
-                    </>
+                        <img src={photo} alt="User avatar"/>
+                    </div>
                 )}
                 </Files> : <img src={photo} alt="User avatar"/>}
                 <div className={classes.userHeader}>

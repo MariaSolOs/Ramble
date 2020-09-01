@@ -11,7 +11,6 @@ import {actions} from './store/types';
 import BookingRequests from './BookingRequests/BookingRequests';
 import Calendar from './Calendar/Calendar';
 import NoCreatedExps from './Calendar/NoCreatedExps';
-import ExpSchedule from './ExpSchedule/ExpSchedule';
 import Page404 from '../../Page404/Page404'; 
 
 const Router = (props) => {
@@ -98,7 +97,6 @@ const Router = (props) => {
                     onDateChange={handleEditDate}/> :
                     <NoCreatedExps/>}
                 </Route>}
-            <Route path={`${path}/:id/schedule`} component={ExpSchedule}/>
             <Route component={Page404}/>
         </Switch>
     );

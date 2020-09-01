@@ -1,5 +1,6 @@
-const {generatePromoCode, verifyUserEmail} = require('../helpers/profileHelpers'),
-       passport = require('passport');
+const passport = require('passport'),   
+      {generatePromoCode, verifyUserEmail} = require('../helpers/profileHelpers'),
+      {ErrorHandler} = require('../helpers/errorHandler');
 
 const User = require('../models/user'), 
       Admin = require('../models/admin');
@@ -9,11 +10,9 @@ exports.emailRegister = (req, res, next) => {
                 membershipProvider: 'email'}, 
     async (err, users) => {
         if(err) {
-            return res.status(404).send({error: 'Registration error'});
+            return next(new ErrorHandler(409, 'Registration error.'));
         } else if(users.length > 0) {
-            return res.status(409).send({
-                error: 'Email is already used.'
-            }); 
+            return next(new ErrorHandler(409, 'Email is already used.'));
         } else {
             User.create({ 
                 fstName: req.body.fstName, 
@@ -32,7 +31,7 @@ exports.emailRegister = (req, res, next) => {
                 verifyUserEmail(user.email, user._id);
                 req.login(user, err => {
                     if(err) { 
-                        res.status(404).send({error: 'Registration error'}); 
+                        return next(new ErrorHandler(409, 'Registration error.'));
                     } else { 
                         res.cookie('userCreatedDate', new Date().toISOString());
                         req.userId = user._id;
@@ -41,7 +40,7 @@ exports.emailRegister = (req, res, next) => {
                     }
                 });
             }).catch(err => { 
-                return res.status(404).send({error: 'Registration error'}); 
+                return next(new ErrorHandler(409, 'Registration error.'));
             });
         }
     });
@@ -54,12 +53,16 @@ exports.emailLogin = (req, res, next) => {
 
 exports.facebookAuth = (req, res, next) => {
     passport.authenticate('facebook', { session: false }, (err, user, info) => {
-        if(err || !user) { return next(err); }
+        if(err || !user) { 
+            return next(new ErrorHandler(409, 'Authentication error.'));
+        }
         if((Date.now() - new Date(user.createdAt).getTime()) < 60000) {
             res.cookie('userCreatedDate', new Date().toISOString());
         }
         req.logIn(user, (err) => {
-            if(err) { return next(err); }
+            if(err) { 
+                return next(new ErrorHandler(409, 'Authentication error.'));
+            }
             next();
         });
     })(req, res, next); 
@@ -75,7 +78,7 @@ exports.googleAuth = (req, res, next) => {
 
 exports.registerAdmin = (req, res, next) => {
     if(!req.isAdmin || !req.user.permissions.includes('addAdmin')) {
-        return res.status(401).send({err: 'Unauthorized.'});
+        return next(new ErrorHandler(401, 'Unauthorized.'));
     }
     Admin.create({ 
         username: req.body.username,
@@ -85,7 +88,9 @@ exports.registerAdmin = (req, res, next) => {
         if(admin) {
             return res.status(201).send({message: 'Successfully added admin'});
         }
-    }).catch(err => { next(err); });
+    }).catch(err => {
+        next(new ErrorHandler(409, 'Registration error.')); 
+    });
 }
 exports.loginAdmin = (req, res, next) => {
     req.isAdmin = true;

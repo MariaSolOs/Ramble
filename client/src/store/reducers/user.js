@@ -9,6 +9,7 @@ const initialState = {
         photo: '',
         city: '',
         email: '',
+        emailVerified: false,
         phoneNumber: '',
         birthday: '',
         promoCode: {

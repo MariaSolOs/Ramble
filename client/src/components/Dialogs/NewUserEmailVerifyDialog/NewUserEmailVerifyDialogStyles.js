@@ -4,7 +4,7 @@ const styles = () => ({
         borderRadius: '1.1rem',
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
-        letterSpacing: '-0.05rem',
+        letterSpacing: '-0.05rem'
     },
 
     content: {
@@ -17,6 +17,7 @@ const styles = () => ({
             props.showEmailForm && 'center',
 
         '&:first-child': { paddingTop: 8 },
+
         '& .fa-paper-plane': {
             fontSize: '2.5rem',
             marginRight: '1rem'
@@ -52,6 +53,7 @@ const styles = () => ({
         display: 'flex',
         justifyContent: 'center',
         margin: '10px 0 10px -10px',
+        
         '& $button:first-child': {
             color: 'darkgrey',
             marginRight: 10 

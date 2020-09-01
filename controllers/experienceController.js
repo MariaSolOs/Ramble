@@ -4,28 +4,29 @@ const cloudinary = require('cloudinary').v2,
       {compile} = require('handlebars'),
       mjml2html = require('mjml'),
       nodemailer = require('nodemailer'),
-      {createExpOccurrences} = require('../helpers/experienceHelpers');
+      {createExpOccurrences} = require('../helpers/experienceHelpers'),
+      {ErrorHandler} = require('../helpers/errorHandler');
 
 //Models
 const Experience = require('../models/experience'),
-      Occurrence = require('../models/occurrence'),
+      //Occurrence = require('../models/occurrence'),
       User = require('../models/user'),
-      Creator = require('../models/creator'),
+      //Creator = require('../models/creator'),
       Notification = require('../models/notification'),
       Review = require('../models/review');
 
 //Fetch cities stored in database
-exports.getLocations = (req, res) => {
+exports.getLocations = (req, res, next) => {
     Experience.find({status: 'approved'}).distinct('location.displayLocation', 
     (err, locations) => {
-        if(err) {
-            res.status(409).send({err: "Couldn't fetch locations."});
+        if(err || !locations) {
+            return next(new ErrorHandler(409, err.message));
         } else { res.status(200).send({ locations }); }
     });
 }
 
 //Get experiences based on location and number of people
-exports.getExps = async (req, res) => {
+exports.getExps = async (req, res, next) => {
     try {
         //We only need this for the gallery card
         const displayFields = 'title location.displayLocation images price ' +
@@ -41,108 +42,114 @@ exports.getExps = async (req, res) => {
         exps = exps.filter(exp => exp.creator.stripe.accountId);
         res.status(200).send({ exps });
     } catch(err) {
-        res.status(500).send({err: "Couldn't fetch experiences."});
+        next(new ErrorHandler(500, err.message));
     }
 }
 
 //For all the approving/dissapproving drama
-exports.getUnapprovedExps = (req, res) => {
+exports.getUnapprovedExps = (req, res, next) => {
     if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
-        return res.status(401).send({err: 'Unauthorized.'});
+        return next(new ErrorHandler(401, 'Unauthorized.'));
     }
     const displayFields = 'title location.displayLocation images price rating.value';
     Experience.find({ status: 'pending' }, displayFields,
     (err, exps) => {
-        if(err) { 
-            res.status(500).send({err: "Couldn't fetch experiences."});
+        if(err || !exps) { 
+            return next(new ErrorHandler(500, "Couldn't fetch experiences."));
         } else { res.status(200).send({ exps }); }
     });
 }
-exports.approveExp = (req, res) => {
+exports.approveExp = (req, res, next) => {
     if(!req.isAdmin || !req.user.permissions.includes('approveExp')) { 
-        return res.status(401).send({err: 'Unauthorized.'});
+        return next(new ErrorHandler(401, 'Unauthorized.'));
     }
     Experience.findByIdAndUpdate(req.params.expId, {status: req.body.decision},
     async (err, exp) => {
-        if(err || !exp) {
-            return res.status(500).send({err: 'Failed to approve/disapprove experience.'});
-        } 
-        if(req.body.decision === 'rejected') {
-            //Just create notification
-            const creator = await User.findOne({creator: exp.creator._id}, 'email');
-            const message = `Your experience ${exp.title} is not ready to go live ` + 
-            'yet. Please check your email for our feedback.';
-            const notif = new Notification({
-                message,
-                user: creator._id,
-                category: 'Creator-ExperienceRejected'
-            });
-            await notif.save();
-            res.status(200).send({
-                message: `Experience successfully ${req.body.decision}.`,
-                creatorEmail: creator.email.address
-            });
-        } else if(req.body.decision === 'approved') {
-            //Send notification
-            const creator = await User.findOne({creator: exp.creator._id}, 
-                            'email stripe creator').populate('creator', 'stripe');
-            const notif = new Notification({
-                message: `Your experience "${exp.title}" has been approved. ` +
-                "You're now ready to host your first guests!",
-                user: creator._id,
-                category: 'Creator-ExperienceApproved'
-            });
-            await notif.save();
-
-            //Create mjml
-            const source = fs.readFileSync(path.resolve(__dirname, 
-                           '../emailTemplates/experienceApproved.mjml'), 'utf-8');              
-            const template = compile(source);
-            const mjml = template({
-                expTitle: exp.title,
-                shareUrl: `${process.env.CLIENT_URL}/experience/view/${exp._id}`,
-                showStripe: !creator.creator.stripe.accountId,
-                stripeRedirectUrl: `${process.env.SERVER_URL}/api/email/connect-stripe/${
-                                    creator._id}`
-            });
-            //Send email
-            const transporter = nodemailer.createTransport({
-                host: 'smtp.zoho.com',
-                port: 465,
-                secure: true, 
-                auth: {
-                    user: process.env.ZOHO_EMAIL, 
-                    pass: process.env.ZOHO_PASSWORD
-                }
-            });
-
-            await transporter.sendMail({
-                from: {
-                    name: 'ramble',
-                    address: process.env.ZOHO_EMAIL
-                }, 
-                to: creator.email.address,
-                subject: 'Your experience was approved', 
-                text: `Congrats! Your experience "${exp.title}" was approved and ` +
-                "is ready to go live. Make sure you've completed your Stripe profile!", 
-                html: mjml2html(mjml, {
-                    filePath: path.resolve(__dirname, 
-                    '../emailTemplates/experienceApproved.mjml'),
-                }).html
-            });
-
-            //Create all occurrences
-            await createExpOccurrences(exp);
-
-            res.status(200).send({message: 'Experience successfully approved.'});
-        } else {
-            res.status(400).send({err: 'Invalid decision.'});
+        try {
+            if(err || !exp) {
+                return next(new ErrorHandler(500, 
+                'Failed to approve/disapprove experience.'));
+            } 
+            if(req.body.decision === 'rejected') {
+                //Just create notification
+                const creator = await User.findOne({creator: exp.creator._id}, 
+                                'email');
+                const notif = new Notification({
+                    message: `Your experience ${exp.title} is not ready ` + 
+                    'to go live yet. Please check your email for our feedback.',
+                    user: creator._id,
+                    category: 'Creator-ExperienceRejected'
+                });
+                await notif.save();
+                res.status(200).send({
+                    message: `Experience successfully ${req.body.decision}.`,
+                    creatorEmail: creator.email.address
+                });
+            } else if(req.body.decision === 'approved') {
+                //Send notification
+                const creator = await User.findOne({creator: exp.creator._id}, 
+                                'email stripe creator').populate('creator', 'stripe');
+                const notif = new Notification({
+                    message: `Your experience "${exp.title}" has been approved. ` +
+                    "You're now ready to host your first guests!",
+                    user: creator._id,
+                    category: 'Creator-ExperienceApproved'
+                });
+                await notif.save();
+    
+                //Create mjml
+                const source = fs.readFileSync(path.resolve(__dirname, 
+                               '../emailTemplates/experienceApproved.mjml'), 'utf-8');              
+                const template = compile(source);
+                const mjml = template({
+                    expTitle: exp.title,
+                    shareUrl: `${process.env.CLIENT_URL}/experience/view/${exp._id}`,
+                    showStripe: !creator.creator.stripe.accountId,
+                    stripeRedirectUrl: `${process.env.SERVER_URL}/api/email/connect-stripe/${
+                                        creator._id}`
+                });
+                //Send email
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.zoho.com',
+                    port: 465,
+                    secure: true, 
+                    auth: {
+                        user: process.env.ZOHO_EMAIL, 
+                        pass: process.env.ZOHO_PASSWORD
+                    }
+                });
+    
+                await transporter.sendMail({
+                    from: {
+                        name: 'ramble',
+                        address: process.env.ZOHO_EMAIL
+                    }, 
+                    to: creator.email.address,
+                    subject: 'Your experience was approved', 
+                    text: `Congrats! Your experience "${exp.title}" was approved and ` +
+                    "is ready to go live. Make sure you've completed your " +
+                    'Stripe profile!', 
+                    html: mjml2html(mjml, {
+                        filePath: path.resolve(__dirname, 
+                        '../emailTemplates/experienceApproved.mjml'),
+                    }).html
+                });
+    
+                //Create all occurrences
+                await createExpOccurrences(exp);
+    
+                res.status(200).send({message: 'Experience successfully approved.'});
+            } else {
+                next(new ErrorHandler(400, 'Invalid decision.'));
+            }
+        } catch(error) {
+            next(new ErrorHandler(500, error.message));
         }
     });
 }
-exports.deleteRejectedExps = async (req, res) => {
+exports.deleteRejectedExps = async (req, res, next) => {
     if(!req.isAdmin || !req.user.permissions.includes('maintenance')) {
-        return res.status(401).send({err: 'Unauthorized.'});
+        return next(new ErrorHandler(401, 'Unauthorized.'));
     }
     //Delete images from Cloudinary
     try {
@@ -158,12 +165,12 @@ exports.deleteRejectedExps = async (req, res) => {
         const delResult = await Experience.deleteMany({status: 'rejected'});
         res.status(200).send({ delCount: delResult.deletedCount });
     } catch(err) {
-        res.status(409).send(err);
+        next(new ErrorHandler(409, err.message));
     }
 }
 
 //Review an experience 
-exports.reviewExperience = async (req, res) => {
+exports.reviewExperience = async (req, res, next) => {
     try {
         //Update experience rating
         const exp = await Experience.findById(req.params.expId, 'rating');
@@ -185,14 +192,14 @@ exports.reviewExperience = async (req, res) => {
         await exp.save();
         res.status(201).send({message: 'Review successfully submitted.'});
     } catch(err) {
-        res.status(409).send({error: "Couldn't submit review."});
+        next(new ErrorHandler(409, err.message));
     }
 }
-exports.getReviews = (req, res) => {
+exports.getReviews = (req, res, next) => {
     Review.find({onModel: 'Experience'}).populate('about', 'title images')
     .exec((err, reviews) => {
         if(err || !reviews) {
-            res.status(500).send(err);
+            return next(new ErrorHandler(409, "Couldn't get reviews."));
         } else {
             res.status(200).send({ reviews });
         }
@@ -200,7 +207,7 @@ exports.getReviews = (req, res) => {
 }
 
 //Create an experience (unapproved status)
-exports.createExperience = async (req, res) => {
+exports.createExperience = async (req, res, next) => {
     try {
         //Upload images to Cloudinary
         const expImages = [];
@@ -229,12 +236,12 @@ exports.createExperience = async (req, res) => {
             }
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't create experience."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
 //Show experience page
-exports.getExp = (req, res) => {
+exports.getExp = (req, res, next) => {
     Experience.findById(req.params.expId).populate({
         path: 'creator',
         populate: {
@@ -243,7 +250,7 @@ exports.getExp = (req, res) => {
         }
     }).exec((err, exp) => {
         if(err || !exp) { 
-            res.status(404).send({err: "Couldn't find experience."});
+            return next(new ErrorHandler(404, 'Experience not found in database.'));
         } else { res.status(200).send({ exp }); }
     });
 }

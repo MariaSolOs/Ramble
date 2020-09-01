@@ -7,7 +7,8 @@ import Spinner from '../../components/Spinner/Spinner';
 import PrivateRoute from '../PrivateRoute';
 import Page404 from '../Page404/Page404';
 const CreatorsIntro = React.lazy(() => import('./CreatorsIntro/CreatorsIntro'));
-const CreatorForm = React.lazy(() => import('./CreatorForm/CreatorForm'))
+const CreatorForm = React.lazy(() => import('./CreatorForm/CreatorForm'));
+const ExpSchedule = React.lazy(() => import('./ExpSchedule/ExpSchedule'));
 const DashboardRouter = React.lazy(() => import('./CreatorDashboard/Router'));
 
 const Router = (props) => {
@@ -25,6 +26,7 @@ const Router = (props) => {
                 <PrivateRoute path={`${path}/join`} test={!isCreator}>
                     <CreatorForm/>
                 </PrivateRoute>
+                <Route path={`${path}/schedule/:expId`} component={ExpSchedule}/>
                 <Route path={`${path}/become`} component={CreatorsIntro}/>
                 <Route component={Page404}/>
             </Switch>

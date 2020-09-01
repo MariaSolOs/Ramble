@@ -51,7 +51,17 @@ export const layoutStyles = () => ({
         }
     },
 
-    //Tooltip 
+    imageDropbox: {
+        position: 'relative',
+        '& .MuiSvgIcon-root': {
+            position: 'absolute',
+            top: 10, right: 10,
+            color: 'rgba(172, 172, 172, 0.7)',
+            fontSize: '2rem',
+            cursor: 'pointer'
+        }
+    },
+
     tooltip: {
         fontFamily: 'Helvetica, sans-serif',
         letterSpacing: '-0.05rem',

@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
-      {calculatePaymentAmount, timeDateConvert} = require('../helpers/experienceHelpers');
+      {calculatePaymentAmount, timeDateConvert} = require('../helpers/experienceHelpers'),
+      {ErrorHandler} =  require('../helpers/errorHandler');
 
 //Models
 const Experience = require('../models/experience'),
@@ -8,14 +9,14 @@ const Experience = require('../models/experience'),
       User = require('../models/user');
 
 //Show occurrences for a certain experience
-exports.getExpOcurrences = (req, res) => {
+exports.getExpOcurrences = (req, res, next) => {
     Occurrence.find({experience: req.params.expId, 
                      dateStart: {
                         $gte: new Date(new Date(req.query.date).setUTCHours(0, 0, 0)), 
                         $lte: new Date(new Date(req.query.date).setUTCHours(23, 59, 59))
     }}, (err, occs) => {
         if(err || !occs) {
-            res.status(404).send({err: "Couldn't find occurrences."});
+            return next(new ErrorHandler(409, "Couldn't find occurrences."));
         } else {
             res.status(200).send({ occs });
         }
@@ -23,7 +24,7 @@ exports.getExpOcurrences = (req, res) => {
 }
 
 //For adding a booking to an existing/new occurrence
-exports.addBookingToOcurrence = async (req, res) => {
+exports.addBookingToOcurrence = async (req, res, next) => {
     try {
         const experience = await Experience.findById(req.params.expId, 
                            'capacity creator').populate('creator', 'bookingRequests');
@@ -104,12 +105,12 @@ exports.addBookingToOcurrence = async (req, res) => {
         if(req.body.payIntentId) {
             res.redirect(307, '/api/stripe/payment-intent/cancel');
         } else {
-            res.status(409).send({err: "Couldn't add booking."});
+            next(new ErrorHandler(409, err.message));
         }
     }
 }
 
-exports.editExpOccs = async (req, res) => {
+exports.editExpOccs = async (req, res, next) => {
     try {
         //Get necessary info to create occurrences
         const exp = await Experience.findById(req.params.expId, 'capacity');
@@ -163,6 +164,6 @@ exports.editExpOccs = async (req, res) => {
 
         res.status(200).send({deletedCount, createdCount});
     } catch(err) {
-        res.status(500).send({err: err.message});
+        next(new ErrorHandler(500, err.message));
     }
 }

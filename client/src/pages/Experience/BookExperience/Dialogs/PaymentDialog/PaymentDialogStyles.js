@@ -185,7 +185,7 @@ const styles = () => ({
         font: 'inherit',
         fontWeight: 400,
         color: '#C8C8C8',
-        fontSize: '0.9rem',
+        fontSize: '0.8rem',
         margin: '1.2rem auto 0.3rem',
         width: '80%',
         '& a': {

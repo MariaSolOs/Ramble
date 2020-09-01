@@ -4,7 +4,7 @@ const express = require('express'),
       controller = require('../controllers/emailController');
 
 //Link to update experience's availabilities
-router.get('/cal-update/:expId/:userId',
+router.get('/:userId/cal-update',
             cookieFromEmailLink,
             controller.updateCreatorCalendar);
 

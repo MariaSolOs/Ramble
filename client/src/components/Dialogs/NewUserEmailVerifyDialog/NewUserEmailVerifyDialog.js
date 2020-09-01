@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {editUserProfile} from '../../../store/actions/user';
-import {showSnackbar} from '../../../store/actions/ui';
 import Cookies from 'js-cookie';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -11,14 +10,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPaperPlane} from '@fortawesome/free-regular-svg-icons/faPaperPlane';
 
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './EmailVerificationDialogStyles';
+import styles from './NewUserEmailVerifyDialogStyles';
 const useStyles = makeStyles(styles);
 
-const EmailVerificationDialog = (props) => {
+const NewUserEmailVerifyDialog = (props) => {
     const [open, setOpen] = useState(false);
 
     //If the user just signed up, open dialog
-    const {showSnackbar} = props;
     useEffect(() => {  
         const userCreatedDate = Cookies.get('userCreatedDate'); 
         if(userCreatedDate && 
@@ -27,15 +25,6 @@ const EmailVerificationDialog = (props) => {
             setTimeout(() => { setOpen(false); }, 5000);
         }
     }, []);
-
-    //If the user just verified their email, show snackbar
-    useEffect(() => {
-        const emailVerifiedDate = Cookies.get('emailVerifiedDate');
-        if(emailVerifiedDate && 
-          ((new Date() - new Date(emailVerifiedDate)) < 60000)) {
-            showSnackbar("Your email address was verified.");
-        }
-    }, [showSnackbar]);
 
     //Form for the user's email address
     const [email, setEmail] = useState('');
@@ -75,7 +64,9 @@ const EmailVerificationDialog = (props) => {
                 </> :
                 <form onSubmit={handleSubmitEmail}>
                     {props.name > 0 &&
-                        <p className={classes.userName}>Welcome, {props.name}!</p>}
+                        <p className={classes.userName}>
+                            Welcome, {props.name}!
+                        </p>}
                     <p>
                         Before we get started we'd like to verify your email.
                     </p>
@@ -109,8 +100,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     editUserProfile: (updatedInfo) => 
-        dispatch(editUserProfile(updatedInfo, false)),
-    showSnackbar: (msg) => dispatch(showSnackbar(msg))
+        dispatch(editUserProfile(updatedInfo, false))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmailVerificationDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(NewUserEmailVerifyDialog);

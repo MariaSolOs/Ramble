@@ -1,6 +1,9 @@
 <mjml>
     <mj-head>
         <mj-title>Email address verification</mj-title>
+        <mj-preview>
+            Verify your email address
+        </mj-preview>
 
         <mj-attributes>
             <mj-text 
@@ -10,7 +13,6 @@
         <mj-style>
             .button tr {
                 background: linear-gradient(to right, #2BB282 0%, #2D73EA 90%);
-                border-radius: 2rem;
                 letter-spacing: -0.4px;
                 white-space: no-wrap;
                 box-sizing: border-box;

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import useSocket from '../hooks/useSocket';
 import {fetchExperiences} from '../store/actions/experiences';
+import {showSnackbar} from '../store/actions/ui';
 import {Route, Switch} from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -10,7 +11,7 @@ import Page404 from '../pages/Page404/Page404';
 import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
 import Spinner from '../components/Spinner/Spinner';
-import EmailVerificationDialog from '../components/Dialogs/EmailVerificationDialog/EmailVerificationDialog';
+import NewUserEmailVerifyDialog from '../components/Dialogs/NewUserEmailVerifyDialog/NewUserEmailVerifyDialog';
 import Home from '../pages/Home/Home';
 import PrivateRoute from '../pages/PrivateRoute';
 const Notifications = React.lazy(() => import('../pages/Notifications/Notifications'));
@@ -31,8 +32,9 @@ const PublicApp = (props) => {
         }
     }, [cookieToken]);
 
+    const {isAuth, fetchExps, isAdmin, showSnackbar} = props;
+
     //Fetch user experiences if logged in 
-    const {isAuth, fetchExps, isAdmin} = props;
     useEffect(() => {
         if(isAuth && !isAdmin) { fetchExps(); }
     }, [isAuth, fetchExps, isAdmin]);
@@ -48,10 +50,19 @@ const PublicApp = (props) => {
         }
     }, [props.numNotifs]);
 
+    //If the user just verified their email, show snackbar
+    useEffect(() => {
+        const emailVerifiedDate = Cookies.get('emailVerifiedDate');
+        if(emailVerifiedDate && 
+          ((new Date() - new Date(emailVerifiedDate)) < 60000)) {
+            showSnackbar("Your email address was verified.");
+        }
+    }, [showSnackbar]);
+
     //isAuth and isCreator are passed to the page routers to filter routes
     return (
         <React.Suspense fallback={<Spinner/>}>
-            <EmailVerificationDialog/>
+            <NewUserEmailVerifyDialog/>
             <Nav/>
             <Switch>
                 <PrivateRoute path="/notifications" test={isAuth}>
@@ -86,7 +97,8 @@ const mapStateToProps = (state) => ({
     numNotifs: state.user.notifs.length
 });
 const mapDispatchToProps = (dispatch) => ({
-    fetchExps: () => dispatch(fetchExperiences())
+    fetchExps: () => dispatch(fetchExperiences()),
+    showSnackbar: () => dispatch(showSnackbar())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublicApp);

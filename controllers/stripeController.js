@@ -1,10 +1,11 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
       handlers = require('../helpers/stripeWebhookHandlers'),
-      {calculatePaymentAmount} = require('../helpers/experienceHelpers');
+      {calculatePaymentAmount} = require('../helpers/experienceHelpers'),
+      {ErrorHandler} = require('../helpers/errorHandler');
 
 const User = require('../models/user');
 
-exports.completeCreatorOnboarding = (req, res) => {
+exports.completeCreatorOnboarding = (req, res, next) => {
     const {code} = req.query;
     //Send the authorization code to Stripe's API
     stripe.oauth.token({grant_type: 'authorization_code', code})
@@ -19,15 +20,15 @@ exports.completeCreatorOnboarding = (req, res) => {
         return res.status(200).redirect(`${process.env.CLIENT_URL}`);
         }, (err) => {
             if (err.type === 'StripeInvalidGrantError') {
-                return res.status(400).json({error: `Invalid authorization code: ${code}`});
+                next(new ErrorHandler(400, `Invalid authorization code: ${code}`));
             } else {
-                return res.status(500).json({error: 'An unknown error occurred.'});
+                next(new ErrorHandler(500, 'An unknown error occurred.'));
             }
         }
     );
 }
 
-exports.addCustomer = async (req, res) => {
+exports.addCustomer = async (req, res, next) => {
     try {
         const user = await User.findById(req.userId, 'fstName lstName email stripe');
         //If the user doesn't have any saved cards,
@@ -43,11 +44,11 @@ exports.addCustomer = async (req, res) => {
             customerId: user.stripe.customerId
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't create Stripe customer."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
-exports.applyPromo = (req, res) => {
+exports.applyPromo = (req, res, next) => {
     User.find({'promoCode.code': req.body.code}, (err, users) => {
         if(!err && (users.length === 1)) {
             //Only one friend can use the promo code
@@ -55,12 +56,12 @@ exports.applyPromo = (req, res) => {
                 valid: users[0].promoCode.usedBy.length === 0
             });
         } else {
-            res.status(500).send({err: 'Promo cannot be applied.'});
+            next(new ErrorHandler(500, 'Promo cannot be applied.'));
         }
     });
 }
 
-exports.attachPaymentMethod = async (req, res) => {
+exports.attachPaymentMethod = async (req, res, next) => {
     try {
         const user = await User.findById(req.userId, 'fstName lstName email stripe');
         //If the user doesn't have any saved cards,
@@ -78,33 +79,33 @@ exports.attachPaymentMethod = async (req, res) => {
         await user.save();
         return res.status(201).send({message: 'Payment method created.'});
     } catch(err) {
-        res.status(409).send({err: "Couldn't add payment method."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
-exports.detachPaymentMethod = (req, res) => {
+exports.detachPaymentMethod = (req, res, next) => {
     stripe.paymentMethods.detach(req.body.paymentMethodId)
     .then(() => {
         res.status(200).send({message: 'Payment method detached.'});
     })
-    .catch((err)=> {
-        res.status(409).send({err: "Couldn't detach payment method."});
+    .catch((err) => {
+        next(new ErrorHandler(409, err.message));
     });
 }
 
-exports.capturePaymentIntent = (req, res) => {
+exports.capturePaymentIntent = (req, res, next) => {
     stripe.paymentIntents.capture(req.body.stripeId, (err, intent) => {
         if(err) {
-            res.status(500).send({err: "Couldn't capture intent."});
+            next(new ErrorHandler(500, err.message));
         } else {
             res.status(200).send({intentId: intent.id, status: intent.status})
         }
     });
 }
-exports.cancelPaymentIntent = (req, res) => {
+exports.cancelPaymentIntent = (req, res, next) => {
     stripe.paymentIntents.cancel(req.body.stripeId, (err, intent) => {
         if(err) {
-            res.status(500).send({err: "Couldn't cancel intent."});
+            next(new ErrorHandler(500, err.message));
         } else {
             res.status(200).send({intentId: intent.id, status: intent.status})
         }
@@ -112,7 +113,7 @@ exports.cancelPaymentIntent = (req, res) => {
 }
 
 //Deal with payments using a saved card from the client
-exports.payWithSavedCard  = async (req, res) => {
+exports.payWithSavedCard  = async (req, res, next) => {
     try {
         const payInfo = await calculatePaymentAmount(
             req.body.expId,
@@ -137,14 +138,12 @@ exports.payWithSavedCard  = async (req, res) => {
         });
         return res.status(201).send({message: 'Payment intent created.'});
     } catch(err) {
-        console.log(err);
-        res.status(500).send(err);
-        //TODO: Handle error here
+        next(new ErrorHandler(500, err.message));
     }
 }
 
 //Creating payment intents
-exports.createPaymentIntent = async (req, res) => {
+exports.createPaymentIntent = async (req, res, next) => {
     try {
         //Calculate prices
         const payInfo = await calculatePaymentAmount(
@@ -174,11 +173,11 @@ exports.createPaymentIntent = async (req, res) => {
         });
         return res.send({clientSecret: payIntent.client_secret});
     } catch(err) {
-        res.status(500).send(err);
+        next(new ErrorHandler(500, err.message));
     }
 }
 
-exports.stripeWebhook = async (req, res) => {
+exports.stripeWebhook = async (req, res, next) => {
     const sign = req.headers['stripe-signature'];
     let event;
 
@@ -189,7 +188,7 @@ exports.stripeWebhook = async (req, res) => {
                     process.env.STRIPE_WEBHOOK_SECRET
                 );
     } catch (err) {
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+        return next(new ErrorHandler(400, err.message));
     }
 
     let message;

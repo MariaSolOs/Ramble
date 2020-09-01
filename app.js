@@ -6,6 +6,7 @@ const express = require('express'),
       morgan = require('morgan'),
       path = require('path'),
       compression = require('compression'),
+      {handleError} = require('./helpers/errorHandler'),
       seedDB = require('./experienceSeeds');
 
 //Setting environment variables
@@ -75,10 +76,8 @@ app.use('/api/creator', creatorRoutes);
 const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
 
-//404 page
-app.use((req, res, next) => {
-    res.status(404);
-    next();
+app.use((err, req, res, next) => {
+    handleError(err, req, res);
 });
 
 app.get('*', (req, res) => {

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {showError} from '../../../../store/actions/ui';
+import {showError} from '../../../store/actions/ui';
 import {useHistory, useParams} from 'react-router-dom';
-import axios from '../../../../tokenizedAxios';
+import axios from '../../../tokenizedAxios';
 
-import WeeklyCalendar from '../../../../components/WeeklyCalendar/WeeklyCalendar';
+import WeeklyCalendar from '../../../components/WeeklyCalendar/WeeklyCalendar';
 
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './ExpScheduleStyles';
@@ -25,13 +25,13 @@ const ExpSchedule = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const {id} = useParams();
+    const {expId} = useParams();
 
     //Fetch experience and set schedule
     const [exp, setExp] = useState(null);
     const [schedule, setSchedule] = useState(null);
     useEffect(() => {
-        axios.get(`/api/exp/${id}`)
+        axios.get(`/api/exp/${expId}`)
         .then(res => {
             console.log(res.data)
             setExp(res.data.exp);
@@ -40,7 +40,7 @@ const ExpSchedule = (props) => {
             dispatch(showError('We cannot update your availabilities right now.'));
             setTimeout(() => { history.push('/'); }, 4000);
         })
-    }, [dispatch, id, history]);
+    }, [dispatch, expId, history]);
 
     const handleCalChange = () => {
 

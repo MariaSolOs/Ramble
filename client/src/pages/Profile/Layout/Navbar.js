@@ -13,7 +13,7 @@ const useStyles = makeStyles(navbarStyles);
 const profilePages = [
     { name: 'Experiences',
       icon: faIcons,
-      route: '/profile/exp/past' },
+      route: '/profile/exp/booked' },
     { name: 'Personal information', 
       icon: faUser,
       route: '/profile/info' },

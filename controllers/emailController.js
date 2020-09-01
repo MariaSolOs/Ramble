@@ -1,8 +1,8 @@
 const User = require('../models/user');
 
 exports.updateCreatorCalendar = (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}/creator/dashboard/${
-    req.params.expId}/schedule`);
+    res.redirect(`${process.env.CLIENT_URL}/creator/schedule/${
+    req.query.exp}`);
 }
 
 exports.connectWithStripe = (req, res) => {

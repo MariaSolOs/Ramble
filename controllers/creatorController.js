@@ -1,4 +1,5 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('cloudinary').v2,
+      {ErrorHandler} = require('../helpers/errorHandler');
 
 //Models
 const Creator = require('../models/creator'),
@@ -16,18 +17,18 @@ const getCreatorProfile = (creator) => ({
 });
 
 //For fetching profile information
-exports.getCreatorProfile = (req, res) => {
+exports.getCreatorProfile = (req, res, next) => {
     req.user.populate('creator').execPopulate()
     .then((user, err) => {
         if(err || !user) {
-            return res.status(500).send({err: "Couldn't fetch creator profile."});
+            return next(new ErrorHandler(500, err.message));
         }
         res.status(200).send({ 
             creatorProfile: {...getCreatorProfile(user.creator)}
         })
     });
 }
-exports.getBookingRequests = async (req, res) => {
+exports.getBookingRequests = async (req, res, next) => {
     try {
         const {bookingRequests} = await Creator.findOne({user: req.userId}).populate({
             path: 'bookingRequests',
@@ -42,12 +43,12 @@ exports.getBookingRequests = async (req, res) => {
         });
         res.status(200).send({ bookingRequests });
     } catch(err) {
-        res.status(500).send({err: 'Failed to get booking requests.'});
+        next(new ErrorHandler(500, err.message));
     }
 }
 
 //Upgrade an user to a creator
-exports.upgradeUserToCreator = async (req, res) => {
+exports.upgradeUserToCreator = async (req, res, next) => {
     try {
         //Upload ID to Cloudinary
         const governmentIds = [];
@@ -75,11 +76,11 @@ exports.upgradeUserToCreator = async (req, res) => {
             profile: getCreatorProfile(creator)
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't update user to creator."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
-exports.editCreatorProfile = async (req, res) => {
+exports.editCreatorProfile = async (req, res, next) => {
     try {
         const creator = await Creator.findById(req.params.creatorId);
         for(const field in req.body) {
@@ -90,16 +91,16 @@ exports.editCreatorProfile = async (req, res) => {
             profile: getCreatorProfile(creator)
         });
     } catch(err) {
-        res.status(409).send({error: "Couldn't update creator."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
-exports.getCreatedExperiences = (req, res) => {
+exports.getCreatedExperiences = (req, res, next) => {
     //Find experiences
     Experience.find({creator: req.params.creatorId},
     'title images duration avail.to', (err, exps) => {
         if(err || !exps) {
-            res.status(500).send({err: "Couldn't find creator's experiences"});
+            return next(new ErrorHandler(500, err.message));
         } else {
             res.status(200).send({ exps }); 
         }
@@ -108,7 +109,7 @@ exports.getCreatedExperiences = (req, res) => {
 
 /*To delete a booking where the customer used a saved card
 we don't need Stripe */
-exports.deleteBookingRequest = async (req, res) => {
+exports.deleteBookingRequest = async (req, res, next) => {
     try {
         const booking = await Booking.findByIdAndRemove(req.params.bookId, 
                         {select: 'client experience numPeople occurrence'})
@@ -131,7 +132,6 @@ exports.deleteBookingRequest = async (req, res) => {
 
         return res.status(200).send({message: 'Booking deleted'});
     } catch(err) {
-        console.log(err)
-        res.status(409).send({err: "Couldn't delete booking."});
+        next(new ErrorHandler(409, err.message));
     }
 }

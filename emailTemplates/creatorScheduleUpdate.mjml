@@ -1,0 +1,143 @@
+<mjml>
+    <mj-head>
+        <mj-title>Experience schedule update</mj-title>
+        <mj-preview>
+            Time to update your availabilities
+        </mj-preview>
+
+        <mj-attributes>
+            <mj-text 
+            font-family="Helvetica, sans-serif"/>
+
+            <mj-class 
+            name="title" 
+            padding="0"
+            letter-spacing="-0.1px"
+            font-weight="600"
+            font-size="23px"
+            color="#525252"/>
+
+            <mj-class 
+            name="grey-text" 
+            font-weight="500"
+            font-size="16px"
+            color="#959595"
+            letter-spacing="-0.2px"/>
+        </mj-attributes>
+
+        <mj-style>
+            .button tr {
+                background: radial-gradient(circle at 298%, #F7521E, #AC9EFF);
+                letter-spacing: -0.2px;
+                white-space: no-wrap;
+            }
+        </mj-style>
+
+    </mj-head>
+
+    <mj-body
+    background-color="#F3F3F3">
+
+        <!-- Ramble title -->
+        <mj-section>
+            <mj-column>
+                <mj-spacer height="25px"/>
+                <mj-text
+                font-weight="100"
+                font-family="Futura" 
+                letter-spacing="-1px"
+                color="#000"
+                font-size="30px">
+                    ramble
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-wrapper padding="20px 25px">
+            <!-- Message -->
+            <mj-section padding="0">
+                <mj-column>
+                    <mj-text mj-class="title">
+                        Time to update your availabilities
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section
+            padding-top="5px">
+                <mj-column>
+                    <mj-text
+                    padding="10px 0 20px"
+                    letter-spacing="-0.15px"
+                    font-weight="600"
+                    line-height="130%"
+                    font-size="17px"
+                    color="#676767">
+                        Your availabilities for "{{expTitle}}" need to 
+                        be updated. Go to your Creator dashboard and list your 
+                        schedule for the next period.
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+
+            <!-- Experience description -->
+            <mj-section
+            background-color="#DDDFDE"
+            border-radius="30px"
+            padding="0">
+                <mj-group>
+                    <mj-column width="40%">
+                        <mj-image 
+                        align="left"
+                        padding="0 20px 0 0"
+                        border-radius="30px"
+                        src="{{expImage}}" 
+                        alt="{{expTitle}}"/>
+                    </mj-column>
+                    <mj-column>
+                        <mj-spacer height="15px"/>
+                        <mj-text mj-class="title">
+                            {{expTitle}}
+                        </mj-text>
+                        <mj-text
+                        mj-class="grey-text"
+                        padding="10px 0 0">
+                            {{expLocation}}
+                        </mj-text>
+                        <mj-button
+                        css-class="button"
+                        background-color="transparent"
+                        color="#FFF"
+                        font-family="Helvetica, sans-serif"
+                        font-weight="bold"
+                        border-radius="25px"
+                        padding-left="0"
+                        inner-padding="10px 15px"
+                        align="left"
+                        href="{{calendarUrl}}">
+                            Update availabilities
+                        </mj-button>
+                    </mj-column>
+                </mj-group>
+            </mj-section>
+
+            <!-- Footer -->
+            <mj-section>
+                <mj-column>
+                <mj-spacer height="50px"/>
+                    <mj-text 
+                    mj-class="grey-text"
+                    padding="0 10px"
+                    font-size="12px">
+                        Ramble Technologies Inc
+                    </mj-text>
+                    <mj-text 
+                    padding="5px 10px 0"
+                    mj-class="grey-text"
+                    font-size="12px">
+                        Montréal, Quebec
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+        </mj-wrapper>
+    </mj-body>
+</mjml>

@@ -233,8 +233,7 @@ const BookExperience = ({exp, user, onClose}) => {
                         img: exp.images[0],
                         price: exp.price
                     }}
-                    userEmail={user.email}
-                    userPromo={user.promoCode}
+                    user={user}
                     cards={cards}
                     onChange={handleChange}
                     controls={{

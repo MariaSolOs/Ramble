@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2,
       stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
-      {verifyUserEmail} = require('../helpers/profileHelpers');
+      {verifyUserEmail} = require('../helpers/profileHelpers'),
+      {ErrorHandler} = require('../helpers/errorHandler');
 
 //Models
 const User = require('../models/user'),
@@ -16,6 +17,7 @@ const getUserData = (user) => ({
     photo: user.photo,
     city: user.city,
     email: user.email.address,
+    emailVerified: user.email.verified,
     phoneNumber: user.phoneNumber,
     birthday: user.birthday,
     promoCode: user.promoCode,
@@ -39,7 +41,7 @@ const changeProfilePhoto = async (oldPhoto, newPhoto) => {
 }
 
 //For fetching profile information
-exports.getUserProfile = (req, res) => {
+exports.getUserProfile = async (req, res, next) => {
     if(req.isAdmin) {
         res.status(200).send({ 
             isAdmin: true,
@@ -52,31 +54,26 @@ exports.getUserProfile = (req, res) => {
     } else {
         Notification.find({user: req.user._id}).sort({createdAt: -1})
         .exec((err, notifs) => {
-            if(err) {
-                return res.status(500).send({err: "Couldn't fetch notifications."});
+            try {
+                if(err) {
+                    throw new ErrorHandler(500, err.message);
+                }
+                res.status(200).send({
+                    isAdmin: false,
+                    isCreator: Boolean(req.user.creator),
+                    token:  req.token,
+                    userData: getUserData(req.user),
+                    notifications: notifs
+                });
+            } catch(error) {
+                next(error);
             }
-            res.status(200).send({
-                isAdmin: false,
-                isCreator: Boolean(req.user.creator),
-                token:  req.token,
-                userData: getUserData(req.user),
-                notifications: notifs
-            });
         });
     }
 }
-exports.getNotifs = (req, res) => {
-    Notification.find({user: req.userId}).sort({createdAt: -1})
-    .exec((err, notifs) => {
-        if(err) {
-            return res.status(500).send({err: "Couldn't fetch notifications."});
-        }
-        res.status(200).send({notifs});
-    });
-}
 
 //Editing user info
-exports.editProfile = async (req, res) => {
+exports.editProfile = async (req, res, next) => {
     try {
         const newEmail = (req.user.email.length === 0) &&
                          (req.body.email && req.body.email.length > 0);
@@ -109,27 +106,27 @@ exports.editProfile = async (req, res) => {
             userData: getUserData(req.user) 
         });
     } catch(err) {
-        res.status(409).send({error: "Couldn't update user."});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
 //For getting and saving/unsaving an experience
-exports.getUserExperiences = async (req, res) => {
+exports.getUserExperiences = async (req, res, next) => {
     try {
         //We only need this for experience cards
         const expFields = 'title location.displayLocation images price rating';
         //Saved experiences
         const {savedExperiences, pastExperiences} = 
-            await req.user.populate('savedExperiences pastExperiences', expFields)
-            .execPopulate();
+               await req.user.populate('savedExperiences pastExperiences', expFields)
+               .execPopulate();
         //Booked experiences
         const booked = await Booking.find({client: req.user._id}, 
-                                  'experience occurrence').populate([
-                                  { path: 'experience',
-                                    select: expFields },
-                                  { path: 'occurrence',
-                                    select: 'dateEnd' }
-                                ]);
+                            'experience occurrence').populate([
+                            { path: 'experience',
+                            select: expFields },
+                            { path: 'occurrence',
+                            select: 'dateEnd' }
+                        ]);
         const bookedExperiences = [];
         for(const booking of booked) {
             bookedExperiences.push(booking.experience);
@@ -139,10 +136,10 @@ exports.getUserExperiences = async (req, res) => {
             savedExperiences
         });
     } catch(err) {
-        res.status(500).send({err: "Couldn't fetch user experiences."});
+        next(new ErrorHandler(500, err.message));
     }
 }
-exports.saveExperience = async (req, res) => {
+exports.saveExperience = async (req, res, next) => {
     try {
         const savedExp = await Experience.findById(req.body.expId, 
                          'title location.displayLocation images price rating');
@@ -153,10 +150,10 @@ exports.saveExperience = async (req, res) => {
             savedExp 
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't save experience"});
+        next(new ErrorHandler(409, err.message));
     }
 }
-exports.unsaveExperience = async (req, res) => {
+exports.unsaveExperience = async (req, res, next) => {
     try {
         await User.findByIdAndUpdate(req.userId, 
               {$pull: {savedExperiences: req.params.expId }});
@@ -165,7 +162,7 @@ exports.unsaveExperience = async (req, res) => {
             message: 'Experience succesfully unsaved.'
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't unsave experience"});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
@@ -178,11 +175,11 @@ exports.deleteNotification = async (req, res) => {
             message: 'Notification deleted.'
         });
     } catch(err) {
-        res.status(409).send({err: "Couldn't delete notification"});
+        next(new ErrorHandler(409, err.message));
     }
 }
 
-exports.getPaymentMethods = async (req, res) => {
+exports.getPaymentMethods = async (req, res, next) => {
     try {
         const user = await User.findById(req.userId, 'stripe');
         if(!user.stripe.customerId) { //No saved payment methods
@@ -203,6 +200,6 @@ exports.getPaymentMethods = async (req, res) => {
         }
         res.status(200).send({ paymentMethods });
     } catch(err) {
-        res.status(500).send(err);
+        next(new ErrorHandler(500, err.message));
     }
 }

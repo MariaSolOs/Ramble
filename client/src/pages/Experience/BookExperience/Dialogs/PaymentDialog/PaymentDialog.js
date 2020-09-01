@@ -44,11 +44,11 @@ const PaymentDialog = (props) => {
 
     //If user referred a friend, apply promo
     useEffect(() => {
-        if(props.userPromo.usedBy.length === 1) {
+        if(props.user.promoCode.usedBy.length === 1) {
             setTotalPrice(totalPrice => totalPrice * 0.8);
-            onChange('promoCode', props.userPromo.code);
+            onChange('promoCode', props.user.promoCode.code);
         }
-    }, [props.userPromo.usedBy, props.userPromo.code, onChange]); 
+    }, [props.user, onChange]); 
     //If user has a discount code
     const handleApplyPromo = (code) => {
         onChange('promoCode', code);
@@ -86,12 +86,12 @@ const PaymentDialog = (props) => {
                 onRememberCard={handleRememberCardChange}
                 onCardToUse={handleUseCardChange}
                 onCanSubmit={handleCanSubmit}/>
-                {props.userPromo.usedBy.length === 1 ?
+                {props.user.promoCode.usedBy.length === 1 ?
                     <p className={classes.promoMsg}>
                         Because you shared your code with a friend, you get 20% off!
                     </p> :
                     <PromoCode
-                    userCode={props.userPromo.code}
+                    userCode={props.user.promoCode.code}
                     promoCode={props.form.promoCode}
                     applyPromo={handleApplyPromo}
                     onCanSubmit={handleCanSubmit}/>}
@@ -109,11 +109,12 @@ const PaymentDialog = (props) => {
                         </>}
                     </p>
                 </div>
-                <EmailForm 
-                userEmail={props.userEmail} 
-                newEmail={props.form.email} 
-                onChange={handleChangeEmail}
-                onCanSubmit={handleCanSubmit}/>
+                {!props.user.emailVerified &&
+                    <EmailForm 
+                    userEmail={props.user.email} 
+                    newEmail={props.form.email} 
+                    onChange={handleChangeEmail}
+                    onCanSubmit={handleCanSubmit}/>}
                 <p className={classes.policyMessage}>
                     By confirming this purchase you agree to the 
                     User Conditions and Policies regarding booking.

@@ -82,7 +82,7 @@ const styles = (theme) => ({
         backgroundColor: '#161616',
         fontFamily: 'Helvetica, sans-serif',
         fontWeight: 'bold',
-        padding: 5.5,
+        padding: '7px 5.5px',
         textIndent: -22,
         lineHeight: '30px',
         alignItems: 'center',
@@ -96,7 +96,7 @@ const styles = (theme) => ({
         '& .icon': {
             float: 'left',
             width: 'auto',
-            maxHeight: '100%'
+            height: '100%'
         }
     },
 
@@ -114,22 +114,13 @@ const styles = (theme) => ({
         letterSpacing: '-0.03rem',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '1rem',
+        margin: '1rem 0 0',
 
         '& span': {
             color: '#ECEBE5',
             textDecoration: 'underline',
             cursor: 'pointer'
         }
-    },
-
-    //Icon copyright link
-    iconsCreditLink: {
-        fontSize: '0.65rem',
-        fontFamily: 'Helvetica, sans-serif',
-        float: 'right',
-        color: 'rgba(129, 123, 123, 0.6)',
-        '&:hover': { color: 'rgba(129, 123, 123, 0.6)' }
     }
 });
 

@@ -7,9 +7,9 @@ import Avatar from '@material-ui/core/Avatar';
 import {FacebookMessengerShareButton, 
         EmailShareButton, 
         WhatsappShareButton} from 'react-share';
-import messengerIcon from './images/refer_messenger.svg';
-import whatsAppIcon from './images/refer_whatsapp.svg';
-import mailIcon from './images/refer_mail.svg';
+import messengerIcon from '../../shared/images/messenger-icon.svg';
+import whatsAppIcon from '../../shared/images/whatsapp-icon.svg';
+import mailIcon from '../../shared/images/mail-icon.svg';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -59,17 +59,17 @@ const ReferBox = (props) => {
                         <>
                             <FacebookMessengerShareButton 
                             appId={process.env.REACT_APP_FACEBOOK_ID} 
-                            url={props.shareUrl}>
+                            url={window.location.href}>
                                 <img src={messengerIcon} alt="Refer with Messenger"/>
                             </FacebookMessengerShareButton>
                             <EmailShareButton 
-                            url={props.shareUrl}
+                            url={window.location.href}
                             subject="Ramble - Experience different"
                             body={'Feel like trying something new? Use my Ramble promo ' +
                             `code ${props.promoCode} to get 20% off your next experience:`}>
                                 <img src={mailIcon} alt="Refer with email"/>
                             </EmailShareButton>
-                            <WhatsappShareButton url={props.shareUrl}>
+                            <WhatsappShareButton url={window.location.href}>
                                 <img src={whatsAppIcon} alt="Refer with Whatsapp"/>
                             </WhatsappShareButton>
                         </> : 

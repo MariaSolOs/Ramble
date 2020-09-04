@@ -43,10 +43,6 @@ const styles = (theme) => ({
         }
     },
 
-    shareDialog: {
-        '& .MuiDialog-paper': { borderRadius: '1rem' }
-    },
-
     goBackBtn: {
         position: 'absolute',
         top: 25, left: 25,

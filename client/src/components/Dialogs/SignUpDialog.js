@@ -5,6 +5,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import EmailIcon from '@material-ui/icons/Email';
+import facebookIcon from '../../shared/images/facebook-icon.svg';
+import googleIcon from '../../shared/images/google-icon.svg';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -33,16 +35,19 @@ const SignUpDialog = (props) => {
                 </button>
                 <a href="/api/auth/facebook" className={classes.link}>
                     <button className={classes.mediaButton}>
-                        <img src="https://img.icons8.com/color/48/000000/facebook-new.png" 
-                        alt="Facebook icon" className="icon"
-                        style={{height: 26, width: 26}}/>
+                        <img 
+                        src={facebookIcon}
+                        alt="Facebook icon" 
+                        className="icon"/>
                         Continue with Facebook
                     </button>
                 </a>
                 <a href="/api/auth/google" className={classes.link}>
                     <button className={classes.mediaButton}>
-                        <img src="https://img.icons8.com/color/48/000000/google-logo.png" 
-                        className="icon" alt="Google icon" style={{height: 24, width: 24}}/>
+                        <img 
+                        src={googleIcon} 
+                        className="icon" 
+                        alt="Google icon"/>
                         Continue with Google
                     </button>
                 </a>
@@ -50,10 +55,6 @@ const SignUpDialog = (props) => {
                     Already have an account?&nbsp;&nbsp;
                     <span onClick={props.switchToLogin} >Log in</span>
                 </p>  
-                <a href="https://icons8.com/icons/set/social-media"
-                className={classes.iconsCreditLink}>
-                    Media icons by Icons8
-                </a>
             </DialogContent>
         </Dialog>
     );

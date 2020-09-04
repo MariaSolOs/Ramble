@@ -115,7 +115,9 @@ const SignUpWithEmailDialog = (props) => {
                         onChange={handleChange}
                         required/>
                     </FormControl>
-                    <p className={classes.switchDialogsLink}>
+                    <p 
+                    className={classes.switchDialogsLink}
+                    style={{ margin: '10px 0 1rem' }}>
                         Already have an account?&nbsp;&nbsp;
                         <span onClick={props.switchToLogin}>Log in</span>
                     </p> 

@@ -8,6 +8,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
+import facebookIcon from '../../shared/images/facebook-icon.svg';
+import googleIcon from '../../shared/images/google-icon.svg';
 
 import TextField from '../Input/TextField/TextField';
 
@@ -93,21 +95,22 @@ const LogInDialog = (props) => {
                 <div className={classes.formDivisor}/>
                 <a href="/api/auth/facebook" className={classes.link}>
                     <button className={classes.mediaButton}>
-                        <img src="https://img.icons8.com/color/48/000000/facebook-new.png" 
-                        alt="Facebook icon" className="icon" style={{height: '100%'}}/>
+                        <img 
+                        src={facebookIcon}
+                        alt="Facebook log in" 
+                        className="icon" 
+                        style={{height: '100%'}}/>
                         Log in with Facebook
                     </button>
                 </a>
                 <a href="/api/auth/google" className={classes.link}> 
                     <button className={classes.mediaButton}>
-                        <img src="https://img.icons8.com/color/48/000000/google-logo.png" 
-                        alt="Google icon" className="icon" style={{height: '90%'}}/>
+                        <img 
+                        src={googleIcon}
+                        alt="Google log in" 
+                        className="icon"/>
                         Log in with Google
                     </button> 
-                </a>
-                <a href="https://icons8.com/icons/set/social-media"
-                className={`${classes.iconsCreditLink} ${classes.link}`}>
-                    Media icons by Icons8
                 </a>
             </DialogContent>
         </Dialog>

@@ -9,9 +9,7 @@ const cloudinary = require('cloudinary').v2,
 
 //Models
 const Experience = require('../models/experience'),
-      //Occurrence = require('../models/occurrence'),
       User = require('../models/user'),
-      //Creator = require('../models/creator'),
       Notification = require('../models/notification'),
       Review = require('../models/review');
 
@@ -238,6 +236,22 @@ exports.createExperience = async (req, res, next) => {
     } catch(err) {
         next(new ErrorHandler(409, err.message));
     }
+}
+
+//Change availability schedule for an experience
+exports.updateSchedule = (req, res, next) => {
+    Experience.findByIdAndUpdate(req.params.expId, 
+    {avail: {
+        from: new Date(),
+        to: new Date().setMonth(new Date().getMonth() + 1),
+        schedule: req.body.schedule
+    }},
+    (err, exp) => {
+        if(err || !exp) {
+            return next(new ErrorHandler(409, "Couldn't update schedule"));
+        }
+        res.status(201).send({message: 'Schedule successfully updated.'});
+    });
 }
 
 //Show experience page

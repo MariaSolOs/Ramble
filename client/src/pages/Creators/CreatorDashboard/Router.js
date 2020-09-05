@@ -79,15 +79,15 @@ const Router = (props) => {
 
     return (
         <Switch location={location}>
-            {state.bookingRequests &&
-                <Route path={`${path}/bookings`}>
+            <Route path={`${path}/bookings`}>
+                {state.bookingRequests &&
                     <BookingRequests 
                     bookingRequests={state.bookingRequests}
-                    deleteRequest={handleDeleteRequest}/>
-                </Route>}
-            {state.createdExps &&
-                <Route path={`${path}/calendar`}>
-                {state.createdExps.length > 0?
+                    deleteRequest={handleDeleteRequest}/>}
+            </Route>
+            <Route path={`${path}/calendar`}>
+                {(state.bookingRequests && state.createdExps) &&
+                state.editExp?
                     <Calendar 
                     createdExps={state.createdExps}
                     bookingRequests={state.bookingRequests}
@@ -96,7 +96,7 @@ const Router = (props) => {
                     onExpChange={handleEditExp}
                     onDateChange={handleEditDate}/> :
                     <NoCreatedExps/>}
-                </Route>}
+            </Route>
             <Route component={Page404}/>
         </Switch>
     );

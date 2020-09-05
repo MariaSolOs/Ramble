@@ -1,5 +1,5 @@
 import React from 'react';
-import {copyMap} from '../../helpers';
+import {copyMap} from '../../../../../shared/utilities/scheduleMapHelpers';
 
 //Components
 import Tip from '../../../../../components/Tip/Tip';

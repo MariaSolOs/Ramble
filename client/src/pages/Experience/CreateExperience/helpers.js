@@ -1,27 +1,14 @@
 //Using indexes identify the selected category
 const categoryOptions = ['taste', 'create', 'relax', 'learn', 'move'];
 
-//For deepcloning map in availabilities
-export const copyMap = (map) => {
-    const copy = new Map();
-    Array.from(map.keys()).forEach(key => {
-        const content = map.get(key).slice(0);
-        copy.set(key, content);
-    });
-    return copy;
-}
-
 /*Transform data to display in experience page and 
 save in database*/
 export const prepareReview = (values, user) => {
     try {
         const locArray = values.location.split(', ');
         locArray.pop(); //Drop the country code
-        let endWeek = new Date(values.startDate);
-        let end2Weeks = new Date(values.startDate);
+        
         let endMonth = new Date(values.startDate);
-        endWeek.setDate(endWeek.getDate() + 7);
-        end2Weeks.setDate(end2Weeks.getDate() + 14);
         endMonth.setMonth(endMonth.getMonth() + 1);
         
         const exp = {
@@ -73,9 +60,7 @@ export const prepareReview = (values, user) => {
 
             avail: {
                 from: values.startDate,
-                to: values.scheduleUpdateFreq === 'weekly'? 
-                    endWeek : values.scheduleUpdateFreq === 'biweekly'?
-                    end2Weeks : endWeek,
+                to: endMonth,
                 schedule: Array.from(values.schedule)
             },
 

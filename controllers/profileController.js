@@ -75,7 +75,7 @@ exports.getUserProfile = async (req, res, next) => {
 //Editing user info
 exports.editProfile = async (req, res, next) => {
     try {
-        const newEmail = (req.user.email.length === 0) &&
+        const newEmail = (req.user.email.address.length === 0) &&
                          (req.body.email && req.body.email.length > 0);
 
         //Update user info
@@ -87,6 +87,9 @@ exports.editProfile = async (req, res, next) => {
                                 );
                 if(!newPhoto){ continue; }
                 else { req.user[field] = newPhoto; }
+            }
+            if(field === 'email') {
+                req.user.email.address = req.body[field];
             } else {
                 req.user[field] = req.body[field];
             }

@@ -24,7 +24,7 @@ const CalendarUpdates = ({startDate, submitInput}) => {
     //TODO: Change the title of this slide
     return (
         <div style={{ overflowY: 'scroll' }}>
-            <h1 className={classes.title}>Availability updates</h1>
+            <h1 className={classes.title}>Start hosting</h1>
             <div>
                 <p className={classes.description}>
                     When would you like to start hosting your experience?

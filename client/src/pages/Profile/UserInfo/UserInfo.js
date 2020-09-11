@@ -65,7 +65,6 @@ const UserInfo = (props) => {
         props.editUserProfile({
             ...values,
             phoneNumber,
-            'email.address': values.email,
             city: user.city !== values.city? values.city : user.city
         });
         //Update creator info if applicable

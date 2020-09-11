@@ -33,7 +33,7 @@ const Router = (props) => {
             });
         })
         .catch(err => {
-            showError('We f*cked up. We cannot get your bookings right now...');
+            showError('We cannot get your bookings right now...');
         });
         endLoading();
     }, [startLoading, endLoading, showError, numBookings, dispatch]);

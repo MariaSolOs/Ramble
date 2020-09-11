@@ -34,7 +34,7 @@ const BookingRequests = (props) => {
             showSnackbar(`The booking was ${decision}`);
         })
         .catch(err => {
-            showError("We f*cked up. We couldn't process your decision...");
+            showError("We couldn't process your decision...");
         });
     }, [showSnackbar, showError, deleteRequest]);
     const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => 
@@ -63,7 +63,7 @@ const BookingRequests = (props) => {
             const decision = action === 'approve'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
         } catch(err) {
-            showError("We f*cked up. We couldn't process your decision...");
+            showError("We couldn't process your decision...");
         } 
     }, [showSnackbar, showError, creatorId, stripeId, deleteRequest]);
 

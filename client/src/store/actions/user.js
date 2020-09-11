@@ -148,7 +148,7 @@ export const upgradeToCreator = (creatorInfo) => {
         })
         .catch(err => {
             console.log(`CREATOR CREATION FAILED: ${err}`);
-            dispatch(showError("We f*cked up. We couldn't submit your form..."));
+            dispatch(showError("We couldn't submit your form..."));
         });
     }
 }

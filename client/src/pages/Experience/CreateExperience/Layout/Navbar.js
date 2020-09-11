@@ -138,8 +138,8 @@ const Navbar = ({completed, currStage}) => {
                                     ${completed < 15 && classes.inactive}`}>
                         {15 <= completed ?
                         <Link to={slides.CAL_UPDATES}>
-                            Calendar updates
-                        </Link> : 'Calendar updates'}
+                            Start hosting
+                        </Link> : 'Start hosting'}
                     </li>
                 </Collapse>
             </li>

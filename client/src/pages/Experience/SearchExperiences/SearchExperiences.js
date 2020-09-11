@@ -30,7 +30,7 @@ const SearchExperiences = (props) => {
                 });
             }
         }).catch(err => {
-            showError('We f*cked up. We cannot find the experience you searched for.');
+            showError('We cannot find the experience you searched for.');
         });
     }, [dispatch, showError]);
 

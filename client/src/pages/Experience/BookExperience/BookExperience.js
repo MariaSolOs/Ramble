@@ -104,7 +104,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 cancelBooking('Please contact us.');
             }
         }).catch(err => { 
-            cancelBooking('We f*cked up. Please contact us.'); 
+            cancelBooking('Please contact us.'); 
         });
     }
 
@@ -127,7 +127,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 if(newCustomer.status === 201) {
                     customerId = newCustomer.data.customerId;
                 } else {
-                    return cancelBooking("We f*cked up. We couldn't save your card...");
+                    return cancelBooking("We couldn't save your card...");
                 }
             }
 
@@ -146,7 +146,7 @@ const BookExperience = ({exp, user, onClose}) => {
                 clientSecret = payIntent.data.clientSecret;
             }
             if (!stripe || !elements || payIntent.status !== 200) { 
-                cancelBooking('We f*cked up. Your booking cannot be completed right now.');
+                cancelBooking('Your booking cannot be completed right now.');
                 return; 
             }
 
@@ -171,9 +171,9 @@ const BookExperience = ({exp, user, onClose}) => {
             } else if(payConfirm.paymentIntent.status === 'requires_capture') {
                 return handleAddBookingToOcc(payConfirm.paymentIntent.id, null);
             } else {
-                return cancelBooking("We f*cked up. We couldn't complete your payment.");
+                return cancelBooking("We couldn't complete your payment.");
             }
-        } catch(err) { cancelBooking('We f*cked up. Please contact us.'); }
+        } catch(err) { cancelBooking('Please contact us.'); }
     }
 
     switch(state.step) {

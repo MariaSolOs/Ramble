@@ -28,7 +28,7 @@ require('./config/socket')(io);
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 //Stripe webhooks aren't parsed to json
 app.use(bodyParser.json({
-    limit: '5mb',
+    limit: '20mb',
     verify: function(req, res, buf) {
         if(req.originalUrl.startsWith('/api/stripe/webhook')) {
             req.rawBody = buf.toString();

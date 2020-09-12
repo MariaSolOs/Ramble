@@ -31,7 +31,7 @@ const Landing = (props) => {
     }
     const [numPeople, NumPeopleField] = useNumberField({
         min: 1, 
-        initval: 1,
+        initval: 2,
         step: 1,
         getlabel: num => num > 1? 'People' : 'Person', 
         startadornment: <FontAwesomeIcon icon={faUsers}/>,

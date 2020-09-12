@@ -99,7 +99,8 @@ const CreateExperience = (props) => {
             <Route path={pages.PLANNING}>
                 <Layout
                 completedSteps={completedSteps}
-                canContinue={values.description.length > 0} 
+                canContinue={values.description.length > 0 && 
+                             values.description.length <= 1000} 
                 currStage={3} 
                 backLink={pages.CATEGORIES}
                 nextLink={pages.SETTING}>

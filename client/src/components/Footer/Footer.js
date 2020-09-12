@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 //Components and icons
 import CustomerServiceDialog from '../Dialogs/CustomerServiceDialog/CustomerServiceDialog';
 import Chip from '@material-ui/core/Chip';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import LanguageIcon from '@material-ui/icons/Language';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faFacebook} from '@fortawesome/free-brands-svg-icons/faFacebook';
@@ -52,10 +51,9 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className={classes.bodyCol}>
-                    <p className={classes.colTitle}>Language & Currency</p>
+                    <p className={classes.colTitle}>Language</p>
                     <div>
                         <Chip icon={<LanguageIcon/>} label="English" className={classes.chip}/>
-                        <Chip icon={<AttachMoneyIcon/>} label="USD" className={classes.chip}/>
                     </div>
                 </div>
             </div>

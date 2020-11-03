@@ -41,7 +41,7 @@ const CreatorForm = (props) => {
     //Creator bio
     const [bio, setBio] = useState('');
     const handleBioChange = (e) => {
-        if(e.target.value.length <= 200) {
+        if(e.target.value.length <= 500) {
             setBio(e.target.value);
         }
     }
@@ -159,7 +159,7 @@ const CreatorForm = (props) => {
                 onChange={handleBioChange}
                 fullWidth
                 endadornment={<InputAdornment position="end">
-                                {200 - bio.length}
+                                {500 - bio.length}
                               </InputAdornment>}/>
             </div>
             <div className={classes.phoneField}>
@@ -232,8 +232,8 @@ const CreatorForm = (props) => {
             </div>
             <button
             type="submit"
-            disabled={bio.length === 0 || 
-                      phoneNumber.length === 0 ||  
+            disabled={(bio !== undefined && bio.length === 0) || 
+                      (phoneNumber !== undefined && phoneNumber.length === 0) ||  
                       !id.front || !id.back}
             className={`${classes.submitButton} ${classes.doneButton}`}>
                 Done

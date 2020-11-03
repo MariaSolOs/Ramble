@@ -44,10 +44,12 @@ const NewUserEmailVerifyDialog = (props) => {
     }
 
     const classes = useStyles({
-        showEmailForm: props.email.length === 0
+        showEmailForm: props.email && (props.email.length === 0)
     });
 
     return (
+        <>
+        {props.email &&
         <Dialog
         open={open}
         onClose={handleClose}
@@ -90,7 +92,8 @@ const NewUserEmailVerifyDialog = (props) => {
                     </div>
                 </form>}
             </DialogContent>
-        </Dialog>
+        </Dialog>}
+        </>
     );
 }
 

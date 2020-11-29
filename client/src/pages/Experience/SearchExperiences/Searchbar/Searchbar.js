@@ -22,7 +22,7 @@ const Searchbar = (props) => {
 
     const locations = useLocations();
     //For updating location and numPeople changes
-    const [location, setLocation] = useState(props.location || 'Montreal, Quebec');
+    const [location, setLocation] = useState(props.location || 'Montreal, Canada');
     const handleLocationChange = (event, value, reason) => {
         if(reason === 'reset') { setLocation(value); }
     }

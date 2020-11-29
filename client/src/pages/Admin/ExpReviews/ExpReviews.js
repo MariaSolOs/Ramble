@@ -16,7 +16,6 @@ const ExpReviews = (props) => {
     useEffect(() => {
         axios.get('/api/exp/reviews')
         .then(res => {
-            console.log(res)
             setReviews(res.data.reviews);
         })
         .catch(err => {

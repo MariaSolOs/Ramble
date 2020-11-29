@@ -228,16 +228,6 @@ const seedDB = async () => {
     // await creator.save();
     //const creator = await Creator.findById('5f21b3176a6c734261291a0a');
 
-    await User.find({}, 'email', async (err, users) => {
-        for(const user of users) {
-            user.email = {
-                address: user.email,
-                verified: true
-            }
-            await user.save();
-        }
-    });
-
     // [...experienceData, ...experienceData]
     // .forEach(async seed => {
     //     const exp = new Experience(seed);
@@ -272,7 +262,7 @@ const seedDB = async () => {
     //     exp.creator = creator._id;
     //     await exp.save();
     // });
-    console.log('Database populated.');
+    //console.log('Database populated.');
 }
 
 module.exports = seedDB;

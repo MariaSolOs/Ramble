@@ -18,7 +18,8 @@ export const fetchLocations = () => {
     return dispatch => {
         axios.get('/api/exp/locations')
         .then(res => {
-            dispatch(setLocations(res.data.locations));
+            dispatch(setLocations(res.data.locations.length === 0? 
+                     ['Montreal, Canada'] : res.data.locations));
         }).catch(err => console.log(`FETCH LOCATIONS FAILED: ${err}`));
     }
 }

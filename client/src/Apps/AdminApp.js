@@ -10,7 +10,6 @@ import ApprovalPage from '../pages/Admin/ApprovalPage/ApprovalPage';
 import Register from '../pages/Admin/Register/Register';
 import Maintenance from '../pages/Admin/Maintenance/Maintenance';
 import PrivateRoute from '../pages/PrivateRoute';
-import Page404 from '../pages/Page404/Page404';
 
 const AdminApp = (props) => {
     const {path} = useRouteMatch();
@@ -20,9 +19,6 @@ const AdminApp = (props) => {
         <>
         <Nav permissions={props.permissions}/>
         <Switch location={location}>
-            <PrivateRoute path={`${path}/approveExps`} test={props.canApproveExps}>
-                <ApproveExps/>
-            </PrivateRoute>
             <PrivateRoute path={`${path}/exp-reviews`} test={props.canSeeReviews}>
                 <ExpReviews/>
             </PrivateRoute>
@@ -35,7 +31,7 @@ const AdminApp = (props) => {
             <PrivateRoute path={`${path}/maintenance`} test={props.canMaintain}>
                 <Maintenance/>
             </PrivateRoute>
-            <Route component={Page404}/>
+            <Route component={ApproveExps}/>
         </Switch>
         </>
     );

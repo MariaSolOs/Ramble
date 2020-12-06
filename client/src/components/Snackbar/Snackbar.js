@@ -9,7 +9,7 @@ const useStyles = makeStyles(styles);
 
 const Snackbar = (props) => {
     const classes = useStyles();
-
+    
     return (
         <MUISnackbar
         anchorOrigin={{vertical: 'top', horizontal: 'right'}}

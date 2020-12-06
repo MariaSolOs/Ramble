@@ -98,7 +98,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchExps: () => dispatch(fetchExperiences()),
-    showSnackbar: () => dispatch(showSnackbar())
+    showSnackbar: (msg) => dispatch(showSnackbar(msg))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublicApp);

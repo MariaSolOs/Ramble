@@ -43,7 +43,10 @@ const styles = () => ({
             width: 200,
             margin: '0 auto',
             '& img': {
-                maxWidth: '75%'
+                width: 200,
+                height: 'auto',
+                maxHeight: 200,
+                borderRadius: '100%'
             },
             '& $deleteIcon': { 
                 bottom: 5,

@@ -22,17 +22,14 @@ const styles = () => ({
     brand: {
         alignContent: 'bottom',
         cursor: 'pointer',
-        '& img': {
+        '& .brand-logo': {
             height: 48,
-            width: 85,
-            paddingBottom: 2
+            width: 85
         },
-        '& span': {
-            fontFamily: 'Futura',
-            fontSize: '1.813rem',
-            letterSpacing: '-0.05rem',
-            color: '#F6F6F6',
-            verticalAlign: 'bottom',
+        '& .brand-name': {
+            height: 30,
+            paddingBottom: 2,
+            marginLeft: -5
         }
     }
 });

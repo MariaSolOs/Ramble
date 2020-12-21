@@ -4,6 +4,7 @@ import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
+import Brand from './ramble_name.png';
 import Logo from './navLogo.png';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -22,8 +23,8 @@ const AppBar = (props) => {
             <Toolbar>
                 <div onClick={props.onRambleClick}>
                     <div className={classes.brand}>
-                        <img src={Logo} alt="ramble logo"/>
-                        <span>ramble</span>
+                        <img className="brand-logo" src={Logo} alt="ramble logo"/>
+                        <img className="brand-name" src={Brand} alt="ramble brand"/>
                     </div>
                 </div>
                 {props.children}

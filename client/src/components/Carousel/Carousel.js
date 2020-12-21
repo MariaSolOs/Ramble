@@ -15,7 +15,6 @@ const Carousel = ({images}) => {
         items={images}
         thumbnailPosition="left"
         showPlayButton={false}
-        showFullscreenButton={false}
         showNav={false}
         showBullets/>
     );

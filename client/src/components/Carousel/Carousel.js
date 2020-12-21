@@ -13,6 +13,7 @@ const Carousel = ({images}) => {
         <ImageGallery
         additionalClass={classes.carousel}
         items={images}
+        showFullscreenButton={false}
         thumbnailPosition="left"
         showPlayButton={false}
         showNav={false}

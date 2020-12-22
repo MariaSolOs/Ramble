@@ -1,6 +1,11 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
       {calculatePaymentAmount, timeDateConvert} = require('../helpers/experienceHelpers'),
-      {ErrorHandler} =  require('../helpers/errorHandler');
+      {ErrorHandler} =  require('../helpers/errorHandler'),
+      fs = require('fs'),
+      path = require('path'),
+      {compile} = require('handlebars'),
+      mjml2html = require('mjml'),
+      nodemailer = require('nodemailer');
 
 //Models
 const Experience = require('../models/experience'),
@@ -27,7 +32,15 @@ exports.getExpOcurrences = (req, res, next) => {
 exports.addBookingToOcurrence = async (req, res, next) => {
     try {
         const experience = await Experience.findById(req.params.expId, 
-                           'capacity creator').populate('creator', 'bookingRequests');
+                           'capacity creator title')
+                           .populate({
+                                path: 'creator',
+                                select: 'bookingRequests user',
+                                populate: {
+                                    path: 'user',
+                                    select: 'email'
+                                }
+                           });
 
         //Find the occurrence
         const occ = await Occurrence.findOne({
@@ -70,6 +83,38 @@ exports.addBookingToOcurrence = async (req, res, next) => {
 
         //Add booking to creator's requests
         experience.creator.bookingRequests.push(booking);
+
+        //Send email notification to creator
+        const source = fs.readFileSync(path.resolve(__dirname, 
+                       '../emailTemplates/newBooking.mjml'), 'utf-8');              
+        const template = compile(source);
+        const mjml = template({
+            clientName: req.user.fstName,
+            expName: experience.title,
+            dashboardLink: `${process.env.CLIENT_URL}/api/email/${
+                            experience.creator.user._id}/creator-dashboard`
+        });
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.zoho.com',
+            port: 465,
+            secure: true, 
+            auth: {
+                user: process.env.ZOHO_EMAIL, 
+                pass: process.env.ZOHO_PASSWORD
+            }
+        });
+        await transporter.sendMail({
+            from: {
+                name: 'ramble',
+                address: process.env.ZOHO_EMAIL
+            }, 
+            to: creator.user.email,
+            subject: 'You have a new booking request', 
+            text: `You have a new booking! ${req.user.fstName} just booked your experience ${
+            experience.title}. Log in to your creator dashboard to check their booking request.`, 
+            html: mjml2html(mjml).html
+        });
 
         //Update promo code use (if applicable)
         if(req.body.promoCode.length > 0) {

@@ -8,6 +8,11 @@ router.get('/:userId/cal-update',
             cookieFromEmailLink,
             controller.updateCreatorCalendar);
 
+//Link to review booking request
+router.get('/:userId/creator-dashboard',
+           cookieFromEmailLink,
+           controller.reviewBookingRequest);
+
 //Redirect to Stripe's onboarding
 router.get('/connect-stripe/:userId',
            cookieFromEmailLink,

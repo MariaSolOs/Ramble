@@ -47,7 +47,7 @@ const UserInfo = (props) => {
     //If the user is a creator, they can modify their bio
     const [creatorBio, setCreatorBio] = useState(props.creator.bio);
     const handleBioChange = (e) => {
-        if(e.target.value.length <= 200) {
+        if(e.target.value.length <= 500) {
             setCreatorBio(e.target.value);
         }
     }
@@ -141,6 +141,8 @@ const UserInfo = (props) => {
                         id="phoneNumber" 
                         name="phoneNumber"
                         type="tel"
+                        value={values.phoneNumber}
+                        onChange={handleChange}
                         helperText={phoneErr && 
                                     'Please enter a valid phone number'}/>
                     </FormControl>
@@ -172,7 +174,7 @@ const UserInfo = (props) => {
                         onChange={handleBioChange}
                         fullWidth
                         endadornment={<InputAdornment position="end">
-                                        {200 - creatorBio.length}
+                                        {500 - creatorBio.length}
                                       </InputAdornment>}/>
                     </div>}
             </CustomScroll>

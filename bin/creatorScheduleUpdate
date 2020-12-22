@@ -21,7 +21,6 @@ const creatorScheduleUpdate = async () => {
         in3Days.setDate(new Date().getDate() + 3);
         const exps = await Experience.find({
                            'avail.to': {$lte: in3Days},
-                           creator: "5f28663a31418000179e6f90",
                            status: 'approved'
                     }, 'title creator avail images location')
                     .populate({

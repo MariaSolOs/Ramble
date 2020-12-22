@@ -15,7 +15,7 @@ const styles = () => ({
         letterSpacing: '-0.05rem',
         '&.Mui-error .MuiOutlinedInput-notchedOutline': {
             borderColor: '#D8246E'
-        }
+        },
     },
     input_focused: {
         '& .MuiOutlinedInput-notchedOutline': {
@@ -23,7 +23,7 @@ const styles = () => ({
         }
     },
     helperText_root: {
-        '&.MuiFormHelperText-root.Mui-error': {
+        '&.MuiFormHelperText-root.Mui-error, &.MuiFormHelperText-contained': {
             fontFamily: 'Helvetica, sans-serif',
             fontWeight: 'bold',
             color: '#D8246E',

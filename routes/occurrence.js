@@ -1,5 +1,6 @@
 const express = require('express'),
       router  = express.Router(),
+      {identifyUser} = require('../middleware/userMiddleware'),
       {authenticateToken} = require('../middleware/authMiddleware'),
       controllers = require('../controllers/occurrenceController');
 
@@ -10,6 +11,7 @@ router.get('/:expId', controllers.getExpOcurrences);
 //For adding a booking to an existing/new occurrence
 router.post('/:expId/bookings', 
             authenticateToken, 
+            identifyUser,
             controllers.addBookingToOcurrence);
 
 

@@ -4,7 +4,6 @@ import {actions} from './types';
 const initialState = {
     bookingRequests: null,
     createdExps: null,
-
     editExp: null,
     editDate: ''
 }

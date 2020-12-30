@@ -97,8 +97,8 @@ exports.editCreatorProfile = async (req, res, next) => {
 
 exports.getCreatedExperiences = (req, res, next) => {
     //Find experiences
-    Experience.find({creator: req.params.creatorId},
-    'title images duration avail.to', (err, exps) => {
+    Experience.find({creator: req.params.creatorId}, 
+    (err, exps) => {
         if(err || !exps) {
             return next(new ErrorHandler(500, err.message));
         } else {

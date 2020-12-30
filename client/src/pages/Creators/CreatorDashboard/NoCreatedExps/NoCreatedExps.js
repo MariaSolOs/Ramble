@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import {makeStyles} from '@material-ui/core/styles';
-import styles from './CalendarStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import styles from './NoCreatedExpsStyles';
 const useStyles = makeStyles(styles);
 
-const NoCreatedExps = (props) => {
+const NoCreatedExps = () => {
     const classes = useStyles();
     
     return (

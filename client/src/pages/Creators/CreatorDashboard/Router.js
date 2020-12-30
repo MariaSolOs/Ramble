@@ -10,7 +10,9 @@ import {actions} from './store/types';
 //Pages and layout
 import BookingRequests from './BookingRequests/BookingRequests';
 import Calendar from './Calendar/Calendar';
-import NoCreatedExps from './Calendar/NoCreatedExps';
+import NoCreatedExps from './NoCreatedExps/NoCreatedExps';
+import CreatedExperiences from './CreatedExperiences/CreatedExperiences';
+import EditExperience from './EditExperience/EditExperience';
 import Page404 from '../../Page404/Page404'; 
 
 const Router = (props) => {
@@ -69,7 +71,7 @@ const Router = (props) => {
         decNumBookings();
     }, [dispatch, decNumBookings]);
 
-    //Calendar actions
+    //Handle editing experiences
     const handleEditExp = useCallback((exp) => {
         dispatch({type: actions.CHANGE_EDIT_EXP, exp});
     }, [dispatch]);
@@ -84,6 +86,16 @@ const Router = (props) => {
                     <BookingRequests 
                     bookingRequests={state.bookingRequests}
                     deleteRequest={handleDeleteRequest}/>}
+            </Route>
+            {/* TODO: If no created exps show NoCreatedExps page */}
+            <Route path={`${path}/experiences`}>
+                {state.createdExps && 
+                    <CreatedExperiences 
+                    exps={state.createdExps}
+                    onEditExp={handleEditExp}/>}
+            </Route>
+            <Route path={`${path}/edit-exp`}>
+                <EditExperience exp={state.editExp}/>
             </Route>
             <Route path={`${path}/calendar`}>
                 {(state.bookingRequests && state.createdExps) &&

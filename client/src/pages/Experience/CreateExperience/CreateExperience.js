@@ -6,7 +6,7 @@ import useLanguages from '../../../hooks/useLanguages';
 import {prepareReview} from './helpers';
 
 //Pages and components
-import * as slides from './FormSlides';
+import * as slides from '../Slides';
 import Intro from './Intro/Intro';
 import Submitted from './Submitted/Submitted';
 import Layout from './Layout/Layout';

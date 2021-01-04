@@ -15,7 +15,7 @@ const CreatedExperiences = ({ exps, onEditExp }) => {
 
     const handleClick = (exp) => () => {
         onEditExp(exp);
-        history.push('/creator/dashboard/edit-exp');
+        history.push('/creator/dashboard/edit-exp/planning');
     }
 
     return (

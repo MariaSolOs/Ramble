@@ -10,7 +10,7 @@ const useStyles = makeStyles(styles);
  * @param {Number} numSteps - Total number of steps
  * @param {String} className - For extra styling
  */
-const NavDots = ({currentStep, numSteps, className}) => {
+const NavDots = ({ currentStep, numSteps, className }) => {
     const classes = useStyles();
     
     return (

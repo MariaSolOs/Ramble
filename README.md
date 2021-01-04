@@ -11,7 +11,7 @@ Essentially, [Ramble](https://www.experienceramble.com/) is an activity marketpl
 
 * SocketIO for live notification updates.
 * User authentication with Facebook, Google and email.
-* Image processing in storage with Cloudinary.
+* Image processing and storage with Cloudinary.
 * Email updates, with personalized templates created with [MJML](https://mjml.io/).
 <img src="preview/email-pinata.png" width="300"/>
 

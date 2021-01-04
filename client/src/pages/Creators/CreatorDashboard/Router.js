@@ -87,12 +87,12 @@ const Router = (props) => {
                     bookingRequests={state.bookingRequests}
                     deleteRequest={handleDeleteRequest}/>}
             </Route>
-            {/* TODO: If no created exps show NoCreatedExps page */}
             <Route path={`${path}/experiences`}>
-                {state.createdExps && 
+                {state.createdExps? 
                     <CreatedExperiences 
                     exps={state.createdExps}
-                    onEditExp={handleEditExp}/>}
+                    onEditExp={handleEditExp}/> :
+                    <NoCreatedExps/>}
             </Route>
             <Route path={`${path}/edit-exp`}>
                 <EditExperience exp={state.editExp}/>

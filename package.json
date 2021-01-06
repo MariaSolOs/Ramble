@@ -15,9 +15,9 @@
   "author": "Maria Solano",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MariaSolOs/ReRamble/issues"
+    "url": "https://github.com/MariaSolOs/Ramble/issues"
   },
-  "homepage": "https://github.com/MariaSolOs/ReRamble#readme",
+  "homepage": "https://github.com/MariaSolOs/Ramble#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",

@@ -83,6 +83,14 @@ export const footerStyles = () => ({
             '&:focus': { outline: 'none' }
         }
     },
+
+    saveMsg: {
+        color: '#FFF',
+        fontFamily: 'Helvetica, sans-serif',
+        fontWeight: 'bold',
+        letterSpacing: '-0.05rem',
+        display: 'inline-block'
+    },
     
     navButton: {
         float: 'right',

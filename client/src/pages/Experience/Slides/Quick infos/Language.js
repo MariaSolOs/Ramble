@@ -1,37 +1,43 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-//Components
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Tip from '../../../../components/Tip/Tip';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './QuickInfosStyles';
 const useStyles = makeStyles(styles);
 
-const Language = ({allLanguages, submitInput}) => {
+const Language = ({ allLanguages, selectedLanguages, submitInput }) => {
     const classes = useStyles();
 
-    //To restrict the user to 3 languages
     const [options, setOptions] = useState([]);
     const [message, setMessage] = useState('Loading...');
     useEffect(() => {
-        if(allLanguages.length > 0) { setOptions(allLanguages); }
+        if(allLanguages.length > 0) { 
+            setOptions(allLanguages); 
+        }
     }, [allLanguages]);
-    const handleChange = (event, value, reason) => {
+
+    const handleChange = (_, value, reason) => {
+        // User can select at most 3 languages
         if(reason === 'select-option') {
             if(value.length >= 3) {
                 setOptions([]);
                 setMessage('You can pick a maximum of 3 languages.');
-                return;
-            } else { submitInput('languages', value); }
+            } else { 
+                submitInput('languages', value); 
+            }
         } else if (reason === 'remove-option') {
             setOptions(allLanguages);
             setMessage('Loading...')
             submitInput('languages', value);
         }
     }
+
+    const handleOptionSelected = (option, value) => (
+        value.includes(option)
+    );
 
     return (
         <>
@@ -49,6 +55,8 @@ const Language = ({allLanguages, submitInput}) => {
                 </Tip>
                 <Autocomplete
                 onChange={handleChange}
+                getOptionSelected={handleOptionSelected}
+                value={selectedLanguages}
                 options={options}
                 loadingText={message}
                 loading={Boolean(options)}

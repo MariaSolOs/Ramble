@@ -16,7 +16,6 @@ import Experience from '../../../components/Experience/Experience';
 import Carousel from '../../../components/Carousel/Carousel';
 
 //Styles
-import 'react-image-gallery/styles/css/image-gallery.css';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);

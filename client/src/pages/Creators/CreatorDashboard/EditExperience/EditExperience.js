@@ -1,33 +1,24 @@
 import React, { useState, useCallback } from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
-import * as slides from '../../../Experience/Slides';
-import PAGES from './pages';
+import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { showSnackbar, showError } from '../../../../store/actions/ui';
+import axios from '../../../../tokenizedAxios';
 import useLanguages from '../../../../hooks/useLanguages';
+import { initValues, prepareReview } from './helpers';
 
+import PAGES from './pages';
+import * as slides from '../../../Experience/Slides';
 import Page404 from '../../../Page404/Page404';
 import Layout from './Layout/Layout';
 
-const EditExperience = ({ exp }) => {
-    console.log(exp)
+const EditExperience = ({ exp, userProfile, creatorBio, 
+                          showSnackbar, showError }) => {
     const location = useLocation();
+    const history = useHistory();
 
     const allLanguages = useLanguages();
 
-    const [values, setValues] = useState({
-        description: exp.description,
-        setting: exp.setting,
-        duration: exp.duration,
-        language: exp.languages.slice(0),
-        capacity: exp.capacity,
-        ageRestricted: exp.ageRestriction !== 0, 
-        ageRequired: exp.ageRestriction,
-        images: exp.images.slice(0),
-        included: exp.included.slice(0),
-        toBring: exp.toBring.slice(0),
-        price: exp.price.perPerson,
-        privatePrice: exp.price.private,
-        currency: exp.price.currency
-    });
+    const [values, setValues] = useState(initValues(exp));
 
     const handleInputChange = useCallback((name, newVal) => {
         setValues(values => ({
@@ -36,13 +27,40 @@ const EditExperience = ({ exp }) => {
         }));
     }, []);
 
+    const handleNavButtonClick = useCallback((slideLink) => () => {
+        history.push(slideLink);
+    }, [history]);
+
+    const handleSubmitChanges = useCallback((expReview) => () => {
+        axios.patch(`/api/exp/${exp._id}`, {
+            description: expReview.description,
+            setting: expReview.setting,
+            duration: expReview.duration,
+            languages: expReview.languages,
+            capacity: expReview.capacity,
+            ageRestriction: expReview.ageRestriction, 
+            images: expReview.images,
+            included: expReview.included,
+            toBring: expReview.toBring,
+            price: expReview.price
+        })
+        .then((res) => {
+            showSnackbar(`Your experience "${res.data.exp.title}" was updated!`);
+        })
+        .catch(() => {
+            showError("We can't update your experience right now...");
+            setTimeout(() => {}, 3000);
+            history.push(PAGES.dashboard);
+        });
+    }, [exp._id, history, showError, showSnackbar]);
+
     return (
         <Switch location={location}>
             <Route path={PAGES.planning}>
                 <Layout 
                 currStage={0} 
-                backLink="/creator/dashboard/experiences"
-                nextLink={PAGES.setting}>
+                onBackClick={handleNavButtonClick(PAGES.dashboard)}
+                onNextClick={handleNavButtonClick(PAGES.setting)}>
                     <slides.Planning
                     description={values.description}
                     submitInput={handleInputChange}/>
@@ -51,8 +69,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.setting}>
                 <Layout
                 currStage={0} 
-                backLink={PAGES.planning}
-                nextLink={PAGES.duration}>
+                onBackClick={handleNavButtonClick(PAGES.planning)}
+                onNextClick={handleNavButtonClick(PAGES.duration)}>
                     <slides.Setting
                     setting={values.setting}
                     submitInput={handleInputChange}/>
@@ -61,8 +79,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.duration}>
                 <Layout
                 currStage={1} 
-                backLink={PAGES.setting}
-                nextLink={PAGES.language}>
+                onBackClick={handleNavButtonClick(PAGES.setting)}
+                onNextClick={handleNavButtonClick(PAGES.language)}>
                     <slides.Duration
                     duration={values.duration}
                     submitInput={handleInputChange}/>
@@ -71,18 +89,19 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.language}>
                 <Layout
                 currStage={1} 
-                backLink={PAGES.duration}
-                nextLink={PAGES.capacity}>
+                onBackClick={handleNavButtonClick(PAGES.duration)}
+                onNextClick={handleNavButtonClick(PAGES.capacity)}>
                     <slides.Language
                     allLanguages={allLanguages}
+                    selectedLanguages={values.languages}
                     submitInput={handleInputChange}/>
                 </Layout>
             </Route>
             <Route path={PAGES.capacity}>
                 <Layout
                 currStage={1} 
-                backLink={PAGES.duration}
-                nextLink={PAGES.age}>
+                onBackClick={handleNavButtonClick(PAGES.duration)}
+                onNextClick={handleNavButtonClick(PAGES.age)}>
                     <slides.Capacity
                     capacity={values.capacity}
                     submitInput={handleInputChange}/>
@@ -91,8 +110,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.age}>
                 <Layout
                 currStage={1} 
-                backLink={PAGES.capacity}
-                nextLink={PAGES.preview}>
+                onBackClick={handleNavButtonClick(PAGES.capacity)}
+                onNextClick={handleNavButtonClick(PAGES.preview)}>
                     <slides.Age
                     ageRestricted={values.ageRestricted}
                     ageRequired={values.ageRequired}
@@ -102,8 +121,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.preview}>
                 <Layout
                 currStage={2} 
-                backLink={PAGES.age}
-                nextLink={PAGES.included}>
+                onBackClick={handleNavButtonClick(PAGES.age)}
+                onNextClick={handleNavButtonClick(PAGES.included)}>
                     <slides.Preview
                     images={values.images}
                     submitInput={handleInputChange}/>
@@ -112,8 +131,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.included}>
                 <Layout
                 currStage={3} 
-                backLink={PAGES.preview}
-                nextLink={PAGES.bring}>
+                onBackClick={handleNavButtonClick(PAGES.preview)}
+                onNextClick={handleNavButtonClick(PAGES.bring)}>
                     <slides.Included
                     included={values.included}
                     submitInput={handleInputChange}/>
@@ -122,8 +141,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.bring}>
                 <Layout
                 currStage={4} 
-                backLink={PAGES.included}
-                nextLink={PAGES.price}>
+                onBackClick={handleNavButtonClick(PAGES.included)}
+                onNextClick={handleNavButtonClick(PAGES.price)}>
                     <slides.Bring
                     toBring={values.toBring}
                     submitInput={handleInputChange}/>
@@ -132,8 +151,8 @@ const EditExperience = ({ exp }) => {
             <Route path={PAGES.price}>
                 <Layout
                 currStage={5} 
-                backLink={PAGES.bring}
-                nextLink={PAGES.review}>
+                onBackClick={handleNavButtonClick(PAGES.bring)}
+                onNextClick={handleNavButtonClick(PAGES.review)}>
                     <slides.Price
                     price={values.price}
                     privatePrice={values.privatePrice}
@@ -142,19 +161,40 @@ const EditExperience = ({ exp }) => {
                     submitInput={handleInputChange}/>
                 </Layout>
             </Route>
-            <Route path={PAGES.review}>
-                <Layout
-                currStage={6} 
-                backLink={PAGES.price}
-                nextLink="/creator/dashboard/experiences">
-                    <slides.Review
-                    review={exp}
-                    images={values.images}/>
-                </Layout>
-            </Route>         
+            <Route path={PAGES.review} render={() => {
+                const expReview = prepareReview(exp, values, {
+                    name: userProfile.fstName,
+                    photo: userProfile.photo,
+                    bio: creatorBio
+                });
+                return (
+                    <>
+                    {expReview?
+                        <Layout
+                        currStage={6} 
+                        onBackClick={handleNavButtonClick(PAGES.dashboard)}
+                        onNextClick={handleSubmitChanges(expReview)}>
+                            <slides.Review
+                            review={expReview}
+                            images={expReview.images}/>
+                        </Layout> : 
+                        <Redirect to={PAGES.dashboard}/>}
+                    </>
+                );
+            }}/>  
             <Route component={Page404}/>
         </Switch>
     );
 }
 
-export default EditExperience;
+const mapStateToProps = (state) => ({
+    userProfile: state.user.profile,
+    creatorBio: state.user.creator.bio
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    showSnackbar: (msg) => dispatch(showSnackbar(msg)),
+    showError: (msg) => dispatch(showError(msg))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditExperience);

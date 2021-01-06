@@ -35,6 +35,12 @@ router.get('/reviews',
 //For creators to create an experience
 router.post('/', authenticateToken, controllers.createExperience);
 
+//For creators to edit their experiences
+router.patch('/:expId', 
+            authenticateToken,
+            identifyUser,
+            controllers.editExperience);
+
 //Change availability schedule for an experience
 router.patch('/:expId/schedule', 
              authenticateToken,

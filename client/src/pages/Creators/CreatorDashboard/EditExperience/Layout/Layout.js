@@ -11,7 +11,7 @@ const useStyles = makeStyles(layoutStyles);
 const NUM_STEPS = 7;
 
 const Layout = ({ completedSteps, currStage, children, 
-                  backLink, nextLink }) => {
+                  onBackClick, onNextClick }) => {
     const classes = useStyles();
 
     return (
@@ -28,8 +28,8 @@ const Layout = ({ completedSteps, currStage, children,
             </div>
             <Footer 
             currStage={currStage} 
-            backLink={backLink} 
-            nextLink={nextLink}
+            onBackClick={onBackClick} 
+            onNextClick={onNextClick}
             numSteps={NUM_STEPS}/>
         </div>
     );

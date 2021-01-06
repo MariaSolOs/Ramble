@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Switch, Route, useLocation, Redirect} from 'react-router-dom';
 import * as pages from './pageNames';
 import useLanguages from '../../../hooks/useLanguages';
-import {prepareReview} from './helpers';
+import {initValues, prepareReview} from './helpers';
 
 //Pages and components
 import * as slides from '../Slides';
@@ -17,28 +17,7 @@ const CreateExperience = (props) => {
 
     //Form values and options
     const allLanguages = useLanguages();
-    const [values, setValues] = useState({
-        location: null,
-        meetPoint: null,
-        coordinates: [],
-        title: '',
-        categories: [],
-        description: '',
-        setting: null,
-        duration: 1, //in hours
-        languages: [],
-        capacity: null,
-        ageRestricted: false, 
-        ageRequired: 18,
-        images: [null, null, null, null],
-        included: [],
-        toBring: [],
-        price: 0, //per person 
-        privatePrice: 0, //for private bookings
-        currency: 'CAD',
-        schedule: new Map(),
-        startDate: null
-    });
+    const [values, setValues] = useState(initValues());
     //Called after validation
     const submitInput = useCallback((name, newVal) => {
         setValues(values => ({...values, [name]: newVal}));
@@ -142,6 +121,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.CAPACITY}>
                     <slides.Language
                     allLanguages={allLanguages}
+                    selectedLanguages={values.languages}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>

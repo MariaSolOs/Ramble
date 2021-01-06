@@ -1,12 +1,35 @@
-//Using indexes identify the selected category
+// Using indexes identify the selected category
 const categoryOptions = ['taste', 'create', 'relax', 'learn', 'move'];
 
-/*Transform data to display in experience page and 
-save in database*/
+export const initValues = () => ({
+    location: null,
+    meetPoint: null,
+    coordinates: [],
+    title: '',
+    categories: [],
+    description: '',
+    setting: null,
+    duration: 1, // in hours
+    languages: [],
+    capacity: null,
+    ageRestricted: false, 
+    ageRequired: 18,
+    images: [null, null, null, null],
+    included: [],
+    toBring: [],
+    price: 0, // per person 
+    privatePrice: 0, // for private bookings
+    currency: 'CAD',
+    schedule: new Map(),
+    startDate: null
+});
+
+/* Transform data to display in experience page and 
+save in database */
 export const prepareReview = (values, user) => {
     try {
         const locArray = values.location.split(', ');
-        locArray.pop(); //Drop the country code
+        locArray.pop(); // Drop the country code
         
         let endMonth = new Date(values.startDate);
         endMonth.setMonth(endMonth.getMonth() + 1);
@@ -30,7 +53,7 @@ export const prepareReview = (values, user) => {
 
             categories: [categoryOptions[values.categories[0]], 
                         categoryOptions[values.categories[1]]]
-                        .filter(opt => opt), //Remove undefined values
+                        .filter(opt => opt), // Remove undefined values
 
             description: values.description,
 
@@ -39,14 +62,14 @@ export const prepareReview = (values, user) => {
             setting: values.setting, 
             duration: values.duration,
 
-            //Make all languages uppercase
+            // Make all languages uppercase
             languages:  values.languages.map(lang => 
                             lang.charAt(0).toUpperCase() + lang.slice(1)
                         ),
 
             capacity: values.capacity,
 
-            //Images will be uploaded to Cloudinary in server
+            // Images will be uploaded to Cloudinary in server
             images: values.images.slice(0),
 
             included: (values.included).map(el => el.item),
@@ -64,7 +87,7 @@ export const prepareReview = (values, user) => {
                 schedule: Array.from(values.schedule)
             },
 
-            //This is the only field that changes after review
+            // This is the only field that changes after review
             creator: {
                 user: {
                     name: user.name,

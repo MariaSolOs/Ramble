@@ -11,5 +11,6 @@ export default {
     included: `${ROOT_PAGE}/included`,
     bring: `${ROOT_PAGE}/bring`,
     price: `${ROOT_PAGE}/price`, 
-    review: `${ROOT_PAGE}/review`
+    review: `${ROOT_PAGE}/review`,
+    dashboard: '/creator/dashboard/experiences'
 }

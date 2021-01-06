@@ -2,11 +2,12 @@ import React from 'react';
 
 import ImageGallery from 'react-image-gallery';
 
-import {makeStyles} from '@material-ui/core/styles';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './CarouselStyles';
 const useStyles = makeStyles(styles);
 
-const Carousel = ({images}) => {
+const Carousel = ({ images }) => {
     const classes = useStyles();
 
     return (

@@ -238,6 +238,46 @@ exports.createExperience = async (req, res, next) => {
     }
 }
 
+//Edit an experience
+exports.editExperience = async (req, res, next) => {
+    try {
+        //Upload new images
+        const expImages = [];
+        for(img of req.body.images) {
+            if(img.includes('Ramble/Experiences')) {
+                expImages.push(img);
+            } else {
+                const upload = await cloudinary.uploader.upload(img, {
+                    folder: 'Ramble/Experiences',
+                    eager: [
+                        { format: 'jpeg', height: 400, quality: 'auto', 
+                          crop: 'fill', dpr: 'auto' }
+                    ]
+                });
+                expImages.push(upload.eager[0].secure_url);
+            }
+        }
+        delete req.body.images;
+
+        //Update experience fields
+        const exp = await Experience.findById(req.params.expId);
+        for(field in req.body) {
+            exp[field] = req.body[field];
+        }
+        await exp.save();
+
+        res.status(201).send({
+            message: 'Experience successfully updated.',
+            exp: {
+                _id: exp._id,
+                title: exp.title
+            }
+        });
+    } catch(error) {
+        next(new ErrorHandler(409, err.message));
+    }
+}
+
 //Change availability schedule for an experience
 exports.updateSchedule = (req, res, next) => {
     Experience.findByIdAndUpdate(req.params.expId, 

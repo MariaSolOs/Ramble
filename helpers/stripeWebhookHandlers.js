@@ -6,7 +6,8 @@ const fs = require('fs'),
 
 const Creator = require('../models/creator'),
       Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking');
+      Booking = require('../models/booking'),
+      CompanyReceipt = require('../models/companyReceipt');
 
 exports.handleSuccessfulPaymentIntent = async (intent) => {
     try {
@@ -35,6 +36,16 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         await booking.save();
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});
+
+        //Create company receipt
+        await CompanyReceipt.create({
+            booking: booking._id,
+            total: intent.amount, 
+            creatorProfit: booking.stripe.creatorProfit,
+            rambleProfit: booking.stripe.rambleGain,
+            taxGST: booking.stripe.taxGST,
+            taxQST: booking.stripe.taxQST,
+        });
 
         //Get information for confirmation email
         await booking.populate([

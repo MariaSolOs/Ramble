@@ -37,7 +37,10 @@ const BookingSchema = new mongoose.Schema({
         promoCode: {
             type: String,
             default: ''
-        }
+        },
+        rambleGain: Number,
+        taxGST: Number,
+        taxQST: Number
     }
 }, {timestamps: true});
   

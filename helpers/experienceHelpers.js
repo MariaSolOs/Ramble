@@ -4,26 +4,42 @@ const Experience = require('../models/experience'),
 exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) => {
     try {
         const exp = await Experience.findById(expId, 'price');
-        let amount;
-        //Prices are multiplied by 100 to use cents
+        let expPrice;
+        // Prices are multiplied by 100 to use cents
         if(bookType === 'public') {
-            amount = exp.price.perPerson * numGuests * 100;
+            expPrice = exp.price.perPerson * numGuests * 100;
         } else if(bookType === 'private') {
-            amount = exp.price.private * 100;
+            expPrice = exp.price.private * 100;
         } else {
             throw new Error('Invalid booking type.');
         }
-        let application_fee_amount = amount * 0.2;
 
-        //Apply the discount if applicable
+        // Compute taxes
+        const taxGST = 0.05 * expPrice;
+        const taxQST = 0.09975 * expPrice;
+
+        // We keep the taxes
+        const rambleGain = expPrice * 0.2;
+        let application_fee_amount = rambleGain + taxGST + taxQST;
+        let amount = expPrice + taxGST + taxQST;
+
+        // Apply the discount if applicable
         if(promoCode.length > 0) {
-            amount *= 0.8;
-            application_fee_amount = undefined;
+            amount -= rambleGain;
+            rambleGain = 0;
+            application_fee_amount -= rambleGain;
         }
 
-        return {amount, currency: exp.price.currency, application_fee_amount}
+        return {
+            amount,
+            currency: exp.price.currency,
+            application_fee_amount,
+            rambleGain,
+            taxGST, 
+            taxQST
+        }
     } catch(err) {
-        throw new Error(`Couldn't calculate amount: ${err}`);
+        throw new Error(`Couldn't calculate payment amount: ${err}`);
     }
 }
 

@@ -53,7 +53,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                     });
 
         //Create booking
-        const {amount, application_fee_amount} = 
+        const {amount, rambleGain, taxGST, taxQST} = 
             await calculatePaymentAmount(
                 experience.id, 
                 req.body.bookType, 
@@ -61,20 +61,26 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                 req.body.promoCode
             );
 
-        const stripeDetails = {
-            paymentIntentId: req.body.payIntentId,
-            cardToUse: req.body.cardToUse,
-            paymentCaptured: false,
-            creatorProfit: application_fee_amount? amount * 0.8 : amount,
-            promoCode: req.body.promoCode
-        }
+        const expPrice = amount - taxGST - taxQST;
+        //Creator profit depends on if a promo was applied
+        const creatorProfit = rambleGain > 0? 0.8 * expPrice : expPrice;
+
         const booking = new Booking({
             experience: experience._id,
             occurrence: occ._id,
             client: req.userId,
             numPeople: req.body.numGuests,
             bookType: req.body.bookType,
-            stripe: { ...stripeDetails }
+            stripe: { 
+                paymentIntentId: req.body.payIntentId,
+                cardToUse: req.body.cardToUse,
+                paymentCaptured: false,
+                creatorProfit,
+                promoCode: req.body.promoCode,
+                rambleGain: rambleGain,
+                taxGST,
+                taxQST
+            }
         });
 
         //Add booking to occurrence and update

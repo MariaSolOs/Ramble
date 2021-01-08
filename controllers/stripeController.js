@@ -16,8 +16,7 @@ exports.completeCreatorOnboarding = (req, res, next) => {
         user.creator.stripe.accountId = response.stripe_user_id;
         await user.creator.save();
 
-        //TODO: Redirect to creator platform here
-        return res.status(200).redirect(`${process.env.CLIENT_URL}`);
+        return res.status(200).redirect(`${process.env.CLIENT_URL}/creator/dashboard/experiences`);
         }, (err) => {
             if (err.type === 'StripeInvalidGrantError') {
                 next(new ErrorHandler(400, `Invalid authorization code: ${code}`));
@@ -115,14 +114,17 @@ exports.cancelPaymentIntent = (req, res, next) => {
 //Deal with payments using a saved card from the client
 exports.payWithSavedCard  = async (req, res, next) => {
     try {
-        const payInfo = await calculatePaymentAmount(
-            req.body.expId,
-            req.body.bookType,
-            req.body.numGuests,
-            req.body.promoCode
-        );
+        const {amount, currency, application_fee_amount} = 
+            await calculatePaymentAmount(
+                req.body.expId,
+                req.body.bookType,
+                req.body.numGuests,
+                req.body.promoCode
+            );
         await stripe.paymentIntents.create({
-            ...payInfo,
+            amount,
+            currency,
+            application_fee_amount,
             customer: req.body.customerId,
             payment_method: req.body.payMethodId,
             error_on_requires_action: true,
@@ -146,12 +148,13 @@ exports.payWithSavedCard  = async (req, res, next) => {
 exports.createPaymentIntent = async (req, res, next) => {
     try {
         //Calculate prices
-        const payInfo = await calculatePaymentAmount(
-            req.body.expId, 
-            req.body.bookType, 
-            +req.body.numGuests,
-            req.body.promoCode
-        );
+        const {amount, application_fee_amount, currency} = 
+            await calculatePaymentAmount(
+                req.body.expId, 
+                req.body.bookType, 
+                +req.body.numGuests,
+                req.body.promoCode
+            );
 
         //Add the customer ID if applicable
         const customerDetails = { 
@@ -160,7 +163,9 @@ exports.createPaymentIntent = async (req, res, next) => {
 
         //Create payment intent
         const payIntent = await stripe.paymentIntents.create({
-            ...payInfo,
+            amount,
+            currency,
+            application_fee_amount,
             transfer_data: {
                 destination: req.body.transferId
             },
@@ -190,7 +195,7 @@ exports.stripeWebhook = async (req, res, next) => {
     } catch (err) {
         return next(new ErrorHandler(400, err.message));
     }
-
+    
     let message;
     switch(event.type) {
         case 'payment_intent.succeeded':

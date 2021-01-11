@@ -86,17 +86,26 @@ const styles = () => ({
         }
     },
 
-    totalPrice: {
-        display: 'flex',
+    priceCalc: {
         width: '90%',
+        margin: '1rem auto'
+    },
+    priceRow: {
+        margin: 0,
+        font: 'inherit',
+        color: '#FFF',
+        fontSize: '1.1rem',
+        display: 'flex',
         justifyContent: 'space-between',
-        margin: '1rem auto',
+
         '& p': {
             margin: 0,
-            font: 'inherit',
-            color: '#FFF',
-            fontSize: '1.3rem',
+            '&.tax-row': {
+                fontSize: '0.85rem',
+                color: '#C8C8C8'
+            },
         },
+
         '& span': { fontSize: '0.9rem' }
     },
 

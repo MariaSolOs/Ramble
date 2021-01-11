@@ -21,7 +21,7 @@ const PaymentDialog = (props) => {
     const handleCanSubmit = (val) => { setEnableSubmit(val); }
 
     //Initially set price according to numGuests and booking type
-    const [totalPrice, setTotalPrice] = useState(
+    const [expPrice, setExpPrice] = useState(
         props.form.bookType === 'public'?
         props.form.numGuests * props.exp.price.perPerson : 
         props.exp.price.private
@@ -45,15 +45,18 @@ const PaymentDialog = (props) => {
     //If user referred a friend, apply promo
     useEffect(() => {
         if(props.user.promoCode.usedBy.length === 1) {
-            setTotalPrice(totalPrice => totalPrice * 0.8);
+            setExpPrice(totalPrice => totalPrice * 0.8);
             onChange('promoCode', props.user.promoCode.code);
         }
     }, [props.user, onChange]); 
     //If user has a discount code
     const handleApplyPromo = (code) => {
         onChange('promoCode', code);
-        setTotalPrice(totalPrice => totalPrice * 0.8);
+        setExpPrice(expPrice => expPrice * 0.8);
     }
+
+    const taxGST = 0.05 * expPrice;
+    const taxQST = 0.09975 * expPrice;
 
     return (
         <>
@@ -63,7 +66,7 @@ const PaymentDialog = (props) => {
         showContinue
         continueMessage={
             <span className={classes.submitMessage}>
-                Confirm booking &bull; <span>$</span>{totalPrice}
+                Confirm booking &bull; <span>$</span>{expPrice}
             </span>
         }
         continueDisabled={!enableSubmit}>
@@ -95,19 +98,33 @@ const PaymentDialog = (props) => {
                     promoCode={props.form.promoCode}
                     applyPromo={handleApplyPromo}
                     onCanSubmit={handleCanSubmit}/>}
-                <div className={classes.totalPrice}>
-                    <p>Total ({props.exp.price.currency})</p>
-                    <p>
-                        {props.form.bookType === 'private'?
-                        `$${props.exp.price.private}` : 
-                        <>
-                            {props.form.numGuests}<span> x </span> 
-                            {(+props.exp.price.perPerson).toFixed(2)}
-                            {(props.form.promoCode.length > 0)
-                                && <> - 20% </>} 
-                            <> = </>{totalPrice.toFixed(2)}
-                        </>}
-                    </p>
+                <div className={classes.priceCalc}>
+                    <div className={classes.priceRow}>
+                        <p>Subtotal</p>
+                        <p>
+                            {props.form.bookType === 'private'?
+                            `$${props.exp.price.private}` : 
+                            <>
+                                {props.form.numGuests}<span> x </span> 
+                                {(+props.exp.price.perPerson).toFixed(2)}
+                                {(props.form.promoCode.length > 0)
+                                    && <> - 20% </>} 
+                                <> = </>{expPrice.toFixed(2)}
+                            </>}
+                        </p>
+                    </div>
+                    <div className={classes.priceRow}>
+                        <p className="tax-row">TPS</p>
+                        <p className="tax-row">{taxGST.toFixed(2)}</p>
+                    </div>
+                    <div className={classes.priceRow}>
+                        <p className="tax-row">TVQ</p>
+                        <p className="tax-row">{taxQST.toFixed(2)}</p>
+                    </div>
+                    <div className={classes.priceRow}>
+                        <p>Total ({props.exp.price.currency})</p>
+                        <p>${expPrice + taxGST + taxQST}</p>
+                    </div>
                 </div>
                 {!props.user.emailVerified &&
                     <EmailForm 

@@ -105,11 +105,10 @@ const ShowExperience = (props) => {
                     <Experience exp={exp} 
                     floatButtons={
                         <FloatButtons 
-                        showSave={props.isAuth}
+                        showSave
                         saved={saved}
                         onSave={handleHeartClick}
-                        onShare={props.isAuth? handleShareDialogChange(true) : 
-                                 props.dialogActions.openSignUpDialog}/>}
+                        onShare={handleShareDialogChange(true)}/>}
                     images={images}/>
                 </div>
                 <div className={classes.footer}>

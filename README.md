@@ -19,4 +19,4 @@ Essentially, [Ramble](https://www.experienceramble.com/) is an activity marketpl
 * [Maria Solano](https://mariasolos.github.io/me/) 
 
 ## License
-[MIT Licence](https://github.com/angular/angular.js/blob/master/LICENSE)
+[MIT Licence](https://opensource.org/licenses/MIT)

@@ -115,6 +115,6 @@ const styles = () => ({
         position: 'absolute',
         top: 20, right: 30,
         '& .MuiSwitch-track': { backgroundColor: '#929293' }
-    },
+    }
 });
 export default styles;

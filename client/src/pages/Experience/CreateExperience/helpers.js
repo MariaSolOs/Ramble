@@ -3,6 +3,8 @@ const categoryOptions = ['taste', 'create', 'relax', 'learn', 'move'];
 
 export const initValues = () => ({
     location: null,
+    zoomMeetingId: null,
+    zoomMeetingPassword: null,
     meetPoint: null,
     coordinates: [],
     title: '',

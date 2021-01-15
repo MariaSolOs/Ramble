@@ -38,6 +38,39 @@ const styles = () => ({
         cursor: 'default'
     },
 
+    //Zoom info styles
+    onlineInfo: {
+        marginTop: 30,
+
+        '& $title': { 
+            fontSize: '1.5rem',
+            margin: 0 
+        }
+    },
+    switch: {
+        margin: '10px 0 10px -8px',
+        '& .MuiSwitch-track': { 
+            backgroundColor: '#929293',
+        }
+    },
+    zoomTextfields: {
+        width: 380,
+
+        '& .zoom-textfield': {
+            fontFamily: 'Helvetica, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            letterSpacing: '-0.05rem',
+            color: '#FFF',
+            backgroundColor: '#2A2A2A',
+            width: '100%',
+            padding: '10px 15px',
+            height: 45,
+            borderRadius: '1rem',
+            marginBottom: 15
+        }
+    },
+
     //For autcomplete searchbars
     searchContainer: {
         '& .algolia-places': { width: 380 },

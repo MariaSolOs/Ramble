@@ -27,15 +27,27 @@ exports.getLocations = (req, res, next) => {
 exports.getExps = async (req, res, next) => {
     try {
         //We only need this for the gallery card
-        const displayFields = 'title location.displayLocation images price ' +
-                              'rating.value creator';
+        const displayFields = 'title images price rating.value creator';
+
         //Get experiences with updated availabilites and approved status
-        let exps = await Experience.find({
-                            status: 'approved',
-                            'location.displayLocation': req.query.location, 
-                            capacity: {$gte: req.query.numPeople},
-                            'avail.to': {$gte: new Date()
-                        }}, displayFields).populate('creator', 'stripe');
+        let exps;
+        if(req.query.location === 'Online') {
+            //Handle virtual experiences
+            exps = await Experience.find({
+                status: 'approved',
+                zoomInfo: {$exists: true}, 
+                capacity: {$gte: req.query.numPeople},
+                'avail.to': {$gte: new Date()}}
+            , displayFields).populate('creator', 'stripe');
+        } else {
+            exps = await Experience.find({
+                        status: 'approved',
+                        'location.displayLocation': req.query.location, 
+                        capacity: {$gte: req.query.numPeople},
+                        'avail.to': {$gte: new Date()}
+                    }, displayFields + 'location.displayLocation')
+                    .populate('creator', 'stripe');
+        }
         //Make sure only creators that have a Stripe account are showed
         exps = exps.filter(exp => exp.creator.stripe.accountId);
         res.status(200).send({ exps });
@@ -257,6 +269,7 @@ exports.editExperience = async (req, res, next) => {
                 expImages.push(upload.eager[0].secure_url);
             }
         }
+        exp.images = expImages;
         delete req.body.images;
 
         //Update experience fields

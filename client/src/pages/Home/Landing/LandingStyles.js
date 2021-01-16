@@ -100,7 +100,11 @@ const styles = (theme) => ({
         backgroundSize: '200% auto',
         transition: 'all 400ms ease-in-out',
         '&:focus': { outline: 'none' },
-        '&:hover': { backgroundPosition: 'right center' }
+        '&:hover': { backgroundPosition: 'right center' },
+        '&:disabled': { 
+            cursor: 'not-allowed',
+            filter: 'grayscale(80%)'
+        }
     },
 
     //For balloon image

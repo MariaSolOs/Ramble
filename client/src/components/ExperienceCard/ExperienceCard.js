@@ -38,7 +38,11 @@ const ExperienceCard = (props) => {
                 alt={`Experience - ${props.exp.title}`}/>
                 <div className={classes.body}>
                     <p className={classes.title}>{props.exp.title}</p>
-                    <p className={classes.location}>{props.exp.location.displayLocation}</p>
+                    <p className={classes.location}>
+                        {props.exp.location? 
+                            props.exp.location.displayLocation :
+                            'Online experience'}
+                    </p>
                     {props.exp.rating &&
                     <p className={classes.rating}>
                         {props.exp.rating.value.toFixed(2)}<StarRateIcon/>

@@ -25,7 +25,7 @@ const Landing = (props) => {
     const history = useHistory();
 
     //For handling the user search queries
-    const [location, setLocation] = useState('Montreal, Quebec');
+    const [location, setLocation] = useState('');
     const handleLocationChange = (event, value, reason) => {
         if(reason === 'reset') { setLocation(value); }
     }
@@ -57,7 +57,7 @@ const Landing = (props) => {
                     <Autocomplete
                     id="location-search"
                     onInputChange={handleLocationChange}
-                    options={locations || []}
+                    options={['Online', ...locations] || []}
                     loading={Boolean(locations)}
                     classes={{ paper: classes.search_list }}
                     fullWidth
@@ -82,7 +82,10 @@ const Landing = (props) => {
                         {NumPeopleField}
                     </div>
                     <div className="explore-button">
-                        <button className={classes.button} onClick={handleSearch}>
+                        <button 
+                        className={classes.button} 
+                        onClick={handleSearch}
+                        disabled={location === ''}>
                             Start exploring
                         </button>
                     </div>

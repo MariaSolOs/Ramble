@@ -35,15 +35,18 @@ const Location = ({ location, meetPoint, submitInput,
     const handleZoomSwitch = (e) => {
         setIsZoomExp(e.target.checked);
 
+        //Reset the fields when switching
         if(e.target.checked) {
             submitInput('location', null);
+            submitInput('meetPoint', null);
+            submitInput('coordinates', []);
         } else {
             submitInput('zoomMeetingId', null);
             submitInput('zoomMeetingPassword', null);
         }
     }
-    const handleZoomInfoChange = (zoomField) => (e) => {
-        submitInput(zoomField, e.target.value);
+    const handleZoomInfoChange = (e) => {
+        submitInput(e.target.name, e.target.value);
     }
 
     const handleClear = (type) => () => {
@@ -109,7 +112,8 @@ const Location = ({ location, meetPoint, submitInput,
                 <div className={classes.zoomTextfields}>
                     <InputBase 
                     value={zoomMeetingId}
-                    onChange={handleZoomInfoChange(zoomMeetingId)}
+                    name="zoomMeetingId"
+                    onChange={handleZoomInfoChange}
                     className="zoom-textfield"
                     placeholder="ZOOM MEETING PERSONAL ID (PMI)"
                     endAdornment={
@@ -132,15 +136,16 @@ const Location = ({ location, meetPoint, submitInput,
                         </Tooltip>
                     }/>
                     <InputBase 
+                    name="zoomMeetingPassword"
                     value={zoomMeetingPassword}
-                    onChange={handleZoomInfoChange(zoomMeetingPassword)}
+                    onChange={handleZoomInfoChange}
                     className="zoom-textfield"
-                    placeholder="MEETING PASSCODE"
+                    placeholder="MEETING PASSWORD"
                     endAdornment={
                         <Tooltip
                         title={
                             <span>
-                                For help on managing your passcode, check the <a 
+                                For help on managing your password, check the <a 
                                 href="https://support.zoom.us/hc/en-us/articles/115005166483-Managing-your-password"
                                 target="_blank" 
                                 rel="noopener noreferrer">

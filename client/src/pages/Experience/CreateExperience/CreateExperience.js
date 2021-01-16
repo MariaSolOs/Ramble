@@ -42,7 +42,8 @@ const CreateExperience = (props) => {
             <Route path={pages.LOCATION}>
                 <Layout 
                 completedSteps={completedSteps}
-                canContinue={values.location && values.meetPoint} 
+                canContinue={(values.location && values.meetPoint) ||
+                             (values.zoomMeetingId && values.zoomMeetingPassword)} 
                 currStage={0} 
                 nextLink={pages.TITLE}>
                     <slides.Location 

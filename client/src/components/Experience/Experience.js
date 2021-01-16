@@ -22,7 +22,10 @@ const Experience = ({exp, floatButtons}) => {
                 <h1 className={classes.title}>{exp.title}</h1>
                 {floatButtons}
             </div>
-            <p className={classes.location}>{exp.location.displayLocation}</p>
+            <p className={classes.location}>
+                {exp.location? 
+                    exp.location.displayLocation : 'Online experience'}
+            </p>
             <div className={classes.categories}>
                 {exp.categories.map(categ => (
                     <CategoryBox 
@@ -43,7 +46,7 @@ const Experience = ({exp, floatButtons}) => {
             description={exp.description} 
             includedItems={exp.included}
             toBringItems={exp.toBring}/>
-            {exp.location.coordinates.lat && 
+            {exp.location && exp.location.coordinates.lat && 
                 <ExperienceMap coordinates={exp.location.coordinates}/>}
         </div>
     );

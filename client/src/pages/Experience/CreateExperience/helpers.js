@@ -31,8 +31,9 @@ save in database */
 export const prepareReview = (values, user) => {
     try {
         //If in-person experience, drop country code
-        if(zoomMeetingId === null) {
-            const locArray = values.location.split(', ');
+        let locArray = [];
+        if(values.location) {
+            locArray = values.location.split(', ');
             locArray.pop(); 
         }
         
@@ -41,23 +42,34 @@ export const prepareReview = (values, user) => {
         
         const exp = {
             status: 'pending',
-            location: values.location && {
-                city: locArray[0],
-                region: locArray.length === 3 && locArray[1],
-                displayLocation: locArray.length === 3? 
-                                `${locArray[0]}, ${locArray[2]}` : 
-                                `${locArray[0]}, ${locArray[1]}`,
-                meetPoint: values.meetPoint,
-                coordinates: {
-                    lat: values.coordinates[0],
-                    long: values.coordinates[1]
-                }
-            },
 
-            zoomInfo: zoomMeetingId && {
-                PMI: values.zoomMeetingId,
-                passcode: values.zoomMeetingPassword
-            },
+            //Add location if applicable
+            ...(values.location && 
+                { location: 
+                    {
+                        city: locArray[0],
+                        region: locArray.length === 3 && locArray[1],
+                        displayLocation: locArray.length === 3? 
+                                         `${locArray[0]}, ${locArray[2]}` : 
+                                         `${locArray[0]}, ${locArray[1]}`,
+                        meetPoint: values.meetPoint,
+                        coordinates: {
+                            lat: values.coordinates[0],
+                            long: values.coordinates[1]
+                        }
+                    }
+                }
+            ),
+
+            //Add Zoom info if applicable
+            ...(values.zoomMeetingId && 
+                { zoomInfo: 
+                    {
+                        PMI: values.zoomMeetingId,
+                        password: values.zoomMeetingPassword
+                    }
+                }
+            ),
 
             title: values.title,
 

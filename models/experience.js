@@ -6,59 +6,66 @@ const ExperienceSchema = new mongoose.Schema({
         required: true,
         enum: ['pending', 'approved', 'rejected']
     },
+
+    zoomInfo: { //For Zoom experiences
+        PMI: String,
+        password: String
+    },
+
     location: {
-        city: {
-            type: String,
-            required: true
-        },
-        region: {
-            type: String,
-        },
-        displayLocation: { //Used for autocomplete searchbars
-            type: String,
-            required: true
-        }, 
-        meetPoint: {
-            type: String,
-            required: true
-        },
+        city: String,
+        region: String,
+        displayLocation: String, //Used for autocomplete searchbars
+        meetPoint: String, 
         coordinates: {
             lat: Number,
             long: Number
         }
     },
+
     title: {
         type: String,
         required: true
     },
+
     categories: [{
         type: String,
         enum: ['taste', 'create', 'relax', 'learn', 'move']
     }],
+
     description: {
         type: String,
         required: true
     },
+
     ageRestriction: Number,
+
     setting: {
         type: String,
         required: true,
         enum: ['private', 'semi-private', 'public']
     },
+
     duration: { //In hours
         type: Number,
         required: true,
         min: 1 
     },
+
     languages: [String],
+
     capacity: { 
         type: Number,
         required: true,
         min: 1 
     },
+
     images: [String],
+
     included: [String],
+
     toBring: [String],
+
     price: {
         perPerson: {
             type: Number,
@@ -71,6 +78,7 @@ const ExperienceSchema = new mongoose.Schema({
             enum: ['CAD', 'USD']
         }
     },
+
     avail: {
         from: {type: Date, required: true},
         to: {type: Date, required: true},
@@ -90,6 +98,7 @@ const ExperienceSchema = new mongoose.Schema({
             required: true
         }
     },
+
     rating: {
         value: {
             type: Number,
@@ -101,6 +110,7 @@ const ExperienceSchema = new mongoose.Schema({
             min: 0
         }
     },
+    
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         required: true, 

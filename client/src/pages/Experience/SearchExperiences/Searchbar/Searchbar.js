@@ -22,7 +22,7 @@ const Searchbar = (props) => {
 
     const locations = useLocations();
     //For updating location and numPeople changes
-    const [location, setLocation] = useState(props.location || 'Montreal, Canada');
+    const [location, setLocation] = useState(props.location);
     const handleLocationChange = (event, value, reason) => {
         if(reason === 'reset') { setLocation(value); }
     }
@@ -48,7 +48,7 @@ const Searchbar = (props) => {
                     id="location-query"
                     value={location}
                     loading={Boolean(locations)}
-                    options={locations}
+                    options={['Online', ...locations]}
                     onInputChange={handleLocationChange}
                     classes={{ paper: classes.search_list }}
                     renderInput={(params) => (

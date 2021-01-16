@@ -45,7 +45,7 @@ exports.getExps = async (req, res, next) => {
                         'location.displayLocation': req.query.location, 
                         capacity: {$gte: req.query.numPeople},
                         'avail.to': {$gte: new Date()}
-                    }, displayFields + 'location.displayLocation')
+                    }, displayFields + ' location.displayLocation')
                     .populate('creator', 'stripe');
         }
         //Make sure only creators that have a Stripe account are showed

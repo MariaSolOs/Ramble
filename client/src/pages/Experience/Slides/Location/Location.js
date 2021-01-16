@@ -3,6 +3,8 @@ import AlgoliaPlaces from 'algolia-places-react';
 
 import Switch from '@material-ui/core/Switch';
 import InputBase from '@material-ui/core/InputBase';
+import HelpIcon from '@material-ui/icons/Help';
+import Tooltip from '@material-ui/core/Tooltip';
 import Tip from '../../../../components/Tip/Tip';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,6 +37,9 @@ const Location = ({ location, meetPoint, submitInput,
 
         if(e.target.checked) {
             submitInput('location', null);
+        } else {
+            submitInput('zoomMeetingId', null);
+            submitInput('zoomMeetingPassword', null);
         }
     }
     const handleZoomInfoChange = (zoomField) => (e) => {
@@ -105,11 +110,51 @@ const Location = ({ location, meetPoint, submitInput,
                     <InputBase 
                     value={zoomMeetingId}
                     onChange={handleZoomInfoChange(zoomMeetingId)}
-                    className="zoom-textfield"/>
+                    className="zoom-textfield"
+                    placeholder="ZOOM MEETING PERSONAL ID (PMI)"
+                    endAdornment={
+                        <Tooltip
+                        title={
+                            <span>
+                                For help on setting your PMI, check the <a 
+                                href="https://support.zoom.us/hc/en-us/articles/203276937-Using-Personal-Meeting-ID-PMI-"
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                    Zoom docs
+                                </a>.
+                            </span>}
+                        interactive
+                        placement="top"
+                        classes={{
+                            tooltip: classes.tooltip
+                        }}>
+                            <HelpIcon/>
+                        </Tooltip>
+                    }/>
                     <InputBase 
                     value={zoomMeetingPassword}
                     onChange={handleZoomInfoChange(zoomMeetingPassword)}
-                    className="zoom-textfield"/>
+                    className="zoom-textfield"
+                    placeholder="MEETING PASSCODE"
+                    endAdornment={
+                        <Tooltip
+                        title={
+                            <span>
+                                For help on managing your passcode, check the <a 
+                                href="https://support.zoom.us/hc/en-us/articles/115005166483-Managing-your-password"
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                    Zoom docs
+                                </a>.
+                            </span>}
+                        interactive
+                        placement="top"
+                        classes={{
+                            tooltip: classes.tooltip
+                        }}>
+                            <HelpIcon/>
+                        </Tooltip>
+                    }/>
                 </div>
                 : null}
         </>

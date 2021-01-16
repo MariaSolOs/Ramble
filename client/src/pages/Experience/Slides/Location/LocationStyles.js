@@ -67,7 +67,25 @@ const styles = () => ({
             padding: '10px 15px',
             height: 45,
             borderRadius: '1rem',
-            marginBottom: 15
+            marginBottom: 15,
+
+            '&::placeholder': {
+                fontSize: '0.8rem'
+            }
+        },
+
+        '& .MuiSvgIcon-root': { fill: '#929293' }
+    },
+
+    //Zoom tooltips
+    tooltip: {
+        pointerEvents: 'auto !important',
+        fontFamily: 'Helvetica, sans-serif',
+        letterSpacing: '-0.02rem',
+        color: '#FFF',
+        '& a': {
+            fontWeight: 'bold',
+            color: '#FFF'
         }
     },
 

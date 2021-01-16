@@ -30,15 +30,18 @@ export const initValues = () => ({
 save in database */
 export const prepareReview = (values, user) => {
     try {
-        const locArray = values.location.split(', ');
-        locArray.pop(); // Drop the country code
+        //If in-person experience, drop country code
+        if(zoomMeetingId === null) {
+            const locArray = values.location.split(', ');
+            locArray.pop(); 
+        }
         
         let endMonth = new Date(values.startDate);
         endMonth.setMonth(endMonth.getMonth() + 1);
         
         const exp = {
             status: 'pending',
-            location: {
+            location: values.location && {
                 city: locArray[0],
                 region: locArray.length === 3 && locArray[1],
                 displayLocation: locArray.length === 3? 
@@ -49,6 +52,11 @@ export const prepareReview = (values, user) => {
                     lat: values.coordinates[0],
                     long: values.coordinates[1]
                 }
+            },
+
+            zoomInfo: zoomMeetingId && {
+                PMI: values.zoomMeetingId,
+                passcode: values.zoomMeetingPassword
             },
 
             title: values.title,

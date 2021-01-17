@@ -50,7 +50,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         //Get information for confirmation email
         await booking.populate([
             { path: 'experience',
-              select: 'title images price creator toBring location',
+              select: 'title images price creator toBring location zoomInfo',
               populate: {
                   path: 'creator',
                   select: 'user',
@@ -86,9 +86,14 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             hostPic: booking.experience.creator.user.photo,
             hostName: booking.experience.creator.user.fstName,
             hostPhone: booking.experience.creator.user.phoneNumber,
-            showToBring: booking.experience.toBring.length > 0,
             toBringItems: booking.experience.toBring,
-            meetPoint: booking.experience.location.meetPoint
+            ...(booking.experience.location.meetPoint &&
+                {meetPoint: booking.experience.location.meetPoint}
+            ),
+            ...(booking.experience.zoomInfo &&
+                {zoomPMI: booking.experience.zoomInfo.PMI,
+                 zoomPassword: booking.experience.zoomInfo.password}
+            )
         });
 
         //Send confirmation email
@@ -101,6 +106,10 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
                 pass: process.env.ZOHO_PASSWORD
             }
         });
+        const meetDetails = booking.experience.zoomInfo?
+            `The zoom information is PMI: ${booking.experience.zoomInfo.PMI} and ${
+            booking.experience.zoomInfo.password}` : `The meeting point is ${
+            booking.experience.location.meetPoint}`;
         await transporter.sendMail({
             from: {
                 name: 'ramble',
@@ -110,8 +119,8 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             subject: 'Your booking is confirmed', 
             text: `Your booking is confirmed!
             You're all set for your experience "${booking.experience.title}" on ${
-            occDate} (${booking.occurrence.timeslot}). The meeting point is ${
-            booking.experience.location.meetPoint} and you will need to bring ${
+            occDate} (${booking.occurrence.timeslot}). ${
+            meetDetails} and you will need to bring ${
             booking.experience.toBring.length > 0 ?
             booking.experience.toBring.join(', ') : 'a big smile'}.
             Your host is ${booking.experience.creator.user.fstName} (phone number: ${

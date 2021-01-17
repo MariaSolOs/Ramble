@@ -27,6 +27,24 @@ const styles = (theme) => ({
         }
     },
 
+    online: {
+        position: 'absolute',
+        top: 10, left: 10,
+        width: 62,
+        color: '#2D2E2E',
+        backgroundColor: 'rgba(256, 256, 256, 0.56)',
+        borderRadius: 5,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '0.4rem',
+        fontWeight: 'bold',
+
+        '& img': {
+            width: 20,
+            margin: 2
+        }
+    },
+
     //Tooltip
     tooltip: {
         fontFamily: 'Helvetica, sans-serif',

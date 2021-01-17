@@ -33,7 +33,10 @@ const styles = (theme) => ({
         margin: '20px 0',
         height: '90%',
         transform: 'scale(0.8) translate(-70px -50px)',
-        '& .image-gallery': { position: 'sticky' },
+        '& .image-gallery': { 
+            position: 'sticky',
+            maxHeight: '60vh'
+        },
         '& .exp-wrapper': { overflowY: 'scroll' }
     }
 });

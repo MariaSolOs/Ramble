@@ -9,12 +9,14 @@ const styles = (theme) => ({
         padding: '2vh 12% 2vh 9%',
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         backgroundColor: '#151515',
         [theme.breakpoints.down('sm')]: { 
             flexDirection: 'column',
             padding: '2% 10% 2% 10%',
             boxSizing: 'border-box',
-            overflowY: 'scroll'
+            overflowY: 'scroll',
+            height: 'auto'
         },
 
         '& .image-gallery-slide .image-gallery-image': {
@@ -23,8 +25,8 @@ const styles = (theme) => ({
 
         '& .image-gallery': {
             position: 'sticky',
-            minWidth: '45%',
-            maxWidth: 490,
+            minWidth: '40%',
+            maxWidth: 450,
             maxHeight: '80vh',
             [theme.breakpoints.down('sm')]: { 
                 marginBottom: '4vh',

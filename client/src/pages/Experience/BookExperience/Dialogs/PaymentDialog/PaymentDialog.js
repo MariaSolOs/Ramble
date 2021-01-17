@@ -123,7 +123,7 @@ const PaymentDialog = (props) => {
                     </div>
                     <div className={classes.priceRow}>
                         <p>Total ({props.exp.price.currency})</p>
-                        <p>${expPrice + taxGST + taxQST}</p>
+                        <p>${(expPrice + taxGST + taxQST).toFixed(2)}</p>
                     </div>
                 </div>
                 {!props.user.emailVerified &&

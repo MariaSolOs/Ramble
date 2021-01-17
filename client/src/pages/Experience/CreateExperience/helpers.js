@@ -30,12 +30,9 @@ export const initValues = () => ({
 save in database */
 export const prepareReview = (values, user) => {
     try {
-        //If in-person experience, drop country code
-        let locArray = [];
-        if(values.location) {
-            locArray = values.location.split(', ');
-            locArray.pop(); 
-        }
+        //Drop country code from location info
+        const locArray = values.location.split(', ');
+        locArray.pop(); 
         
         let endMonth = new Date(values.startDate);
         endMonth.setMonth(endMonth.getMonth() + 1);
@@ -43,28 +40,26 @@ export const prepareReview = (values, user) => {
         const exp = {
             status: 'pending',
 
-            //Add location if applicable
-            ...(values.location && 
-                { location: 
-                    {
-                        city: locArray[0],
-                        region: locArray.length === 3 && locArray[1],
-                        displayLocation: locArray.length === 3? 
-                                         `${locArray[0]}, ${locArray[2]}` : 
-                                         `${locArray[0]}, ${locArray[1]}`,
+            location: {
+                city: locArray[0],
+                region: locArray.length === 3 && locArray[1],
+                displayLocation: locArray.length === 3? 
+                                 `${locArray[0]}, ${locArray[2]}` : 
+                                 `${locArray[0]}, ${locArray[1]}`,
+                                 
+                ...(values.meetPoint && { //For in-person experiences
                         meetPoint: values.meetPoint,
                         coordinates: {
                             lat: values.coordinates[0],
                             long: values.coordinates[1]
                         }
                     }
-                }
-            ),
+                ),
+            },
 
             //Add Zoom info if applicable
             ...(values.zoomMeetingId && 
-                { zoomInfo: 
-                    {
+                { zoomInfo: {
                         PMI: values.zoomMeetingId,
                         password: values.zoomMeetingPassword
                     }
@@ -81,7 +76,11 @@ export const prepareReview = (values, user) => {
 
             ageRestriction: values.ageRestricted && values.ageRequired,
 
-            setting: values.setting, 
+            ...(values.setting && { //Virtual exps have no setting
+                    setting: values.setting, 
+                }
+            ),
+
             duration: values.duration,
 
             // Make all languages uppercase

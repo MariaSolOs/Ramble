@@ -13,9 +13,18 @@ const ExperienceSchema = new mongoose.Schema({
     },
 
     location: {
-        city: String,
-        region: String,
-        displayLocation: String, //Used for autocomplete searchbars
+        city: {
+            type: String,
+            required: true
+        },
+        region: {
+            type: String,
+            required: true
+        },
+        displayLocation: { //Used for autocomplete searchbars
+            type: String, 
+            required: true
+        }, 
         meetPoint: String, 
         coordinates: {
             lat: Number,
@@ -42,7 +51,6 @@ const ExperienceSchema = new mongoose.Schema({
 
     setting: {
         type: String,
-        required: true,
         enum: ['private', 'semi-private', 'public']
     },
 

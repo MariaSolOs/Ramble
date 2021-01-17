@@ -7,6 +7,7 @@ import QuickInfos from './QuickInfos';
 import CreatorInfo from './Creator';
 import Description from './Description';
 import ExperienceMap from './ExperienceMap';
+import onlineIcon from '../../shared/images/computer-exp.svg';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -18,13 +19,17 @@ const Experience = ({exp, floatButtons}) => {
 
     return (
         <div className={classes.body}>
+            {exp.zoomInfo &&
+                <div className={classes.online}>
+                    <img src={onlineIcon} alt="Online experience"/>
+                    ONLINE
+                </div>}
             <div className={classes.header}>
                 <h1 className={classes.title}>{exp.title}</h1>
                 {floatButtons}
             </div>
             <p className={classes.location}>
-                {exp.location? 
-                    exp.location.displayLocation : 'Online experience'}
+                {exp.location.displayLocation}
             </p>
             <div className={classes.categories}>
                 {exp.categories.map(categ => (
@@ -46,7 +51,7 @@ const Experience = ({exp, floatButtons}) => {
             description={exp.description} 
             includedItems={exp.included}
             toBringItems={exp.toBring}/>
-            {exp.location && exp.location.coordinates.lat && 
+            {exp.location.coordinates && exp.location.coordinates.lat && 
                 <ExperienceMap coordinates={exp.location.coordinates}/>}
         </div>
     );

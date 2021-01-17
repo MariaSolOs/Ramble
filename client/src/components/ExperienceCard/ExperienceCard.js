@@ -6,6 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHeart} from '@fortawesome/free-solid-svg-icons/faHeart';
 import StarRateIcon from '@material-ui/icons/StarRate';
+import compIcon from '../../shared/images/computer-exp.svg';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -15,6 +16,7 @@ const useStyles = makeStyles(styles);
 const ExperienceCard = (props) => {
     const classes = useStyles({saved: props.saved});
     
+    console.log(props.exp)
     return (
         <div 
         className={`${classes.root} ${props.className}`} 
@@ -33,15 +35,18 @@ const ExperienceCard = (props) => {
                         <FontAwesomeIcon icon={faHeart}/>
                     </Fab>
                 </Tooltip>}
+            {props.exp.zoomInfo &&
+                <div className={classes.online}>
+                    <img src={compIcon} alt="Online experience"/>
+                    ONLINE
+                </div>}
             <div className={classes.card}>
                 <img src={props.exp.images[0]}
                 alt={`Experience - ${props.exp.title}`}/>
                 <div className={classes.body}>
                     <p className={classes.title}>{props.exp.title}</p>
                     <p className={classes.location}>
-                        {props.exp.location? 
-                            props.exp.location.displayLocation :
-                            'Online experience'}
+                        {props.exp.location.displayLocation}
                     </p>
                     {props.exp.rating &&
                     <p className={classes.rating}>

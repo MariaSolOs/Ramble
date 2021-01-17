@@ -37,7 +37,6 @@ const Location = ({ location, meetPoint, submitInput,
 
         //Reset the fields when switching
         if(e.target.checked) {
-            submitInput('location', null);
             submitInput('meetPoint', null);
             submitInput('coordinates', []);
         } else {
@@ -84,7 +83,7 @@ const Location = ({ location, meetPoint, submitInput,
                     className={classes.switch}
                     onChange={handleZoomSwitch}/>
                 </div>}
-            {location?
+            {(location && !isZoomExp)?
                 <div className={`${classes.meetPoint} ${classes.searchContainer}`}>
                     <h1 className={`${classes.title} meetPoint`}>Meeting point</h1>
                     <p className={classes.description}>

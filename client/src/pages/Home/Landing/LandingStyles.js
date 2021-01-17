@@ -102,8 +102,7 @@ const styles = (theme) => ({
         '&:focus': { outline: 'none' },
         '&:hover': { backgroundPosition: 'right center' },
         '&:disabled': { 
-            cursor: 'not-allowed',
-            filter: 'grayscale(80%)'
+            pointerEvents: 'none'
         }
     },
 

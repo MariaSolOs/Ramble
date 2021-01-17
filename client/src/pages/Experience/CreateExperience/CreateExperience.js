@@ -43,7 +43,9 @@ const CreateExperience = (props) => {
                 <Layout 
                 completedSteps={completedSteps}
                 canContinue={(values.location && values.meetPoint) ||
-                             (values.zoomMeetingId && values.zoomMeetingPassword)} 
+                             (values.location && 
+                              values.zoomMeetingId && 
+                              values.zoomMeetingPassword)} 
                 currStage={0} 
                 nextLink={pages.TITLE}>
                     <slides.Location 

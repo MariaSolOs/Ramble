@@ -5,7 +5,8 @@ export const pageStyles = (theme) => ({
         display: 'flex',
         flexDirection: 'column',
         width: '83%',
-        marginLeft: '4%',
+        minWidth: 320,
+        maxWidth: 460,
         [theme.breakpoints.down('sm')]: { 
             width: '80%',
             margin: '0 auto'
@@ -15,6 +16,23 @@ export const pageStyles = (theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+
+    online: {
+        width: 70,
+        color: '#2D2E2E',
+        backgroundColor: 'rgba(256, 256, 256, 0.56)',
+        borderRadius: 5,
+        marginBottom: 10,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '0.5rem',
+        fontWeight: 'bold',
+
+        '& img': {
+            width: 20,
+            margin: 4
+        }
     },
 
     title: {

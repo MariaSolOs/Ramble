@@ -27,7 +27,8 @@ exports.getLocations = (req, res, next) => {
 exports.getExps = async (req, res, next) => {
     try {
         //We only need this for the gallery card
-        const displayFields = 'title images price rating.value creator';
+        const displayFields = 'title images price rating.value creator ' +
+                              'location.displayLocation zoomInfo';
 
         //Get experiences with updated availabilites and approved status
         let exps;
@@ -45,8 +46,7 @@ exports.getExps = async (req, res, next) => {
                         'location.displayLocation': req.query.location, 
                         capacity: {$gte: req.query.numPeople},
                         'avail.to': {$gte: new Date()}
-                    }, displayFields + ' location.displayLocation')
-                    .populate('creator', 'stripe');
+                    }, displayFields).populate('creator', 'stripe');
         }
         //Make sure only creators that have a Stripe account are showed
         exps = exps.filter(exp => exp.creator.stripe.accountId);

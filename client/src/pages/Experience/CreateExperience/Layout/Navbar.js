@@ -12,9 +12,9 @@ const useStyles = makeStyles(navbarStyles);
  * @param {Number} completed - All links <= completed will be enabled
  * @param {Number} currStage - Current creation step
  */
-const Navbar = ({completed, currStage}) => {
+const Navbar = ({completed, currStage, isZoomExp}) => {
     const classes = useStyles();
-    
+
     //For collapsing/expanding stepnavs: 
     const [showSteps, setShowSteps] = useState('');
     const openSteps = (steps) => () => setShowSteps(steps);
@@ -68,13 +68,14 @@ const Navbar = ({completed, currStage}) => {
                         </Link> : 
                         <span className={classes.inactive}>Description</span>}
                     </li>
-                    <li className={`${5 <= completed && classes.completed}`}>
-                        {5 <= completed ?
-                        <Link to={slides.SETTING}>
-                            Setting
-                        </Link> : 
-                        <span className={classes.inactive}>Setting</span>}
-                    </li>
+                    {!isZoomExp &&
+                        <li className={`${5 <= completed && classes.completed}`}>
+                            {5 <= completed ?
+                            <Link to={slides.SETTING}>
+                                Setting
+                            </Link> : 
+                            <span className={classes.inactive}>Setting</span>}
+                        </li>}
                 </Collapse>
             </li>
             <li 
@@ -96,8 +97,9 @@ const Navbar = ({completed, currStage}) => {
                      { name: 'Required age', link: slides.AGE}].map(({name, link}, i) => (
                         <li
                         key={name}
-                        className={`${(i + 6) <= completed && classes.completed}`}>
-                            {(i + 6) <= completed ?
+                        className={`${(isZoomExp? i + 5:i + 6) <= completed && 
+                                   classes.completed}`}>
+                            {(isZoomExp? i + 5:i + 6) <= completed ?
                             <Link to={link}>{name}</Link> : 
                             <span className={classes.inactive}>{name}</span>}
                         </li>
@@ -108,9 +110,10 @@ const Navbar = ({completed, currStage}) => {
               { name: "What's included", link: slides.INCLUDED},
               { name: 'What to bring', link: slides.BRING},
               { name: 'Pricing', link: slides.PRICE}].map(({name, link}, i) => (
-                <li key={name} className={`${(i + 5) <= currStage && classes.completed}  
+                <li key={name} className={`${i + 5 <= currStage 
+                                           && classes.completed}  
                                            ${link === currPage && classes.current}`}>
-                    {(i + 9) < completed? 
+                    {(isZoomExp? i + 8:i + 9) < completed? 
                     <Link to={link}>{name}</Link> : 
                     <span className={classes.inactive}>{name}</span>}
                 </li>
@@ -118,8 +121,8 @@ const Navbar = ({completed, currStage}) => {
             <li 
             onMouseEnter={openSteps('Availabilities')}
             onMouseLeave={openSteps('')}
-            className={`${14 > completed && classes.inactive}
-                        ${9 < currStage && classes.completed}
+            className={`${(isZoomExp? 13:14) > completed && classes.inactive}
+                        ${9 <= currStage && classes.completed}
                         ${9 === currStage && classes.current}`}>
                 Availabilities
                 <Collapse
@@ -128,15 +131,15 @@ const Navbar = ({completed, currStage}) => {
                 in={showSteps === 'Availabilities' || (currPage === slides.SCHEDULE) ||
                    (currPage === slides.CAL_UPDATES)}>
                     <li className={`${completed - currStage >= 4 && classes.completed} 
-                                    ${completed < 14 && classes.inactive}`}>
-                        {14 <= completed ?
+                                    ${completed < (isZoomExp? 13:14) && classes.inactive}`}>
+                        {(isZoomExp? 13:14) <= completed ?
                         <Link to={slides.SCHEDULE}>
                             Schedule
                         </Link> : 'Schedule'}
                     </li>
                     <li className={`${completed - currStage >= 4 && classes.completed} 
-                                    ${completed < 15 && classes.inactive}`}>
-                        {15 <= completed ?
+                                    ${completed < (isZoomExp? 14:15) && classes.inactive}`}>
+                        {(isZoomExp? 14:15) <= completed ?
                         <Link to={slides.CAL_UPDATES}>
                             Start hosting
                         </Link> : 'Start hosting'}
@@ -145,7 +148,7 @@ const Navbar = ({completed, currStage}) => {
             </li>
             <li className={`${10 <= currStage && classes.completed}
                             ${10 === currStage &&  classes.current}`}>
-                {14 <= completed ?
+                {(isZoomExp? 13:14) <= completed ?
                 <Link to={slides.REVIEW}>
                     Review & Submit
                 </Link> : 

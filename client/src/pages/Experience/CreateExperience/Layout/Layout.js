@@ -4,28 +4,34 @@ import Navbar from './Navbar';
 import NavDots from '../../../../components/NavDots/NavDots';
 import Footer from './Footer';
 
-import {makeStyles} from '@material-ui/core/styles';
-import {layoutStyles} from './LayoutStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import { layoutStyles } from './LayoutStyles';
 const useStyles = makeStyles(layoutStyles);
 
-const Layout = (props) => {
+const NUM_STEPS = 11;
+
+const Layout = ({ completedSteps, currStage, canContinue, isZoomExp, 
+                  backLink, nextLink, children }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
             <Navbar 
-            completed={props.completedSteps}
-            currStage={props.currStage}/>
+            completed={completedSteps}
+            currStage={currStage}
+            isZoomExp={isZoomExp}/>
             <div className={classes.content}>
-                <NavDots currentStep={props.currStage} numSteps={11}
+                <NavDots 
+                currentStep={currStage} 
+                numSteps={NUM_STEPS}
                 className={classes.navDots}/>
-                {props.children}
+                { children }
             </div>
             <Footer 
-            canContinue={props.canContinue}
-            currStage={props.currStage} 
-            backLink={props.backLink} 
-            nextLink={props.nextLink}
-            numSteps={11}/>
+            canContinue={canContinue}
+            currStage={currStage} 
+            backLink={backLink} 
+            nextLink={nextLink}
+            numSteps={NUM_STEPS}/>
         </div>
     );
 }

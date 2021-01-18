@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AlgoliaPlaces from 'algolia-places-react';
 
 import Switch from '@material-ui/core/Switch';
@@ -11,8 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './LocationStyles';
 const useStyles = makeStyles(styles);
 
-const Location = ({ location, meetPoint, submitInput, 
-                    zoomMeetingId, zoomMeetingPassword }) => {      
+const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
+                    zoomMeetingPassword, submitInput, }) => {      
     const classes = useStyles();
 
     // To format location suggestions
@@ -31,17 +31,16 @@ const Location = ({ location, meetPoint, submitInput,
     }
 
     // For Zoom experiences 
-    const [isZoomExp, setIsZoomExp] = useState(false);
     const handleZoomSwitch = (e) => {
-        setIsZoomExp(e.target.checked);
+        submitInput('isZoomExp', e.target.checked);
 
         //Reset the fields when switching
         if(e.target.checked) {
-            submitInput('meetPoint', null);
+            submitInput('meetPoint', '');
             submitInput('coordinates', []);
         } else {
-            submitInput('zoomMeetingId', null);
-            submitInput('zoomMeetingPassword', null);
+            submitInput('zoomMeetingId', '');
+            submitInput('zoomMeetingPassword', '');
         }
     }
     const handleZoomInfoChange = (e) => {
@@ -80,6 +79,7 @@ const Location = ({ location, meetPoint, submitInput,
                     <h3 className={classes.title}>Online experience</h3>
                     <Switch 
                     color="default"
+                    checked={isZoomExp}
                     className={classes.switch}
                     onChange={handleZoomSwitch}/>
                 </div>}

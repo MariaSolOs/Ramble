@@ -27,11 +27,16 @@ const CreateExperience = (props) => {
     const [completedSteps, setCompletedSteps] = useState(0);
     useEffect(() => {
         const loc = location.pathname.replace('/experience/new/', '').toUpperCase();
-        const step = Object.keys(pages).indexOf(loc);
+        let pageNames = Object.keys(pages);
+        if(values.isZoomExp) { //Skip setting page for Zoom experiences
+            pageNames = pageNames.filter(page => page !== 'SETTING');
+        }
+        const step = pageNames.indexOf(loc);
         if(step > completedSteps) {
             setCompletedSteps(step);
         }
-    }, [location, completedSteps]);
+    }, [location, completedSteps, values.isZoomExp]);
+
 
     return (
         <Switch location={location}>
@@ -47,20 +52,26 @@ const CreateExperience = (props) => {
                               values.zoomMeetingId && 
                               values.zoomMeetingPassword)} 
                 currStage={0} 
-                nextLink={pages.TITLE}>
+                nextLink={pages.TITLE}
+                isZoomExp={values.isZoomExp}>
                     <slides.Location 
                     location={values.location} 
                     meetPoint={values.meetPoint}
+                    isZoomExp={values.isZoomExp}
+                    zoomMeetingId={values.zoomMeetingId} 
+                    zoomMeetingPassword={values.zoomMeetingPassword}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.TITLE}>
                 <Layout 
                 completedSteps={completedSteps}
-                canContinue={values.title.length > 0} 
+                canContinue={values.title.length > 0 && 
+                             values.title.length <= 50} 
                 currStage={1} 
                 backLink={pages.LOCATION}
-                nextLink={pages.CATEGORIES}>
+                nextLink={pages.CATEGORIES}
+                isZoomExp={values.isZoomExp}>
                     <slides.Title 
                     title={values.title}
                     submitInput={submitInput}/>
@@ -72,7 +83,8 @@ const CreateExperience = (props) => {
                 canContinue={values.categories.length >= 1} 
                 currStage={2} 
                 backLink={pages.TITLE}
-                nextLink={pages.PLANNING}>
+                nextLink={pages.PLANNING}
+                isZoomExp={values.isZoomExp}>
                     <slides.Categories
                     categories={values.categories}
                     submitInput={submitInput}/>
@@ -85,7 +97,8 @@ const CreateExperience = (props) => {
                              values.description.length <= 1000} 
                 currStage={3} 
                 backLink={pages.CATEGORIES}
-                nextLink={pages.SETTING}>
+                nextLink={values.isZoomExp? pages.DURATION : pages.SETTING}
+                isZoomExp={values.isZoomExp}>
                     <slides.Planning
                     description={values.description}
                     submitInput={submitInput}/>
@@ -97,7 +110,8 @@ const CreateExperience = (props) => {
                 canContinue={values.setting} 
                 currStage={3} 
                 backLink={pages.PLANNING}
-                nextLink={pages.DURATION}>
+                nextLink={pages.DURATION}
+                isZoomExp={values.isZoomExp}>
                     <slides.Setting
                     setting={values.setting}
                     submitInput={submitInput}/>
@@ -108,8 +122,9 @@ const CreateExperience = (props) => {
                 completedSteps={completedSteps}
                 canContinue={values.duration >= 1} 
                 currStage={4} 
-                backLink={pages.SETTING}
-                nextLink={pages.LANGUAGE}>
+                backLink={values.isZoomExp? pages.PLANNING : pages.SETTING}
+                nextLink={pages.LANGUAGE}
+                isZoomExp={values.isZoomExp}>
                     <slides.Duration
                     duration={values.duration}
                     submitInput={submitInput}/>
@@ -121,7 +136,8 @@ const CreateExperience = (props) => {
                 canContinue={values.languages.length > 0} 
                 currStage={4} 
                 backLink={pages.DURATION}
-                nextLink={pages.CAPACITY}>
+                nextLink={pages.CAPACITY}
+                isZoomExp={values.isZoomExp}>
                     <slides.Language
                     allLanguages={allLanguages}
                     selectedLanguages={values.languages}
@@ -134,7 +150,8 @@ const CreateExperience = (props) => {
                 canContinue={values.capacity} 
                 currStage={4} 
                 backLink={pages.DURATION}
-                nextLink={pages.AGE}>
+                nextLink={pages.AGE}
+                isZoomExp={values.isZoomExp}>
                     <slides.Capacity
                     capacity={values.capacity}
                     submitInput={submitInput}/>
@@ -147,7 +164,8 @@ const CreateExperience = (props) => {
                              || !values.ageRestricted} 
                 currStage={4} 
                 backLink={pages.CAPACITY}
-                nextLink={pages.PREVIEW}>
+                nextLink={pages.PREVIEW}
+                isZoomExp={values.isZoomExp}>
                     <slides.Age
                     ageRestricted={values.ageRestricted}
                     ageRequired={values.ageRequired}
@@ -160,7 +178,8 @@ const CreateExperience = (props) => {
                 canContinue={values.images.every(img => img)} 
                 currStage={5} 
                 backLink={pages.AGE}
-                nextLink={pages.INCLUDED}>
+                nextLink={pages.INCLUDED}
+                isZoomExp={values.isZoomExp}>
                     <slides.Preview
                     images={values.images}
                     submitInput={submitInput}/>
@@ -172,7 +191,8 @@ const CreateExperience = (props) => {
                 canContinue={true} 
                 currStage={6} 
                 backLink={pages.PREVIEW}
-                nextLink={pages.BRING}>
+                nextLink={pages.BRING}
+                isZoomExp={values.isZoomExp}>
                     <slides.Included
                     included={values.included}
                     submitInput={submitInput}/>
@@ -185,7 +205,8 @@ const CreateExperience = (props) => {
                              (values.mustBring && values.toBring.length > 0)} 
                 currStage={7} 
                 backLink={pages.INCLUDED}
-                nextLink={pages.PRICE}>
+                nextLink={pages.PRICE}
+                isZoomExp={values.isZoomExp}>
                     <slides.Bring
                     toBring={values.toBring}
                     submitInput={submitInput}/>
@@ -197,7 +218,8 @@ const CreateExperience = (props) => {
                 canContinue={values.price > 0} 
                 currStage={8} 
                 backLink={pages.BRING}
-                nextLink={pages.SCHEDULE}>
+                nextLink={pages.SCHEDULE}
+                isZoomExp={values.isZoomExp}>
                     <slides.Price
                     price={values.price}
                     privatePrice={values.privatePrice}
@@ -212,7 +234,8 @@ const CreateExperience = (props) => {
                 canContinue={[...values.schedule.keys()].length > 0} 
                 currStage={9} 
                 backLink={pages.PRICE}
-                nextLink={pages.CAL_UPDATES}>
+                nextLink={pages.CAL_UPDATES}
+                isZoomExp={values.isZoomExp}>
                     <slides.Schedule
                     schedule={values.schedule}
                     duration={values.duration}
@@ -225,7 +248,8 @@ const CreateExperience = (props) => {
                 canContinue={values.startDate} 
                 currStage={9} 
                 backLink={pages.SCHEDULE}
-                nextLink={pages.REVIEW}>
+                nextLink={pages.REVIEW}
+                isZoomExp={values.isZoomExp}>
                     <slides.CalendarUpdates
                     startDate={values.startDate}
                     submitInput={submitInput}/>
@@ -246,7 +270,8 @@ const CreateExperience = (props) => {
                         currStage={10} 
                         backLink={pages.CAL_UPDATES}
                         nextLink={props.creatorId ? pages.SUBMITTED :
-                                '/creator/join'}>
+                                '/creator/join'}
+                        isZoomExp={values.isZoomExp}>
                             <slides.Review
                         review={expReview}
                         images={values.images}/>

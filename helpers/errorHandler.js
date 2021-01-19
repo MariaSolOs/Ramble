@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('../config/sendgrid');
 
 class ErrorHandler extends Error {
     constructor(statusCode, message) {
@@ -9,26 +9,16 @@ class ErrorHandler extends Error {
 }
 
 const emailErrorToMariaHandler = (err, req) => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: process.env.ZOHO_EMAIL, 
-            pass: process.env.ZOHO_PASSWORD
-        }
-    });
-
-    transporter.sendMail({
+    sgMail.send({
         from: {
             name: 'ramble',
-            address: process.env.ZOHO_EMAIL
+            email: process.env.ZOHO_EMAIL
         }, 
         to: process.env.ZOHO_EMAIL,
         subject: 'ERROR', 
         text: `TIME: ${new Date().toISOString()} \n USER ID: ${req.userId}\n 
         ERROR NAME: ${err.name}\n ERROR MESSAGE: ${err.message}\n ERROR STACK: ${
-        err.stack}`, 
+        err.stack}`
     });
 }
 

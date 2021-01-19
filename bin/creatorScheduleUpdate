@@ -5,9 +5,9 @@ require('../config/mongoose');
 
 const fs = require('fs'),
       path = require('path'),
-      {compile} = require('handlebars'),
+      { compile } = require('handlebars'),
       mjml2html = require('mjml'),
-      nodemailer = require('nodemailer');
+      sgMail = require('../config/sendgrid');
 
 const Experience = require('../models/experience'),
       Creator = require('../models/creator'),
@@ -32,21 +32,12 @@ const creatorScheduleUpdate = async () => {
                         }}
                     );
 
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.zoho.com',
-            port: 465,
-            secure: true, 
-            auth: {
-                user: process.env.ZOHO_EMAIL, 
-                pass: process.env.ZOHO_PASSWORD
-            }
-        });
-
         //Create mjml
         const source = fs.readFileSync(path.resolve(__dirname, 
                        '../emailTemplates/creatorScheduleUpdate.mjml'), 'utf-8');              
         const template = compile(source);   
 
+        //Send emails
         for(const exp of exps) {
             try {
                 const mjml = template({
@@ -56,12 +47,12 @@ const creatorScheduleUpdate = async () => {
                     calendarUrl: `${process.env.CLIENT_URL}/api/email/${
                     exp.creator.user._id}/cal-update?exp=${exp._id}`
                 });
-                await transporter.sendMail({
+                await sgMail.send({
+                    to: exp.creator.user.email.address,
                     from: {
                         name: 'ramble',
-                        address: process.env.ZOHO_EMAIL
-                    }, 
-                    to: exp.creator.user.email.address,
+                        email: process.env.ZOHO_EMAIL,
+                    },
                     subject: 'Time to update your availabilities', 
                     text: `Your availabilities for "${exp.title}" need to be updated. ` + 
                           'Go to your Creator dashboard and list your schedule' + 
@@ -69,14 +60,14 @@ const creatorScheduleUpdate = async () => {
                     html: mjml2html(mjml).html
                 });
             } catch(err) { 
-                console.log(`ERROR SENDING EMAIL: ${err}`);
+                console.error(`ERROR SENDING EMAIL: ${err}`);
                 continue; 
             }
         }
 
-        console.log('JOB SUCCESS: CALENDAR UPDATE REMINDERS');
+        console.log(`JOB SUCCESS: CALENDAR UPDATE REMINDERS (${exps.length} EMAILS)`);
     } catch(err) {
-        console.log(`JOB FAILED: CALENDAR UPDATE REMINDERS - ${err}`);
+        console.error(`JOB FAILED: CALENDAR UPDATE REMINDERS - ${err}`);
     }
     process.exit();
 }

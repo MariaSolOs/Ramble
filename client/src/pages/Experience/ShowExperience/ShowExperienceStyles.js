@@ -6,10 +6,9 @@ const styles = (theme) => ({
         height: '84vh',
         width: '100vw',
         boxSizing: 'border-box',
-        padding: '2vh 12% 2vh 9%',
+        padding: '2vh 12% 2vh 11%',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
         backgroundColor: '#151515',
         [theme.breakpoints.down('sm')]: { 
             flexDirection: 'column',

@@ -61,8 +61,8 @@ const Footer = () => {
                 <p>&copy; 2020 Ramble Technologies Inc</p>
                 <div>
                     {/* TODO: Add real links to pages here */}
-                    <Link to="/terms">Terms of service</Link>
-                    <Link to="/privPolicy">Privacy Policy</Link>
+                    <span className="link">Terms of service</span>
+                    <span className="link">Privacy Policy</span>
                 </div>
             </div>
         </footer>

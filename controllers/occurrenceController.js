@@ -5,7 +5,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),
       path = require('path'),
       {compile} = require('handlebars'),
       mjml2html = require('mjml'),
-      nodemailer = require('nodemailer');
+      sgMail = require('../config/sendgrid');
 
 //Models
 const Experience = require('../models/experience'),
@@ -101,20 +101,11 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                             experience.creator.user._id}/creator-dashboard`
         });
 
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.zoho.com',
-            port: 465,
-            secure: true, 
-            auth: {
-                user: process.env.ZOHO_EMAIL, 
-                pass: process.env.ZOHO_PASSWORD
-            }
-        });
-        await transporter.sendMail({
+        await sgMail.send({
             from: {
-                name: 'ramble',
-                address: process.env.ZOHO_EMAIL
-            }, 
+                email: process.env.ZOHO_EMAIL, 
+                name: 'ramble'
+            },
             to: creator.user.email,
             subject: 'You have a new booking request', 
             text: `You have a new booking! ${req.user.fstName} just booked your experience ${

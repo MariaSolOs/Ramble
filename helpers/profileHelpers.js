@@ -2,7 +2,7 @@ const fs = require('fs'),
       path = require('path'),
       {compile} = require('handlebars'),
       mjml2html = require('mjml'),
-      nodemailer = require('nodemailer');
+      sgMail = require('../config/sendgrid');
 
 const User = require('../models/user');
 
@@ -39,19 +39,10 @@ exports.verifyUserEmail = async (email, userId) => {
     });
 
     //Send email
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: process.env.ZOHO_EMAIL, 
-            pass: process.env.ZOHO_PASSWORD
-        }
-    });
-    await transporter.sendMail({
+    await sgMail.send({
         from: {
             name: 'ramble',
-            address: process.env.ZOHO_EMAIL
+            email: process.env.ZOHO_EMAIL
         }, 
         to: email,
         subject: 'Verify your email address', 

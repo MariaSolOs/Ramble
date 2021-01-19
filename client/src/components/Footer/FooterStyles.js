@@ -97,7 +97,7 @@ const styles = (theme) => ({
             fontSize: '0.85rem',
             letterSpacing: '-0.05rem'
         },
-        '& > div a': {
+        '& .link': {
             marginLeft: 20
         },
         [theme.breakpoints.down('sm')]: { marginLeft: '10%' },

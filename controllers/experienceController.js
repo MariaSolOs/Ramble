@@ -38,14 +38,17 @@ exports.getExps = async (req, res, next) => {
                 status: 'approved',
                 zoomInfo: {$exists: true}, 
                 capacity: {$gte: req.query.numPeople},
-                'avail.to': {$gte: new Date()}}
+                // 'avail.to': {$gte: new Date()} 
+                // TODO: Comment this back once we have more experiences
+            }
             , displayFields).populate('creator', 'stripe');
         } else {
             exps = await Experience.find({
                         status: 'approved',
                         'location.displayLocation': req.query.location, 
                         capacity: {$gte: req.query.numPeople},
-                        'avail.to': {$gte: new Date()}
+                        // 'avail.to': {$gte: new Date()}
+                        // TODO: Comment this back once we have more experiences
                     }, displayFields).populate('creator', 'stripe');
         }
         //Make sure only creators that have a Stripe account are showed

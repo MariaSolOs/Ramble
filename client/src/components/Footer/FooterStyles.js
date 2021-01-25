@@ -90,7 +90,7 @@ const styles = (theme) => ({
         justifyContent: 'space-between',
         width: '80%',
         margin: '0 auto 3rem 15%',
-        '& p': {
+        '& p, & .link': {
             margin: 0,
             display: 'inline',
             color: '#C0BFBA',

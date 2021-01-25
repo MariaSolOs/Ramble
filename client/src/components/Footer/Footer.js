@@ -53,12 +53,15 @@ const Footer = () => {
                 <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Language</p>
                     <div>
-                        <Chip icon={<LanguageIcon/>} label="English" className={classes.chip}/>
+                        <Chip 
+                        icon={<LanguageIcon/>} 
+                        label="English" 
+                        className={classes.chip}/>
                     </div>
                 </div>
             </div>
             <div className={classes.bottom}>
-                <p>&copy; 2020 Ramble Technologies Inc</p>
+                <p>&copy; 2021 Ramble Technologies Inc</p>
                 <div>
                     {/* TODO: Add real links to pages here */}
                     <span className="link">Terms of service</span>

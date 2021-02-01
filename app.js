@@ -17,8 +17,11 @@ require('./config/mongoose');
 require('./config/cloudinary');
 
 //Set up the socket for notifications
-const server = require('http').createServer(app),
-      io = require('socket.io')(server, {path: '/ramble/socket.io'});
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, 
+    { cors: { origin: '*' } ,
+      path: '/ramble/socket.io' },
+);
 require('./config/socket')(io);
 
 //Seed experience database

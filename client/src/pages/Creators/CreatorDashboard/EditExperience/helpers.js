@@ -1,3 +1,5 @@
+import uuid from 'react-uuid';
+
 export const initValues = (exp) => ({
     description: exp.description,
     setting: exp.setting,
@@ -7,8 +9,12 @@ export const initValues = (exp) => ({
     ageRestricted: exp.ageRestriction !== 0, 
     ageRequired: exp.ageRestriction,
     images: exp.images.slice(0),
-    included: exp.included.slice(0),
-    toBring: exp.toBring.slice(0),
+    included: exp.included.map(item => ({
+        key: uuid(), item
+    })),
+    toBring: exp.toBring.map(item => ({
+        key: uuid(), item
+    })),
     price: exp.price.perPerson,
     privatePrice: exp.price.private !== null? 
                         exp.price.private : 0,

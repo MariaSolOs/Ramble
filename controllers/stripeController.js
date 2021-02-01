@@ -34,7 +34,7 @@ exports.addCustomer = async (req, res, next) => {
         if(!user.stripe.customerId) {
             const customer = await stripe.customers.create({
                 name: `${user.fstName} ${user.lstName}`,
-                email: user.email
+                email: user.email.address
             });
             user.stripe.customerId = customer.id;
             await user.save();

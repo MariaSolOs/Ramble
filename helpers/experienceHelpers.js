@@ -15,11 +15,11 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) =
         }
 
         // Compute taxes
-        const taxGST = 0.05 * expPrice;
-        const taxQST = 0.09975 * expPrice;
+        const taxGST = Math.floor(0.05 * expPrice);
+        const taxQST = Math.floor(0.09975 * expPrice);
 
         // We keep the taxes
-        const rambleGain = expPrice * 0.2;
+        const rambleGain = Math.floor(expPrice * 0.2);
         let application_fee_amount = rambleGain + taxGST + taxQST;
         let amount = expPrice + taxGST + taxQST;
 

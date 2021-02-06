@@ -145,6 +145,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
     } catch(err) {
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
+            req.body.stripeId = req.body.payIntentId;
             res.redirect(307, '/api/stripe/payment-intent/cancel');
         } else {
             next(new ErrorHandler(409, err.message));

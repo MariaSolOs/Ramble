@@ -31,7 +31,7 @@ passport.use(new GoogleStrategy({
                     });
                     newUser.save((err) => {
                         if (err){ return done(err); }
-                        verifyUserEmail(newUser.email, newUser._id);
+                        verifyUserEmail(newUser.email.address, newUser._id);
                         req.newUser = true;
                         return done(err, newUser);
                     });

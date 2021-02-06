@@ -28,7 +28,7 @@ exports.emailRegister = (req, res, next) => {
                     code: await generatePromoCode(req.body.fstName),
                 }
             }).then(user => {
-                verifyUserEmail(user.email, user._id);
+                verifyUserEmail(user.email.address, user._id);
                 req.login(user, err => {
                     if(err) { 
                         return next(new ErrorHandler(409, 'Registration error.'));

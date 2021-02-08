@@ -143,6 +143,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
             cardInfo
         });
     } catch(err) {
+        console.log('ERROR! ' + err);
         //If something goes wrong, cancel the intent (if applicable)
         if(req.body.payIntentId) {
             req.body.stripeId = req.body.payIntentId;

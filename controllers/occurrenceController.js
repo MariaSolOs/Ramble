@@ -106,7 +106,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                 email: process.env.ZOHO_EMAIL, 
                 name: 'ramble'
             },
-            to: creator.user.email,
+            to: experience.creator.user.email,
             subject: 'You have a new booking request', 
             text: `You have a new booking! ${req.user.fstName} just booked your experience ${
             experience.title}. Log in to your creator dashboard to check their booking request.`, 

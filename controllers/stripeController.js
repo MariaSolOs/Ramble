@@ -67,7 +67,7 @@ exports.attachPaymentMethod = async (req, res, next) => {
         if(!user.stripe.customerId) {
             await stripe.customers.create({
                 name: `${user.fstName} ${user.lstName}`,
-                email: user.email,
+                email: user.email.address,
                 payment_method: req.body.paymentMethodId
             });
         } else {

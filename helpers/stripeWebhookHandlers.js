@@ -6,8 +6,7 @@ const fs = require('fs'),
 
 const Creator = require('../models/creator'),
       Occurrence = require('../models/occurrence'),
-      Booking = require('../models/booking'),
-      CompanyReceipt = require('../models/companyReceipt');
+      Booking = require('../models/booking');
 
 exports.handleSuccessfulPaymentIntent = async (intent) => {
     try {
@@ -36,16 +35,6 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         await booking.save();
         await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
               {$pull: {bookingRequests: booking._id}});
-
-        //Create company receipt
-        await CompanyReceipt.create({
-            booking: booking._id,
-            total: intent.amount, 
-            creatorProfit: booking.stripe.creatorProfit,
-            rambleProfit: booking.stripe.rambleGain,
-            taxGST: booking.stripe.taxGST,
-            taxQST: booking.stripe.taxQST,
-        });
 
         //Get information for confirmation email
         await booking.populate([
@@ -106,7 +95,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
                 name: 'ramble',
                 email: process.env.ZOHO_EMAIL
             }, 
-            to: booking.client.email,
+            to: booking.client.email.address,
             subject: 'Your booking is confirmed', 
             text: `Your booking is confirmed!
             You're all set for your experience "${booking.experience.title}" on ${

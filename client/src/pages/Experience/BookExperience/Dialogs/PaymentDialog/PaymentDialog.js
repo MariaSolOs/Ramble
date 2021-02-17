@@ -66,7 +66,7 @@ const PaymentDialog = (props) => {
         showContinue
         continueMessage={
             <span className={classes.submitMessage}>
-                Confirm booking &bull; <span>$</span>{expPrice}
+                Confirm booking &bull; <span>$</span>{(expPrice + taxGST + taxQST).toFixed(2)}
             </span>
         }
         continueDisabled={!enableSubmit}>

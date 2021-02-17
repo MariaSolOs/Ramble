@@ -120,37 +120,14 @@
             <mj-section
             padding="30px 0">
                 <mj-column
-                width="30%"
-                vertical-align="middle"
-                css-class="thumbnails">
-                    <mj-image
-                    src="{{images.[1]}}"
-                    alt="Experience preview"
-                    border-radius="16px"
-                    padding="0 25px 10px 20px"
-                    height="140px"/>
-                    <mj-image
-                    src="{{images.[2]}}"
-                    alt="Experience preview"
-                    border-radius="16px"
-                    padding="10px 25px 10px 20px"
-                    height="140px"/>
-                    <mj-image
-                    src="{{images.[3]}}"
-                    alt="Experience preview"
-                    border-radius="16px"
-                    padding="10px 25px 0 20px"
-                    height="140px"/>
-                </mj-column> 
-                <mj-column
-                width="70%"
+                width="80%"
                 padding="0 5%">
                     <mj-image
-                    src="{{images.[0]}}" 
+                    src="{{image}}" 
                     alt="Experience preview"
                     border-radius="16px"
                     padding="0"
-                    height="460px"/>
+                    height="400px"/>
                 </mj-column>
             </mj-section>
 

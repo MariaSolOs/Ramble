@@ -4,7 +4,7 @@ export const pageStyles = (theme) => ({
         fontWeight: 'bold',
         display: 'flex',
         flexDirection: 'column',
-        width: '83%',
+        width: '95%',
         minWidth: 320,
         maxWidth: 460,
         [theme.breakpoints.down('sm')]: { 

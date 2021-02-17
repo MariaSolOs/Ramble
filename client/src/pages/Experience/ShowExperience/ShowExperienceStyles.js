@@ -6,7 +6,7 @@ const styles = (theme) => ({
         height: '84vh',
         width: '100vw',
         boxSizing: 'border-box',
-        padding: '2vh 12% 2vh 11%',
+        padding: '2vh 8% 2vh 11%',
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: '#151515',

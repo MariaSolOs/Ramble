@@ -67,7 +67,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             price: (intent.amount / 100).toFixed(2),
             currency: booking.experience.price.currency,
             bookingDate,
-            images: booking.experience.images,
+            image: booking.experience.images[0],
             expTitle: booking.experience.title,
             occDate,
             timeslot: booking.occurrence.timeslot,

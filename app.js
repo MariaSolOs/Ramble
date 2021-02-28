@@ -80,7 +80,7 @@ app.use((err, req, res) => {
     handleError(err, req, res);
 });
 
-app.get('*', (_, res) => {
+app.get('/*', (_, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 

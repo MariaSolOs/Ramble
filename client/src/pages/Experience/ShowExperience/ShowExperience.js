@@ -114,7 +114,8 @@ const ShowExperience = (props) => {
                 <div className={classes.footer}>
                     <div>
                         <p className={classes.price}>
-                            <span>${exp.price.perPerson}</span>PER PERSON
+                            <span>${exp.price.perPerson}</span>
+                            {exp.zoomInfo? 'PER CONNECTION' : 'PER PERSON'}
                         </p>
                         <button className={classes.bookButton} onClick={handleBooking}>
                             Book experience

@@ -28,7 +28,7 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                     {helpers.getFormattedTime(booking.createdAt)}
                 </p>
                 <h3 className={classes.whiteText}>
-                    Booking request from {booking.client.fstName}
+                    Booking request from {booking.client.fstName} {booking.client.lstName}
                 </h3>
             </div>
             <div className={classes.body}>

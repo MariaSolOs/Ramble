@@ -38,7 +38,7 @@ exports.getBookingRequests = async (req, res, next) => {
             { path: 'occurrence',
               select: 'dateStart timeslot spotsLeft creatorProfit' },
             { path: 'client',
-              select: 'fstName city photo stripe' }
+              select: 'fstName lstName city photo stripe' }
             ]
         });
         res.status(200).send({ bookingRequests });

@@ -76,11 +76,11 @@ app.use('/api/creator', creatorRoutes);
 const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
 
-app.use((err, req, res) => {
+app.use((err, req, res, _) => {
     handleError(err, req, res);
 });
 
-app.get('/*', (_, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 

@@ -28,7 +28,7 @@ const handleError = (err, req, res) => {
 
     if((statusCode !== 404) && 
        (process.env.NODE_ENV === 'production')) {
-        emailErrorToMariaHandler(err, req);
+           emailErrorToMariaHandler(err, req);
     }
     
     res.status(statusCode).send({

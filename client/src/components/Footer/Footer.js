@@ -62,11 +62,10 @@ const Footer = () => {
             </div>
             <div className={classes.bottom}>
                 <p>&copy; 2021 Ramble Technologies Inc</p>
-                <div>
-                    {/* TODO: Add real links to pages here */}
+                {/* <div>
                     <span className="link">Terms of service</span>
                     <span className="link">Privacy Policy</span>
-                </div>
+                </div> */}
             </div>
         </footer>
         </>

@@ -14,8 +14,10 @@ export default function useSocket() {
         //Initialize socket
         const token = window.localStorage.getItem('token');
         if(!token) { return; }
-        const socket = socketIOClient(process.env.REACT_APP_SERVER, 
-                       {path: '/ramble/socket.io', query: {token}});
+        const socket = socketIOClient(process.env.REACT_APP_SERVER, {
+            path: '/ramble/socket.io', 
+            query: { token }
+        });
 
         //Notifications               
         socket.on('notifAdded', (newNotif) => {

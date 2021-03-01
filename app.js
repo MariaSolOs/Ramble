@@ -34,11 +34,15 @@ app.use(compression());
 
 //Set up the socket for notifications
 const server = require('http').createServer(app);
-const io = require('socket.io')(server, 
-    { cors: true,
-      path: '/ramble/socket.io',
-      origins: [process.env.CLIENT_URL] }
-);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: process.env.CLIENT_URL,
+        methods: ['GET', 'POST'],
+        credentials: true
+    },
+    allowEIO3: true,
+    path: '/ramble/socket.io'
+});
 require('./config/socket')(io);
 
 //Passport configuration and routes
@@ -76,6 +80,16 @@ app.use('/api/creator', creatorRoutes);
 const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
 
+// Redirect to HTTPS
+app.use((req, res, next) => {
+    if(req.secure) {
+        next();
+    } else {
+        res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+});
+
+// Error management
 app.use((err, req, res, _) => {
     handleError(err, req, res);
 });

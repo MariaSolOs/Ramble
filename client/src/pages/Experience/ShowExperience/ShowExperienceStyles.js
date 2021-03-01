@@ -68,7 +68,8 @@ const styles = (theme) => ({
             justifyContent: 'space-between',
             alignItems: 'center',
             width: 'calc(100vw - 24% - 45%)',
-            margin: '0 15% 0 auto',
+            margin: (props) => 
+                props.online? '0 25% 0 auto' : '0 15% 0 auto',
             [theme.breakpoints.down('sm')]: { 
                 width: '80%',
                 margin: '0 auto',

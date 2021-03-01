@@ -21,8 +21,7 @@ import styles from './ShowExperienceStyles';
 const useStyles = makeStyles(styles);
 
 const ShowExperience = (props) => {
-    const classes = useStyles();
-
+    
     //Fetch the requested experience
     const history = useHistory();
     const {id} = useParams();
@@ -43,6 +42,8 @@ const ShowExperience = (props) => {
         });
         return () => mounted = false;
     }, [id, history, showError]);
+    
+    const classes = useStyles({ online: exp.zoomInfo !== undefined });
 
     //For saving/unsaving an experience
     const [saved, setSaved] = useState(false);

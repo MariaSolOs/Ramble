@@ -9,8 +9,11 @@ const express = require('express'),
       httpsRedirect = require('express-https-redirect'),
      { handleError } = require('./helpers/errorHandler');
 
-//Setting environment variables
+// Setting environment variables
 const PORT = process.env.PORT || 5000;
+
+// Redirect to HTTPS
+app.use('/', httpsRedirect());
 
 //Global configurations
 require('./config/mongoose');
@@ -32,7 +35,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(compression());
-app.use('/', httpsRedirect());
 
 //Set up the socket for notifications
 const server = require('http').createServer(app);

@@ -6,7 +6,8 @@ const express = require('express'),
       morgan = require('morgan'),
       path = require('path'),
       compression = require('compression'),
-      {handleError} = require('./helpers/errorHandler');
+      httpsRedirect = require('express-https-redirect'),
+     { handleError } = require('./helpers/errorHandler');
 
 //Setting environment variables
 const PORT = process.env.PORT || 5000;
@@ -26,11 +27,12 @@ app.use(bodyParser.json({
         }
     }
 }));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 //Set logs to :method :url :status :response-time ms - :res[content-length]
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(compression());
+app.use('/', httpsRedirect());
 
 //Set up the socket for notifications
 const server = require('http').createServer(app);
@@ -61,7 +63,7 @@ passport.deserializeUser(function(user, done) {
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-//APIs:
+//APIs
 const stripeRoutes = require('./routes/stripe');
 app.use('/api/stripe', stripeRoutes);
 
@@ -79,18 +81,6 @@ app.use('/api/creator', creatorRoutes);
 
 const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
-
-// Redirect to HTTPS
-app.enable('trust proxy');
-app.use((req, res, next) => {
-    if(process.env.NODE_ENV === 'production') {
-        if(req.secure) {
-            next();
-        } else {
-            res.redirect(`https://${req.headers.host}${req.url}`);
-        }
-    }
-});
 
 // Error management
 app.use((err, req, res, _) => {

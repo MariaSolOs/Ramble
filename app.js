@@ -81,11 +81,14 @@ const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
 
 // Redirect to HTTPS
+app.enable('trust proxy');
 app.use((req, res, next) => {
-    if(req.secure) {
-        next();
-    } else {
-        res.redirect(`https://${req.headers.host}${req.url}`);
+    if(process.env.NODE_ENV === 'production') {
+        if(req.secure) {
+            next();
+        } else {
+            res.redirect(`https://${req.headers.host}${req.url}`);
+        }
     }
 });
 

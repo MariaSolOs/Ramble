@@ -43,7 +43,7 @@ const ShowExperience = (props) => {
         return () => mounted = false;
     }, [id, history, showError]);
     
-    const classes = useStyles({ online: exp.zoomInfo !== undefined });
+    const classes = useStyles({ online: exp && exp.zoomInfo !== undefined });
 
     //For saving/unsaving an experience
     const [saved, setSaved] = useState(false);

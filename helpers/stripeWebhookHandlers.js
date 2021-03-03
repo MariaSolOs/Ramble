@@ -39,7 +39,7 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
         //Get information for confirmation email
         await booking.populate([
             { path: 'experience',
-              select: 'title images price creator toBring location zoomInfo',
+              select: 'title price creator toBring location zoomInfo',
               populate: {
                   path: 'creator',
                   select: 'user',
@@ -67,7 +67,6 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
             price: (intent.amount / 100).toFixed(2),
             currency: booking.experience.price.currency,
             bookingDate,
-            image: booking.experience.images[0],
             expTitle: booking.experience.title,
             occDate,
             timeslot: booking.occurrence.timeslot,

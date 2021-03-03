@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],
-    pastExperiences: [{
+    bookedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],

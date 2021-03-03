@@ -55,7 +55,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
         //Create booking
         const {amount, rambleGain, taxGST, taxQST} = 
             await calculatePaymentAmount(
-                experience.id, 
+                experience._id, 
                 req.body.bookType, 
                 req.body.numGuests,
                 req.body.promoCode
@@ -132,6 +132,11 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                 last4: payment_method.card.last4
             }
         }
+
+        //Add experience to user's booked exps
+        //Update users' past experiences
+        await User.findByIdAndUpdate(req.userId, 
+        { $addToSet: {bookedExperiences: experience._id}} );
 
         //Save all changes
         await occ.save();

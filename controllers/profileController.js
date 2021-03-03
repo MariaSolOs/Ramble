@@ -6,7 +6,6 @@ const cloudinary = require('cloudinary').v2,
 //Models
 const User = require('../models/user'),
       Experience = require('../models/experience'),
-      Booking = require('../models/booking'),
       Notification = require('../models/notification');
 
 //Helpers
@@ -119,25 +118,10 @@ exports.getUserExperiences = async (req, res, next) => {
         //We only need this for experience cards
         const expFields = 'title location.displayLocation images price rating';
         //Saved experiences
-        const {savedExperiences, pastExperiences} = 
-               await req.user.populate('savedExperiences pastExperiences', expFields)
+        const {savedExperiences, bookedExperiences} = 
+               await req.user.populate('savedExperiences bookedExperiences', expFields)
                .execPopulate();
-        //Booked experiences
-        const booked = await Booking.find({client: req.user._id}, 
-                            'experience occurrence').populate([
-                            { path: 'experience',
-                            select: expFields },
-                            { path: 'occurrence',
-                            select: 'dateEnd' }
-                        ]);
-        const bookedExperiences = [];
-        for(const booking of booked) {
-            bookedExperiences.push(booking.experience);
-        }
-        res.status(200).send({
-            bookedExperiences: [...bookedExperiences, ...pastExperiences], 
-            savedExperiences
-        });
+        res.status(200).send({ bookedExperiences, savedExperiences });
     } catch(err) {
         next(new ErrorHandler(500, err.message));
     }

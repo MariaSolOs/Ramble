@@ -17,9 +17,10 @@ const CreatorCard = (props) => {
     const [currentSlide, setSlide] = useState(0);
     const creator = creatorBios[currentSlide];
     
+    // TODO: Resume scrolling when we get more creators
     //For scrolling bios:
-    const scrollLeft = () => { setSlide((currentSlide + 3) % 4); }
-    const scrollRight = () => { setSlide((currentSlide + 1) % 4); }
+    const scrollLeft = () => { setSlide((currentSlide + 3) % creatorBios.length); }
+    const scrollRight = () => { setSlide((currentSlide + 1) % creatorBios.length); }
 
     return (
         <TransitionGroup>
@@ -34,12 +35,12 @@ const CreatorCard = (props) => {
             key={currentSlide}>
             <div className={classes.bioCard}>
                 <div className={classes.imageContainer}>
-                    <KeyboardArrowLeftIcon onClick={scrollLeft}/>
+                    {/* <KeyboardArrowLeftIcon onClick={scrollLeft}/> */}
                     <img 
                     src={creator.img}
                     alt={`Creator Bio - ${creator.name}`}
                     className={classes.gridImg}/>
-                    <KeyboardArrowRightIcon onClick={scrollRight}/>
+                    {/* <KeyboardArrowRightIcon onClick={scrollRight}/> */}
                 </div>
                 <p className={classes.creatorName}>{creator.name}</p>
                 <p className={classes.creatorCity}>{creator.city}</p>

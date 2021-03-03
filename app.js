@@ -7,7 +7,11 @@ const express = require('express'),
       path = require('path'),
       compression = require('compression'),
       httpsRedirect = require('express-https-redirect'),
+      maintenance = require('./maintenance'),
      { handleError } = require('./helpers/errorHandler');
+
+// Run maintenance script
+// maintenance();
 
 // Setting environment variables
 const PORT = process.env.PORT || 5000;

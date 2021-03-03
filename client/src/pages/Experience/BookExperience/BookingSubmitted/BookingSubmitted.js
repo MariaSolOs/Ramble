@@ -28,6 +28,13 @@ const BookingSubmitted = (props) => {
     const {state} = useLocation();
     const {exp, occ, booking} = state;
 
+    //Compute payment info
+    const expPrice = booking.bookType === 'public'? 
+                     booking.numGuests * exp.price.perPerson :
+                     exp.price.private;
+    const taxGST = 0.05 * expPrice;
+    const taxQST = 0.09975 * expPrice;
+
     //Format occurrence date
     const format = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
     const occDate = new Date(occ.date).toLocaleDateString('en-US', format);
@@ -131,20 +138,13 @@ const BookingSubmitted = (props) => {
                                     {booking.numGuests}<span> x $</span>
                                     {exp.price.perPerson.toFixed(2)}
                                 </p>
-                                <p>
-                                    ${(booking.numGuests * exp.price.perPerson)
-                                      .toFixed(2)}
-                                </p>
+                                <p>${expPrice.toFixed(2)}</p>
                             </div>}
                             <div className={`${classes.total} row`}>
                                 <p>
                                     Total <span> ({exp.price.currency})</span>
                                 </p>
-                                <p>
-                                    ${booking.bookType === 'public'?
-                                    (booking.numGuests * exp.price.perPerson)
-                                    .toFixed(2) : exp.price.private}
-                                </p>
+                                <p>${(expPrice + taxGST + taxQST).toFixed(2)}</p>
                             </div>
                         </div>
                     </CustomScroll>

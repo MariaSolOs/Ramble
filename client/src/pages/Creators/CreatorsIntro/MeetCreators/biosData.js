@@ -1,20 +1,8 @@
 export default [
-    {name: 'Ella', 
-     city: 'Montreal', 
-     bio: 'Aliquip XOXO photo booth laboris paleo excepteur pickled fashion axe in. Ipsum vaporware ennui hexagon DIY asymmetrical, aliqua ad lumbersexual man bun.', 
-     img: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_500,w_500/v1/Ramble/Creators/creatorBio1.jpeg`},
-    {name: 'Natalie',
-     city: 'San Francisco',
-     bio: 'Dreamcatcher vape echo park fingerstache ugh. Duis cliche kombucha stumptown whatever. Polaroid thundercats ipsum stumptown, twee organic live-edge truffaut nisi slow-carb.',
-     img: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_500,w_500/v1/Ramble/Creators/creatorBio2.jpeg`,
-    },
-    {name: 'Josh',
-     city: 'New York',
-     bio: 'Drinking vinegar scenester vegan chartreuse mlkshk migas beard magna. XOXO id kogi marfa portland succulents cornhole pop-up.',
-     img: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_500,w_500/v1/Ramble/Creators/creatorBio3.jpeg`,
-    },
-    {name: 'Eric',
-     city: 'California',
-     bio: 'Echo park crucifix authentic copper mug twee adipisicing pinterest tacos in live-edge godard hell of leggings lyft kombucha.',
-     img: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_500,w_500/v1/Ramble/Creators/creatorBio4.jpeg`}
+    {
+        name: 'Kevin', 
+        city: 'Montréal', 
+        bio: 'I\'m a bartender and an ice carver in one of Montreal\'s coolest cocktail bars. I consider myself a creative and devoted mind and I have yet to quench my thirst for everything mixology.', 
+        img: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_thumb,g_face,h_500,w_500/v1614733940/Ramble/Creators/kevin_ezussv.jpg`
+    }
 ];

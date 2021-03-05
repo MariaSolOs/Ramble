@@ -9,10 +9,11 @@ import {actions} from './store/types';
 
 //Pages and layout
 import BookingRequests from './BookingRequests/BookingRequests';
-import Calendar from './Calendar/Calendar';
+import Availabilities from './Availabilities/Availabilities';
 import NoCreatedExps from './NoCreatedExps/NoCreatedExps';
 import CreatedExperiences from './CreatedExperiences/CreatedExperiences';
 import EditExperience from './EditExperience/EditExperience';
+import UpcomingBookings from './UpcomingBookings/UpcomingBookings';
 import Page404 from '../../Page404/Page404'; 
 
 const Router = (props) => {
@@ -43,11 +44,15 @@ const Router = (props) => {
     //Fetch creator's experiences
     useEffect(() => {
         startLoading();
-        axios.get(`/api/creator/${creatorId}/experiences`)
+        axios.get(`/api/creator/experiences`)
         .then(res => {
             dispatch({
                 type: actions.SET_CREATED_EXPS,
                 exps: res.data.exps
+            });
+            dispatch({
+                type: actions.SET_BOOKING_DATES,
+                bookingDates: res.data.bookingDates
             });
             //The default experience will be the first one
             if(res.data.exps.length > 0) {
@@ -60,7 +65,7 @@ const Router = (props) => {
             endLoading();
         }).catch(err => {
             endLoading();
-            showError("Your calendar isn't available right now.");
+            showError("Your availabilities aren't available right now.");
             setTimeout(() => { history.push('/'); }, 3000);
         });
     }, [creatorId, startLoading, endLoading, showError, history, dispatch]);
@@ -81,7 +86,7 @@ const Router = (props) => {
 
     return (
         <Switch location={location}>
-            <Route path={`${path}/bookings`}>
+            <Route path={`${path}/bookings-requests`}>
                 {state.bookingRequests &&
                     <BookingRequests 
                     bookingRequests={state.bookingRequests}
@@ -97,10 +102,10 @@ const Router = (props) => {
             <Route path={`${path}/edit-exp`}>
                 <EditExperience exp={state.editExp}/>
             </Route>
-            <Route path={`${path}/calendar`}>
+            <Route path={`${path}/availabilities`}>
                 {(state.bookingRequests && state.createdExps) &&
                 state.editExp?
-                    <Calendar 
+                    <Availabilities 
                     createdExps={state.createdExps}
                     bookingRequests={state.bookingRequests}
                     exp={state.editExp}
@@ -109,6 +114,10 @@ const Router = (props) => {
                     onDateChange={handleEditDate}/> :
                     <NoCreatedExps/>}
             </Route>
+            {state.bookingDates &&
+                <Route path={`${path}/bookings-upcoming`}>
+                    <UpcomingBookings bookingDates={state.bookingDates}/>
+                </Route>}
             <Route component={Page404}/>
         </Switch>
     );

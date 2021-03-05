@@ -2,6 +2,7 @@ import {useReducer, useCallback} from 'react';
 import {actions} from './types';
 
 const initialState = {
+    bookingDates: null,
     bookingRequests: null,
     createdExps: null,
     editExp: null,
@@ -11,6 +12,11 @@ const initialState = {
 export default function useDashboardReducer() {
     const reducer = useCallback((state, action) => {
         switch(action.type) {
+            case actions.SET_BOOKING_DATES: 
+                return {
+                    ...state,
+                    bookingDates: action.bookingDates.slice(0)
+                }
             case actions.SET_BOOKING_REQUESTS:
                 return {
                     ...state,

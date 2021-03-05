@@ -76,7 +76,7 @@ const ExpSchedule = (props) => {
                 <h3>We've updated your availabilities!</h3>
                 <button 
                 className={`${classes.button} ${classes.doneButton}`}
-                onClick={() => history.push('/creator/dashboard/calendar')}>
+                onClick={() => history.push('/creator/dashboard/availabilities')}>
                     Add more time slots
                 </button>
                 <button 

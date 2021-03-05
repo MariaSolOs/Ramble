@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import NavRow from '../NavRow/NavRow';
 import ExperienceCard from '../../../../components/ExperienceCard/ExperienceCard';
+import NoCreatedExps from '../NoCreatedExps/NoCreatedExps';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './CreatedExperiencesStyles';
@@ -19,10 +20,11 @@ const CreatedExperiences = ({ exps, onEditExp }) => {
     }
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root}> 
             <div className={classes.shadowSeparator}/>
             <div className={classes.page}>
                 <NavRow/>
+                {exps.length === 0? <NoCreatedExps/> :
                 <div className={classes.experiences}>
                     {exps.map(exp => (
                         <ExperienceCard
@@ -30,7 +32,7 @@ const CreatedExperiences = ({ exps, onEditExp }) => {
                         exp={exp}
                         onCardClick={handleClick(exp)}/>
                     ))}
-                </div>
+                </div>}
             </div>
         </div>
     );

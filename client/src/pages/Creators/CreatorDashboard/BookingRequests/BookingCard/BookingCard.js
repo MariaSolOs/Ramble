@@ -1,5 +1,5 @@
 import React from 'react';
-import * as helpers from './helpers';
+import * as helpers from '../../helpers';
 
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
@@ -38,7 +38,7 @@ const BookingCard = ({booking, onAccept, onDecline}) => {
                         <span>Private booking</span>
                     </div>}
                 <div className={classes.clientInfo}>
-                    <Avatar src={booking.client.photo}/>
+                    <Avatar src={booking.client.photo} alt="Client"/>
                     <div>
                         <p className={classes.whiteText}>
                             {booking.client.fstName}

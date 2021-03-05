@@ -3,7 +3,7 @@ import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './CalendarStyles';
+import styles from './AvailabilitiesStyles';
 const useStyles = makeStyles(styles);
 
 const ExpNav = (props) => {

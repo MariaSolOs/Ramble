@@ -68,7 +68,7 @@ const CollapsingNav = (props) => {
                     }}>
                         <MenuItem 
                         component={NavLink} 
-                        to={props.isCreator? '/creator/dashboard/bookings' : 
+                        to={props.isCreator? '/creator/dashboard/bookings-requests' : 
                                              '/creator/become'}
                         onClick={closeMenu}>
                             {(props.isCreator && props.numBookings > 0) && 
@@ -94,7 +94,7 @@ const CollapsingNav = (props) => {
                 <div className={classes.expandedLinks}>
                     {props.isCreator? 
                     <Link
-                    to="/creator/dashboard/bookings"
+                    to="/creator/dashboard/bookings-requests"
                     className={classes.navLink}
                     style={{ color: '#FFF' }}>
                         {props.numBookings > 0 &&

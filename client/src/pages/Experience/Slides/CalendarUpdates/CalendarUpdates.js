@@ -21,7 +21,6 @@ const CalendarUpdates = ({startDate, submitInput}) => {
         submitInput('startDate', date);
     }
 
-    //TODO: Change the title of this slide
     return (
         <div style={{ overflowY: 'scroll' }}>
             <h1 className={classes.title}>Start hosting</h1>

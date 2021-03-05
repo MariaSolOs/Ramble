@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
 import {faPhoneAlt} from '@fortawesome/free-solid-svg-icons/faPhoneAlt';
 import {faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
+import {faLaptop} from '@fortawesome/free-solid-svg-icons/faLaptop';
 
 import 'react-custom-scroll/dist/customScroll.css';
 import {makeStyles} from '@material-ui/core/styles';
@@ -96,7 +97,11 @@ const BookingSubmitted = (props) => {
                             <Avatar src={exp.creator.img}/>
                             <p className={classes.grey}>{exp.creator.name}</p>
                             <FontAwesomeIcon icon={faPhoneAlt}/>
-                            <p className={classes.grey}>{exp.creator.phoneNumber}</p>
+                            {exp.meetPoint && 
+                                // Hide this for online experiences
+                                <p className={classes.grey}>
+                                    {exp.creator.phoneNumber}
+                                </p>}
                         </div>
                         {exp.toBring.length > 0 &&
                         <>
@@ -115,9 +120,10 @@ const BookingSubmitted = (props) => {
                             Meeting spot
                         </h2>
                         <div className={classes.meetPoint}>
-                            <FontAwesomeIcon icon={faMapMarkerAlt}/>
+                            <FontAwesomeIcon 
+                            icon={exp.meetPoint? faMapMarkerAlt : faLaptop}/>
                             <p className={classes.grey}>
-                                {exp.meetPoint}
+                                {exp.meetPoint? exp.meetPoint : 'Online'}
                             </p>
                         </div>
                         <h2 className={classes.grey}>Payment details</h2>

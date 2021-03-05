@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import {makeStyles} from '@material-ui/core/styles';
-import styles from './CalendarStyles';
+import styles from './AvailabilitiesStyles';
 const useStyles = makeStyles(styles);
 
 const Calendar = (props) => {

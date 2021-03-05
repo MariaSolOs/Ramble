@@ -12,14 +12,17 @@ const NavRow = () => {
 
     return (
         <Breadcrumbs separator="" classes={{ root: classes.nav }}>
-            <NavLink to="/creator/dashboard/bookings">
+            <NavLink to="/creator/dashboard/bookings-requests">
                 Booking requests
             </NavLink>
             <NavLink to="/creator/dashboard/experiences">
                 Experiences
             </NavLink>
-            <NavLink to="/creator/dashboard/calendar">
-                My calendar
+            <NavLink to="/creator/dashboard/availabilities">
+                My availabilities
+            </NavLink>
+            <NavLink to="/creator/dashboard/bookings-upcoming">
+                Upcoming bookings
             </NavLink>
         </Breadcrumbs>
     );

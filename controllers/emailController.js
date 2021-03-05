@@ -6,7 +6,7 @@ exports.updateCreatorCalendar = (req, res) => {
 }
 
 exports.reviewBookingRequest = (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}/creator/dashboard/bookings`);
+    res.redirect(`${process.env.CLIENT_URL}/creator/dashboard/bookings-requests`);
 }
 
 exports.connectWithStripe = (req, res) => {

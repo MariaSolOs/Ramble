@@ -47,6 +47,57 @@ exports.getBookingRequests = async (req, res, next) => {
     }
 }
 
+// For getting upcoming bookings
+exports.getUpcomingBookings = async (req, res, next) => {
+    try {
+        const exps = await Experience.find({ 
+            creator: req.user.creator 
+        }).distinct('_id');
+
+        // Get bookings for indicated date
+        const occs = await Occurrence.find({
+            experience: { $in: exps },
+            'bookings.0': { $exists: true },
+            dateStart: {
+                $gte: new Date(new Date(req.params.date).setUTCHours(0, 0, 0)), 
+                $lte: new Date(new Date(req.params.date).setUTCHours(23, 59, 59))
+            },
+        }, 'experience timeslot bookings', 
+        { sort: 'dateStart experience.title' }).populate([
+            {
+                path: 'experience',
+                select: 'title'
+            },
+            {
+                path: 'bookings',
+                select: 'client numPeople bookType',
+                populate: {
+                    path: 'client',
+                    select: 'fstName lstName photo'
+                }
+            }
+        ]);
+
+        // Use null as title separators
+        const filteredOccs = [];
+        let currentTitle = '';
+        for (const occ of occs) {
+            currentTitle = (currentTitle === occ.experience.title)? null : 
+                            occ.experience.title;
+            filteredOccs.push({
+                _id: occ._id,
+                experience: currentTitle,
+                timeslot: occ.timeslot,
+                bookings: occ.bookings
+            });
+        }
+
+        res.status(200).send({ occs: filteredOccs });
+    } catch (err) {
+        next(new ErrorHandler(500, err.message));
+    }
+}
+
 //Upgrade an user to a creator
 exports.upgradeUserToCreator = async (req, res, next) => {
     try {
@@ -66,8 +117,7 @@ exports.upgradeUserToCreator = async (req, res, next) => {
             user: req.userId,
             bio: req.body.bio,
             verified: false,
-            governmentIds,
-            stripe: { id: null }
+            governmentIds
         });
         await creator.save();
         req.user.creator = creator._id;
@@ -95,16 +145,23 @@ exports.editCreatorProfile = async (req, res, next) => {
     }
 }
 
-exports.getCreatedExperiences = (req, res, next) => {
-    //Find experiences
-    Experience.find({creator: req.params.creatorId}, 
-    (err, exps) => {
-        if(err || !exps) {
-            return next(new ErrorHandler(500, err.message));
-        } else {
-            res.status(200).send({ exps }); 
-        }
-    });
+exports.getExpsInfos = async (req, res, next) => {
+    try {
+        // Find created experiences
+        const exps = await Experience.find({ creator: req.user.creator });
+        const expIds = exps.map(({ _id }) => _id);
+        
+        // Find dates of upcoming bookings
+        let bookingDates = await Occurrence.find({
+            experience: { $in: expIds },
+            'bookings.0': { $exists: true }
+        }).distinct('dateStart');
+        bookingDates = bookingDates.map((date) => date.toISOString().split('T')[0])
+
+        res.status(200).send({ exps, bookingDates });
+    } catch (err) {
+        next(new ErrorHandler(500, err.message));
+    }
 }
 
 /*To delete a booking where the customer used a saved card

@@ -12,6 +12,10 @@ router.get('/',
 router.get('/bookingRequests', 
             authenticateToken, 
             controllers.getBookingRequests);
+router.get('/:date/upcomingBookings',
+            authenticateToken,
+            identifyUser,
+            controllers.getUpcomingBookings);
 
 //Update user to creator
 router.post('/', 
@@ -24,11 +28,11 @@ router.patch('/:creatorId',
              authenticateToken,
              controllers.editCreatorProfile);
 
-//Get created experiences 
-router.get('/:creatorId/experiences',
+//Get created experiences and upcoming bookings
+router.get('/experiences',
            authenticateToken,
            identifyUser,
-           controllers.getCreatedExperiences);
+           controllers.getExpsInfos);
 
 //To delete bookings where no payment intent has been created
 router.delete('/bookingRequests/:bookId',

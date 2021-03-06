@@ -17,7 +17,6 @@ const reducer = (state, action) => {
     switch(action.type) {
         case TOGGLE_SIGNUP_DIALOG:
             return {
-                ...state,
                 showSignUpDialog: action.show,
                 showEmailDialog: action.show? false : state.showEmailDialog,
                 showLogInDialog: action.show? false : state.showLogInDialog,
@@ -25,7 +24,6 @@ const reducer = (state, action) => {
             }
         case TOGGLE_LOGIN_DIALOG:
             return {
-                ...state,
                 showLogInDialog: action.show,
                 showSignUpDialog: action.show? false : state.showSignUpDialog,
                 showEmailDialog: action.show? false : state.showEmailDialog,
@@ -33,7 +31,6 @@ const reducer = (state, action) => {
             }
         case TOGGLE_EMAIL_DIALOG:
             return {
-                ...state,
                 showEmailDialog: action.show,
                 showSignUpDialog: action.show? false : state.showSignUpDialog,
                 showLogInDialog: action.show? false : state.showLogInDialog,
@@ -41,7 +38,6 @@ const reducer = (state, action) => {
             }
         case TOGGLE_FORGOT_PWD_DIALOG:
             return {
-                ...state,
                 showForgotPwdDialog: action.show,
                 showSignUpDialog: action.show? false : state.showSignUpDialog,
                 showEmailDialog: action.show? false : state.showEmailDialog,
@@ -55,10 +51,10 @@ const mapDispatch = (dispatch) => ({
     openSignUpDialog: () => dispatch({type: TOGGLE_SIGNUP_DIALOG, show: true}),    
     openEmailDialog: () => dispatch({type: TOGGLE_EMAIL_DIALOG, show: true}),
     openLogInDialog: () => dispatch({type: TOGGLE_LOGIN_DIALOG, show: true}),
+    openForgotPwdDialog: () => dispatch({type: TOGGLE_FORGOT_PWD_DIALOG, show: true}),
     closeSignUpDialog: () => dispatch({type: TOGGLE_SIGNUP_DIALOG, show: false}),
     closeEmailDialog: () => dispatch({type: TOGGLE_EMAIL_DIALOG, show: false}),
     closeLogInDialog: () => dispatch({type: TOGGLE_LOGIN_DIALOG, show: false}),
-    openForgotPwdDialog: () => dispatch({type: TOGGLE_FORGOT_PWD_DIALOG, show: true}),
     closeForgotPwdDialog: () => dispatch({type: TOGGLE_FORGOT_PWD_DIALOG, show: false})
 });
 

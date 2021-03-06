@@ -1,3 +1,5 @@
+const { generateAccessToken } = require('../helpers/JWTHelpers');
+
 const User = require('../models/user');
 
 exports.updateCreatorCalendar = (req, res) => {
@@ -26,5 +28,6 @@ exports.verifyEmailAddress = (req, res) => {
 }
 
 exports.resetPassword = (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}`);
+    res.cookie('resetToken', req.params.userId);
+    res.redirect(process.env.CLIENT_URL);
 }

@@ -23,4 +23,8 @@ router.get('/verify-email-address/:userId',
            cookieFromEmailLink,
            controller.verifyEmailAddress);
 
+//Reset password
+router.get('/:userId/reset-password',
+           controller.resetPassword);
+
 module.exports = router;

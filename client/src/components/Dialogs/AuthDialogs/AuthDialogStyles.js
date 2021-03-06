@@ -159,7 +159,7 @@ const styles = (theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '0 0 0.5rem',
+        padding: '0.8rem 0',
 
         '& .fa-paper-plane': {
             fontSize: '2rem',

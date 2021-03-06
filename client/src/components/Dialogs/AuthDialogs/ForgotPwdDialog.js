@@ -23,10 +23,12 @@ const ForgotPwdDialog = (props) => {
     const handleChange = (e) => { setEmail(e.target.value); }
 
     const handleClose = () => {
-        setEmail('');
-        setErrMsg('');
-        setShowSuccessMsg(false);
         props.onClose();
+        setTimeout(() => {
+            setEmail('');
+            setErrMsg('');
+            setShowSuccessMsg(false);
+        }, 1000);
     }
 
     const handleSubmit = (e) => {
@@ -34,6 +36,7 @@ const ForgotPwdDialog = (props) => {
 
         axios.post('api/auth/send-pwd-reset', { email }).then(() => {
             setShowSuccessMsg(true);
+            setTimeout(() => { handleClose(); }, 3000);
         }).catch(err => {
             if (err.response.status === 404) {
                 setErrMsg("We couldn't find an account with that email...");
@@ -46,12 +49,13 @@ const ForgotPwdDialog = (props) => {
         open={props.open} 
         onClose={handleClose} 
         classes={{ paper: classes.paper }}>
-            <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
             {showSuccessMsg? 
             <div className={classes.resetEmailSentMsg}>
                 <FontAwesomeIcon icon={faPaperPlane}/>
                 <p className={classes.forgotTitle}>The email is on its way!</p>
             </div> :
+            <>
+            <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
             <DialogContent> 
                 <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
@@ -75,7 +79,8 @@ const ForgotPwdDialog = (props) => {
                         Reset my password
                     </button>
                 </form>
-            </DialogContent>}
+            </DialogContent>
+            </>}
         </Dialog>
     );
 }

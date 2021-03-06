@@ -191,13 +191,16 @@ exports.getPaymentMethods = async (req, res, next) => {
     }
 }
 
-exports.resetPassword = (req, res, next) => {
-    User.findByIdAndUpdate(req.body.userId, {
-        password: req.body.password
-    }, (err, user) => {
-        if (err || !user) {
-            return next(new ErrorHandler(409, 'Reset password failed.'));
-        }
-        res.status(201).send({ message: 'Password reset.' });
-    });
+exports.resetPassword = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.body.token);
+        user.password = req.body.password;
+        await user.save();
+        res.status(201).send({ 
+            email: user.email.address,
+            message: 'Password reset.'
+        });
+    } catch (error) {
+        next(new ErrorHandler(409, 'Reset password failed.'));
+    }
 }

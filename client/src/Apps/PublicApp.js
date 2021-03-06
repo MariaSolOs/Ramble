@@ -12,6 +12,7 @@ import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
 import Spinner from '../components/Spinner/Spinner';
 import NewUserEmailVerifyDialog from '../components/Dialogs/NewUserEmailVerifyDialog/NewUserEmailVerifyDialog';
+import ResetPasswordDialog from '../components/Dialogs/ResetPasswordDialog/ResetPasswordDialog';
 import Home from '../pages/Home/Home';
 import PrivateRoute from '../pages/PrivateRoute';
 const Notifications = React.lazy(() => import('../pages/Notifications/Notifications'));
@@ -63,6 +64,7 @@ const PublicApp = (props) => {
     return (
         <React.Suspense fallback={<Spinner/>}>
             <NewUserEmailVerifyDialog/>
+            <ResetPasswordDialog/>
             <Nav/>
             <Switch>
                 <PrivateRoute path="/notifications" test={isAuth}>

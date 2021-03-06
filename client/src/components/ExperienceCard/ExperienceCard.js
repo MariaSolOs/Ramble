@@ -47,7 +47,7 @@ const ExperienceCard = (props) => {
                     <p className={classes.location}>
                         {props.exp.location.displayLocation}
                     </p>
-                    {props.exp.rating &&
+                    {props.exp.rating.numRatings > 0 &&
                     <p className={classes.rating}>
                         {props.exp.rating.value.toFixed(2)}<StarRateIcon/>
                     </p>}

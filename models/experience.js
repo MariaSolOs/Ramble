@@ -111,11 +111,12 @@ const ExperienceSchema = new mongoose.Schema({
         value: {
             type: Number,
             min: 1, 
-            max: 5
+            max: 5,
+            default: 5
         },
         numRatings: {
             type: Number,
-            min: 0
+            default: 0
         }
     },
     

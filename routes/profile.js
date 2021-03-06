@@ -36,6 +36,10 @@ router.delete('/notifs/:notifId',
 //Get saved cards
 router.get('/payMethods',
            authenticateToken,
-           controllers.getPaymentMethods);              
+           controllers.getPaymentMethods);     
+           
+//Reset password
+router.post('/reset-password', 
+            controllers.resetPassword);
 
 module.exports = router;

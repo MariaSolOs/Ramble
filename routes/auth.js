@@ -5,7 +5,7 @@ const express = require('express'),
       {authenticateToken, sendToken, redirectUserWithCookie} = require('../middleware/authMiddleware'),
       controller = require('../controllers/authController');
 
-//In case email login fails
+// In case email login fails
 router.get('/email-login-fail', (req, res) => {
     res.status(401).send({message: 'Incorrect email/password'});
 });
@@ -19,6 +19,10 @@ router.post('/email-login',
             }), 
             controller.emailLogin, 
             sendToken);
+
+// Send password reset email
+router.post('/send-pwd-reset',
+            controller.sendResetPwdEmail);
                  
 router.get('/facebook', 
            controller.facebookAuth, 
@@ -42,7 +46,7 @@ router.post('/admin-login',
             }), 
             controller.loginAdmin, 
             sendToken);
-//Only users with respective permissions can register new admins
+// Only users with respective permissions can register new admins
 router.post('/admin-register', 
             authenticateToken,
             identifyUser,

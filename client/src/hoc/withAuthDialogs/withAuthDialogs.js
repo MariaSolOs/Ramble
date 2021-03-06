@@ -3,9 +3,10 @@ import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import useAuthDialogReducer from './reducer';
 
-import SignUpDialog from '../../components/Dialogs/SignUpDialog';
-import SignUpWithEmailDialog from '../../components/Dialogs/SignUpWithEmailDialog';
-import LogInDialog from '../../components/Dialogs/LogInDialog';
+import SignUpDialog from '../../components/Dialogs/AuthDialogs/SignUpDialog';
+import SignUpWithEmailDialog from '../../components/Dialogs/AuthDialogs/SignUpWithEmailDialog';
+import LogInDialog from '../../components/Dialogs/AuthDialogs/LogInDialog';
+import ForgotPwdDialog from '../../components/Dialogs/AuthDialogs/ForgotPwdDialog';
 
 const withAuthDialogs = (Component) => (props) => {
     const isAuth = useSelector(state => state.user.profile.id !== null);
@@ -32,7 +33,11 @@ const withAuthDialogs = (Component) => (props) => {
                 <LogInDialog 
                 open={state.showLogInDialog} 
                 onClose={actions.closeLogInDialog}
+                openForgotPwdDialog={actions.openForgotPwdDialog}
                 currentRoute={pathname}/>
+                <ForgotPwdDialog
+                open={state.showForgotPwdDialog}
+                onClose={actions.closeForgotPwdDialog}/>
                 <Component {...props} dialogActions={actions}/>
             </>}
         </>

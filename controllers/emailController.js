@@ -24,3 +24,7 @@ exports.verifyEmailAddress = (req, res) => {
         res.redirect(process.env.CLIENT_URL);
     });
 }
+
+exports.resetPassword = (req, res) => {
+    res.redirect(`${process.env.CLIENT_URL}`);
+}

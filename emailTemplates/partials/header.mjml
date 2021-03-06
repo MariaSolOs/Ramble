@@ -7,7 +7,7 @@
             src="https://res.cloudinary.com/dxod7etqu/image/upload/c_scale,w_166/v1597845322/Ramble/Emails/ramble_logo.png" 
             width="60px"
             alt="ramble logo"
-            padding="0 0 0 16px"
+            padding="0 0 3px"
             align="right"
             href="https://reramble.herokuapp.com/"/>
         </mj-column>
@@ -16,10 +16,10 @@
             <mj-text 
             font-weight="100"
             font-family="Futura" 
-            letter-spacing="-1px"
+            letter-spacing="-2px"
             color="#FFF"
-            font-size="25px"
-            padding="0px 8px">
+            font-size="30px"
+            padding="0px 3px">
                 ramble
             </mj-text>
         </mj-column>

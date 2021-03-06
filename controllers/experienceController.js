@@ -185,7 +185,7 @@ exports.reviewExperience = async (req, res, next) => {
         //If applicable, create a review
         if(req.body.review.length > 0) {
             const review = new Review({
-                body: req.body.review,
+                body: `${req.body.review} (rating: ${req.body.rating})`,
                 about: req.params.expId,
                 onModel: 'Experience'
             });

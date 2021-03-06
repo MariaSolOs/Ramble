@@ -82,4 +82,3 @@ UserSchema.plugin(passportLocalMongoose, {usernameField: 'email.address'});
 module.exports = mongoose.model('User', UserSchema);
 
 //TODO: Write script to delete idle users
-//TODO: Deal with email subscriptions

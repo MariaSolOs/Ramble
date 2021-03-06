@@ -14,12 +14,7 @@ const styles = (theme) => ({
         display: 'flex',
         alignContent: 'center',
         padding: '0.9rem 1rem 0.7rem 1rem',
-        '& .closeIcon': {
-            float: 'left',
-            color: '#FFF',
-            fontSize: '1.5rem',
-            cursor: 'pointer'
-        },
+
         '& .title': {
             margin: 'auto',
             textIndent: -22,
@@ -29,6 +24,13 @@ const styles = (theme) => ({
             color: '#ECEBE5',
             fontFamily: 'Helvetica, sans-serif'
         }
+    },
+
+    closeIcon: {
+        float: 'left',
+        color: '#FFF',
+        fontSize: '1.5rem',
+        cursor: 'pointer'
     },
 
     //Form sections
@@ -55,7 +57,6 @@ const styles = (theme) => ({
         borderBottom: 'solid 1px #4F4F4F'
     },
 
-    //Sign up/log in button
     submitButton: {
         display: 'block',
         width: '100%',
@@ -69,8 +70,9 @@ const styles = (theme) => ({
         letterSpacing: '-0.04rem',
         color: '#ECEBE5',
         cursor: 'pointer',
-        '&:hover': { outline: 'none' }
+        '&:focus': { outline: 'none' }
     },
+
     //Sign up/log in with media buttons
     mediaButton: {
         display: 'block',
@@ -100,14 +102,14 @@ const styles = (theme) => ({
         }
     },
 
-    //Get rid of the link underline
+    // Get rid of the link underline
     link: {
         textDecoration: 'none',
         '&:hover': { textDecoration: 'none' }
     },
 
-    //Switching between dialogs
-    switchDialogsLink: {
+    // Switching between dialogs
+    switchDialogsText: {
         fontSize: '0.78rem',
         cursor: 'default',
         color: '#6F6E6B',
@@ -120,6 +122,49 @@ const styles = (theme) => ({
             color: '#ECEBE5',
             textDecoration: 'underline',
             cursor: 'pointer'
+        }
+    },
+
+    // Forgot password link
+    forgotLink: {
+        color: '#ECEBE5',
+        textDecoration: 'underline',
+        cursor: 'pointer',
+        margin: '-10px 3px 15px',
+        fontWeight: 'bold',
+        fontFamily: 'Helvetica, sans-serif',
+        letterSpacing: '-0.05rem',
+        fontSize: '0.8rem'
+    },
+
+    forgotTitle: {
+        color: '#ECEBE5',
+        margin: 0,
+        fontWeight: 'bold',
+        fontFamily: 'Helvetica, sans-serif',
+        letterSpacing: '-0.05rem',
+        fontSize: '1.1rem'
+    },
+
+    forgotMessage: {
+        color: '#C0BFBA',
+        margin: '1rem 0',
+        fontWeight: 'bold',
+        fontFamily: 'Helvetica, sans-serif',
+        letterSpacing: '-0.05rem',
+        fontSize: '0.9rem'
+    },
+
+    resetEmailSentMsg: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 0 0.5rem',
+
+        '& .fa-paper-plane': {
+            fontSize: '2rem',
+            marginRight: '1rem',
+            color: '#FFF'
         }
     }
 });

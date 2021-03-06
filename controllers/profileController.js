@@ -190,3 +190,14 @@ exports.getPaymentMethods = async (req, res, next) => {
         next(new ErrorHandler(500, err.message));
     }
 }
+
+exports.resetPassword = (req, res, next) => {
+    User.findByIdAndUpdate(req.body.userId, {
+        password: req.body.password
+    }, (err, user) => {
+        if (err || !user) {
+            return next(new ErrorHandler(409, 'Reset password failed.'));
+        }
+        res.status(201).send({ message: 'Password reset.' });
+    });
+}

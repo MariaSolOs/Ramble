@@ -1,20 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {emailAuth, adminLogin} from '../../store/actions/user';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { emailAuth, adminLogin } from '../../../store/actions/user';
 
-//MUI
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
-import facebookIcon from '../../shared/images/facebook-icon.svg';
-import googleIcon from '../../shared/images/google-icon.svg';
+import facebookIcon from '../../../shared/images/facebook-icon.svg';
+import googleIcon from '../../../shared/images/google-icon.svg';
+import TextField from '../../Input/TextField/TextField';
 
-import TextField from '../Input/TextField/TextField';
-
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './AuthDialogStyles';
 const useStyles = makeStyles(styles);
 
@@ -27,12 +24,12 @@ const LogInDialog = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    //To return to the current page after login
+    // To return to the current page after login
     useEffect(() => {
         window.localStorage.setItem('redirectURL', props.currentRoute);
     }, [props.currentRoute]);
     
-    //Log in form
+    // Log in form
     const [values, setValues] = useState(initForm);
     const handleChange = (e) => {
         setValues({
@@ -40,10 +37,12 @@ const LogInDialog = (props) => {
             [e.target.name]: e.target.value
         });
     }
+
     const handleClose = () => {
         setValues(initForm);
         props.onClose();
     }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if(values.email.startsWith('RAMBLE_ADMIN__')) {
@@ -56,13 +55,18 @@ const LogInDialog = (props) => {
         handleClose();
     }
 
+    const handleForgotPassword = () => {
+        handleClose();
+        props.openForgotPwdDialog();
+    }
+
     return (
         <Dialog 
         open={props.open} 
         onClose={handleClose} 
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
-                <CloseIcon onClick={handleClose} className="closeIcon"/>
+                <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
                 <h5 className="title">Log in</h5>
             </div>
             <DialogContent>
@@ -86,6 +90,11 @@ const LogInDialog = (props) => {
                         onChange={handleChange}
                         required/>
                     </FormControl>
+                    <p 
+                    className={classes.forgotLink} 
+                    onClick={handleForgotPassword}>
+                        I forgot my password
+                    </p>
                     <button 
                     type="submit"
                     className={classes.submitButton}>

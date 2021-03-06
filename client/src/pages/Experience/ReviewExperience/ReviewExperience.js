@@ -65,10 +65,9 @@ const ReviewExperience = (props) => {
             <DialogContent>
                 <form onSubmit={handleSubmit}>
                     <div className={classes.rating}>
-                        {rating !== null &&
-                            <p className={classes.label}>
-                                {labels[hover !== -1 ? hover : rating]}
-                            </p>}
+                        <p className={classes.label}>
+                            {labels[hover !== -1 ? hover : rating]}
+                        </p>
                         <Rating
                         name="experienceRating"
                         max={5}

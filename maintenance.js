@@ -1,11 +1,15 @@
-const User = require('./models/user');
+const Notification = require('./models/notification');
 
 module.exports = () => {
     console.log('Running maintenance script...');
 
-    User.updateMany({}, { $rename: { pastExperiences: 'bookedExperiences' } }, { multi: true }, 
-        (err, blocks) => {
-        if (err) { throw err; }
-        console.log('User succesfully updated.');
+    Notification.deleteMany({
+        expToReview: ''
+    }, (err, res) => {
+        if (err || !res) {
+            throw new Error('Notif deletion failed.');
+        } else {
+            console.log(`DELETED ${res.deletedCount} NOTIFS`);
+        }
     });
 }

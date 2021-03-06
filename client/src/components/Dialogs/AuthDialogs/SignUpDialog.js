@@ -5,8 +5,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import EmailIcon from '@material-ui/icons/Email';
-import facebookIcon from '../../shared/images/facebook-icon.svg';
-import googleIcon from '../../shared/images/google-icon.svg';
+import facebookIcon from '../../../shared/images/facebook-icon.svg';
+import googleIcon from '../../../shared/images/google-icon.svg';
 
 //Styles
 import {makeStyles} from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ const SignUpDialog = (props) => {
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-header"
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
-                <CloseIcon onClick={props.onClose} className="closeIcon"/>
+                <CloseIcon onClick={props.onClose} className={classes.closeIcon}/>
                 <h5 className="title">Sign up</h5>
             </div>
             <DialogContent>
@@ -51,7 +51,7 @@ const SignUpDialog = (props) => {
                         Continue with Google
                     </button>
                 </a>
-                <p className={classes.switchDialogsLink}>
+                <p className={classes.switchDialogsText}>
                     Already have an account?&nbsp;&nbsp;
                     <span onClick={props.switchToLogin} >Log in</span>
                 </p>  

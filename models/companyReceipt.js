@@ -21,6 +21,10 @@ const CompanyReceiptSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    serviceFee: {
+        type: Number,
+        required: true
+    },
     experience: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience',

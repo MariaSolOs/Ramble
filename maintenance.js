@@ -1,15 +1,13 @@
-const Notification = require('./models/notification');
+const CompanyReceipt = require('./models/companyReceipt');
 
-module.exports = () => {
+module.exports = async () => {
     console.log('Running maintenance script...');
 
-    Notification.deleteMany({
-        expToReview: ''
-    }, (err, res) => {
-        if (err || !res) {
-            throw new Error('Notif deletion failed.');
-        } else {
-            console.log(`DELETED ${res.deletedCount} NOTIFS`);
-        }
-    });
+    const receipts = await CompanyReceipt.find({});
+    for (const receipt of receipts) {
+        receipt.serviceFee = 0;
+        await receipt.save();
+    }
+
+    console.log('Maintenance done!');
 }

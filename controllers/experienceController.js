@@ -27,7 +27,7 @@ exports.getLocations = (req, res, next) => {
 exports.getExps = async (req, res, next) => {
     try {
         //We only need this for the gallery card
-        const displayFields = 'title images price rating.value creator ' +
+        const displayFields = 'title images price rating creator ' +
                               'location.displayLocation zoomInfo';
 
         //Get experiences with updated availabilites and approved status

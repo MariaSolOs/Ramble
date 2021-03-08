@@ -15,6 +15,8 @@ const Experience = require('../models/experience'),
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res, next) => {
+    calculatePaymentAmount('5fe11cd03a08be0017582ce7', 'public', 3, null);
+
     Occurrence.find({experience: req.params.expId, 
                      dateStart: {
                         $gte: new Date(new Date(req.query.date).setUTCHours(0, 0, 0)), 
@@ -53,7 +55,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                     });
 
         //Create booking
-        const {amount, rambleGain, taxGST, taxQST} = 
+        const {amount, rambleGain, taxGST, taxQST, serviceFee} = 
             await calculatePaymentAmount(
                 experience._id, 
                 req.body.bookType, 
@@ -61,7 +63,7 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                 req.body.promoCode
             );
 
-        const expPrice = amount - taxGST - taxQST;
+        const expPrice = amount - taxGST - taxQST - serviceFee;
         //Creator profit depends on if a promo was applied
         const creatorProfit = rambleGain > 0? 0.8 * expPrice : expPrice;
 
@@ -79,7 +81,8 @@ exports.addBookingToOcurrence = async (req, res, next) => {
                 promoCode: req.body.promoCode,
                 rambleGain: rambleGain,
                 taxGST,
-                taxQST
+                taxQST,
+                serviceFee
             }
         });
 
@@ -134,7 +137,6 @@ exports.addBookingToOcurrence = async (req, res, next) => {
         }
 
         //Add experience to user's booked exps
-        //Update users' past experiences
         await User.findByIdAndUpdate(req.userId, 
         { $addToSet: {bookedExperiences: experience._id}} );
 

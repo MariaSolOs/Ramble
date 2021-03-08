@@ -33,8 +33,9 @@ const BookingSubmitted = (props) => {
     const expPrice = booking.bookType === 'public'? 
                      booking.numGuests * exp.price.perPerson :
                      exp.price.private;
-    const taxGST = 0.05 * expPrice;
-    const taxQST = 0.09975 * expPrice;
+    const subTotal = expPrice * 1.05;
+    const taxGST = 0.05 * subTotal;
+    const taxQST = 0.09975 * subTotal;
 
     //Format occurrence date
     const format = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
@@ -47,19 +48,19 @@ const BookingSubmitted = (props) => {
         last4: '',
         icon: null
     });
-    useEffect(() => {
-        if(booking.payInfo.savedCardUsed) {
-            const cardUsed = cards.filter(card => 
-                card.id === booking.payInfo.savedCardUsed
-            )[0];
-            setCardInfo({...cardUsed});
-        } else {
-            setCardInfo({
-                ...booking.payInfo.cardInfo,
-                icon: getCardBrandIcon(booking.payInfo.cardInfo.brand)
-            });
-        }
-    }, [cards, getCardBrandIcon, booking.payInfo]);
+    // useEffect(() => {
+    //     if(booking.payInfo.savedCardUsed) {
+    //         const cardUsed = cards.filter(card => 
+    //             card.id === booking.payInfo.savedCardUsed
+    //         )[0];
+    //         setCardInfo({...cardUsed});
+    //     } else {
+    //         setCardInfo({
+    //             ...booking.payInfo.cardInfo,
+    //             icon: getCardBrandIcon(booking.payInfo.cardInfo.brand)
+    //         });
+    //     }
+    // }, [cards, getCardBrandIcon, booking.payInfo]);
 
     return (
         <div className={classes.root}>
@@ -96,10 +97,10 @@ const BookingSubmitted = (props) => {
                         <div className={classes.host}>
                             <Avatar src={exp.creator.img}/>
                             <p className={classes.grey}>{exp.creator.name}</p>
-                            <FontAwesomeIcon icon={faPhoneAlt}/>
                             {exp.meetPoint && 
                                 // Hide this for online experiences
                                 <p className={classes.grey}>
+                                    <FontAwesomeIcon icon={faPhoneAlt}/>
                                     {exp.creator.phoneNumber}
                                 </p>}
                         </div>
@@ -138,19 +139,19 @@ const BookingSubmitted = (props) => {
                                 </span>
                                 {cardInfo.last4}
                             </div>
-                           {booking.bookType === 'public' &&
-                            <div className={`${classes.calculation} row`}>
-                                <p>
-                                    {booking.numGuests}<span> x $</span>
-                                    {exp.price.perPerson.toFixed(2)}
-                                </p>
-                                <p>${expPrice.toFixed(2)}</p>
-                            </div>}
+                           {(booking.bookType === 'public' && exp.meetPoint) &&
+                                <div className={`${classes.calculation} row`}>
+                                    <p>
+                                        {booking.numGuests}<span> x $</span>
+                                        {exp.price.perPerson.toFixed(2)}
+                                    </p>
+                                    <p>${expPrice.toFixed(2)}</p>
+                                </div>}
                             <div className={`${classes.total} row`}>
                                 <p>
                                     Total <span> ({exp.price.currency})</span>
                                 </p>
-                                <p>${(expPrice + taxGST + taxQST).toFixed(2)}</p>
+                                <p>${(subTotal + taxGST + taxQST).toFixed(2)}</p>
                             </div>
                         </div>
                     </CustomScroll>

@@ -100,7 +100,7 @@ const styles = () => ({
 
         '& p': {
             margin: 0,
-            '&.tax-row': {
+            '&.costs-row': {
                 fontSize: '0.85rem',
                 color: '#C8C8C8'
             },

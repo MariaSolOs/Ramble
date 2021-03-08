@@ -57,8 +57,10 @@ const PaymentDialog = (props) => {
         setExpPrice(expPrice => expPrice * 0.8);
     }
 
-    const taxGST = 0.05 * expPrice;
-    const taxQST = 0.09975 * expPrice;
+    // Price breakdown
+    const subTotal = expPrice * 1.05;
+    const taxGST = 0.05 * subTotal;
+    const taxQST = 0.09975 * subTotal;
 
     return (
         <>
@@ -119,16 +121,20 @@ const PaymentDialog = (props) => {
                         </p>
                     </div>
                     <div className={classes.priceRow}>
-                        <p className="tax-row">TPS</p>
-                        <p className="tax-row">{taxGST.toFixed(2)}</p>
+                        <p className="costs-row">TPS</p>
+                        <p className="costs-row">{taxGST.toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
-                        <p className="tax-row">TVQ</p>
-                        <p className="tax-row">{taxQST.toFixed(2)}</p>
+                        <p className="costs-row">TVQ</p>
+                        <p className="costs-row">{taxQST.toFixed(2)}</p>
+                    </div>
+                    <div className={classes.priceRow}>
+                        <p className="costs-row">Service fee</p>
+                        <p className="costs-row">{(expPrice * 0.05).toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
                         <p>Total ({props.exp.price.currency})</p>
-                        <p>${(expPrice + taxGST + taxQST).toFixed(2)}</p>
+                        <p>${(subTotal + taxGST + taxQST).toFixed(2)}</p>
                     </div>
                 </div>
                 {!props.user.emailVerified &&

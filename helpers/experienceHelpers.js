@@ -10,23 +10,26 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) =
             // For Zoom experience we just charge the connection
             expPrice = exp.price.perPerson * 100;
             // For in person experiences, multiply by number of guests
-            if (!exp.zoomInfo) {
+            if (!exp.zoomInfo.PMI) {
                 expPrice *= numGuests;
             }
-        } else if(bookType === 'private') {
+        } else if (bookType === 'private') {
             expPrice = exp.price.private * 100;
         } else {
             throw new Error('Invalid booking type.');
         }
 
-        // Compute taxes
-        const taxGST = Math.round(0.05 * expPrice);
-        const taxQST = Math.round(0.09975 * expPrice);
+        const serviceFee = Math.round(expPrice * 0.05);
+        const subTotal = serviceFee + expPrice;
 
+        // Compute taxes
+        const taxGST = Math.round(0.05 * subTotal);
+        const taxQST = Math.round(0.09975 * subTotal);
+        
         // We keep the taxes
         const rambleGain = Math.round(expPrice * 0.2);
-        let application_fee_amount = rambleGain + taxGST + taxQST;
-        let amount = expPrice + taxGST + taxQST;
+        let application_fee_amount = rambleGain + taxGST + taxQST + serviceFee;
+        let amount = subTotal + taxGST + taxQST;
 
         // Apply the discount if applicable
         if(promoCode.length > 0) {
@@ -41,7 +44,8 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) =
             application_fee_amount,
             rambleGain,
             taxGST, 
-            taxQST
+            taxQST,
+            serviceFee
         }
     } catch(err) {
         throw new Error(`Couldn't calculate payment amount: ${err}`);

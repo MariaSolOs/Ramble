@@ -129,7 +129,7 @@ const styles = (theme) => ({
         alignItems: 'center',
         maxWidth: '50%',
         margin: '1rem 0 2rem',
-        '& .fa-map-marker-alt': {
+        '& .fa-map-marker-alt, & .fa-laptop': {
             color: '#CCCCCE',
             fontSize: '1.7rem',
             marginRight: 10

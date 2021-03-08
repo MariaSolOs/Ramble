@@ -52,7 +52,8 @@ const occUpdates = async () => {
                     taxGST: booking.stripe.taxGST,
                     taxQST: booking.stripe.taxQST,
                     date: occ.dateStart,
-                    timeslot: occ.timeslot
+                    timeslot: occ.timeslot,
+                    serviceFee: booking.stripe.serviceFee
                 });
             }
         }

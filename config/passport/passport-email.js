@@ -7,10 +7,10 @@ const local = new LocalStrategy({
       passwordField: 'password',
       session: false
     }, (username, password, done) => {
-        User.findOne({
+        User.findOneAndUpdate({
             'email.address': username,
-            membershipProvider: 'email'
-        }, (err, user) => {
+            membershipProvider: 'email',
+        }, { lastLogin: new Date() }, (err, user) => {
             if(!err && user) {
                 user.validPassword(password).then(res => {
                     if(res) { return done(null, user); }

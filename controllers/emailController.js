@@ -1,5 +1,3 @@
-const { generateAccessToken } = require('../helpers/JWTHelpers');
-
 const User = require('../models/user');
 
 exports.updateCreatorCalendar = (req, res) => {

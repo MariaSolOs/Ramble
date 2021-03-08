@@ -55,42 +55,6 @@ exports.emailLogin = (req, res, next) => {
     next();
 }
 
-exports.sendResetPwdEmail = (req, res, next) => {
-    User.findOne({ 
-        'email.address': req.body.email,
-         membershipProvider: 'email'
-    }, '_id', (err, user) => {
-        if (err) {
-            return next(new ErrorHandler(409, 'Authentication error.'));
-        }
-        if (!user) {
-            return next(new ErrorHandler(404, 'Email not registered.'));
-        }
-
-        res.status(201).send({ message: 'Reset email sent.' });
-
-        const source = fs.readFileSync(path.resolve(__dirname, 
-            '../emailTemplates/passwordReset.mjml'), 'utf-8');              
-        const template = compile(source);
-        const mjml = template({
-            passwordLink: `${process.env.CLIENT_URL}/api/email/${user._id}/reset-password`
-        });
-
-        sgMail.send({
-            from: {
-                email: process.env.ZOHO_EMAIL, 
-                name: 'ramble'
-            },
-            to: req.body.email,
-            subject: 'Reset your password', 
-            text: "Forgot your password? It's okay, you can create a new one.", 
-            html: mjml2html(mjml).html
-        }).catch((err) => {
-            next(new ErrorHandler(500, `Reset email to ${req.body.email} couldn't be sent.`));
-        });
-    });
-}
-
 exports.facebookAuth = (req, res, next) => {
     passport.authenticate('facebook', { session: false }, (err, user, info) => {
         if(err || !user) { 
@@ -135,6 +99,42 @@ exports.registerAdmin = (req, res, next) => {
 exports.loginAdmin = (req, res, next) => {
     req.isAdmin = true;
     next();
+}
+
+exports.sendResetPwdEmail = (req, res, next) => {
+    User.findOne({ 
+        'email.address': req.body.email,
+         membershipProvider: 'email'
+    }, '_id', (err, user) => {
+        if (err) {
+            return next(new ErrorHandler(409, 'Authentication error.'));
+        }
+        if (!user) {
+            return next(new ErrorHandler(404, 'Email not registered.'));
+        }
+
+        res.status(201).send({ message: 'Reset email sent.' });
+
+        const source = fs.readFileSync(path.resolve(__dirname, 
+            '../emailTemplates/passwordReset.mjml'), 'utf-8');              
+        const template = compile(source);
+        const mjml = template({
+            passwordLink: `${process.env.CLIENT_URL}/api/email/${user._id}/reset-password`
+        });
+
+        sgMail.send({
+            from: {
+                email: process.env.ZOHO_EMAIL, 
+                name: 'ramble'
+            },
+            to: req.body.email,
+            subject: 'Reset your password', 
+            text: "Forgot your password? It's okay, you can create a new one.", 
+            html: mjml2html(mjml).html
+        }).catch((err) => {
+            next(new ErrorHandler(500, `Reset email to ${req.body.email} couldn't be sent.`));
+        });
+    });
 }
 
 //Logout route

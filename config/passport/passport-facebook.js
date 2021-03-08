@@ -9,7 +9,9 @@ passport.use(new FacebookStrategy({
     callbackURL: `${process.env.SERVER_URL}/api/auth/facebook/`,
     profileFields: ['name', 'email', 'picture.type(large)']
   }, function(accessToken, refreshToken, profile, done) {
-        User.findOne({membershipProviderId: profile.id}, async (err, user) => {
+        User.findOneAndUpdate({
+            membershipProviderId: profile.id
+        }, { lastLogin: new Date() }, async (err, user) => {
             if(err) { return done(err); }
             if(!user) {
                 const newUser = new User({

@@ -48,19 +48,19 @@ const BookingSubmitted = (props) => {
         last4: '',
         icon: null
     });
-    // useEffect(() => {
-    //     if(booking.payInfo.savedCardUsed) {
-    //         const cardUsed = cards.filter(card => 
-    //             card.id === booking.payInfo.savedCardUsed
-    //         )[0];
-    //         setCardInfo({...cardUsed});
-    //     } else {
-    //         setCardInfo({
-    //             ...booking.payInfo.cardInfo,
-    //             icon: getCardBrandIcon(booking.payInfo.cardInfo.brand)
-    //         });
-    //     }
-    // }, [cards, getCardBrandIcon, booking.payInfo]);
+    useEffect(() => {
+        if(booking.payInfo.savedCardUsed) {
+            const cardUsed = cards.filter(card => 
+                card.id === booking.payInfo.savedCardUsed
+            )[0];
+            setCardInfo({...cardUsed});
+        } else {
+            setCardInfo({
+                ...booking.payInfo.cardInfo,
+                icon: getCardBrandIcon(booking.payInfo.cardInfo.brand)
+            });
+        }
+    }, [cards, getCardBrandIcon, booking.payInfo]);
 
     return (
         <div className={classes.root}>

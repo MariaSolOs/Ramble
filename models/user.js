@@ -66,8 +66,12 @@ const UserSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }]
+    },
+    lastLogin: {
+        type: Date,
+        default: new Date()
     }
-}, {timestamps: true});
+});
 
 UserSchema.methods.validPassword = function(password) {
     return bcrypt.compare(password, this.passwordHash);

@@ -9,10 +9,10 @@ passport.use(new GoogleStrategy({
         callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
         passReqToCallback: true
     }, (req, accessToken, refreshToken, profile, done) => {
-            User.findOne({
+            User.findOneAndUpdate({
                 membershipProviderId: profile.id,
                 membershipProvider: 'google'
-            }, async (err, user) => {
+            }, { lastLogin: new Date() }, async (err, user) => {
                 if(err) { return done(err); } 
                 if(!user) {
                     const newUser = new User({

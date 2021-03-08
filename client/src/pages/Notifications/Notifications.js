@@ -47,7 +47,7 @@ const Notifications = (props) => {
     //For review notifs, go to the experience page and review
     const history = useHistory();
 
-    return (
+    return ( 
         <div className={classes.root}>
             <div className={classes.shadowSeparator}/>
             <div className="body">
@@ -58,6 +58,7 @@ const Notifications = (props) => {
                         const reviewNotif = notif.category === 'User-ExperienceReview';
                         const handleClick = (e) => {
                             if(reviewNotif) {
+                                axios.delete(`/api/profile/notifs/${notif._id}`);
                                 history.push(`/experience/review/${notif.expToReview}`);
                             }
                         }

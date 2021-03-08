@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import creatorBios from './biosData';
 
 //Arrow icons
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+// import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+// import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 //Styles
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
@@ -19,8 +19,8 @@ const CreatorCard = (props) => {
     
     // TODO: Resume scrolling when we get more creators
     //For scrolling bios:
-    const scrollLeft = () => { setSlide((currentSlide + 3) % creatorBios.length); }
-    const scrollRight = () => { setSlide((currentSlide + 1) % creatorBios.length); }
+    // const scrollLeft = () => { setSlide((currentSlide + 3) % creatorBios.length); }
+    // const scrollRight = () => { setSlide((currentSlide + 1) % creatorBios.length); }
 
     return (
         <TransitionGroup>

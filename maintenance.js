@@ -1,12 +1,12 @@
-const CompanyReceipt = require('./models/companyReceipt');
+const User = require('./models/user');
 
 module.exports = async () => {
     console.log('Running maintenance script...');
 
-    const receipts = await CompanyReceipt.find({});
-    for (const receipt of receipts) {
-        receipt.serviceFee = 0;
-        await receipt.save();
+    const users = await User.find({});
+    for (const user of users) {
+        user.lastLogin = new Date();
+        await user.save();
     }
 
     console.log('Maintenance done!');

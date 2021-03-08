@@ -38,11 +38,15 @@ const Footer = () => {
                 <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Social</p>
                     <div>
-                        <a href="/">
+                        <a 
+                        href="https://www.instagram.com/experienceramble/"
+                        rel="noopener noreferrer" 
+                        target="_blank">
                             <FontAwesomeIcon icon={faInstagram} 
                             className={`${classes.icon} instagram`}/>
                         </a>
-                        <a href="https://www.facebook.com/ramblecanada"
+                        <a 
+                        href="https://www.facebook.com/experienceramble"
                         rel="noopener noreferrer" 
                         target="_blank">
                             <FontAwesomeIcon icon={faFacebook} 

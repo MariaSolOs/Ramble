@@ -37,7 +37,6 @@ const CreateExperience = (props) => {
         }
     }, [location, completedSteps, values.isZoomExp]);
 
-
     return (
         <Switch location={location}>
             {!props.isAuth && <Redirect to="/creator/become"/>}

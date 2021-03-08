@@ -23,7 +23,9 @@ const PaymentDialog = (props) => {
     //Initially set price according to numGuests and booking type
     const [expPrice, setExpPrice] = useState(
         props.form.bookType === 'public'?
-        props.form.numGuests * props.exp.price.perPerson : 
+            props.exp.isOnline ?
+                props.exp.price.perPerson:
+                props.form.numGuests * props.exp.price.perPerson : 
         props.exp.price.private
     );
 
@@ -105,11 +107,14 @@ const PaymentDialog = (props) => {
                             {props.form.bookType === 'private'?
                             `$${props.exp.price.private}` : 
                             <>
-                                {props.form.numGuests}<span> x </span> 
-                                {(+props.exp.price.perPerson).toFixed(2)}
-                                {(props.form.promoCode.length > 0)
-                                    && <> - 20% </>} 
-                                <> = </>{expPrice.toFixed(2)}
+                                {props.exp.isOnline?
+                                    expPrice.toFixed(2) : 
+                                    <>{props.form.numGuests}<span> x </span> 
+                                    {(+props.exp.price.perPerson).toFixed(2)}
+                                    {(props.form.promoCode.length > 0)
+                                        && <> - 20% </>} 
+                                    <> = </>{expPrice.toFixed(2)}
+                                    </>}
                             </>}
                         </p>
                     </div>

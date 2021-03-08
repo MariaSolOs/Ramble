@@ -41,7 +41,7 @@ const styles = (theme) => ({
         fontSize: '2.6rem',
         letterSpacing: '-0.1rem',
         color: '#FFF',
-        marginBottom: '0.4rem'
+        margin: '0 0 0.4rem -2px',
     },
     description: {
         fontFamily: 'Helvetica, sans-serif',

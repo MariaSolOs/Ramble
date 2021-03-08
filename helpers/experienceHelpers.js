@@ -3,11 +3,16 @@ const Experience = require('../models/experience'),
 
 exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) => {
     try {
-        const exp = await Experience.findById(expId, 'price');
+        const exp = await Experience.findById(expId, 'price zoomInfo');
         let expPrice;
         // Prices are multiplied by 100 to use cents
-        if(bookType === 'public') {
-            expPrice = exp.price.perPerson * numGuests * 100;
+        if (bookType === 'public') {
+            // For Zoom experience we just charge the connection
+            expPrice = exp.price.perPerson * 100;
+            // For in person experiences, multiply by number of guests
+            if (!exp.zoomInfo) {
+                expPrice *= numGuests;
+            }
         } else if(bookType === 'private') {
             expPrice = exp.price.private * 100;
         } else {

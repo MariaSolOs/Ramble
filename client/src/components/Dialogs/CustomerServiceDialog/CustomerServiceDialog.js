@@ -29,7 +29,7 @@ const CustomerServiceDialog = (props) => {
                 </div>
                 <div className={classes.contactInfo}>
                     <FontAwesomeIcon icon={faEnvelope}/>
-                    <p>support@ramble.com</p>
+                    <p>maria@ramble.email</p>
                 </div>
             </DialogContent>
         </Dialog>

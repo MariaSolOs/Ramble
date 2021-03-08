@@ -48,11 +48,12 @@ const ExperienceCard = (props) => {
                         {props.exp.location.displayLocation}
                     </p>
                     {props.exp.rating.numRatings > 0 &&
-                    <p className={classes.rating}>
-                        {props.exp.rating.value.toFixed(2)}<StarRateIcon/>
-                    </p>}
+                        <p className={classes.rating}>
+                            {props.exp.rating.value.toFixed(2)}<StarRateIcon/>
+                        </p>}
                     <p className={classes.price}>
-                        <span>${props.exp.price.perPerson}</span> PER PERSON
+                        <span>${props.exp.price.perPerson} </span> 
+                        {props.exp.zoomInfo? 'PER CONNECTION' : 'PER PERSON'}
                     </p>
                 </div>
             </div>

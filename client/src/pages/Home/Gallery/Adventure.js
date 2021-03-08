@@ -17,7 +17,7 @@ const Adventure = (props) => {
             <div className={classes.body}>
                 <div style={{ textAlign: 'right' }}>
                     <h1 className={classes.title} style={{ fontSize: '2.4rem' }}>
-                        On a first date, a romantic outing, or with your significant other.
+                        With friends, family, on your own, or with your significant other.
                     </h1>
                     <h5 className={classes.description}>
                         Turn every occasion into a memorable adventure.

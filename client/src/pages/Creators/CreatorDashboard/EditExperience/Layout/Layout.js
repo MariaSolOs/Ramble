@@ -10,15 +10,14 @@ const useStyles = makeStyles(layoutStyles);
 
 const NUM_STEPS = 7;
 
-const Layout = ({ completedSteps, currStage, children, 
-                  onBackClick, onNextClick }) => {
+const Layout = ({ currStage, onBackClick, onNextClick, isZoomExp, children }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <Navbar 
-            completed={completedSteps}
-            currStage={currStage}/>
+            currStage={currStage}
+            isZoomExp={isZoomExp}/>
             <div className={classes.content}>
                 <NavDots 
                 currentStep={currStage} 

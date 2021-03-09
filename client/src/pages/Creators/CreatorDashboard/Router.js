@@ -83,6 +83,14 @@ const Router = (props) => {
     const handleEditDate = useCallback((date) => {
         dispatch({type: actions.CHANGE_EDIT_DATE, date});
     }, [dispatch]);
+    const handleUpdateExps = useCallback((exp) => {
+        const updatedExps = state.createdExps.filter(({ _id }) => _id !== exp._id);
+        updatedExps.push(exp);
+        dispatch({
+            type: actions.SET_CREATED_EXPS,
+            exps: updatedExps
+        });
+    }, [dispatch, state.createdExps]);
 
     return (
         <Switch location={location}>
@@ -100,7 +108,7 @@ const Router = (props) => {
                     <NoCreatedExps/>}
             </Route>
             <Route path={`${path}/edit-exp`}>
-                <EditExperience exp={state.editExp}/>
+                <EditExperience exp={state.editExp} onUpdatedExp={handleUpdateExps}/>
             </Route>
             <Route path={`${path}/availabilities`}>
                 {(state.bookingRequests && state.createdExps) &&

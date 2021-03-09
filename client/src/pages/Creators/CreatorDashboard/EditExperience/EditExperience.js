@@ -12,7 +12,7 @@ import Page404 from '../../../Page404/Page404';
 import Layout from './Layout/Layout';
 
 const EditExperience = ({ exp, userProfile, creatorBio, 
-                          showSnackbar, showError }) => {
+                          showSnackbar, showError, onUpdatedExp }) => {
     const location = useLocation();
     const history = useHistory();
 
@@ -43,43 +43,49 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             included: expReview.included,
             toBring: expReview.toBring,
             price: expReview.price
-        })
-        .then((res) => {
+        }).then((res) => {
             showSnackbar(`Your experience "${res.data.exp.title}" was updated!`);
+            onUpdatedExp(res.data.exp);
         })
         .catch(() => {
             showError("We can't update your experience right now...");
             setTimeout(() => {}, 3000);
             history.push(PAGES.dashboard);
         });
-    }, [exp._id, history, showError, showSnackbar]);
+    }, [exp._id, history, showError, showSnackbar, onUpdatedExp]);
 
     return (
         <Switch location={location}>
             <Route path={PAGES.planning}>
                 <Layout 
                 currStage={0} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.dashboard)}
-                onNextClick={handleNavButtonClick(PAGES.setting)}>
+                onNextClick={values.isZoomExp? handleNavButtonClick(PAGES.duration) : 
+                             handleNavButtonClick(PAGES.setting)}>
                     <slides.Planning
                     description={values.description}
                     submitInput={handleInputChange}/>
                 </Layout>
             </Route>
-            <Route path={PAGES.setting}>
-                <Layout
-                currStage={0} 
-                onBackClick={handleNavButtonClick(PAGES.planning)}
-                onNextClick={handleNavButtonClick(PAGES.duration)}>
-                    <slides.Setting
-                    setting={values.setting}
-                    submitInput={handleInputChange}/>
-                </Layout>
-            </Route>
+            {values.setting &&
+                <Route path={PAGES.setting}>
+                    <Layout
+                    currStage={0} 
+                    isZoomExp={values.isZoomExp}
+                    onBackClick={handleNavButtonClick(PAGES.planning)}
+                    onNextClick={handleNavButtonClick(PAGES.duration)}>
+                        <slides.Setting
+                        setting={values.setting}
+                        submitInput={handleInputChange}/>
+                    </Layout>
+                </Route>}
             <Route path={PAGES.duration}>
                 <Layout
                 currStage={1} 
-                onBackClick={handleNavButtonClick(PAGES.setting)}
+                isZoomExp={values.isZoomExp}
+                onBackClick={values.isZoomExp? handleNavButtonClick(PAGES.planning) :
+                             handleNavButtonClick(PAGES.setting)}
                 onNextClick={handleNavButtonClick(PAGES.language)}>
                     <slides.Duration
                     duration={values.duration}
@@ -89,6 +95,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.language}>
                 <Layout
                 currStage={1} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.duration)}
                 onNextClick={handleNavButtonClick(PAGES.capacity)}>
                     <slides.Language
@@ -100,6 +107,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.capacity}>
                 <Layout
                 currStage={1} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.duration)}
                 onNextClick={handleNavButtonClick(PAGES.age)}>
                     <slides.Capacity
@@ -110,6 +118,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.age}>
                 <Layout
                 currStage={1} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.capacity)}
                 onNextClick={handleNavButtonClick(PAGES.preview)}>
                     <slides.Age
@@ -121,6 +130,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.preview}>
                 <Layout
                 currStage={2} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.age)}
                 onNextClick={handleNavButtonClick(PAGES.included)}>
                     <slides.Preview
@@ -131,6 +141,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.included}>
                 <Layout
                 currStage={3} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.preview)}
                 onNextClick={handleNavButtonClick(PAGES.bring)}>
                     <slides.Included
@@ -141,6 +152,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.bring}>
                 <Layout
                 currStage={4} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.included)}
                 onNextClick={handleNavButtonClick(PAGES.price)}>
                     <slides.Bring
@@ -151,6 +163,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
             <Route path={PAGES.price}>
                 <Layout
                 currStage={5} 
+                isZoomExp={values.isZoomExp}
                 onBackClick={handleNavButtonClick(PAGES.bring)}
                 onNextClick={handleNavButtonClick(PAGES.review)}>
                     <slides.Price
@@ -172,6 +185,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                     {expReview?
                         <Layout
                         currStage={6} 
+                        isZoomExp={values.isZoomExp}
                         onBackClick={handleNavButtonClick(PAGES.dashboard)}
                         onNextClick={handleSubmitChanges(expReview)}>
                             <slides.Review

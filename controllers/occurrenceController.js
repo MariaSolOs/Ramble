@@ -85,7 +85,8 @@ exports.addBookingToOcurrence = async (req, res, next) => {
         });
 
         //Add booking to occurrence and update
-        occ.spotsLeft -= booking.numPeople;
+        occ.spotsLeft = req.body.bookType === 'private'? 0 : 
+                        occ.spotsLeft - booking.numPeople;
         occ.bookings.push(booking);
 
         //Add booking to creator's requests

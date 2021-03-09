@@ -32,8 +32,7 @@ export const fetchUserProfile = () => {
         .then(async res => {
             if(res.status === 200) {
                 if(res.data.isCreator) {
-                    await axios.get('/api/creator')
-                    .then(res => {
+                    await axios.get('/api/creator').then(res => {
                         dispatch(setCreatorProfile(res.data.creatorProfile));  
                     }).catch(err => { 
                         console.log(`FETCH CREATOR PROFILE FAILED: ${err}`); 

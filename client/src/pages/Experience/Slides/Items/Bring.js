@@ -53,7 +53,6 @@ const Bring = ({toBring, submitInput}) => {
         if(e.keyCode === 13) { addItem(); }
     }
 
-    console.log(toBring)
     return (
         <div onKeyDown={handleEnter}>
             <div>

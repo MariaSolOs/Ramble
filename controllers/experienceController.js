@@ -193,7 +193,7 @@ exports.reviewExperience = async (req, res, next) => {
         }
 
         await exp.save();
-        res.status(201).send({message: 'Review successfully submitted.'});
+        res.status(201).send({ message: 'Review successfully submitted.' });
     } catch(err) {
         next(new ErrorHandler(409, err.message));
     }
@@ -246,6 +246,7 @@ exports.createExperience = async (req, res, next) => {
 //Edit an experience
 exports.editExperience = async (req, res, next) => {
     try {
+        const exp = await Experience.findById(req.params.expId);
         //Upload new images
         const expImages = [];
         for(img of req.body.images) {
@@ -266,7 +267,6 @@ exports.editExperience = async (req, res, next) => {
         delete req.body.images;
 
         //Update experience fields
-        const exp = await Experience.findById(req.params.expId);
         for(field in req.body) {
             exp[field] = req.body[field];
         }
@@ -274,13 +274,10 @@ exports.editExperience = async (req, res, next) => {
 
         res.status(201).send({
             message: 'Experience successfully updated.',
-            exp: {
-                _id: exp._id,
-                title: exp.title
-            }
+            exp
         });
     } catch(error) {
-        next(new ErrorHandler(409, err.message));
+        next(new ErrorHandler(409, error.message));
     }
 }
 

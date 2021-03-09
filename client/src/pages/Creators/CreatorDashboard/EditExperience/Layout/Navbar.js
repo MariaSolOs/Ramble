@@ -7,14 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { navbarStyles } from './LayoutStyles';
 const useStyles = makeStyles(navbarStyles);
 
-const Navbar = ({ currStage }) => {
+const Navbar = ({ currStage, isZoomExp }) => {
     const classes = useStyles();
     
     const [showSteps, setShowSteps] = useState('');
     const openSteps = (steps) => () => setShowSteps(steps);
 
     const currPage = useLocation().pathname;
-
     return (
         <ul className={classes.nav}>
             <li 
@@ -32,11 +31,12 @@ const Navbar = ({ currStage }) => {
                             Description
                         </Link>
                     </li>
-                    <li className={`${currPage === PAGES.setting && 'current'}`}>
-                        <Link to={PAGES.setting}>
-                            Setting
-                        </Link>
-                    </li>
+                    {!isZoomExp &&
+                        <li className={`${currPage === PAGES.setting && 'current'}`}>
+                            <Link to={PAGES.setting}>
+                                Setting
+                            </Link>
+                        </li>}
                 </Collapse>
             </li>
             <li 

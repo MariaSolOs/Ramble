@@ -43,7 +43,7 @@ const styles = () => ({
             flexDirection: 'column',
             '& $description': {
                 fontSize: '1.1rem',
-                margin: '40px 2rem 0 auto',
+                margin: '40px auto 0 0',
             }
         }
     },

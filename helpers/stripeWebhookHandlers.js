@@ -117,18 +117,23 @@ exports.handleSuccessfulPaymentIntent = async (intent) => {
 exports.handleCancelledPaymentIntent = async (intent) => {
     try {
         //Find booking
-        const booking = await Booking.findOneAndDelete(
-                            {'stripe.paymentIntentId': intent.id}
-                        );
-        if(!booking) { 
+        const booking = await Booking.findOneAndDelete({
+            'stripe.paymentIntentId': intent.id 
+        });
+        if (!booking) { 
             return 'No booking found with a matching intent ID'; 
         }
         //Update occurrence and creator's requests
-        await Creator.findByIdAndUpdate(intent.metadata.creatorId, 
-              {$pull: {bookingRequests: booking._id}});
+        const exp = await Experience.findById(booking.experience, 'capacity');
+        await Creator.findByIdAndUpdate(intent.metadata.creatorId, {
+            $pull: { bookingRequests: booking._id }
+        });
         await Occurrence.findByIdAndUpdate(booking.occurrence, {
-            $pull: {bookings: booking._id},
-            $inc: {spotsLeft: booking.numPeople}
+            $pull: { bookings: booking._id },
+            $inc: { 
+                spotsLeft: booking.bookType === 'public'? 
+                           booking.numPeople : exp.capacity
+            }
         });
 
         return 'Successfully cancelled payment intent.';

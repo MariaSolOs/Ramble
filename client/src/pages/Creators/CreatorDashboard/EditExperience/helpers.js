@@ -18,7 +18,8 @@ export const initValues = (exp) => ({
     price: exp.price.perPerson,
     privatePrice: exp.price.private !== null? 
                         exp.price.private : 0,
-    currency: exp.price.currency
+    currency: exp.price.currency,
+    isZoomExp: Boolean(exp.zoomInfo)
 });
 
 /* Transform data to display in experience page and 
@@ -51,7 +52,7 @@ export const prepareReview = (currentExp, editedExp, user) => {
             price: {    
                 perPerson: editedExp.price,
                 private: editedExp.privatePrice > 0? 
-                            editedExp.privatePrice : null,
+                         editedExp.privatePrice : null,
                 currency: editedExp.currency
             },
 
@@ -65,6 +66,6 @@ export const prepareReview = (currentExp, editedExp, user) => {
         }
         
         return exp; 
-    } catch(err) { return null; }
+    } catch (err) { return null; }
 }
 

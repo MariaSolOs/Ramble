@@ -19,7 +19,7 @@ exports.calculatePaymentAmount = async (expId, bookType, numGuests, promoCode) =
             throw new Error('Invalid booking type.');
         }
 
-        const serviceFee = Math.round(expPrice * 0.05);
+        const serviceFee = Math.round(expPrice * 0.0345) + 33;
         const subTotal = serviceFee + expPrice;
 
         // Compute taxes

@@ -15,8 +15,6 @@ const Experience = require('../models/experience'),
 
 //Show occurrences for a certain experience
 exports.getExpOcurrences = (req, res, next) => {
-    calculatePaymentAmount('5fe11cd03a08be0017582ce7', 'public', 3, null);
-
     Occurrence.find({experience: req.params.expId, 
                      dateStart: {
                         $gte: new Date(new Date(req.query.date).setUTCHours(0, 0, 0)), 

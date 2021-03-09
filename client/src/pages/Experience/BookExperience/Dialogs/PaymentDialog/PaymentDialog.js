@@ -58,7 +58,8 @@ const PaymentDialog = (props) => {
     }
 
     // Price breakdown
-    const subTotal = expPrice * 1.05;
+    const serviceFee = (expPrice * 0.0345) + 0.33;
+    const subTotal = serviceFee + expPrice;
     const taxGST = 0.05 * subTotal;
     const taxQST = 0.09975 * subTotal;
 
@@ -130,7 +131,7 @@ const PaymentDialog = (props) => {
                     </div>
                     <div className={classes.priceRow}>
                         <p className="costs-row">Service fee</p>
-                        <p className="costs-row">{(expPrice * 0.05).toFixed(2)}</p>
+                        <p className="costs-row">{serviceFee.toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
                         <p>Total ({props.exp.price.currency})</p>

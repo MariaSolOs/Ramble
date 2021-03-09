@@ -33,7 +33,7 @@ const BookingSubmitted = (props) => {
     const expPrice = booking.bookType === 'public'? 
                      booking.numGuests * exp.price.perPerson :
                      exp.price.private;
-    const subTotal = expPrice * 1.05;
+    const subTotal = (expPrice * 1.0345) + 0.33;
     const taxGST = 0.05 * subTotal;
     const taxQST = 0.09975 * subTotal;
 

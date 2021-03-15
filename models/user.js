@@ -75,7 +75,7 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.methods.validPassword = function(password) {
     return bcrypt.compare(password, this.passwordHash);
-};  
+}
   
 UserSchema.virtual('password').set(function(value) {
     this.passwordHash = bcrypt.hashSync(value, 10);

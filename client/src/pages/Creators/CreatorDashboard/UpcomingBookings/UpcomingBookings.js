@@ -33,7 +33,7 @@ const UpcomingBookings = ({ bookingDates }) => {
     const [occs, setOccs] = useState([]);
     useEffect(() => {
         const month = `${date.getMonth() + 1}`.padStart(2, '0');
-        const day = `${date.getDay()}`.padStart(2, '0');
+        const day = `${date.getDate()}`.padStart(2, '0');
         axios.get(`/api/creator/${date.getFullYear()}-${month}-${day}/upcomingBookings`).then(res => {
             setOccs(res.data.occs);
         });

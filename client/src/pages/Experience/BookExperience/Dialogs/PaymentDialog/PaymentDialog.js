@@ -122,16 +122,16 @@ const PaymentDialog = (props) => {
                         </p>
                     </div>
                     <div className={classes.priceRow}>
+                        <p className="costs-row">Service fee</p>
+                        <p className="costs-row">{serviceFee.toFixed(2)}</p>
+                    </div>
+                    <div className={classes.priceRow}>
                         <p className="costs-row">TPS</p>
                         <p className="costs-row">{taxGST.toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
                         <p className="costs-row">TVQ</p>
                         <p className="costs-row">{taxQST.toFixed(2)}</p>
-                    </div>
-                    <div className={classes.priceRow}>
-                        <p className="costs-row">Service fee</p>
-                        <p className="costs-row">{serviceFee.toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
                         <p>Total ({props.exp.price.currency})</p>

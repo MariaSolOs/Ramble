@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
-import {showError} from '../../../store/actions/ui';
+import {showError, startLoading, endLoading} from '../../../store/actions/ui';
 import {useHistory, useParams} from 'react-router-dom';
 import axios from '../../../tokenizedAxios';
 import {copyMap} from '../../../shared/utilities/scheduleMapHelpers';
@@ -42,7 +42,7 @@ const ExpSchedule = (props) => {
         }).catch(err => {
             dispatch(showError('We cannot update your availabilities right now.'));
             setTimeout(() => { history.push('/'); }, 4000);
-        })
+        });
     }, [dispatch, expId, history]);
 
     const format = {weekday: 'long', month: 'long', day: 'numeric'};
@@ -57,15 +57,17 @@ const ExpSchedule = (props) => {
     }, []);
 
     const handleSave = () => {
-        axios.patch(`/api/exp/${exp._id}/schedule`, 
-        {schedule: Array.from(schedule)})
-        .then(res => {
+        dispatch(startLoading());
+        axios.patch(`/api/exp/${exp._id}/schedule`, {
+            schedule: Array.from(schedule)
+        }).then(res => {
             setDone(true);
-        })
-        .catch(err => {
+        }).catch(err => {
             dispatch(showError("We cannot update your schedule right " + 
             'now. Try again later.'));
             setTimeout(() => { history.push('/'); }, 4000);
+        }).finally(() => {
+            dispatch(endLoading());
         });
     }
 

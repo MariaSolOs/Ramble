@@ -288,11 +288,12 @@ exports.updateSchedule = (req, res, next) => {
         from: new Date(),
         to: new Date().setMonth(new Date().getMonth() + 1),
         schedule: req.body.schedule
-    }},
-    (err, exp) => {
+    }}, async (err, exp) => {
         if(err || !exp) {
             return next(new ErrorHandler(409, "Couldn't update schedule"));
         }
+        // Create new occurrences
+        await createExpOccurrences(exp);
         res.status(201).send({message: 'Schedule successfully updated.'});
     });
 }

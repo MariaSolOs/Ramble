@@ -1,20 +1,14 @@
-const User = require('./models/user');
-const Creator = require('./models/creator');
+const Receipt = require('./models/companyReceipt');
 
+// For computing taxes
 module.exports = async () => {
-    console.log('Running maintenance script...');
+    const receipts = await Receipt.find({}, 'taxGST taxQST');
+    let taxQST = taxGST = 0;
 
-    const toDel = [];
-    const creators = await Creator.find({}, '_id user');
-
-    for (const creator of creators) {
-        const userCount = await User.count({ _id: creator.user });
-        if (userCount == 0) {
-            toDel.push(creator._id);
-        }
+    for (const receipt of receipts) {
+        taxQST += receipt.taxQST;
+        taxGST += receipt.taxGST;
     }
 
-    await User.deleteMany({ _id: { $in: toDel }});
-
-    console.log('Maintenance done!');
+    console.log(`TAX QST: ${taxQST} -- TAX QST: ${taxGST}`);
 }

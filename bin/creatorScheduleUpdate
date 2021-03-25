@@ -17,10 +17,10 @@ const creatorScheduleUpdate = async () => {
     console.log('JOB STARTS: CALENDAR UPDATE REMINDERS');
     try {
         //Find all experiences where the availability is about to expire
-        const in3Days = new Date();
-        in3Days.setDate(new Date().getDate() + 3);
+        const in2Days = new Date();
+        in2Days.setDate(new Date().getDate() + s);
         const exps = await Experience.find({
-                           'avail.to': {$lte: in3Days},
+                           'avail.to': {$lte: in2Days},
                            status: 'approved'
                     }, 'title creator avail images location')
                     .populate({

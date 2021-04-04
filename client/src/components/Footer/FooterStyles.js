@@ -58,14 +58,16 @@ const styles = (theme) => ({
 
     //Chips
     chip: {
-        backgroundColor: 'rgba(65, 65, 65, 0.9)',
+        backgroundColor: 'rgba(65, 65, 65, 0.9) !important',
         color: '#FFF',
         fontFamily: 'inherit',
         fontWeight: 'bold',
+        textTransform: 'capitalize',
         letterSpacing: '-0.05rem',
         width: 'fit-content',
         padding: '3px 10px',
-        marginRight: 10
+        marginRight: 10,
+        cursor: 'pointer'
     },
 
     //Media icons

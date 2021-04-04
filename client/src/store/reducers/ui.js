@@ -1,9 +1,10 @@
-import {uiTypes as types} from '../actionTypes';
+import { uiTypes as types } from '../actionTypes';
 
 const initialState = {
     loading: false,
     message: '',
-    messageComponent: ''
+    messageComponent: '',
+    language: 'en'
 }
 
 const uiReducer = (state = initialState, action) => {
@@ -41,6 +42,12 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 message: '',
                 messageComponent: ''
+            }
+        }
+        case types.SET_LANGUAGE: {
+            return {
+                ...state,
+                language: action.language
             }
         }
         default: { return state; }

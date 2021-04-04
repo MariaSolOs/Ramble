@@ -1,25 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import {connect} from 'react-redux';
-import {logout} from '../../../store/actions/user';
-import {NavLink, Link, useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { logout } from '../../../store/actions/user';
+import { NavLink, Link, useHistory } from 'react-router-dom';
 import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
+import text from './CollapsingNavText';
 
-//MUI
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-
 import AppBar from '../AppBar/AppBar';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAngleDoubleDown} from '@fortawesome/free-solid-svg-icons/faAngleDoubleDown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons/faAngleDoubleDown';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './CollapsingNavStyles';
 const useStyles = makeStyles(styles);
 
 const CollapsingNav = (props) => {
     const classes = useStyles();
+
+    const { dialogActions, lang } = props;
 
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = (e) => setAnchorEl(e.currentTarget);
@@ -32,17 +33,16 @@ const CollapsingNav = (props) => {
                         numNotifs={props.numNotifs}
                         isCreator={props.isCreator}
                         closeParentMenu={closeMenu}
-                        logoutUser={props.logoutUser}/>;
+                        logoutUser={props.logoutUser}
+                        lang={lang}/>;
 
-    //Close popover when window resizes
+    // Close popover when window resizes
     useEffect(() => {
         window.addEventListener('resize', closeMenu);
         return () => window.removeEventListener('resize', closeMenu);
     }, []);
 
-    const {dialogActions} = props;
-
-    //Clicking on the Ramble logo redirect to the home page
+    // Clicking on the Ramble logo redirect to the home page
     const history = useHistory();
     const handleRambleClick = () => history.push('/');
 
@@ -75,19 +75,19 @@ const CollapsingNav = (props) => {
                             <div className={classes.numBookings}>
                                 {props.numBookings}
                             </div>}
-                            {props.isCreator? 'Creator dashboard': 'Become a Creator'}
+                            {props.isCreator? text.creatorDB[lang]: text.becomeCreator[lang]}
                         </MenuItem>
                         {props.isAuth? 
                             <MenuItem>{profileMenu}</MenuItem> : 
                             [<MenuItem component="button" key={0}
                             onClick={() => { dialogActions.openSignUpDialog();
-                                            closeMenu(); }}>
-                                Sign up
+                                             closeMenu(); }}>
+                                {text.signUp[lang]}
                             </MenuItem>,
                             <MenuItem component="button" key={1}
                             onClick={() => { dialogActions.openLogInDialog();
-                                            closeMenu(); }}>
-                                Log in
+                                             closeMenu(); }}>
+                                {text.logIn[lang]}
                             </MenuItem>]}
                     </Menu>
                 </div>
@@ -101,25 +101,25 @@ const CollapsingNav = (props) => {
                             <div className={classes.numBookings}>
                                 {props.numBookings}
                             </div>}
-                        Creator dashboard
+                        {text.creatorDB[lang]}
                     </Link> : 
                     <Link 
                     to="/creator/become"
                     className={classes.navLink}
                     style={{ color: '#FFF' }}>
-                        Become a Creator
+                        {text.becomeCreator[lang]}
                     </Link>}
                     {props.isAuth? profileMenu : 
                     <>
                         <button 
                         onClick={() => dialogActions.openSignUpDialog()}
                         className={`${classes.navLink} ${classes.dialogToggler}`}>
-                            Sign up
+                            {text.signUp[lang]}
                         </button>
                         <button as="button" 
                         onClick={() => dialogActions.openLogInDialog()}
                         className={`${classes.navLink} ${classes.dialogToggler}`}>
-                            Log in
+                            {text.logIn[lang]}
                         </button>
                     </>}
                 </div>
@@ -134,7 +134,8 @@ const mapStateToProps = (state) => ({
     numNotifs: state.user.notifs.length,
     numBookings: state.user.creator.numBookings,
     userName: state.user.profile.fstName,
-    userPic: state.user.profile.photo
+    userPic: state.user.profile.photo,
+    lang: state.ui.language
 });
 const mapDispatchToProps = (dispatch) => ({
     logoutUser: () => dispatch(logout())

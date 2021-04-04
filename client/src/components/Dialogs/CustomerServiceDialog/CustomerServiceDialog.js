@@ -1,26 +1,24 @@
 import React from 'react';
+import text from './CustomerServiceDialogText';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPhoneAlt} from '@fortawesome/free-solid-svg-icons/faPhoneAlt';
-import {faEnvelope} from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhoneAlt } from '@fortawesome/free-solid-svg-icons/faPhoneAlt';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import styles from './CustomerServiceDialogStyles';
 const useStyles = makeStyles(styles);
 
-const CustomerServiceDialog = (props) => {
+const CustomerServiceDialog = ({ open, onClose, lang }) => {
     const classes = useStyles();
 
     return (
-        <Dialog 
-        open={props.open} 
-        onClose={props.onClose} 
-        classes={{ paper: classes.paper }}>
+        <Dialog open={open} onClose={onClose} classes={{ paper: classes.paper }}>
             <div className={classes.header}>
-                <h4 className="title">Customer service</h4>
-                <p>24/7 service to help you anywhere, anytime</p>
+                <h4 className="title">{text.title[lang]}</h4>
+                <p>{text.message[lang]}</p>
             </div>
             <DialogContent className={classes.content}>
                 <div className={classes.contactInfo}>

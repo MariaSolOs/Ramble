@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 import Landing from './Landing/Landing';
 import Partake from './Gallery/Partake';
@@ -10,8 +11,9 @@ const useStyles = makeStyles(styles);
 
 const Home = () => {
     const classes = useStyles();
+    const lang = useSelector(state => state.ui.language);
 
-    //Focus searchbar when clicking on the gallery images
+    // Focus searchbar when clicking on the gallery images
     const searchRef = useRef(null);
     const setSearchFocus = () => { 
         searchRef.current && searchRef.current.focus(); 
@@ -20,8 +22,8 @@ const Home = () => {
     return (
         <div className={classes.root}>
             <Landing searchRef={searchRef}/>
-            <Partake setSearchFocus={setSearchFocus}/>
-            <Adventure setSearchFocus={setSearchFocus}/>
+            <Partake setSearchFocus={setSearchFocus} lang={lang}/>
+            <Adventure setSearchFocus={setSearchFocus} lang={lang}/>
         </div>
     );
 }

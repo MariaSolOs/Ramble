@@ -1,42 +1,54 @@
-import React, {useState} from 'react';
-// import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLanguage } from '../../store/actions/ui';
+import text from './FooterText';
 
-//Components and icons
 import CustomerServiceDialog from '../Dialogs/CustomerServiceDialog/CustomerServiceDialog';
 import Chip from '@material-ui/core/Chip';
 import LanguageIcon from '@material-ui/icons/Language';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faFacebook} from '@fortawesome/free-brands-svg-icons/faFacebook';
-import {faInstagram} from '@fortawesome/free-brands-svg-icons/faInstagram';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './FooterStyles';
 const useStyles = makeStyles(styles);
 
 const Footer = () => {
+    const lang = useSelector(state => state.ui.language);
+    const dispatch = useDispatch();
+
     const classes = useStyles();
 
     const [showCustService, setShowCustService] = useState(false);
     const openCustService = () => { setShowCustService(true); }
     const closeCustService = () => { setShowCustService(false); }
 
+    const handleLangChange = () => {
+        if (lang === 'en') {
+            dispatch(setLanguage('fr'));
+        } else {
+            dispatch(setLanguage('en'));
+        }
+    }
+
     return (
         <>
         <CustomerServiceDialog 
         open={showCustService}
-        onClose={closeCustService}/>
+        onClose={closeCustService}
+        lang={lang}/>
         <footer className={classes.footer}>
             <div className={classes.header}>ramble</div>
             <div className={classes.body}>
                 <div className={classes.bodyCol}>
                     <p className={classes.colTitle}>Support</p>
                     <span className="open-dialog" onClick={openCustService}>
-                        24/7 Customer Service
+                        {text.supportLink[lang]}
                     </span>
                 </div>
                 <div className={classes.bodyCol}>
-                    <p className={classes.colTitle}>Social</p>
+                    <p className={classes.colTitle}>{text.socialCol[lang]}</p>
                     <div>
                         <a 
                         href="https://www.instagram.com/experienceramble/"
@@ -55,25 +67,25 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className={classes.bodyCol}>
-                    <p className={classes.colTitle}>Language</p>
+                    <p className={classes.colTitle}>{text.languageCol[lang]}</p>
                     <div>
                         <Chip 
                         icon={<LanguageIcon/>} 
-                        label="English" 
-                        className={classes.chip}/>
+                        label={text.languageChip[lang]}
+                        className={classes.chip}
+                        clickable
+                        onClick={handleLangChange}/>
                     </div>
                 </div>
             </div>
             <div className={classes.bottom}>
-                <p>&copy; 2021 Ramble Technologies Inc</p>
-                {/* <div>
-                    <span className="link">Terms of service</span>
-                    <span className="link">Privacy Policy</span>
-                </div> */}
+                <p>
+                    &copy; {text.copyright[lang]}
+                </p>
             </div>
         </footer>
         </>
     );
 }
 
-export default React.memo(Footer);
+export default Footer;

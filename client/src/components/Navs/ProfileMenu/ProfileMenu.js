@@ -1,25 +1,25 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {NavLink, Link, useLocation} from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
+import text from './ProfileMenuText';
 
-//MUI
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './ProfileMenuStyles';
 const useStyles = makeStyles(styles);
 
 const ProfileMenu = (props) => {
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
     const showNotif = props.numNotifs > 0 && pathname !== '/notifications';
+    const { closeParentMenu, lang } = props;
+
     const classes = useStyles({
         withNotifIcon: showNotif,
         isCreator: props.isCreator
     });
-    const {closeParentMenu} = props;
-
+    
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = (e) => setAnchorEl(e.currentTarget);
     const closeMenu = useCallback(() => {
@@ -27,7 +27,7 @@ const ProfileMenu = (props) => {
         closeParentMenu();
     }, [closeParentMenu]);
 
-    //Close popover when window resizes
+    // Close popover when window resizes
     useEffect(() => {
         window.addEventListener('resize', closeMenu);
         return () => { window.removeEventListener('resize', closeMenu); }
@@ -54,7 +54,7 @@ const ProfileMenu = (props) => {
             component={NavLink} 
             to="/profile/exp/booked"
             onClick={closeMenu}>
-                View Profile
+                {text.profile[lang]}
             </MenuItem>
             <MenuItem 
             component={NavLink}
@@ -71,10 +71,10 @@ const ProfileMenu = (props) => {
                 component={NavLink} 
                 to="/experience/new/intro"
                 onClick={closeMenu}>
-                    New Experience
+                    {text.newExp[lang]}
                 </MenuItem>}
             <MenuItem component={Link} to="/" onClick={props.logoutUser}>
-                Logout
+                {text.logout[lang]}
             </MenuItem>
         </Menu>
       </div>

@@ -1,43 +1,42 @@
-import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import useNumberField from '../../../hooks/useNumberField/useNumberField';
 import useLocations from '../../../hooks/useLocations';
+import { landingText as text } from '../HomeText';
 
-//Components and icons
 import ReferBox from '../../../components/ReferBox/ReferBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './LandingStyles';
 const useStyles = makeStyles(styles);
 
 const Landing = (props) => {
     const classes = useStyles();
-
+    const lang = useSelector(state => state.ui.language);
     const locations = useLocations();
     const history = useHistory();
 
-    //For handling the user search queries
+    // For handling the user search queries
     const [location, setLocation] = useState('');
-    const handleLocationChange = (event, value, reason) => {
+    const handleLocationChange = (_, value, reason) => {
         if(reason === 'reset') { setLocation(value); }
     }
     const [numPeople, NumPeopleField] = useNumberField({
         min: 1, 
         initval: 2,
         step: 1,
-        getlabel: num => num > 1? 'People' : 'Person', 
+        getlabel: num => num > 1? text.peopleLabel[lang] : text.personLabel[lang], 
         startadornment: <FontAwesomeIcon icon={faUsers}/>,
     });
 
-    //Redirect to search page when user 'starts exploring'
+    // Redirect to search page when user 'starts exploring'
     const handleSearch = () => {
         history.push(`/experience/search?location=${location}&numPeople=${numPeople}`);
     }
@@ -49,10 +48,8 @@ const Landing = (props) => {
     return (
         <div className={classes.root}>
             <div className={classes.body}>
-                <h1 className={classes.title}>Experience different.</h1>
-                <h5 className={classes.description}>
-                    Discover and attend unique experiences
-                </h5>
+                <h1 className={classes.title}>{text.title[lang]}</h1>
+                <h5 className={classes.description}>{text.discover[lang]}</h5>
                 <div className={classes.row}>
                     <Autocomplete
                     id="location-search"
@@ -65,7 +62,7 @@ const Landing = (props) => {
                         <TextField
                         {...params}
                         classes={{ root: classes.textField_root }}
-                        placeholder="Select a city"
+                        placeholder={text.searchbar[lang]}
                         inputRef={props.searchRef}
                         InputProps={{
                             ...params.InputProps,
@@ -86,7 +83,7 @@ const Landing = (props) => {
                         className={classes.button} 
                         onClick={handleSearch}
                         disabled={location === ''}>
-                            Start exploring
+                            {text.exploreButton[lang]}
                         </button>
                     </div>
                 </div>

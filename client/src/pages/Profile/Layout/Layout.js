@@ -57,7 +57,7 @@ const Layout = (props) => {
             </div>
             <div className={classes.body}>   
                 <div className={classes.navbar}>
-                    <Navbar/>
+                    <Navbar lang={props.lang}/>
                 </div>
                 <div className={classes.shadowSeparator}/>
                 <div className={classes.page}>
@@ -71,7 +71,8 @@ const Layout = (props) => {
 const mapStateToProps = (state) => ({
     fstName: state.user.profile.fstName,
     photo: state.user.profile.photo,
-    city: state.user.profile.city
+    city: state.user.profile.city,
+    lang: state.ui.language
 });
 const mapDispatchToProps = (dispatch) => ({
     changeProfilePic: (photo) => dispatch(editUserProfile({photo})),

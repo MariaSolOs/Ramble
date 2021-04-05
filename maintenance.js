@@ -1,8 +1,17 @@
 const Experience = require('./models/experience'),
-      Occurrence = require('./models/occurrence'),
-      {createExpOccurrences} = require('./helpers/experienceHelpers');
+      Notification = require('./models/notification'),
+      Review = require('./models/review');
 
-// For computing taxes
 module.exports = async () => {
-    
+    const notifs = await Notification.find({ category: 'User-ExperienceReview' });
+    const toDel = [];
+
+    for (notif of notifs) {
+        const exists = await Experience.exists({ _id: notif.expToReview });
+        if (!exists) {
+            toDel.push(notif._id);
+        }
+    }
+
+    await Notification.deleteMany({ _id: { $in: toDel } });
 }

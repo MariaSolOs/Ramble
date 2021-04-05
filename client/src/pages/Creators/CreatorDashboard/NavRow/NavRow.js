@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import text from './NavRowText';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
@@ -7,22 +8,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './NavRowStyles';
 const useStyles = makeStyles(styles);
 
-const NavRow = () => {
+const NavRow = ({ lang }) => {
     const classes = useStyles();
 
     return (
         <Breadcrumbs separator="" classes={{ root: classes.nav }}>
             <NavLink to="/creator/dashboard/bookings-requests">
-                Booking requests
+                {text.bookRequests[lang]}
             </NavLink>
             <NavLink to="/creator/dashboard/experiences">
-                Experiences
+                {text.exps[lang]}
             </NavLink>
             <NavLink to="/creator/dashboard/availabilities">
-                My availabilities
+                {text.avails[lang]}
             </NavLink>
             <NavLink to="/creator/dashboard/bookings-upcoming">
-                Upcoming bookings
+                {text.upcoming[lang]}
             </NavLink>
         </Breadcrumbs>
     );

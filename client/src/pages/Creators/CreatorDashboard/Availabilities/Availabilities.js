@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import uuid from 'react-uuid';
 import {generateTimeSlots, getFormattedDate} from './helpers';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {showError, showSnackbar} from '../../../../store/actions/ui';
 import axios from '../../../../tokenizedAxios';
+import text from './AvailabilitiesText';
 
 import NavRow from '../NavRow/NavRow';
 import ExpNav from './ExpNav';
@@ -17,6 +18,7 @@ const useStyles = makeStyles(styles);
 
 const Calendar = (props) => {
     const classes = useStyles();
+    const lang = useSelector(state => state.ui.language);
     const dispatch = useDispatch();
 
     const [affectedBookings, setAffectedBookings] = useState([]);
@@ -99,7 +101,7 @@ const Calendar = (props) => {
 
     return (
         <div className={classes.root}>
-            <NavRow/>
+            <NavRow lang={lang}/>
             <ExpNav
             experiences={props.createdExps}
             changesSaved={changesSaved}
@@ -107,8 +109,7 @@ const Calendar = (props) => {
             <div className={classes.body}>
                 <h1 className={classes.title}>{exp.title}</h1>
                 <h3 className={classes.subtitle}>
-                    Select the dates for which you want to add<br/> 
-                    or remove availabilities.
+                    {text.selectDateMsg[lang]}
                 </h3>
                 <div className={classes.calendar}>
                     <div onClick={handleOpenSaveCalMsg}>
@@ -128,8 +129,7 @@ const Calendar = (props) => {
                             {getFormattedDate(date)}
                         </h3>
                         <p className={classes.instruction}>
-                            Select the time slots you want to add or remove for 
-                            this date.
+                            {text.selectTimesMsg[lang]}
                         </p>
                         {timeslots && timeslots.map(slot => {
                         if(affectedBookings.map(book => book.occurrence.timeslot)
@@ -172,18 +172,18 @@ const Calendar = (props) => {
                         }})}
                     </div>
                 </div>
-                <div style={{height: 33}}>
-                    {openSaveCalMsg && 
-                        <span 
-                        className={classes.instruction} 
-                        style={{fontSize: '0.85rem'}}>
-                            Please save changes before picking<br/>
-                            another date.
-                        </span>}
-                </div>
+                <span 
+                className={classes.instruction} 
+                style={{
+                    fontSize: '0.85rem',
+                    opacity: openSaveCalMsg ? 1 : 0
+                }}>
+                    Please save changes before picking<br/>
+                    another date.
+                </span>
                 <div className={classes.footer}>
                     <button onClick={handleSaveChanges}>
-                        Save changes
+                        {text.saveButton[lang]}
                     </button>
                 </div>
             </div>

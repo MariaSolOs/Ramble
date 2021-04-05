@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import axios from '../../../../tokenizedAxios';
 import {connect} from 'react-redux';
 import {showError, showSnackbar} from '../../../../store/actions/ui';
+import text from './BookingRequestsText';
 
 import NavRow from '../NavRow/NavRow';
 import BookingCard from './BookingCard/BookingCard';
@@ -14,7 +15,8 @@ const BookingRequests = (props) => {
     const classes = useStyles();
 
     const {showError, showSnackbar, creatorId, 
-           stripeId, bookingRequests, deleteRequest} = props;
+           stripeId, bookingRequests, deleteRequest,
+           lang} = props;
 
     //Create a copy of the requests to sort them
     const [bookings, setBookings] = useState();
@@ -53,7 +55,6 @@ const BookingRequests = (props) => {
                     transferId: stripeId,
                     creatorId
                 });
-                //TODO: Handle error here
             } else if(action === 'cancel') {
                 await axios.delete(`/api/creator/bookingRequests/${bookId}`);
             } else {
@@ -95,11 +96,11 @@ const BookingRequests = (props) => {
         <div className={classes.root}>
             <div className={classes.shadowSeparator}/>
             <div className={classes.page}>
-                <NavRow/>
+                <NavRow lang={lang}/>
                 <div className={classes.sortBar}>
-                    Sort by
-                    <button onClick={sortByBookDate}>Booking date</button>
-                    <button onClick={sortByExpDate}>Experience date</button>
+                    {text.sortBy[lang]}
+                    <button onClick={sortByBookDate}>{text.sortBookDate[lang]}</button>
+                    <button onClick={sortByExpDate}>{text.sortExpDate[lang]}</button>
                 </div>
                 <div className={classes.requests}> 
                 {bookings && bookings.map(booking => (
@@ -141,6 +142,7 @@ const BookingRequests = (props) => {
 const mapStateToProps = (state) => ({
     creatorId: state.user.creator.id,
     stripeId: state.user.creator.stripeId,
+    lang: state.ui.language
 });
 const mapDispatchToProps = (dispatch) => ({
     showError: (msg) => dispatch(showError(msg)),

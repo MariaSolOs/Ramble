@@ -11,18 +11,18 @@ import {navbarStyles} from './LayoutStyles';
 const useStyles = makeStyles(navbarStyles);
 
 const profilePages = [
-    { name: 'Experiences',
+    { name: { en: 'Experiences', fr: 'Expériences' },
       icon: faIcons,
       route: '/profile/exp/booked' },
-    { name: 'Personal information', 
+    { name: { en:  'Personal information', fr: 'Informations personnelles' } , 
       icon: faUser,
       route: '/profile/info' },
-    { name: 'Payment information', 
+    { name: { en: 'Payment information', fr: 'Informations de paiement' }, 
       icon: faCreditCard,
       route: '/profile/payInfo' },
 ];
 
-const Navbar = () => {
+const Navbar = ({ lang }) => {
     const classes = useStyles();
     return (
         <ul className={classes.root}>

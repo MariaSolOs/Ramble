@@ -68,7 +68,7 @@ const styles = (theme) => ({
     calendar: {
         display: 'flex',
         justifyContent: 'space-evenly',
-        marginTop: '2rem',
+        marginTop: '1rem',
         maxWidth: 670
     },
 
@@ -168,7 +168,7 @@ const styles = (theme) => ({
     footer: {
         width: 'calc(570px + 9%)',
         margin: '10px 0 3vh',
-        height: 40,
+        height: 35,
         '& button': {
             width: 130,
             height: '100%',

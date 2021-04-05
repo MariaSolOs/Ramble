@@ -15,7 +15,7 @@ const useStyles = makeStyles(styles);
 
 const IN_ONE_MONTH = new Date().setDate(new Date().getDate() + 30);
 
-const UpcomingBookings = ({ bookingDates }) => {
+const UpcomingBookings = ({ bookingDates, lang }) => {
     const classes = useStyles();
 
     // To handle selected date
@@ -43,7 +43,7 @@ const UpcomingBookings = ({ bookingDates }) => {
         <div className={classes.root}> 
             <div className={classes.shadowSeparator}/>
             <div className={classes.page}>
-                <NavRow/>
+                <NavRow lang={lang}/>
                 <div className={classes.container}>
                     <DatePicker
                     selected={date}

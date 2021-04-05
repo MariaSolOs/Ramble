@@ -22,7 +22,8 @@ const Router = (props) => {
     const history = useHistory();
 
     const {startLoading, endLoading, showError, 
-           numBookings, creatorId, decNumBookings} = props;
+           numBookings, creatorId, decNumBookings,
+           lang} = props;
 
     const [state, dispatch] = useDashboardReducer();
     //Fetch booking requests
@@ -124,7 +125,9 @@ const Router = (props) => {
             </Route>
             {state.bookingDates &&
                 <Route path={`${path}/bookings-upcoming`}>
-                    <UpcomingBookings bookingDates={state.bookingDates}/>
+                    <UpcomingBookings 
+                    bookingDates={state.bookingDates} 
+                    lang={lang}/>
                 </Route>}
             <Route component={Page404}/>
         </Switch>
@@ -133,7 +136,8 @@ const Router = (props) => {
 
 const mapStateToProps = (state) => ({
     creatorId: state.user.creator.id,
-    numBookings: state.user.creator.numBookings
+    numBookings: state.user.creator.numBookings,
+    lang: state.ui.language
 });
 const mapDispatchToProps = (dispatch) => ({
     startLoading: () => dispatch(startLoading()),

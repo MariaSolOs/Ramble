@@ -1,23 +1,22 @@
 import React from 'react';
 
-//Components 
 import BecomeACreator from './BecomeACreator/BecomeACreator';
 import MeetCreators from './MeetCreators/MeetCreators';
 import GetYourActOut from './GetYourActOut/GetYourActOut';
 import Footer from '../../../components/Footer/Footer';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './CreatorsIntroStyles';
 const useStyles = makeStyles(styles);
 
-const CreatorsIntro = (props) => {
+const CreatorsIntro = ({ lang }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <BecomeACreator/>
-            <MeetCreators/>
-            <GetYourActOut/>
+            <BecomeACreator lang={lang}/>
+            <MeetCreators lang={lang}/>
+            <GetYourActOut lang={lang}/>
             <Footer/>
         </div>
     );

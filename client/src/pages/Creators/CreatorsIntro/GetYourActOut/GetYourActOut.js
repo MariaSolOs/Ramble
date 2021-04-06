@@ -1,22 +1,22 @@
 import React from 'react';
+import { GetYourActOutText as text } from '../CreatorsIntroText';
 
 import lightbulbSVG from './images/actOut_lightbulb.svg';
 import cloudSVG from './images/actOut_cloud.svg';
 import walletSVG from './images/actOut_wallet.svg';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './GetYourActOutStyles';
 const useStyles = makeStyles(styles);
 
-const GetYourActOut = () => {
+const GetYourActOut = ({ lang }) => {
     const classes = useStyles();
 
     return ( 
         <div className={classes.root}>
             <div>
                 <h1 className={classes.title}>
-                    Get your act <div>out there.<span className={classes.underline}/></div>
+                    {text.act[lang][0]} <div>{text.act[lang][1]}<span className={classes.underline}/></div>
                 </h1>
                 <div className={classes.graph}>
                     <div>
@@ -24,19 +24,19 @@ const GetYourActOut = () => {
                             <div>
                                 <img src={lightbulbSVG} alt="Lightbulb"/>
                             </div>
-                            <p>Find a unique way to share your passion</p>
+                            <p>{text.bulbText[lang]}</p>
                         </div>
                         <div className={classes.graphItem}>
                             <div>
                                 <img src={cloudSVG} alt="Cloud"/>
                             </div>
-                            <p>Bring people into your own world</p>
+                            <p>{text.cloudText[lang]}</p>
                         </div>
                         <div className={classes.graphItem}>
                             <div>
-                            <img src={walletSVG} alt="Wallet"/>
+                                <img src={walletSVG} alt="Wallet"/>
                             </div>
-                            <p>Make money while sharing what really matters to you</p>
+                            <p>{text.walletText[lang]}</p>
                         </div>
                     </div>
                     <div className={classes.underline}/>

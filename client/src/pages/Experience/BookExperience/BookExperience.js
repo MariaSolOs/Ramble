@@ -3,7 +3,7 @@ import axios from '../../../tokenizedAxios';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import useBookingReducer from './store/reducer';
 import { steps, actions } from './store/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { showError } from '../../../store/actions/ui';
 import useSavedCards from '../../../hooks/useSavedCards';
@@ -11,6 +11,8 @@ import useSavedCards from '../../../hooks/useSavedCards';
 import * as dialogs from './Dialogs';
 
 const BookExperience = ({ exp, user, onClose }) => {
+    const lang = useSelector(state => state.ui.language);
+
     // Managing dialog switching and payment steps
     const [state, dispatch] = useBookingReducer();
     const setStep = useCallback((step) => () => {
@@ -180,6 +182,7 @@ const BookExperience = ({ exp, user, onClose }) => {
             const minDate = new Date(Math.max(new Date(exp.avail.from), new Date()));
             return <dialogs.CalendarDialog 
                     open
+                    lang={lang}
                     date={{
                         min: minDate,
                         max: new Date(exp.avail.to),
@@ -194,6 +197,7 @@ const BookExperience = ({ exp, user, onClose }) => {
         case steps.TIMES: 
             return <dialogs.TimesDialog
                     open
+                    lang={lang}
                     date={state.form.date}
                     timeslot={state.form.timeslot}
                     onChange={handleChange}
@@ -206,6 +210,7 @@ const BookExperience = ({ exp, user, onClose }) => {
         case steps.BOOK_TYPE:
             return <dialogs.BookTypeDialog
                     open
+                    lang={lang}
                     form={state.form}
                     exp={{
                         title: exp.title,
@@ -221,6 +226,7 @@ const BookExperience = ({ exp, user, onClose }) => {
                     }}/>
         case steps.PAYMENT: 
             return <dialogs.PaymentDialog 
+                    lang={lang}
                     openForm={!state.payDone}
                     openStatus={state.payProcessing || state.payDone}
                     payMessage={state.payMsg}

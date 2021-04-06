@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { PaymentDialogText as text } from '../DialogsText';
 
-//Components and icons
 import Template from '../Template';
 import ExperienceSummary from '../../ExperienceSummary/ExperienceSummary';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,18 +9,18 @@ import PaymentMethod from './PaymentMethod';
 import PromoCode from './PromoCode';
 import EmailForm from './EmailForm';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './PaymentDialogStyles';
 const useStyles = makeStyles(styles);
 
 const PaymentDialog = (props) => {
     const classes = useStyles();
 
-    //Can submit form once the card input is valid
+    // Can submit form once the card input is valid
     const [enableSubmit, setEnableSubmit] = useState(false);
     const handleCanSubmit = (val) => { setEnableSubmit(val); }
 
-    //Initially set price according to numGuests and booking type
+    // Initially set price according to numGuests and booking type
     const [expPrice, setExpPrice] = useState(
         props.form.bookType === 'public'?
             props.exp.isOnline ?
@@ -69,15 +69,16 @@ const PaymentDialog = (props) => {
         open={props.openForm} 
         nextStep={props.controls.nextStep} 
         showContinue
+        lang={props.lang}
         continueMessage={
             <span className={classes.submitMessage}>
-                Confirm booking &bull; <span>$</span>{(expPrice + taxGST + taxQST).toFixed(2)}
+                {text.confirmBook[props.lang]} &bull; <span>$</span>{(expPrice + taxGST + taxQST).toFixed(2)}
             </span>
         }
         continueDisabled={!enableSubmit}>
             <div className={classes.header}>
                 <ChevronLeftIcon onClick={props.controls.goBack} className="goBackIcon"/>
-                <h5 className="title">Payment</h5>
+                <h5 className="title">{text.payment[props.lang]}</h5>
             </div>
             <DialogContent>
                 <div className={classes.expWrapper}>
@@ -105,7 +106,7 @@ const PaymentDialog = (props) => {
                     onCanSubmit={handleCanSubmit}/>}
                 <div className={classes.priceCalc}>
                     <div className={classes.priceRow}>
-                        <p>Subtotal</p>
+                        <p>{text.subTotal[props.lang]}</p>
                         <p>
                             {props.form.bookType === 'private'?
                             `$${props.exp.price.private}` : 
@@ -122,7 +123,7 @@ const PaymentDialog = (props) => {
                         </p>
                     </div>
                     <div className={classes.priceRow}>
-                        <p className="costs-row">Service fee</p>
+                        <p className="costs-row">{text.serviceFee[props.lang]}</p>
                         <p className="costs-row">{serviceFee.toFixed(2)}</p>
                     </div>
                     <div className={classes.priceRow}>
@@ -145,11 +146,7 @@ const PaymentDialog = (props) => {
                     onChange={handleChangeEmail}
                     onCanSubmit={handleCanSubmit}/>}
                 <p className={classes.policyMessage}>
-                    By confirming this purchase you agree to the 
-                    User Conditions and Policies regarding booking.
-                    {/* <a href="#"> User Conditions and Policies </a> 
-                    regarding booking. */}
-                    {/* TODO: Replace this link with real one */}
+                    {text.policyMsg[props.lang]}
                 </p>
             </DialogContent>
         </Template>

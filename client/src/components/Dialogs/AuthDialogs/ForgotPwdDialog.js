@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../../../tokenizedAxios';
+import { ForgotPwdDialogText as text } from './AuthDialogsText';
 
 import FormControl from '@material-ui/core/FormControl';
 import Dialog from '@material-ui/core/Dialog';
@@ -52,7 +53,7 @@ const ForgotPwdDialog = (props) => {
             {showSuccessMsg? 
             <div className={classes.resetEmailSentMsg}>
                 <FontAwesomeIcon icon={faPaperPlane}/>
-                <p className={classes.forgotTitle}>The email is on its way!</p>
+                <p className={classes.forgotTitle}>{text.emailSent[props.lang]}</p>
             </div> :
             <>
             <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
@@ -60,10 +61,10 @@ const ForgotPwdDialog = (props) => {
                 <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
                         <p className={classes.forgotTitle}>
-                            Enter your email address
+                            {text.enterEmail[props.lang]}
                         </p>
                         <p className={classes.forgotMessage}>
-                            We'll send you a link so that you can create a new password.
+                            {text.sendLink[props.lang]}
                         </p>
                         <TextField 
                         id="email"
@@ -76,7 +77,7 @@ const ForgotPwdDialog = (props) => {
                     <button 
                     type="submit"
                     className={classes.submitButton}>
-                        Reset my password
+                        {text.resetPwd[props.lang]}
                     </button>
                 </form>
             </DialogContent>

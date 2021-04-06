@@ -1,4 +1,5 @@
 import React from 'react';
+import { TemplateText as text } from './DialogsText';
 
 import Dialog from '@material-ui/core/Dialog';
 
@@ -44,6 +45,7 @@ const useStyles = makeStyles(() => ({
  * @param {Boolean} showContinue - If true, display continue button
  * @param {String} [continueMessage] - Text to display in the continue button
  * @param {Boolean} continueDisabled - If false, the user cannot continue
+ * @param {String} lang - Current language of the site
  */
 const Template = (props) => {
     const classes = useStyles();
@@ -60,7 +62,7 @@ const Template = (props) => {
                 className={classes.continueButton}
                 disabled={props.continueDisabled}>
                     {props.continueMessage? props.continueMessage : 
-                                            'Continue'}
+                                            text.continue[props.lang]}
                 </button>}
         </Dialog>
     );

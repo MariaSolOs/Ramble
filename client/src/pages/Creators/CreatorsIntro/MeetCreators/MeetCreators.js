@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import creatorBios from './biosData';
+import { MeetCreatorsText as text } from '../CreatorsIntroText';
 
-//Arrow icons
 // import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 // import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
-//Styles
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {makeStyles} from '@material-ui/core/styles';
 import styles from './MeetCreatorsStyles';
@@ -51,12 +50,12 @@ const CreatorCard = (props) => {
     );
 }
 
-const MeetCreators = () => {
+const MeetCreators = ({ lang }) => {
     const classes = useStyles();
     return (
         <div className={classes.slide}>
             <h1 className={classes.title}>
-                Meet current <div className='underline'>Creators<span/></div>
+                {text.title[lang][0]} <div className='underline'>{text.title[lang][1]}<span/></div>
             </h1>
             <CreatorCard/>
         </div>

@@ -1,30 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-//Components
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import Tip from '../../../../components/Tip/Tip';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './QuickInfosStyles';
 const useStyles = makeStyles(styles);
 
-const Duration = ({duration, submitInput}) => {
+const Duration = ({ duration, submitInput }) => {
     const classes = useStyles();
 
     //For increase/decrease buttons
-    const [currDuration, setCurrDuration] = useState(duration > 1? duration : 1);
+    const [currDuration, setCurrDuration] = useState(duration > 0.5? duration : 0.5);
     const increaseDuration = () => setCurrDuration(currDuration + 0.5);
     const decreaseDuration = () => {
-        if(currDuration > 1) { setCurrDuration(currDuration - 0.5); }
+        if(currDuration >= 1) { setCurrDuration(currDuration - 0.5); }
     }
 
     //To format the time nicely
     const getTime = () => {
         const minutes = currDuration - Math.floor(currDuration);
         const hours = Math.floor(currDuration);
+
+        if (hours === 0) { return '30 minutes'; }
+
         const hoursLabel = hours > 1? 'hours' : 'hour';
         return (`${hours} ${hoursLabel} ${minutes === 0? '' : ' and 30 minutes'}`);
     }

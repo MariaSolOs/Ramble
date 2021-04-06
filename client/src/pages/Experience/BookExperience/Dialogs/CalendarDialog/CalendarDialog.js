@@ -1,14 +1,13 @@
 import React from 'react';
+import { CalendarDialogText as text } from '../DialogsText';
 
-//Components
 import Template from '../Template';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import DatePicker from 'react-datepicker';
 
-//Styles
 import 'react-datepicker/dist/react-datepicker.css';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './CalendarDialogStyles';
 const useStyles = makeStyles(styles);
 
@@ -36,12 +35,15 @@ const CalendarDialog = (props) => {
     return (
         <Template 
         open={props.open}
+        lang={props.lang}
         nextStep={props.controls.nextStep}
         showContinue
         continueDisabled={!props.date.selec}>
             <div className={classes.header}>
                 <CloseIcon onClick={props.controls.goBack} className="closeIcon"/>
-                <h5 className="title">We know why.<br/>Question is when?</h5>
+                <h5 className="title">
+                    {text.title[props.lang][0]}<br/>{text.title[props.lang][1]}
+                </h5>
             </div>
             <DialogContent className={classes.content}>
                 <DatePicker

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { emailAuth } from '../../../store/actions/user';
+import { SignUpWithEmailDialogText as text } from './AuthDialogsText';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -77,12 +78,14 @@ const SignUpWithEmailDialog = (props) => {
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
                 <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
-                <h5 className="title">Sign up</h5>
+                <h5 className="title">{text.signUp[props.lang]}</h5>
             </div>
             <DialogContent>
                 <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="fstName">First name</FormLabel>
+                        <FormLabel htmlFor="fstName">
+                            {text.fstName[props.lang]}
+                        </FormLabel>
                         <TextField 
                         id="fstName" 
                         name="fstName" 
@@ -91,7 +94,9 @@ const SignUpWithEmailDialog = (props) => {
                         required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="lstName">Last name</FormLabel>
+                        <FormLabel htmlFor="lstName">
+                            {text.lstName[props.lang]}
+                        </FormLabel>
                         <TextField 
                         id="lstName"
                         name="lstName" 
@@ -101,7 +106,9 @@ const SignUpWithEmailDialog = (props) => {
                     </FormControl>
                     <div className={classes.formDivisor} style={{margin: '0 auto'}}/>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <FormLabel htmlFor="email">
+                            {text.email[props.lang]}
+                        </FormLabel>
                         <TextField
                         type="email"
                         id="email" 
@@ -111,7 +118,9 @@ const SignUpWithEmailDialog = (props) => {
                         required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="password1">Password</FormLabel>
+                        <FormLabel htmlFor="password1">
+                            {text.password[props.lang]}
+                        </FormLabel>
                         <TextField 
                         type="password"
                         id="password1"
@@ -121,7 +130,9 @@ const SignUpWithEmailDialog = (props) => {
                         required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="password2">Confirm password</FormLabel>
+                        <FormLabel htmlFor="password2">
+                            {text.confirmPwd[props.lang]}
+                        </FormLabel>
                         <TextField 
                         type="password"
                         id="password2"
@@ -134,13 +145,15 @@ const SignUpWithEmailDialog = (props) => {
                     <p 
                     className={classes.switchDialogsText}
                     style={{ margin: '10px 0 1rem' }}>
-                        Already have an account?&nbsp;&nbsp;
-                        <span onClick={props.switchToLogin}>Log in</span>
+                        {text.alreadyAccount[props.lang]}&nbsp;&nbsp;
+                        <span onClick={props.switchToLogin}>
+                            {text.logIn[props.lang]}
+                        </span>
                     </p> 
                     <button 
                     type="submit" 
                     className={classes.submitButton}>
-                        Continue
+                        {text.continue[props.lang]}
                     </button>
                 </form>
             </DialogContent>

@@ -57,7 +57,7 @@ const ExperienceSchema = new mongoose.Schema({
     duration: { //In hours
         type: Number,
         required: true,
-        min: 1 
+        min: 0.5
     },
 
     languages: [String],

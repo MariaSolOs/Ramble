@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { emailAuth, adminLogin } from '../../../store/actions/user';
+import { LogInDialogText as text } from './AuthDialogsText';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -67,12 +68,14 @@ const LogInDialog = (props) => {
         classes={{ paper: classes.paper }}>
             <div className={classes.header}>
                 <CloseIcon onClick={handleClose} className={classes.closeIcon}/>
-                <h5 className="title">Log in</h5>
+                <h5 className="title">{text.logIn[props.lang]}</h5>
             </div>
             <DialogContent>
                 <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <FormLabel htmlFor="email">
+                            {text.email[props.lang]}
+                        </FormLabel>
                         <TextField 
                         id="email"
                         name="email"
@@ -81,7 +84,9 @@ const LogInDialog = (props) => {
                         required/>
                     </FormControl>
                     <FormControl className={classes.formControl} fullWidth>
-                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormLabel htmlFor="password">
+                            {text.password[props.lang]}
+                        </FormLabel>
                         <TextField 
                         type="password"
                         id="password"
@@ -93,12 +98,12 @@ const LogInDialog = (props) => {
                     <p 
                     className={classes.forgotLink} 
                     onClick={handleForgotPassword}>
-                        I forgot my password
+                        {text.forgotPwd[props.lang]}
                     </p>
                     <button 
                     type="submit"
                     className={classes.submitButton}>
-                        Log in
+                        {text.logIn[props.lang]}
                     </button>
                 </form>
                 <div className={classes.formDivisor}/>
@@ -109,7 +114,7 @@ const LogInDialog = (props) => {
                         alt="Facebook log in" 
                         className="icon" 
                         style={{height: '100%'}}/>
-                        Log in with Facebook
+                        {text.fbLogin[props.lang]}
                     </button>
                 </a>
                 <a href="/api/auth/google" className={classes.link}> 
@@ -118,7 +123,7 @@ const LogInDialog = (props) => {
                         src={googleIcon}
                         alt="Google log in" 
                         className="icon"/>
-                        Log in with Google
+                        {text.googleLogin[props.lang]}
                     </button> 
                 </a>
             </DialogContent>

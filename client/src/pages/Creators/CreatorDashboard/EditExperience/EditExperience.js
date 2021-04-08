@@ -12,7 +12,7 @@ import Page404 from '../../../Page404/Page404';
 import Layout from './Layout/Layout';
 
 const EditExperience = ({ exp, userProfile, creatorBio, 
-                          showSnackbar, showError, onUpdatedExp }) => {
+                          showSnackbar, showError, onUpdatedExp, lang }) => {
     const location = useLocation();
     const history = useHistory();
 
@@ -64,6 +64,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onNextClick={values.isZoomExp? handleNavButtonClick(PAGES.duration) : 
                              handleNavButtonClick(PAGES.setting)}>
                     <slides.Planning
+                    lang={lang}
                     description={values.description}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -76,6 +77,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                     onBackClick={handleNavButtonClick(PAGES.planning)}
                     onNextClick={handleNavButtonClick(PAGES.duration)}>
                         <slides.Setting
+                        lang={lang}
                         setting={values.setting}
                         submitInput={handleInputChange}/>
                     </Layout>
@@ -88,6 +90,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                              handleNavButtonClick(PAGES.setting)}
                 onNextClick={handleNavButtonClick(PAGES.language)}>
                     <slides.Duration
+                    lang={lang}
                     duration={values.duration}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -99,6 +102,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.duration)}
                 onNextClick={handleNavButtonClick(PAGES.capacity)}>
                     <slides.Language
+                    lang={lang}
                     allLanguages={allLanguages}
                     selectedLanguages={values.languages}
                     submitInput={handleInputChange}/>
@@ -111,6 +115,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.duration)}
                 onNextClick={handleNavButtonClick(PAGES.age)}>
                     <slides.Capacity
+                    lang={lang}
                     capacity={values.capacity}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -122,6 +127,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.capacity)}
                 onNextClick={handleNavButtonClick(PAGES.preview)}>
                     <slides.Age
+                    lang={lang}
                     ageRestricted={values.ageRestricted}
                     ageRequired={values.ageRequired}
                     submitInput={handleInputChange}/>
@@ -134,6 +140,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.age)}
                 onNextClick={handleNavButtonClick(PAGES.included)}>
                     <slides.Preview
+                    lang={lang}
                     images={values.images}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -145,6 +152,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.preview)}
                 onNextClick={handleNavButtonClick(PAGES.bring)}>
                     <slides.Included
+                    lang={lang}
                     included={values.included}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -156,6 +164,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.included)}
                 onNextClick={handleNavButtonClick(PAGES.price)}>
                     <slides.Bring
+                    lang={lang}
                     toBring={values.toBring}
                     submitInput={handleInputChange}/>
                 </Layout>
@@ -167,6 +176,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                 onBackClick={handleNavButtonClick(PAGES.bring)}
                 onNextClick={handleNavButtonClick(PAGES.review)}>
                     <slides.Price
+                    lang={lang}
                     price={values.price}
                     privatePrice={values.privatePrice}
                     currency={values.currency}
@@ -189,6 +199,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
                         onBackClick={handleNavButtonClick(PAGES.dashboard)}
                         onNextClick={handleSubmitChanges(expReview)}>
                             <slides.Review
+                            lang={lang}
                             review={expReview}
                             images={expReview.images}/>
                         </Layout> : 
@@ -203,7 +214,8 @@ const EditExperience = ({ exp, userProfile, creatorBio,
 
 const mapStateToProps = (state) => ({
     userProfile: state.user.profile,
-    creatorBio: state.user.creator.bio
+    creatorBio: state.user.creator.bio,
+    language: state.ui.language
 });
 
 const mapDispatchToProps = (dispatch) => ({

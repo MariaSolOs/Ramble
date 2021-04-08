@@ -1,14 +1,14 @@
 import React from 'react';
+import { PlanningText as text } from '../SlidesText';
 
 import TextField from '../../../../components/Input/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './PlanningStyles';
 const useStyles = makeStyles(styles);
 
-const Planning = ({description, submitInput}) => {
+const Planning = ({ description, submitInput, lang }) => {
     const classes = useStyles();
 
     const handleChange = (e) => {
@@ -17,11 +17,8 @@ const Planning = ({description, submitInput}) => {
 
     return (
         <div className={classes.root}>
-            <h1 className={classes.title}>Planning</h1>
-            <p className={classes.description}>
-                Please provide a precise summary of your experience. This description
-                will be displayed on the experience page.
-            </p>
+            <h1 className={classes.title}>{text.title[lang]}</h1>
+            <p className={classes.description}>{text.desc[lang]}</p>
             <TextField 
             name="planning" 
             label="Describe your experience"

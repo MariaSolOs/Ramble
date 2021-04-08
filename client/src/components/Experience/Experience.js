@@ -1,7 +1,6 @@
 import React from 'react';
 import uuid from 'react-uuid';
 
-//Components and icons
 import CategoryBox from '../CategoryBox/CategoryBox';
 import QuickInfos from './QuickInfos';
 import CreatorInfo from './Creator';
@@ -9,12 +8,11 @@ import Description from './Description';
 import ExperienceMap from './ExperienceMap';
 import onlineIcon from '../../shared/images/computer-exp.svg';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
-import {pageStyles} from './ExperienceStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import { pageStyles } from './ExperienceStyles';
 const useStyles = makeStyles(pageStyles);
 
-const Experience = ({exp, floatButtons}) => {
+const Experience = ({ exp, floatButtons, lang }) => {
     const classes = useStyles();
 
     return (
@@ -35,6 +33,7 @@ const Experience = ({exp, floatButtons}) => {
                 {exp.categories.map(categ => (
                     <CategoryBox 
                     key={uuid()}
+                    lang={lang}
                     category={categ} 
                     iconLocation="left"
                     height="35px" 

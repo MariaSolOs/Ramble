@@ -1,7 +1,6 @@
 import Location from './Location/Location';
 import Title from './Title/Title';
 import Categories from './Category/Category';
-import About from './About you/AboutYou';
 import Planning from './Planning/Planning';
 import Setting from './Setting/Setting';
 import Duration from './Quick infos/Duration';
@@ -16,7 +15,7 @@ import Schedule from './Schedule/Schedule';
 import CalendarUpdates from './CalendarUpdates/CalendarUpdates';
 import Review from './Review/Review';
 
-export {Location, Title, Categories, About, Planning, 
+export {Location, Title, Categories, Planning, 
         Setting, Duration, Capacity, Language, Age, Preview, Included, 
         Bring, Price, Schedule, CalendarUpdates, Review}
 

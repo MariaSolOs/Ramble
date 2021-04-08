@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LanguageText as text } from '../SlidesText';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -8,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './QuickInfosStyles';
 const useStyles = makeStyles(styles);
 
-const Language = ({ allLanguages, selectedLanguages, submitInput }) => {
+const Language = ({ allLanguages, selectedLanguages, submitInput, lang }) => {
     const classes = useStyles();
 
     const [options, setOptions] = useState([]);
@@ -21,8 +22,8 @@ const Language = ({ allLanguages, selectedLanguages, submitInput }) => {
 
     const handleChange = (_, value, reason) => {
         // User can select at most 3 languages
-        if(reason === 'select-option') {
-            if(value.length >= 3) {
+        if (reason === 'select-option') {
+            if (value.length >= 3) {
                 setOptions([]);
                 setMessage('You can pick a maximum of 3 languages.');
             } else { 
@@ -43,16 +44,14 @@ const Language = ({ allLanguages, selectedLanguages, submitInput }) => {
         <>
             <div>
                 <h1 className={classes.title}>
-                    Quick Infos
+                    {text.infos[lang]}
                     <span className={classes.greyCaps}>2 of 4</span>
                 </h1>
             </div>
             <div className={classes.formGroup}>
-                <h2 className={classes.title}>Language</h2>
-                <p className={classes.description}>In which language will you interact with your guests?</p>
-                <Tip>
-                    You should host your experience in a language you speak fluently.
-                </Tip>
+                <h2 className={classes.title}>{text.title[lang]}</h2>
+                <p className={classes.description}>{text.desc[lang]}</p>
+                <Tip>{text.tip[lang]}</Tip>
                 <Autocomplete
                 onChange={handleChange}
                 getOptionSelected={handleOptionSelected}

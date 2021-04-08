@@ -1,11 +1,12 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { FooterText as text } from './LayoutText';
 
-import {makeStyles} from '@material-ui/core/styles';
-import {footerStyles} from './LayoutStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import { footerStyles } from './LayoutStyles';
 const useStyles = makeStyles(footerStyles);
 
-const Footer = ({currStage, backLink, nextLink, numSteps, canContinue}) => {
+const Footer = ({ currStage, backLink, nextLink, numSteps, canContinue, lang }) => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -16,13 +17,13 @@ const Footer = ({currStage, backLink, nextLink, numSteps, canContinue}) => {
                 className={`${classes.nextButton} ${classes.navButton}`}
                 disabled={!canContinue}
                 onClick={() => history.push(nextLink)}>
-                    {currStage === numSteps - 1? 'Submit my experience' : 'Next'}
+                    {currStage === numSteps - 1? text.submit[lang] : text.next[lang]}
                 </button>}
             {currStage > 0 && 
                 <button 
                 className={`${classes.backButton} ${classes.navButton}`}
                 onClick={() => history.push(backLink)}>
-                    Back
+                    {text.back[lang]}
                 </button>}
         </div>
     );

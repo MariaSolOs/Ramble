@@ -5,7 +5,6 @@ import * as pages from './pageNames';
 import useLanguages from '../../../hooks/useLanguages';
 import {initValues, prepareReview} from './helpers';
 
-//Pages and components
 import * as slides from '../Slides';
 import Intro from './Intro/Intro';
 import Submitted from './Submitted/Submitted';
@@ -46,6 +45,7 @@ const CreateExperience = (props) => {
             <Route path={pages.LOCATION}>
                 <Layout 
                 completedSteps={completedSteps}
+                lang={props.lang}
                 canContinue={(values.location && values.meetPoint) ||
                              (values.location && 
                               values.zoomMeetingId && 
@@ -54,6 +54,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.TITLE}
                 isZoomExp={values.isZoomExp}>
                     <slides.Location 
+                    lang={props.lang}
                     location={values.location} 
                     meetPoint={values.meetPoint}
                     isZoomExp={values.isZoomExp}
@@ -64,6 +65,7 @@ const CreateExperience = (props) => {
             </Route>
             <Route path={pages.TITLE}>
                 <Layout 
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.title.length > 0 && 
                              values.title.length <= 50} 
@@ -72,12 +74,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.CATEGORIES}
                 isZoomExp={values.isZoomExp}>
                     <slides.Title 
+                    lang={props.lang}
                     title={values.title}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.CATEGORIES}>
                 <Layout 
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.categories.length >= 1} 
                 currStage={2} 
@@ -85,12 +89,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.PLANNING}
                 isZoomExp={values.isZoomExp}>
                     <slides.Categories
+                    lang={props.lang}
                     categories={values.categories}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.PLANNING}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.description.length > 0 && 
                              values.description.length <= 1000} 
@@ -99,12 +105,14 @@ const CreateExperience = (props) => {
                 nextLink={values.isZoomExp? pages.DURATION : pages.SETTING}
                 isZoomExp={values.isZoomExp}>
                     <slides.Planning
+                    lang={props.lang}
                     description={values.description}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.SETTING}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.setting} 
                 currStage={3} 
@@ -112,12 +120,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.DURATION}
                 isZoomExp={values.isZoomExp}>
                     <slides.Setting
+                    lang={props.lang}
                     setting={values.setting}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.DURATION}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.duration >= 0.5} 
                 currStage={4} 
@@ -125,12 +135,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.LANGUAGE}
                 isZoomExp={values.isZoomExp}>
                     <slides.Duration
+                    lang={props.lang}
                     duration={values.duration}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.LANGUAGE}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.languages.length > 0} 
                 currStage={4} 
@@ -138,6 +150,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.CAPACITY}
                 isZoomExp={values.isZoomExp}>
                     <slides.Language
+                    lang={props.lang}
                     allLanguages={allLanguages}
                     selectedLanguages={values.languages}
                     submitInput={submitInput}/>
@@ -145,6 +158,7 @@ const CreateExperience = (props) => {
             </Route>
             <Route path={pages.CAPACITY}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.capacity} 
                 currStage={4} 
@@ -152,12 +166,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.AGE}
                 isZoomExp={values.isZoomExp}>
                     <slides.Capacity
+                    lang={props.lang}
                     capacity={values.capacity}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.AGE}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={(values.ageRestricted && values.ageRequired)
                              || !values.ageRestricted} 
@@ -166,6 +182,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.PREVIEW}
                 isZoomExp={values.isZoomExp}>
                     <slides.Age
+                    lang={props.lang}
                     ageRestricted={values.ageRestricted}
                     ageRequired={values.ageRequired}
                     submitInput={submitInput}/>
@@ -173,6 +190,7 @@ const CreateExperience = (props) => {
             </Route>
             <Route path={pages.PREVIEW}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.images.every(img => img)} 
                 currStage={5} 
@@ -180,12 +198,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.INCLUDED}
                 isZoomExp={values.isZoomExp}>
                     <slides.Preview
+                    lang={props.lang}
                     images={values.images}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.INCLUDED}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={true} 
                 currStage={6} 
@@ -193,12 +213,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.BRING}
                 isZoomExp={values.isZoomExp}>
                     <slides.Included
+                    lang={props.lang}
                     included={values.included}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.BRING}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={!values.mustBring || 
                              (values.mustBring && values.toBring.length > 0)} 
@@ -207,12 +229,14 @@ const CreateExperience = (props) => {
                 nextLink={pages.PRICE}
                 isZoomExp={values.isZoomExp}>
                     <slides.Bring
+                    lang={props.lang}
                     toBring={values.toBring}
                     submitInput={submitInput}/>
                 </Layout>
             </Route>
             <Route path={pages.PRICE}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.price > 0} 
                 currStage={8} 
@@ -220,6 +244,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.SCHEDULE}
                 isZoomExp={values.isZoomExp}>
                     <slides.Price
+                    lang={props.lang}
                     price={values.price}
                     privatePrice={values.privatePrice}
                     currency={values.currency}
@@ -229,6 +254,7 @@ const CreateExperience = (props) => {
             </Route>
             <Route path={pages.SCHEDULE}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={[...values.schedule.keys()].length > 0} 
                 currStage={9} 
@@ -236,6 +262,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.CAL_UPDATES}
                 isZoomExp={values.isZoomExp}>
                     <slides.Schedule
+                    lang={props.lang}
                     schedule={values.schedule}
                     duration={values.duration}
                     submitInput={submitInput}/>
@@ -243,6 +270,7 @@ const CreateExperience = (props) => {
             </Route>
             <Route path={pages.CAL_UPDATES}>
                 <Layout
+                lang={props.lang}
                 completedSteps={completedSteps}
                 canContinue={values.startDate} 
                 currStage={9} 
@@ -250,6 +278,7 @@ const CreateExperience = (props) => {
                 nextLink={pages.REVIEW}
                 isZoomExp={values.isZoomExp}>
                     <slides.CalendarUpdates
+                    lang={props.lang}
                     startDate={values.startDate}
                     submitInput={submitInput}/>
                 </Layout>
@@ -264,6 +293,7 @@ const CreateExperience = (props) => {
                     <>
                         {expReview?
                         <Layout
+                        lang={props.lang}
                         completedSteps={completedSteps}
                         canContinue
                         currStage={10} 
@@ -272,8 +302,9 @@ const CreateExperience = (props) => {
                                 '/creator/join'}
                         isZoomExp={values.isZoomExp}>
                             <slides.Review
-                        review={expReview}
-                        images={values.images}/>
+                            lang={props.lang}
+                            review={expReview}
+                            images={values.images}/>
                         </Layout> : <Redirect to={pages.INTRO}/>}
                     </>
                 );
@@ -291,7 +322,8 @@ const mapStateToProps = (state) => ({
     isAuth: state.user.profile.id,
     userProfile: state.user.profile,
     creatorId: state.user.creator.id,
-    creatorBio: state.user.creator.bio
+    creatorBio: state.user.creator.bio,
+    lang: state.ui.language
 });
 
 export default connect(mapStateToProps, null)(CreateExperience);

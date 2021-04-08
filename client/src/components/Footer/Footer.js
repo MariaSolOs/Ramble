@@ -25,11 +25,9 @@ const Footer = () => {
     const closeCustService = () => { setShowCustService(false); }
 
     const handleLangChange = () => {
-        if (lang === 'en') {
-            dispatch(setLanguage('fr'));
-        } else {
-            dispatch(setLanguage('en'));
-        }
+        const newLang = lang === 'en' ? 'fr' : 'en';
+        dispatch(setLanguage(newLang));
+        window.localStorage.setItem('lang', newLang);
     }
 
     return (

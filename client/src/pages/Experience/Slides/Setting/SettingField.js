@@ -1,15 +1,13 @@
 import React from 'react';
 
-//Components and icons
 import Checkbox from '../../../../components/Input/Checkbox/Checkbox';
 import Chip from './Chip';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './SettingStyles';
 const useStyles = makeStyles(styles);
 
-const SettingField = ({title, description, icons, iconsLabels, checkBoxProps}) => {
+const SettingField = ({ title, description, icons, iconsLabels, checkBoxProps }) => {
     const classes = useStyles();
 
     return (
@@ -44,5 +42,6 @@ const SettingField = ({title, description, icons, iconsLabels, checkBoxProps}) =
         </div>
     );
 }
-export default React.memo(SettingField, (prevProps, nextProps) => 
-    (prevProps.checkBoxProps.checked === nextProps.checkBoxProps.checked));
+export default React.memo(SettingField, (prevProps, nextProps) => (
+    prevProps.checkBoxProps.checked === nextProps.checkBoxProps.checked
+));

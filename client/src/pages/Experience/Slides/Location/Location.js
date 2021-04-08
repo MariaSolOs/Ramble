@@ -1,5 +1,6 @@
 import React from 'react';
 import AlgoliaPlaces from 'algolia-places-react';
+import { LocationText as text } from '../SlidesText';
 
 import Switch from '@material-ui/core/Switch';
 import InputBase from '@material-ui/core/InputBase';
@@ -12,7 +13,7 @@ import styles from './LocationStyles';
 const useStyles = makeStyles(styles);
 
 const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
-                    zoomMeetingPassword, submitInput, }) => {      
+                    zoomMeetingPassword, submitInput, lang }) => {      
     const classes = useStyles();
 
     // To format location suggestions
@@ -54,9 +55,9 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
     return (
         <>
             <div className={`${classes.location} ${classes.searchContainer}`}>
-                <h1 className={classes.title}>Location</h1>
+                <h1 className={classes.title}>{text.title[lang]}</h1>
                 <p className={classes.description}>
-                    In which city will your experience take place?
+                    {text.cityQuestion[lang]}
                 </p>
                 <AlgoliaPlaces
                 required
@@ -73,10 +74,9 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
                 onChange={handleLocationChange}
                 onClear={handleClear('location')}/>
             </div>
-            {(location === null || location === '' ||
-              isZoomExp) &&
+            {(location === null || location === '' || isZoomExp) &&
                 <div className={classes.onlineInfo}>
-                    <h3 className={classes.title}>Online experience</h3>
+                    <h3 className={classes.title}>{text.onlineExp[lang]}</h3>
                     <Switch 
                     color="default"
                     checked={isZoomExp}
@@ -85,11 +85,13 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
                 </div>}
             {(location && !isZoomExp)?
                 <div className={`${classes.meetPoint} ${classes.searchContainer}`}>
-                    <h1 className={`${classes.title} meetPoint`}>Meeting point</h1>
+                    <h1 className={`${classes.title} meetPoint`}>
+                        {text.meetPoint[lang]}
+                    </h1>
                     <p className={classes.description}>
-                        Where exactly will you meet your guests? <br/>
+                        {text.meetQuestion[lang]} <br/>
                     </p>
-                    <Tip>Choose an easily accessible location.</Tip>
+                    <Tip>{text.accessTip[lang]}</Tip>
                     <AlgoliaPlaces
                     required
                     placeholder="Enter an address"
@@ -104,7 +106,7 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
                     onChange={handleMeetPointChange}
                     onClear={handleClear('meetPoint')}/>
                     <p className={`${classes.description} lower-comment`}>
-                        This information will be shared with guests only after booking.
+                        {text.sharedRemark[lang]}
                     </p>
                 </div> : 
             isZoomExp? 
@@ -114,7 +116,7 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
                     name="zoomMeetingId"
                     onChange={handleZoomInfoChange}
                     className="zoom-textfield"
-                    placeholder="ZOOM MEETING PERSONAL ID (PMI)"
+                    placeholder={text.zoomPMI[lang]}
                     endAdornment={
                         <Tooltip
                         title={
@@ -139,7 +141,7 @@ const Location = ({ location, meetPoint, zoomMeetingId, isZoomExp,
                     value={zoomMeetingPassword}
                     onChange={handleZoomInfoChange}
                     className="zoom-textfield"
-                    placeholder="MEETING PASSWORD"
+                    placeholder={text.zoomPwd[lang]}
                     endAdornment={
                         <Tooltip
                         title={

@@ -13,7 +13,7 @@ const useStyles = makeStyles(styles);
 const CreatorCard = (props) => {
     const classes = useStyles();
 
-    const [currentSlide, setSlide] = useState(0);
+    const currentSlide = useState(0)[0];
     const creator = creatorBios[currentSlide];
     
     // TODO: Resume scrolling when we get more creators

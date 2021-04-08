@@ -87,6 +87,7 @@ const ApprovalPage = (props) => {
                 </Fab>
                 <Carousel images={images}/>
                 <Experience 
+                lang="en"
                 exp={exp} 
                 floatButtons={
                     <FloatButtons 

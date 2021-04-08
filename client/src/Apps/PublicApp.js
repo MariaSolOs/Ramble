@@ -2,11 +2,10 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import useSocket from '../hooks/useSocket';
 import {fetchExperiences} from '../store/actions/experiences';
-import {showSnackbar} from '../store/actions/ui';
+import {showSnackbar, setLanguage} from '../store/actions/ui';
 import {Route, Switch} from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-//Pages and layout
 import Page404 from '../pages/Page404/Page404';
 import Nav from '../components/Navs/CollapsingNav/CollapsingNav';
 import Footer from '../components/Footer/Footer';
@@ -33,7 +32,7 @@ const PublicApp = (props) => {
         }
     }, [cookieToken]);
 
-    const {isAuth, fetchExps, isAdmin, showSnackbar} = props;
+    const {isAuth, fetchExps, isAdmin, showSnackbar, setLanguage} = props;
 
     //Fetch user experiences if logged in 
     useEffect(() => {
@@ -59,6 +58,14 @@ const PublicApp = (props) => {
             showSnackbar("Your email address was verified.");
         }
     }, [showSnackbar]);
+
+    //Keep selected language 
+    useEffect(() => {
+        const lang = window.localStorage.getItem('lang');
+        if (lang) {
+            setLanguage(lang);
+        }
+    }, [setLanguage]);
 
     //isAuth and isCreator are passed to the page routers to filter routes
     return (
@@ -100,7 +107,8 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     fetchExps: () => dispatch(fetchExperiences()),
-    showSnackbar: (msg) => dispatch(showSnackbar(msg))
+    showSnackbar: (msg) => dispatch(showSnackbar(msg)),
+    setLanguage: (lang) => dispatch(setLanguage(lang))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublicApp);

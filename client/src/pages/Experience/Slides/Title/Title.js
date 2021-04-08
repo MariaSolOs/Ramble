@@ -1,16 +1,15 @@
 import React from 'react';
+import { TitleText as text } from '../SlidesText';
 
-//Components
 import TextField from '../../../../components/Input/TextField/TextField';
 import Tip from '../../../../components/Tip/Tip';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './TitleStyles';
 const useStyles = makeStyles(styles);
 
-const Title = ({title, submitInput}) => {
+const Title = ({ title, submitInput, lang }) => {
     const classes = useStyles();
     const handleChange = (e) => {
         if(e.target.value.length <= 50) {
@@ -20,9 +19,9 @@ const Title = ({title, submitInput}) => {
 
     return (
         <div className={classes.root}>
-            <h1 className={classes.title}>Title</h1>
-            <p className={classes.description}>Give your experience a compelling title.</p>
-            <Tip>Try keeping it short and exciting.</Tip>
+            <h1 className={classes.title}>{text.title[lang]}</h1>
+            <p className={classes.description}>{text.msg[lang]}</p>
+            <Tip>{text.tip[lang]}</Tip>
             <TextField 
             name="title" 
             value={title} 

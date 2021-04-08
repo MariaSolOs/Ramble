@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './ReviewStyles';
 const useStyles = makeStyles(styles);
 
-const Review = ({ review, images }) => {
+const Review = ({ review, images, lang }) => {
     const classes = useStyles();
 
     //Save experience 
@@ -29,6 +29,7 @@ const Review = ({ review, images }) => {
                 <Carousel images={carouselImgs}/>
                 <div className="exp-wrapper">
                     <Experience 
+                    lang={lang}
                     exp={review}
                     floatButtons={<FloatButtons showSave/>}/>
                 </div>

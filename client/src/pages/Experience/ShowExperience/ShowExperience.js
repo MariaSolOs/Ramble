@@ -103,7 +103,9 @@ const ShowExperience = (props) => {
                 </Fab>
                 <Carousel images={images}/>
                 <div className={classes.experienceWrapper}>   
-                    <Experience exp={exp} 
+                    <Experience 
+                    lang={props.lang}
+                    exp={exp} 
                     floatButtons={
                         <FloatButtons 
                         showSave
@@ -135,7 +137,8 @@ const ShowExperience = (props) => {
 const mapStateToProps = (state) => ({
     isAuth: state.user.profile.id !== null,
     user: state.user.profile,
-    userExps: state.exp.savedExps.map(exp => exp._id)
+    userExps: state.exp.savedExps.map(exp => exp._id),
+    lang: state.ui.language
 });
 const mapDispatchToProps = (dispatch) => ({
     saveExp: (expId) => dispatch(saveExperience(expId)),

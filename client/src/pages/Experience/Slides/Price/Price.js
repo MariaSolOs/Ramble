@@ -1,25 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { PriceText as text } from '../SlidesText';
 
-//Components 
 import Tip from '../../../../components/Tip/Tip';
 import TextField from '../../../../components/Input/TextField/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
-//Styles 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './PriceStyles';
 const useStyles = makeStyles(styles);
 
-const Price = ({price, privatePrice, currency, capacity, submitInput}) => {
+const Price = ({ price, privatePrice, currency, capacity, submitInput, lang }) => {
     const classes = useStyles();
 
-    //For handling changes
+    // For handling changes
     const handlePriceChange = (type) => (e) => {
         const price = e.target.value.slice(2);
-        //No decimal values allowed
-        if(/^\d+$/.test(price) || price === '') {
+        // No decimal values allowed
+        if (/^\d+$/.test(price) || price === '') {
             submitInput(type, e.target.value.slice(2));
         }
     }
@@ -27,7 +26,7 @@ const Price = ({price, privatePrice, currency, capacity, submitInput}) => {
         submitInput('currency', e.target.value);
     }
 
-    //For showing/hiding booking section
+    // For showing/hiding booking section
     const [showBookings, setShowBookings] = useState(false);
     const handleToggleBookings = (e) => {
         setShowBookings(e.target.checked);
@@ -36,7 +35,7 @@ const Price = ({price, privatePrice, currency, capacity, submitInput}) => {
     return (
         <>
             <div>
-                <h1 className={classes.title}>Pricing</h1>
+                <h1 className={classes.title}>{text.title[lang]}</h1>
                 <p className={`${classes.description} header`}>
                     Enter the price each guest should pay.
                 </p>

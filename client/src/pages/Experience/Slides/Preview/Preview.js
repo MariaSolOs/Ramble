@@ -1,35 +1,23 @@
-import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {showSnackbar} from '../../../../store/actions/ui';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../../../../store/actions/ui';
 import Files from 'react-butterfiles';
 import uuid from 'react-uuid';
+import { PreviewCaptionsText as captions, PreviewText as text } from '../SlidesText';
 
-//Components
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Tip from '../../../../components/Tip/Tip';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './PreviewStyles';
 const useStyles = makeStyles(styles);
 
-const captions = [
-    { title: 'Cover Picture',
-      details: 'This picture will appear on the front page of your experience' },
-    { title: 'Creator',
-      details: 'Share a picture of you conducting your experience' },
-    { title: 'Action Shot',
-      details: 'Show your guests having a great time' },
-    { title: 'Location',
-      details: 'Include a shot of the surroundings' }
-];
-
-const Preview = ({images, submitInput}) => {
+const Preview = ({ images, submitInput, lang }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    //Image dropzone
+    // Image dropzone
     const [index, setIndex] = useState(0);
     const handleErrors = (errors) => {
         let message;
@@ -59,15 +47,13 @@ const Preview = ({images, submitInput}) => {
     }
 
     return (
-        <><div>
-            <h1 className={classes.title}>Preview</h1>
+        <>
+        <div>
+            <h1 className={classes.title}>{text.title[lang]}</h1>
             <p className={classes.description}>
-                Provide your guests with a teaser of what they'll do.<br/>
+                {text.desc[lang]}<br/>
             </p>
-            <Tip>
-                Use high quality pictures so that your experience sticks out. Try to include
-                people in the pictures.
-            </Tip>
+            <Tip>{text.tip[lang]}</Tip>
         </div>
         <div>
             <Files
@@ -81,25 +67,27 @@ const Preview = ({images, submitInput}) => {
                         {images.map((image, i) => (
                             <div className={classes.dropzoneItem} key={uuid()}>
                                 <div className={classes.itemsDetails}>
-                                    <p>{captions[i].title}</p>
-                                    <p>{captions[i].details}</p>
+                                    <p>{captions[i].title[lang]}</p>
+                                    <p>{captions[i].details[lang]}</p>
                                 </div>
                                 <div className={classes.dropzoneImg}>
                                     {image && <HighlightOffIcon 
                                                className={classes.deleteIcon}
                                                onClick={() => handleDeleteImage(i)}/>}
-                                    {image ? <img src={image} alt="Experience preview"/> :
-                                    <AddCircleIcon 
-                                    className={classes.addIcon} 
-                                    onClick={browseFiles}
-                                    onMouseEnter={() => setIndex(i)}/>}
+                                    {image ? 
+                                        <img src={image} alt="Experience preview"/> :
+                                        <AddCircleIcon 
+                                        className={classes.addIcon} 
+                                        onClick={browseFiles}
+                                        onMouseEnter={() => setIndex(i)}/>}
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
             </Files>
-        </div></>
+        </div>
+        </>
     );
 }
 

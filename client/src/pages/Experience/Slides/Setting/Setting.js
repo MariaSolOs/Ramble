@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { SettingText as text } from '../SlidesText';
 
-//Components and icons
 import HomeIcon from '@material-ui/icons/Home';
 import DirectionsBoatIcon from '@material-ui/icons/DirectionsBoat';
 import PaletteIcon from '@material-ui/icons/Palette';
@@ -12,15 +12,14 @@ import LocationCityIcon from '@material-ui/icons/LocationCity';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingField from './SettingField';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './SettingStyles';
 const useStyles = makeStyles(styles);
 
-const Setting = ({setting, submitInput}) => {
+const Setting = ({ setting, submitInput, lang }) => {
     const classes = useStyles();
 
-    //Only one checkbox can be selected
+    // Only one checkbox can be selected
     const [checked, setChecked] = useState({
         private: setting === 'private',
         semiPrivate: setting === 'semi-private',
@@ -28,13 +27,13 @@ const Setting = ({setting, submitInput}) => {
     });
 
     const handleChange = (e) => {
-        if(e.target.name === 'private') {
+        if (e.target.name === 'private') {
             setChecked({
                 private: true,
                 semiPrivate: false,
                 public: false
             })
-        } else if(e.target.name === 'semi-private') {
+        } else if (e.target.name === 'semi-private') {
             setChecked({
                 private: false,
                 semiPrivate: true,
@@ -47,35 +46,32 @@ const Setting = ({setting, submitInput}) => {
                 public: true
             })
         }
-        //Update value in form
+        // Update value in form
         submitInput('setting', e.target.name);
     }
 
     return (
         <>
             <div>
-                <h1 className={classes.title}>Setting</h1>
-                <p className={classes.description}>
-                    In what kind of environment will your experience take place?
-                </p>
+                <h1 className={classes.title}>{text.title[lang]}</h1>
+                <p className={classes.description}>{text.desc[lang]}</p>
             </div>
             <div className={classes.flexCol}>
                 <SettingField 
-                title="Private" 
-                description="There will be no one around except my guests."
+                title={text.field1[lang]} 
+                description={text.desc1[lang]}
                 icons={[<HomeIcon/>, <DirectionsBoatIcon/>, <PaletteIcon/>]}
-                iconsLabels={['Your home', 'Boat', 'Studio']}
+                iconsLabels={text.labels1[lang]}
                 checkBoxProps={{
                     name: 'private',
                     checked: checked.private,
                     onChange: handleChange
                 }}/>
                 <SettingField 
-                title="Semi Private" 
-                description="This experience will be held in an enclosed setting but there 
-                might be people other than my guests around."
+                title={text.field2[lang]} 
+                description={text.desc2[lang]}
                 icons={[<LocalBarIcon/>, <SpaIcon/>, <MeetingRoomIcon/>]}
-                iconsLabels={['Closed bar', 'Spa', 'Backroom']}
+                iconsLabels={text.labels2[lang]}
                 checkBoxProps={{
                     name: 'semi-private',
                     checked: checked.semiPrivate,
@@ -83,9 +79,9 @@ const Setting = ({setting, submitInput}) => {
                 }}/>
                 <SettingField 
                 title="Public" 
-                description="This experience is held in a public space."
+                description={text.desc3[lang]}
                 icons={[<NaturePeopleIcon/>, <LocationCityIcon/>, <StorefrontIcon/>]}
-                iconsLabels={['Park', 'Streets', 'Café']}
+                iconsLabels={text.labels3[lang]}
                 checkBoxProps={{
                     name: 'public',
                     checked: checked.public,

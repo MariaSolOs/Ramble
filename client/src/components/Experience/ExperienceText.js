@@ -22,7 +22,7 @@ export const DescriptionText = {
         en: 'What to bring', 
         fr: 'Quoi emporter' 
     }
-},
+}
 
 export const ExperienceMapText = {
     location: {

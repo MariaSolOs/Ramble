@@ -1,27 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import uuid from 'react-uuid';
-import {getTimeSlots, slotSort} from './helpers';
+import { getTimeSlots, slotSort } from './helpers';
 
 import Collapse from '@material-ui/core/Collapse';
 
-//Styles 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './WeeklyCalendarStyles';
 const useStyles = makeStyles(styles);
 
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const days = {
+    en: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    fr: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+}
 
-const WeeklyCalendar = ({avail, duration, onChange}) => {
+const WeeklyCalendar = ({ avail, duration, onChange }) => {
     const classes = useStyles();
 
-    //Generate timeslots 
+    // Generate timeslots 
     const [timeslots, setTimeslots] = useState();
     useEffect(() => {
         const generated = getTimeSlots(+duration);
         setTimeslots(generated);
     }, [duration]);
 
-    //For keeping track of the expanded days
+    // For keeping track of the expanded days
     const expandedDays = Array.from(avail.keys());
     const handleShowSlots = (e) => {
         if(!expandedDays || !expandedDays.includes(e.target.value)) {
@@ -32,20 +34,23 @@ const WeeklyCalendar = ({avail, duration, onChange}) => {
         onChange(avail);
     }
 
-    //For keeping track of selected times 
+    // For keeping track of selected times 
     const handleSelectSlot = (day, slot) => () => {
         const selected = avail.get(day);
         const newSelection = selected.includes(slot)? 
-                             selected.filter(t => t !== slot) :
-                             [...selected, slot];
+                                selected.filter(t => t !== slot) :
+                                [...selected, slot];
         newSelection.sort(slotSort);
         avail.set(day, newSelection);
         onChange(avail);
     }
 
+    let lang = window.localStorage.getItem('lang');
+    if (!lang) { lang = 'en'; }
+
     return (
         <div className={classes.weekSlots}>
-            {timeslots && days.map(day => (
+            {timeslots && days['en'].map((day, i) => (
                 <div key={day}>    
                     <button 
                     className={`day-button 
@@ -53,7 +58,7 @@ const WeeklyCalendar = ({avail, duration, onChange}) => {
                                 : classes.unselectedButton}`} 
                     value={day}
                     onClick={handleShowSlots}>
-                        {day}
+                        {days[lang][i]}
                     </button>
                     <Collapse
                     in={avail.has(day)}

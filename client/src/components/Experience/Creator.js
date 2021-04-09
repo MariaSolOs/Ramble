@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { CreatorText as text } from './ExperienceText';
 
 import Avatar from '@material-ui/core/Avatar';
 import Collapse from '@material-ui/core/Collapse';
 
-import {makeStyles} from '@material-ui/core/styles';
-import {creatorStyles} from './ExperienceStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import { creatorStyles } from './ExperienceStyles';
 const useStyles = makeStyles(creatorStyles);
 
-const Creator = ({creator}) => {
+const Creator = ({ creator, lang }) => {
     const classes = useStyles();
 
-    //For displaying/hiding creator bio
+    // For displaying/hiding creator bio
     const [expandedBio, setExpandedBio] = useState(false);
     const handleBioToggle = () => {
         setExpandedBio(!expandedBio);
@@ -18,14 +19,14 @@ const Creator = ({creator}) => {
 
     return (
         <>
-            <h3 className={classes.label}>Hosted by</h3>
+            <h3 className={classes.label}>{text.hosted[lang]}</h3>
             <div className={classes.host}>
                 <Avatar src={creator.user.photo} alt="Experience creator"/>
                 <span className="creator-name">{creator.user.fstName}</span>
                 <button 
                 className={classes.bioToggler}
                 onClick={handleBioToggle}>
-                    About creator
+                    {text.about[lang]}
                 </button>
             </div>
             <div className={classes.bio}>

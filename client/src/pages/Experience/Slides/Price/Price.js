@@ -37,12 +37,14 @@ const Price = ({ price, privatePrice, currency, capacity, submitInput, lang }) =
             <div>
                 <h1 className={classes.title}>{text.title[lang]}</h1>
                 <p className={`${classes.description} header`}>
-                    Enter the price each guest should pay.
+                    {text.enterPrice[lang]}
                 </p>
-                <Tip>This price will be displayed as "Per person"</Tip>
+                <Tip>{text.tip1[lang]}</Tip>
                 <div className={classes.inputRow}>
                     <div className={classes.field}>
-                        <p className={classes.description}>Price per person</p>
+                        <p className={classes.description}>
+                            {text.pricePerPers[lang]}
+                        </p>
                         <div className={classes.input}>
                             <TextField
                             onChange={handlePriceChange('price')}
@@ -50,7 +52,9 @@ const Price = ({ price, privatePrice, currency, capacity, submitInput, lang }) =
                         </div>
                     </div>
                     <div className={classes.field}>
-                        <p className={classes.description}>Currency</p>
+                        <p className={classes.description}>
+                            {text.currency[lang]}
+                        </p>
                         <div className={classes.input}>
                             <TextField 
                             select 
@@ -74,11 +78,12 @@ const Price = ({ price, privatePrice, currency, capacity, submitInput, lang }) =
                     </div>
                     <div className="num-guests">
                         <p className={classes.description}>
-                            X {capacity} {capacity > 1? 'Guests' : 'Guest'} =
+                            X {capacity} {capacity > 1 ? 
+                                text.guests[lang] : text.guest[lang]} =
                         </p>
                     </div>
                     <div className={classes.field}>
-                        <p className={classes.description}>Projected revenue</p>
+                        <p className={classes.description}>{text.projRev[lang]}</p>
                         <div className={classes.input}>
                             <TextField
                             readOnly
@@ -92,20 +97,14 @@ const Price = ({ price, privatePrice, currency, capacity, submitInput, lang }) =
             color="default" 
             onChange={handleToggleBookings}
             className={classes.toggle}/>
-                <h3 className={classes.bookingTitle}>Enable private bookings</h3>
-                <p className={classes.description}>
-                    Charge a special price for people who want to be the only guests at your experience.
-                </p>
+                <h3 className={classes.bookingTitle}>{text.enablePriv[lang]}</h3>
+                <p className={classes.description}>{text.descPriv[lang]}</p>
                 <div hidden={!showBookings}>
-                    <Tip className={classes.tip}>
-                        This is a fixed price private groups have to pay to book the entire experience.
-                    </Tip>
-                    <Tip className={classes.tip}>
-                        This option will be offered to your guests if all spots are available for a time slot.
-                    </Tip>
+                    <Tip className={classes.tip}>{text.tip2[lang]}</Tip>
+                    <Tip className={classes.tip}>{text.tip3[lang]}</Tip>
                     <div className={classes.inputRow}>
                         <div className={classes.field}>
-                            <p className={classes.description}>Price for private bookings</p>
+                            <p className={classes.description}>{text.privPrice[lang]}</p>
                             <div className={classes.input}>
                                 <TextField
                                 onChange={handlePriceChange('privatePrice')}

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { saveExperienceForm } from '../../../../store/actions/experiences';
+import { ReviewText as text } from '../SlidesText';
 
 import Experience from '../../../../components/Experience/Experience';
 import FloatButtons from '../../../../components/ShareSaveButtons/ShareSaveButtons';
@@ -13,7 +14,7 @@ const useStyles = makeStyles(styles);
 const Review = ({ review, images, lang }) => {
     const classes = useStyles();
 
-    //Save experience 
+    // Save experience 
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(saveExperienceForm(review));
@@ -23,17 +24,17 @@ const Review = ({ review, images, lang }) => {
 
     return (
         <div className={classes.root}>
-            <h1 className={classes.title}>Review & Submit</h1>
+            <h1 className={classes.title}>{text.title[lang]}</h1>
             {review ? 
-            <div className={classes.experience}>
-                <Carousel images={carouselImgs}/>
-                <div className="exp-wrapper">
-                    <Experience 
-                    lang={lang}
-                    exp={review}
-                    floatButtons={<FloatButtons showSave/>}/>
-                </div>
-            </div> : 
+                <div className={classes.experience}>
+                    <Carousel images={carouselImgs}/>
+                    <div className="exp-wrapper">
+                        <Experience 
+                        lang={lang}
+                        exp={review}
+                        floatButtons={<FloatButtons showSave/>}/>
+                    </div>
+                </div> : 
             <p className={classes.description}>
                 Your experience couldn't be submitted.<br/>
                 Please verify that you've correctly completed all the 

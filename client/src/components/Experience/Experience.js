@@ -44,9 +44,11 @@ const Experience = ({ exp, floatButtons, lang }) => {
             duration={exp.duration} 
             capacity={exp.capacity}
             languages={exp.languages}
-            ageRestriction={exp.ageRestriction}/>
-            <CreatorInfo creator={exp.creator}/>
+            ageRestriction={exp.ageRestriction}
+            lang={lang}/>
+            <CreatorInfo creator={exp.creator} lang={lang}/>
             <Description 
+            lang={lang}
             description={exp.description} 
             includedItems={exp.included}
             toBringItems={exp.toBring}/>

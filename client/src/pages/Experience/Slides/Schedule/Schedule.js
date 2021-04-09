@@ -1,16 +1,15 @@
 import React from 'react';
-import {copyMap} from '../../../../shared/utilities/scheduleMapHelpers';
+import { copyMap } from '../../../../shared/utilities/scheduleMapHelpers';
+import { ScheduleText as text } from '../SlidesText';
 
-//Components
 import Tip from '../../../../components/Tip/Tip';
 import WeeklyCalendar from '../../../../components/WeeklyCalendar/WeeklyCalendar';
 
-//Styles 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './ScheduleStyles';
 const useStyles = makeStyles(styles);
 
-const Schedule = ({schedule, duration, submitInput}) => {
+const Schedule = ({ schedule, duration, submitInput, lang }) => {
     const classes = useStyles();
 
     const handleChange = (avail) => {
@@ -19,21 +18,13 @@ const Schedule = ({schedule, duration, submitInput}) => {
 
     return (
         <>
-            <h1 className={classes.title}>Schedule</h1>
-            <p className={classes.description}>
-                Set a frequency at which you would like to host your experience.
-            </p>
+            <h1 className={classes.title}>{text.title[lang]}</h1>
+            <p className={classes.description}>{text.desc[lang]}</p>
             <div className={classes.tips}>
-                <Tip>
-                    Consider your weekly schedule. Set realistic availabilities during which you are sure to be free.
-                </Tip>
-                <Tip>
-                    Try to pick times of the day that are suitable for your type of experience.
-                </Tip>
+                <Tip>{text.tip1[lang]}</Tip>
+                <Tip>{text.tip2[lang]}</Tip>
             </div>
-            <p className={classes.description}>
-                Pick the days of the week and time slots for which guests can book your experience.
-            </p>
+            <p className={classes.description}>{text.pickInst[lang]}</p>
             <div style={{marginBottom: '10%'}}>
                 <WeeklyCalendar
                 avail={schedule} 

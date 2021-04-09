@@ -1,17 +1,18 @@
 import React from 'react';
+import { ExperienceMapText as text } from './ExperienceText';
 
 import ReactMapGL, {Marker} from 'react-map-gl';
 
-import {makeStyles} from '@material-ui/core/styles';
-import {mapStyles} from './ExperienceStyles';
+import { makeStyles } from '@material-ui/core/styles';
+import { mapStyles } from './ExperienceStyles';
 const useStyles = makeStyles(mapStyles);
 
-const ExperienceMap = (props) => {
+const ExperienceMap = ({ coordinates, lang }) => {
     const classes = useStyles();
 
     return (
         <>
-            <h3 className={classes.label}>Location</h3>
+            <h3 className={classes.label}>{text.location[lang]}</h3>
             <div className={classes.wrapper}>
                 <ReactMapGL
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
@@ -19,11 +20,11 @@ const ExperienceMap = (props) => {
                 width="100%"
                 height={300}
                 zoom={11}
-                latitude={props.coordinates.lat}
-                longitude={props.coordinates.long}>
+                latitude={coordinates.lat}
+                longitude={coordinates.long}>
                     <Marker 
-                    latitude={props.coordinates.lat}
-                    longitude={props.coordinates.long}>
+                    latitude={coordinates.lat}
+                    longitude={coordinates.long}>
                         <div className={classes.marker}>
                             <div/>
                         </div>

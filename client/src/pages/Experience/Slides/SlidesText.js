@@ -337,5 +337,102 @@ export const PriceText = {
     title: {
         en: 'Pricing',
         fr: 'Prix'
+    },
+    enterPrice: {
+        en: 'Enter the price each guest should pay.',
+        fr: 'Entrez le prix que chaque invité devra payer.'
+    },
+    tip1: {
+        en: 'This price will be displayed as "Per person"',
+        fr: 'Ce prix sera affiché comme "Par Personne"'
+    },
+    pricePerPers: {
+        en: 'Price per person',
+        fr: 'Prix par personne'
+    },
+    currency: {
+        en: 'Currency',
+        fr: 'Devise'
+    },
+    guest: {
+        en: 'guest',
+        fr: 'invité'
+    },
+    guests: {
+        en: 'guests',
+        fr: 'invités'
+    },
+    projRev: {
+        en: 'Projected revenue',
+        fr: 'Revenu projeté'
+    },
+    enablePriv: {
+        en: 'Enable private bookings',
+        fr: 'Permettre les réservations privées'
+    },
+    descPriv: {
+        en: 'Charge a special price for people who want to be the only guests at your experience.',
+        fr: 'Chargez un prix spécial pour les personnes qui souhaitent être les seuls invités à votre expérience.'
+    },
+    tip2: {
+        en: 'This is a fixed price private groups have to pay to book the entire experience.',
+        fr: "Il s'agit d'un prix fixe que les groupes privés doivent payer pour réserver l'expérience au complet."
+    },
+    tip3: {
+        en: 'This option will be offered to your guests if all spots are available for a time slot.',
+        fr: 'Cette option sera proposée à vos invités si toutes les places sont disponibles pour une plage horaire.'
+    },
+    privPrice: {
+        en: 'Price for private bookings',
+        fr: 'Prix pour les réservations privées'
+    }
+}
+
+export const ScheduleText = {
+    title: {
+        en: 'Schedule', 
+        fr: 'Horaire'
+    },
+    desc: {
+        en: 'Set a frequency at which you would like to host your experience.',
+        fr: 'Définissez une fréquence à laquelle vous souhaitez animer votre expérience.'
+    },
+    tip1: {
+        en: 'Consider your weekly schedule. Set realistic availabilities during which you are sure to be free.',
+        fr: "Tenez compte de votre horaire hebdomadaire. Définissez des disponibilités réalistes pendant lesquelles vous êtes sûr d'être libre."
+    },
+    tip2: {
+        en: 'Try to pick times of the day that are suitable for your type of experience.',
+        fr: "Essayez de choisir des moments de la journée qui conviennent à votre type d'expérience."
+    },
+    pickInst: {
+        en: 'Pick the days of the week and time slots for which guests can book your experience.',
+        fr: 'Choisissez les jours de la semaine et les plages horaires pour lesquels les invités peuvent réserver votre expérience.'
+    }
+}
+
+export const CalendarUpdatesText = {
+    title: {
+        en: 'Start hosting', 
+        fr: 'Débutez vos activités'
+    },
+    desc: {
+        en: 'When would you like to start hosting your experience?',
+        fr: 'Quand souhaitez-vous commencer à animer votre expérience?'
+    },
+    tip1: {
+        en: "A month after this date, you'll have to update your schedule for the following month.",
+        fr: 'Un mois après cette date, vous devrez mettre à jour vos disponibilités pour le mois suivant.'
+    },
+    tip2: {
+        en: "In your creator dashboard, you'll be able to add time slots for a certain date, or remove them if no bookings have been made yet.",
+        fr: "Dans le tableau de bord, vous pourrez ajouter des plages horaires pour une certaine date ou les supprimer si aucune réservation n'a encore été effectuée."
+    }
+}
+
+export const ReviewText = {
+    title: {
+        en: 'Review & Submit', 
+        fr: 'Reviser & Soumettre'
     }
 }

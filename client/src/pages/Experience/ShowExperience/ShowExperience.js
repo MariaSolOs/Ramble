@@ -4,7 +4,6 @@ import {saveExperience, unsaveExperience} from '../../../store/actions/experienc
 import {showError} from '../../../store/actions/ui';
 import axios from '../../../tokenizedAxios';
 import {useParams, useHistory} from 'react-router-dom';
-import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
 
 //Components and icons
 import BookExperience from '../BookExperience/BookExperience';
@@ -64,11 +63,7 @@ const ShowExperience = (props) => {
 
     //For booking an experience
     const [showBooking, setShowBooking] = useState(false);
-    const handleBooking = () => {
-        if(props.isAuth) { 
-            setShowBooking(true);
-        } else { props.dialogActions.openSignUpDialog(); }
-    }
+    const handleBooking = () => { setShowBooking(true); }
     const closeBooking = () => { setShowBooking(false); }
 
     //Go back button
@@ -128,15 +123,12 @@ const ShowExperience = (props) => {
                 </>}
             {showBooking && <BookExperience 
                             exp={exp}
-                            user={props.user}
                             onClose={closeBooking}/>}
         </div>
     );
 }
 
 const mapStateToProps = (state) => ({
-    isAuth: state.user.profile.id !== null,
-    user: state.user.profile,
     userExps: state.exp.savedExps.map(exp => exp._id),
     lang: state.ui.language
 });
@@ -146,4 +138,4 @@ const mapDispatchToProps = (dispatch) => ({
     showError: (msg) => dispatch(showError(msg))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(ShowExperience));
+export default connect(mapStateToProps, mapDispatchToProps)(ShowExperience);

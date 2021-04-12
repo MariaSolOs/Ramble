@@ -65,7 +65,7 @@ const SearchExperiences = (props) => {
 
     const history = useHistory();
     //For showing experience pages
-    const handleViewExp = useCallback((expId) => (e) => {
+    const handleViewExp = useCallback((expId) => () => {
         history.push(`/experience/view/${expId}`);
     }, [history]);
 

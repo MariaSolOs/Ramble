@@ -3,16 +3,15 @@ import axios from '../../../tokenizedAxios';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import useBookingReducer from './store/reducer';
 import { steps, actions } from './store/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { showError } from '../../../store/actions/ui';
 import useSavedCards from '../../../hooks/useSavedCards';
+import withAuthDialogs from '../../../hoc/withAuthDialogs/withAuthDialogs';
 
 import * as dialogs from './Dialogs';
 
-const BookExperience = ({ exp, user, onClose }) => {
-    const lang = useSelector(state => state.ui.language);
-
+const BookExperience = (props) => {
     // Managing dialog switching and payment steps
     const [state, dispatch] = useBookingReducer();
     const setStep = useCallback((step) => () => {
@@ -20,13 +19,13 @@ const BookExperience = ({ exp, user, onClose }) => {
     }, [dispatch]);
 
     // For booking cancelling
-    const uiDispatch = useDispatch();
+    const { onClose, showError } = props;
     const cancelBooking = useCallback((msg = null) => {
-        if (msg) { uiDispatch(showError(msg)); }
+        if (msg) { showError(msg); }
         setTimeout(() => {
             onClose();
         }, 4000);
-    }, [onClose, uiDispatch]);
+    }, [onClose, showError]);
 
     // For handling booking details
     const handleChange = useCallback((name, value) => {
@@ -37,7 +36,7 @@ const BookExperience = ({ exp, user, onClose }) => {
     useEffect(() => {
         if (state.form.date) {
             // Cut off the time from query
-            axios.get(`/api/occ/${exp._id}`, {
+            axios.get(`/api/occ/${props.exp._id}`, {
                 params: { date: state.form.date.toISOString().split('T')[0] }
             }).then(res => {
                 if (res.status === 200) {
@@ -49,12 +48,21 @@ const BookExperience = ({ exp, user, onClose }) => {
                         }))
                     });
                 }
-            }).catch(err => {
+            }).catch(() => {
                 cancelBooking('This date is not available.');
             });
         }
-    }, [state.form.date, exp._id, exp.avail.schedule, exp.capacity, 
+    }, [state.form.date, props.exp._id, props.exp.avail.schedule, props.exp.capacity, 
         dispatch, cancelBooking]);
+
+    // Stop booking if user hasn't signed up/logged in 
+    const handleUserAuth = () => {
+        if (props.user.id === null) {
+            props.dialogActions.openSignUpDialog();
+        } else {
+            setStep(steps.TIMES)();
+        }
+    }
 
     // We pass user's saved cards to payment dialog
     const { cards } = useSavedCards();
@@ -62,7 +70,7 @@ const BookExperience = ({ exp, user, onClose }) => {
     // After payment is done, add booking to occurrence
     const history = useHistory();
     const handleAddBookingToOcc = (payIntentId, cardToUse) => {
-        axios.post(`/api/occ/${exp._id}/bookings`, {
+        axios.post(`/api/occ/${props.exp._id}/bookings`, {
             date: state.form.date.toISOString().split('T')[0],
             timeslot: state.form.timeslot,
             numGuests: state.form.numGuests,
@@ -76,16 +84,16 @@ const BookExperience = ({ exp, user, onClose }) => {
                     pathname: '/experience/booking-submitted',
                     state: {
                         exp: {
-                            title: exp.title,
-                            img: exp.images[0],
+                            title: props.exp.title,
+                            img: props.exp.images[0],
                             creator: {
-                                name: exp.creator.user.fstName,
-                                img: exp.creator.user.photo,
-                                phoneNumber: exp.creator.user.phoneNumber
+                                name: props.exp.creator.user.fstName,
+                                img: props.exp.creator.user.photo,
+                                phoneNumber: props.exp.creator.user.phoneNumber
                             },
-                            toBring: exp.toBring,
-                            meetPoint: exp.location.meetPoint,
-                            price: exp.price
+                            toBring: props.exp.toBring,
+                            meetPoint: props.exp.location.meetPoint,
+                            price: props.exp.price
                         },
                         occ: {
                             date: state.form.date,
@@ -109,20 +117,20 @@ const BookExperience = ({ exp, user, onClose }) => {
         });
     }
 
-    //For handling payment
+    // For handling payment
     const stripe = useStripe();
     const elements = useElements();
     const handlePayment = async () => {
         dispatch({ type: actions.PAY_INIT });
         try {
-            if (state.form.cardToUse) { //Then we can skip all this
+            if (state.form.cardToUse) { // Then we can skip all this
                 return handleAddBookingToOcc(null, state.form.cardToUse); 
             }
 
             let clientSecret;
             let customerId;
 
-            //If user wants to save the card, create Stripe customer
+            // If user wants to save the card, create Stripe customer
             if (state.form.rememberCard) {
                 const newCustomer = await axios.post('/api/stripe/customer');
                 if (newCustomer.status === 201) {
@@ -132,11 +140,11 @@ const BookExperience = ({ exp, user, onClose }) => {
                 }
             }
 
-            //Create payment intent and get client secret 
+            // Create payment intent and get client secret 
             const payIntent = await axios.post('/api/stripe/payment-intent', { 
-                expId: exp._id,
-                transferId: exp.creator.stripe.accountId,
-                creatorId: exp.creator._id,
+                expId: props.exp._id,
+                transferId: props.exp.creator.stripe.accountId,
+                creatorId: props.exp.creator._id,
                 bookType: state.form.bookType,
                 numGuests: state.form.numGuests,
                 promoCode: state.form.promoCode,
@@ -159,11 +167,11 @@ const BookExperience = ({ exp, user, onClose }) => {
                 payment_method: {
                     card: elements.getElement(CardElement),
                     billing_details: {
-                        name: `${user.fstName} ${user.lstName}`,
+                        name: `${props.user.fstName} ${props.user.lstName}`,
                     }
                 },
                 receipt_email: state.form.email.length > 0? 
-                               state.form.email : user.email,
+                               state.form.email : props.user.email,
                 ...usage
             });
             if (payConfirm.error) {
@@ -178,31 +186,31 @@ const BookExperience = ({ exp, user, onClose }) => {
 
     switch(state.step) {
         case steps.CALENDAR: 
-            //Either today or the min date from exp timeframe
-            const minDate = new Date(Math.max(new Date(exp.avail.from), new Date()));
+            // Either today or the min date from exp timeframe
+            const minDate = new Date(Math.max(new Date(props.exp.avail.from), new Date()));
             return <dialogs.CalendarDialog 
                     open
-                    lang={lang}
+                    lang={props.lang}
                     date={{
                         min: minDate,
-                        max: new Date(exp.avail.to),
+                        max: new Date(props.exp.avail.to),
                         selec: state.form.date
                     }}
-                    availDays={Object.keys(exp.avail.schedule)}
+                    availDays={Object.keys(props.exp.avail.schedule)}
                     onChange={handleChange}
                     controls={{
-                        goBack: onClose,
-                        nextStep: setStep(steps.TIMES)
+                        goBack: props.onClose,
+                        nextStep: handleUserAuth
                     }}/>
         case steps.TIMES: 
             return <dialogs.TimesDialog
                     open
-                    lang={lang}
+                    lang={props.lang}
                     date={state.form.date}
                     timeslot={state.form.timeslot}
                     onChange={handleChange}
                     slotsInfo={state.slotsInfo}
-                    expCapacity={exp.capacity}
+                    expCapacity={props.exp.capacity}
                     controls={{
                         goBack: setStep(steps.CALENDAR),
                         nextStep: setStep(steps.BOOK_TYPE)
@@ -210,14 +218,14 @@ const BookExperience = ({ exp, user, onClose }) => {
         case steps.BOOK_TYPE:
             return <dialogs.BookTypeDialog
                     open
-                    lang={lang}
+                    lang={props.lang}
                     form={state.form}
                     exp={{
-                        title: exp.title,
-                        creator: exp.creator,
-                        capacity: exp.capacity,
-                        img: exp.images[0],
-                        price: exp.price,
+                        title: props.exp.title,
+                        creator: props.exp.creator,
+                        capacity: props.exp.capacity,
+                        img: props.exp.images[0],
+                        price: props.exp.price,
                     }}
                     onChange={handleChange}
                     controls={{
@@ -226,19 +234,19 @@ const BookExperience = ({ exp, user, onClose }) => {
                     }}/>
         case steps.PAYMENT: 
             return <dialogs.PaymentDialog 
-                    lang={lang}
+                    lang={props.lang}
                     openForm={!state.payDone}
                     openStatus={state.payProcessing || state.payDone}
                     payMessage={state.payMsg}
                     form={state.form}
                     exp={{
-                        title: exp.title,
-                        creator: exp.creator,
-                        img: exp.images[0],
-                        price: exp.price,
-                        isOnline: exp.zoomInfo
+                        title: props.exp.title,
+                        creator: props.exp.creator,
+                        img: props.exp.images[0],
+                        price: props.exp.price,
+                        isOnline: props.exp.zoomInfo
                     }}
-                    user={user}
+                    user={props.user}
                     cards={cards}
                     onChange={handleChange}
                     controls={{
@@ -249,4 +257,12 @@ const BookExperience = ({ exp, user, onClose }) => {
     }
 }
 
-export default BookExperience;
+const mapStateToProps = (state) => ({
+    lang: state.ui.language,
+    user: state.user.profile
+});
+const mapDispatchToProps = (dispatch) => ({
+    showError: (msg) => dispatch(showError(msg))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withAuthDialogs(BookExperience));

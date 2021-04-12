@@ -1,10 +1,9 @@
 import React from 'react';
-import {TransitionGroup, CSSTransition} from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import ExperienceCard from '../ExperienceCard/ExperienceCard';
 
-//Styles
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './ExperiencesGalleryStyles';
 const useStyles = makeStyles(styles);
 
@@ -14,7 +13,7 @@ const ExperiencesGallery = (props) => {
     return (
         <TransitionGroup className={classes.gallery}>
             {props.experiences.map(exp => (
-            <CSSTransition 
+                <CSSTransition 
                 key={exp._id}
                 timeout={300}
                 classNames={{

@@ -72,7 +72,7 @@ const PaymentDialog = (props) => {
         lang={props.lang}
         continueMessage={
             <span className={classes.submitMessage}>
-                {text.confirmBook[props.lang]} &bull; <span>$</span>{(expPrice + taxGST + taxQST).toFixed(2)}
+                {text.confirmBook[props.lang]} &bull; <span>$</span>{(subTotal + taxGST + taxQST).toFixed(2)}
             </span>
         }
         continueDisabled={!enableSubmit}>

@@ -11,6 +11,7 @@ const cloudinary = require('cloudinary').v2,
 const Experience = require('../models/experience'),
       User = require('../models/user'),
       Notification = require('../models/notification'),
+      Occurrence = require('../models/occurrence'),
       Review = require('../models/review');
 
 //Fetch cities stored in database
@@ -271,6 +272,17 @@ exports.editExperience = async (req, res, next) => {
             exp[field] = req.body[field];
         }
         await exp.save();
+
+        //Update occurrences if applicable
+        if ('capacity' in req.body) {
+            const occs = await Occurrence.find({ experience: exp._id });
+            for (occ of occs) {
+                if (exp.capacity >= occ.spotsLeft) {
+                    occ.spotsLeft = exp.capacity - occ.spotsLeft;
+                    await occ.save();
+                }
+            }
+        } 
 
         res.status(201).send({
             message: 'Experience successfully updated.',

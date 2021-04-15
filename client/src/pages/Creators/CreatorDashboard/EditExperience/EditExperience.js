@@ -215,7 +215,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
 const mapStateToProps = (state) => ({
     userProfile: state.user.profile,
     creatorBio: state.user.creator.bio,
-    language: state.ui.language
+    lang: state.ui.language
 });
 
 const mapDispatchToProps = (dispatch) => ({

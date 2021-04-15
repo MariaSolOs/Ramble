@@ -27,7 +27,7 @@ const Navbar = ({ lang }) => {
     return (
         <ul className={classes.root}>
             {profilePages.map(({name, icon, route}) => (
-                <li key={name}>
+                <li key={name[lang]}>
                     <NavLink 
                     to={route} 
                     className={classes.navLink}
@@ -38,7 +38,7 @@ const Navbar = ({ lang }) => {
                         } else { return match; }
                     }}>
                         <FontAwesomeIcon icon={icon}/>
-                        {name}
+                        {name[lang]}
                     </NavLink>
                 </li>
             ))}

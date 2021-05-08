@@ -42,6 +42,9 @@ const WeeklyCalendar = ({ avail, duration, onChange }) => {
                                 [...selected, slot];
         newSelection.sort(slotSort);
         avail.set(day, newSelection);
+        if (avail.get(day).length === 0) {
+            avail.delete(day);
+        }
         onChange(avail);
     }
 

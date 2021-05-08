@@ -25,22 +25,18 @@ const BookingRequests = (props) => {
     }, [bookingRequests]);
 
     //Handle accept/decline requests
-    const handleDecisionUnsavedCard = useCallback((action, stripeId, bookId) => 
-    (e) => {
+    const handleDecisionUnsavedCard = useCallback((action, stripeId, bookId) => () => {
         showSnackbar('Processing your decision...');
         //Action is either capture or cancel
-        axios.post(`/api/stripe/payment-intent/${action}`, {stripeId})
-        .then(res => {
+        axios.post(`/api/stripe/payment-intent/${action}`, {stripeId}).then(() => {
             deleteRequest(bookId);
             const decision = action === 'capture'? 'approved' : 'canceled';
             showSnackbar(`The booking was ${decision}`);
-        })
-        .catch(err => {
+        }).catch(err => {
             showError("We couldn't process your decision...");
         });
     }, [showSnackbar, showError, deleteRequest]);
-    const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => 
-    async (e) => {
+    const handleDecisionSavedCard = useCallback((action, stripeInfo, bookId) => async (e) => {
         try {
             showSnackbar('Processing your decision...');
             if(action === 'approve') {

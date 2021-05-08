@@ -46,8 +46,7 @@ const EditExperience = ({ exp, userProfile, creatorBio,
         }).then((res) => {
             showSnackbar(`Your experience "${res.data.exp.title}" was updated!`);
             onUpdatedExp(res.data.exp);
-        })
-        .catch(() => {
+        }).catch(() => {
             showError("We can't update your experience right now...");
             setTimeout(() => {}, 3000);
             history.push(PAGES.dashboard);

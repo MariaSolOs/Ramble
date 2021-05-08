@@ -268,7 +268,7 @@ exports.editExperience = async (req, res, next) => {
         delete req.body.images;
 
         //Update experience fields
-        for(field in req.body) {
+        for (const field in req.body) {
             exp[field] = req.body[field];
         }
         await exp.save();

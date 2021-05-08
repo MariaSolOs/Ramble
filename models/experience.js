@@ -96,8 +96,7 @@ const ExperienceSchema = new mongoose.Schema({
                 type: [String]
             },
             validate: input => {
-                const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 
-                'Friday', 'Saturday', 'Sunday'];
+                const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
                 const slotReg = /\b((1[0-2]|[1-9])(:30)?([AP][M]))-((1[0-2]|[1-9])(:30)?([AP][M]))/;
                 const correctKeys = Array.from(input.keys()).every(key => weekdays.includes(key));
                 const correctSlots = Array.from(input.values()).every(val => slotReg.test(val));

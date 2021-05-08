@@ -116,7 +116,7 @@ const ShowExperience = (props) => {
                             {exp.zoomInfo? 'PER CONNECTION' : 'PER PERSON'}
                         </p>
                         <button className={classes.bookButton} onClick={handleBooking}>
-                            Book experience
+                            {props.lang === 'fr' ? 'Voir les disponibilités' : 'See dates'}
                         </button>
                     </div>
                 </div>

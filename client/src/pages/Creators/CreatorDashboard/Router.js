@@ -8,6 +8,7 @@ import useDashboardReducer from './store/reducer';
 import {actions} from './store/types';
 
 //Pages and layout
+import Layout from './Layout/Layout';
 import BookingRequests from './BookingRequests/BookingRequests';
 import Availabilities from './Availabilities/Availabilities';
 import NoCreatedExps from './NoCreatedExps/NoCreatedExps';
@@ -97,37 +98,44 @@ const Router = (props) => {
         <Switch location={location}>
             <Route path={`${path}/bookings-requests`}>
                 {state.bookingRequests &&
+                <Layout lang={lang}>
                     <BookingRequests 
                     bookingRequests={state.bookingRequests}
-                    deleteRequest={handleDeleteRequest}/>}
+                    deleteRequest={handleDeleteRequest}/>
+                </Layout>}
             </Route>
             <Route path={`${path}/experiences`}>
+                <Layout lang={lang}>
                 {state.createdExps? 
                     <CreatedExperiences 
                     exps={state.createdExps}
                     onEditExp={handleEditExp}/> :
                     <NoCreatedExps/>}
+                </Layout>
             </Route>
             <Route path={`${path}/edit-exp`}>
                 <EditExperience exp={state.editExp} onUpdatedExp={handleUpdateExps}/>
             </Route>
             <Route path={`${path}/availabilities`}>
-                {(state.bookingRequests && state.createdExps) &&
-                state.editExp?
-                    <Availabilities 
-                    createdExps={state.createdExps}
-                    bookingRequests={state.bookingRequests}
-                    exp={state.editExp}
-                    date={state.editDate}
-                    onExpChange={handleEditExp}
-                    onDateChange={handleEditDate}/> :
-                    <NoCreatedExps/>}
+                <Layout lang={lang}>
+                    {(state.bookingRequests && state.createdExps) &&
+                    state.editExp?
+                        <Availabilities 
+                        createdExps={state.createdExps}
+                        bookingRequests={state.bookingRequests}
+                        exp={state.editExp}
+                        date={state.editDate}
+                        onExpChange={handleEditExp}
+                        onDateChange={handleEditDate}/> :
+                        <NoCreatedExps/>}
+                </Layout>
             </Route>
             {state.bookingDates &&
                 <Route path={`${path}/bookings-upcoming`}>
-                    <UpcomingBookings 
-                    bookingDates={state.bookingDates} 
-                    lang={lang}/>
+                    <Layout lang={lang}>
+                        <UpcomingBookings 
+                        bookingDates={state.bookingDates}/>
+                    </Layout>
                 </Route>}
             <Route component={Page404}/>
         </Switch>

@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import axios from '../../../../tokenizedAxios';
 import { getFormattedDate, getTimePieces } from '../helpers';
 
-import NavRow from '../NavRow/NavRow';
 import BookingTab from './BookingTab/BookingTab';
 import DatePicker from 'react-datepicker';
 import CustomScroll from 'react-custom-scroll';
@@ -15,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 const IN_ONE_MONTH = new Date().setDate(new Date().getDate() + 30);
 
-const UpcomingBookings = ({ bookingDates, lang }) => {
+const UpcomingBookings = ({ bookingDates }) => {
     const classes = useStyles();
 
     // To handle selected date
@@ -40,53 +39,47 @@ const UpcomingBookings = ({ bookingDates, lang }) => {
     }, [date]);
     
     return (
-        <div className={classes.root}> 
-            <div className={classes.shadowSeparator}/>
-            <div className={classes.page}>
-                <NavRow lang={lang}/>
-                <div className={classes.container}>
-                    <DatePicker
-                    selected={date}
-                    onChange={handleDateChange}
-                    minDate={new Date()}
-                    maxDate={IN_ONE_MONTH}
-                    filterDate={filterDate}
-                    calendarClassName={classes.datePicker}
-                    inline/>
-                    <CustomScroll>
-                    <div className={classes.bookingsContainer}>
-                        <div className={`${classes.tab} ${classes.whiteTab}`}>
-                            {getFormattedDate(date)}
-                        </div>
-                        {occs.map((occ) => {
-                            const [fromHour, fromTime, toHour, toTime] = 
-                                getTimePieces(occ.timeslot);
-                            return (
-                                <React.Fragment key={occ._id}>
-                                    {occ.experience &&
-                                        <h4 className={classes.whiteText}>
-                                            {occ.experience}
-                                        </h4>}
-                                    <div className={`${classes.tab} ${classes.greyTab} ${classes.greyText}`}>
-                                        <span className="large-num">
-                                            {fromHour}
-                                        </span>{fromTime} - 
-                                        <span className="large-num">
-                                            {toHour}
-                                        </span>{toTime}
-                                    </div>
-                                    {occ.bookings.map((booking) => (
-                                        <BookingTab 
-                                        key={booking._id} 
-                                        booking={booking}/>
-                                    ))}
-                                </React.Fragment>
-                            )
-                        })}
-                    </div>
-                    </CustomScroll>
+        <div className={classes.container}>
+            <DatePicker
+            selected={date}
+            onChange={handleDateChange}
+            minDate={new Date()}
+            maxDate={IN_ONE_MONTH}
+            filterDate={filterDate}
+            calendarClassName={classes.datePicker}
+            inline/>
+            <CustomScroll>
+            <div className={classes.bookingsContainer}>
+                <div className={`${classes.tab} ${classes.whiteTab}`}>
+                    {getFormattedDate(date)}
                 </div>
+                {occs.map((occ) => {
+                    const [fromHour, fromTime, toHour, toTime] = 
+                        getTimePieces(occ.timeslot);
+                    return (
+                        <React.Fragment key={occ._id}>
+                            {occ.experience &&
+                                <h4 className={classes.whiteText}>
+                                    {occ.experience}
+                                </h4>}
+                            <div className={`${classes.tab} ${classes.greyTab} ${classes.greyText}`}>
+                                <span className="large-num">
+                                    {fromHour}
+                                </span>{fromTime} - 
+                                <span className="large-num">
+                                    {toHour}
+                                </span>{toTime}
+                            </div>
+                            {occ.bookings.map((booking) => (
+                                <BookingTab 
+                                key={booking._id} 
+                                booking={booking}/>
+                            ))}
+                        </React.Fragment>
+                    )
+                })}
             </div>
+            </CustomScroll>
         </div>
     );
 }

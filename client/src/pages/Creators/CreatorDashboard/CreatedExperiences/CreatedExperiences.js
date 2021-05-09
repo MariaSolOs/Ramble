@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import NavRow from '../NavRow/NavRow';
 import ExperienceCard from '../../../../components/ExperienceCard/ExperienceCard';
 import NoCreatedExps from '../NoCreatedExps/NoCreatedExps';
 
@@ -19,21 +18,14 @@ const CreatedExperiences = ({ exps, onEditExp }) => {
         history.push('/creator/dashboard/edit-exp/planning');
     }
 
-    return (
-        <div className={classes.root}> 
-            <div className={classes.shadowSeparator}/>
-            <div className={classes.page}>
-                <NavRow/>
-                {exps.length === 0? <NoCreatedExps/> :
-                <div className={classes.experiences}>
-                    {exps.map(exp => (
-                        <ExperienceCard
-                        key={exp._id}
-                        exp={exp}
-                        onCardClick={handleClick(exp)}/>
-                    ))}
-                </div>}
-            </div>
+    return (exps.length === 0? <NoCreatedExps/> :
+        <div className={classes.experiences}>
+            {exps.map(exp => (
+                <ExperienceCard
+                key={exp._id}
+                exp={exp}
+                onCardClick={handleClick(exp)}/>
+            ))}
         </div>
     );
 }

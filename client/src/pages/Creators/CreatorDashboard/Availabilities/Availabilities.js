@@ -6,7 +6,6 @@ import {showError, showSnackbar} from '../../../../store/actions/ui';
 import axios from '../../../../tokenizedAxios';
 import text from './AvailabilitiesText';
 
-import NavRow from '../NavRow/NavRow';
 import ExpNav from './ExpNav';
 import DatePicker from 'react-datepicker';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,7 +15,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import styles from './AvailabilitiesStyles';
 const useStyles = makeStyles(styles);
 
-const Calendar = (props) => {
+const Availabilities = (props) => {
     const classes = useStyles();
     const lang = useSelector(state => state.ui.language);
     const dispatch = useDispatch();
@@ -100,8 +99,7 @@ const Calendar = (props) => {
     }
 
     return (
-        <div className={classes.root}>
-            <NavRow lang={lang}/>
+        <>
             <ExpNav
             experiences={props.createdExps}
             changesSaved={changesSaved}
@@ -187,8 +185,8 @@ const Calendar = (props) => {
                     </button>
                 </div>
             </div>
-        </div>
+            </>
     );
 }
 
-export default Calendar;
+export default Availabilities;

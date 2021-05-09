@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {showError, showSnackbar} from '../../../../store/actions/ui';
 import text from './BookingRequestsText';
 
-import NavRow from '../NavRow/NavRow';
 import BookingCard from './BookingCard/BookingCard';
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -89,49 +88,45 @@ const BookingRequests = (props) => {
     }, [bookings]);
 
     return (
-        <div className={classes.root}>
-            <div className={classes.shadowSeparator}/>
-            <div className={classes.page}>
-                <NavRow lang={lang}/>
-                <div className={classes.sortBar}>
-                    {text.sortBy[lang]}
-                    <button onClick={sortByBookDate}>{text.sortBookDate[lang]}</button>
-                    <button onClick={sortByExpDate}>{text.sortExpDate[lang]}</button>
-                </div>
-                <div className={classes.requests}> 
-                {bookings && bookings.map(booking => (
-                    <div key={booking._id} className={classes.request}>
-                        <BookingCard 
-                        booking={booking}
-                        onAccept={
-                            booking.stripe.paymentIntentId?
-                            handleDecisionUnsavedCard(
-                                'capture', 
-                                booking.stripe.paymentIntentId,
-                                booking._id
-                            ) :
-                            handleDecisionSavedCard('approve', 
-                            { customerId: booking.client.stripe.customerId,
-                            expId: booking.experience._id,
-                            bookType: booking.bookType,
-                            numGuests: booking.numPeople,
-                            ...booking.stripe }, 
-                            booking._id)
-                        }
-                        onDecline={
-                            booking.stripe.paymentIntentId?
-                            handleDecisionUnsavedCard(
-                                'cancel', 
-                                booking.stripe.paymentIntentId,
-                                booking._id
-                            ) :
-                            handleDecisionSavedCard('cancel', {}, booking._id)
-                        }/>
-                    </div>
-                ))}
-                </div>
+        <>
+            <div className={classes.sortBar}>
+                {text.sortBy[lang]}
+                <button onClick={sortByBookDate}>{text.sortBookDate[lang]}</button>
+                <button onClick={sortByExpDate}>{text.sortExpDate[lang]}</button>
             </div>
-        </div>
+            <div className={classes.requests}> 
+            {bookings && bookings.map(booking => (
+                <div key={booking._id} className={classes.request}>
+                    <BookingCard 
+                    booking={booking}
+                    onAccept={
+                        booking.stripe.paymentIntentId?
+                        handleDecisionUnsavedCard(
+                            'capture', 
+                            booking.stripe.paymentIntentId,
+                            booking._id
+                        ) :
+                        handleDecisionSavedCard('approve', 
+                        { customerId: booking.client.stripe.customerId,
+                        expId: booking.experience._id,
+                        bookType: booking.bookType,
+                        numGuests: booking.numPeople,
+                        ...booking.stripe }, 
+                        booking._id)
+                    }
+                    onDecline={
+                        booking.stripe.paymentIntentId?
+                        handleDecisionUnsavedCard(
+                            'cancel', 
+                            booking.stripe.paymentIntentId,
+                            booking._id
+                        ) :
+                        handleDecisionSavedCard('cancel', {}, booking._id)
+                    }/>
+                </div>
+            ))}
+            </div>
+        </>
     );
 }
 

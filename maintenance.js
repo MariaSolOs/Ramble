@@ -1,17 +1,14 @@
-const Experience = require('./models/experience'),
-      Notification = require('./models/notification'),
-      Review = require('./models/review');
+const Occurrence = require('./models/occurrence');
 
 module.exports = async () => {
-    const notifs = await Notification.find({ category: 'User-ExperienceReview' });
-    const toDel = [];
+    const occs = await Occurrence.find({ experience: '60675544a96a41001792875a' });
 
-    for (notif of notifs) {
-        const exists = await Experience.exists({ _id: notif.expToReview });
-        if (!exists) {
-            toDel.push(notif._id);
+    for (occ of occs) {
+        if (occ.bookings.length === 0) {
+            occ.spotsLeft = 30;
+            await occ.save();
         }
     }
 
-    await Notification.deleteMany({ _id: { $in: toDel } });
+    // console.log('Done updating!');
 }

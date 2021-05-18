@@ -24,7 +24,12 @@ require('./config/mongoose');
 require('./config/cloudinary');
 
 //Server setup
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ 
+    origin: [
+        process.env.CLIENT_URL
+    ], 
+    credentials: true 
+}));
 //Stripe webhooks aren't parsed to json
 app.use(bodyParser.json({
     limit: '20mb',

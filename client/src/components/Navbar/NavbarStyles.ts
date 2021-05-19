@@ -1,13 +1,15 @@
 import { createStyles, Theme } from '@material-ui/core/styles';
 
-const styles = (_: Theme) => createStyles({
+const styles = (theme: Theme) => createStyles({
     root: {
-        position: 'absolute'
-        //     right: 0
+        position: 'absolute',
+        right: 0
     },
 
     collapsedNav: {
-
+        [theme.breakpoints.up('md')]: {
+            display: 'none'
+        }
     },
 
     toggleIcon: {
@@ -22,90 +24,80 @@ const styles = (_: Theme) => createStyles({
         backgroundColor: 'rgba(65, 65, 65, 0.7)',
         borderRadius: '1rem',
         padding: '0 4px',
-        // '&.MuiPopover-paper': {
-        //     minWidth: 200
-        // }
+
+        '&.MuiPopover-paper': {
+            minWidth: 200
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            '&.MuiPopover-paper': {
+                minWidth: 150
+            }
+        }
     },
 
     menuList: {
+        '& .MuiListItem-root': {
+            width: '100%',
+            fontFamily: theme.typography.fontFamily,
+            fontWeight: theme.typography.fontWeightBold,
+            fontSize: '0.9rem',
+            letterSpacing: '-0.07rem',
+            color: '#E8E8E8',
+            textAlign: 'center',
+            justifyContent: 'center',
+            borderRadius: '0.65rem',
+            padding: 4,
+            margin: '0 0 4px 0',
 
-    }
-    // collapsedList: {
-    //     '& .MuiListItem-root': {
-    //         width: '100%',
-    //         fontFamily: 'Helvetica, sans-serif',
-    //         fontWeight: 'bold',
-    //         fontSize: '0.9rem',
-    //         letterSpacing: '-0.07rem',
-    //         color: '#E8E8E8',
-    //         textAlign: 'center',
-    //         justifyContent: 'center',
-    //         borderRadius: '0.65rem',
-    //         padding: 4,
-    //         margin: '0 0 4px 0',
-    //         '&:last-child': { margin: 0 }
-    //     },
-    //     '& a.MuiListItem-button, button.MuiListItem-button': {
-    //         '&:hover': {
-    //             backgroundColor: 'rgba(118, 118, 118, 0.96)',
-    //             transition: 'all 0.3s ease-in-out'
-    //         }
-    //     },
-    //     '& button': { outline: 'none' }
-    // },
+            '&:last-child': { margin: 0 },
 
-    // toggleIcon: {
-    //     '&:focus': { outline: 'none' },
-    //     boxShadow: 'none',
-    //     padding: '12px 12px 0'
-    // },
+            [theme.breakpoints.down('xs')]: {
+                height: 38,
+                minHeight: 0
+            }
+        },
 
-    // //Navigation links
-    // navLink: {
-    //     padding: 8,
-    //     fontFamily: 'Helvetica, sans-serif',
-    //     fontWeight: 'bold',
-    //     fontSize: '1.05rem',
-    //     letterSpacing: '-0.07rem',
-    //     whiteSpace: 'nowrap',
-    //     marginRight: 10,
-    //     color: '#ACACAC',
-    //     '&:hover': { color: '#ACACAC' }
-    // },
-    // dialogToggler: {
-    //     background: 'none',
-    //     border: 'none',
-    //     cursor: 'pointer',
-    //     '&:focus': { outline: 'none' }
-    // },
-    // //Collapsed navbar
-    // collapsedNav: {
-    //     [theme.breakpoints.up('md')]: { display: 'none' }
-    // },
+        '& a.MuiListItem-button, button.MuiListItem-button': {
+            '&:hover': {
+                backgroundColor: 'rgba(118, 118, 118, 0.96)',
+                transition: 'all 0.3s ease-in-out'
+            }
+        }
+    },
 
-    // //Expanded navbar
-    // expandedLinks: {
-    //     [theme.breakpoints.down('sm')]: {
-    //         display: 'none'
-    //     },
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     margin: '0 10px 0 0'
-    // },
+    expandedLinks: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: 10,
 
-    // numBookings: {
-    //     borderRadius: '50%',
-    //     backgroundColor: '#F93E35',
-    //     color: '#FFF',
-    //     fontSize: '1rem',
-    //     display: 'inline-flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     width: 20, height: 20,
-    //     padding: 2,
-    //     marginRight: '0.3rem',
-    //     textIndent: -1 
-    // }
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        }
+    },
+
+    dialogToggler: {
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+
+        '&:focus': { outline: 'none' }
+    },
+
+    navLink: {
+        padding: 8,
+        fontFamily: theme.typography.fontFamily,
+        fontWeight: theme.typography.fontWeightBold,
+        fontSize: '1.05rem',
+        letterSpacing: '-0.07rem',
+        whiteSpace: 'nowrap',
+        marginRight: 10,
+        color: '#ACACAC',
+        textDecoration: 'none',
+
+        '&$whiteNavLink': { color: '#FFF' }
+    },
+    whiteNavLink: {}
 });
 
 export default styles;

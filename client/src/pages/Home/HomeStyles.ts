@@ -1,11 +1,13 @@
 import { createStyles, Theme } from '@material-ui/core/styles';
 
 const styles = (_: Theme) => createStyles({
-    slide: {
-        height: '100vh'
+    searchSlide: {
+        marginTop: 100,
+        boxSizing: 'border-box',
+        height: 'calc(100vh - 164px)'
     },
 
-    content: {
+    slideContent: {
         margin: '0 auto',
         display: 'flex',
         width: '80%',
@@ -23,6 +25,10 @@ const styles = (_: Theme) => createStyles({
         //     width: '90%',
         //     margin: '0 auto' 
         // }
+    },
+
+    searchBodyRow: {
+        
     },
 
     title: {

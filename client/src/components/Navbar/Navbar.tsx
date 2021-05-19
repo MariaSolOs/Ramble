@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useLanguageContext } from '../../context/languageContext';
 
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-// import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons/faAngleDoubleDown';
 import AppBar from '../AppBar/AppBar';
@@ -21,6 +21,13 @@ const Navbar = () => {
 
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const closeMenu = () => { setAnchorEl(null); }
+    
+    // Close popover when window resizes
+    useEffect(() => {
+        window.addEventListener('resize', closeMenu);
+
+        return () => { window.removeEventListener('resize', closeMenu); }
+    }, []);
 
     return (
         <AppBar>
@@ -50,24 +57,37 @@ const Navbar = () => {
                         list: classes.menuList
                     }}>
                         <MenuItem
-                        // component={NavLink}
+                        component={Link}
+                        to="/"
                         onClick={closeMenu}>
                             {text.becomeCreator}
                         </MenuItem>
+                        <MenuItem
+                        component="button"
+                        onClick={closeMenu}>
+                            {text.signUp}
+                        </MenuItem>
+                        <MenuItem
+                        component="button"
+                        onClick={closeMenu}>
+                            {text.logIn}
+                        </MenuItem>
                     </Menu>
-                    {/* {props.isAuth? 
-                            <MenuItem>{profileMenu}</MenuItem> : 
-                            [<MenuItem component="button" key={0}
-                            onClick={() => { dialogActions.openSignUpDialog();
-                                             closeMenu(); }}>
-                                {text.signUp[lang]}
-                            </MenuItem>,
-                            <MenuItem component="button" key={1}
-                            onClick={() => { dialogActions.openLogInDialog();
-                                             closeMenu(); }}>
-                                {text.logIn[lang]}
-                            </MenuItem>]}
-                    </Menu> */}
+                </div>
+                <div className={classes.expandedLinks}>
+                    <Link
+                    to="/creator/become"
+                    className={`${classes.navLink} ${classes.whiteNavLink}`}>
+                        {text.becomeCreator}
+                    </Link>
+                    <button
+                    className={`${classes.dialogToggler} ${classes.navLink}`}>
+                        {text.signUp}
+                    </button>
+                    <button
+                    className={`${classes.dialogToggler} ${classes.navLink}`}>
+                        {text.logIn}
+                    </button>
                 </div>
             </div>
         </AppBar>

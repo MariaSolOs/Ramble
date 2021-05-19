@@ -9,6 +9,7 @@ const theme = createMuiTheme({
                 body: {
                     backgroundColor: '#151515',
                     fontFamily: 'Helvetica, sans-serif',
+                    fontWeight: 'bold',
                     letterSpacing: '-0.05rem',
                     color: '#FFF'
                 }

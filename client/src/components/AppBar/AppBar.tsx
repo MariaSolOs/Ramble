@@ -8,14 +8,14 @@ import Logo from '../../assets/images/appBar_logo.png';
 import RambleTitle from '../../assets/images/appBar_ramble.png';
 
 import { makeStyles } from '@material-ui/core/styles';
-import styles from './AppBarStyles';
+import styles from './AppBar.styles';
 const useStyles = makeStyles(styles);
 
 const AppBar: React.FC = ({ children }) => {
     const classes = useStyles();
 
     const isScrolled = useScrollTrigger({ disableHysteresis: true });
-
+    
     return (
         <MUIAppBar 
         position="fixed" 

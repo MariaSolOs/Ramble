@@ -18,13 +18,11 @@ const theme = createMuiTheme({
     }
 });
 
-const GlobalStyles: React.FC = ({ children }) => {
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            { children }
-        </ThemeProvider>
-    );
-}
+const GlobalStyles: React.FC = ({ children }) => (
+    <ThemeProvider theme={theme}>
+        <CssBaseline />
+        { children }
+    </ThemeProvider>
+);
 
 export default GlobalStyles;

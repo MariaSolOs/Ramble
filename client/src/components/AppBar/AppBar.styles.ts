@@ -5,6 +5,8 @@ const styles = (theme: Theme) => createStyles({
         backgroundColor: 'transparent',
         boxShadow: 'none',
         opacity: 1,
+        padding: '10px 10px 0',
+        transition: 'opacity 600ms',
 
         '&.scrolled': {
             opacity: 0,

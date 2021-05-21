@@ -11,8 +11,9 @@ import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons/faAngleDoub
 import AppBar from '../AppBar/AppBar';
 
 import { makeStyles } from '@material-ui/core/styles';
-import styles from './NavbarStyles';
+import styles from './Navbar.styles';
 const useStyles = makeStyles(styles);
+
 
 const Navbar = () => {
     const { Navbar: text } = useLanguageContext().appText;

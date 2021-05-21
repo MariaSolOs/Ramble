@@ -26,7 +26,6 @@ const Gallery = (props: Props) => {
     const { Home: text } = useLanguageContext().appText;
 
     const classes = useStyles();
-    console.log('GAL')
 
     return (
         <>

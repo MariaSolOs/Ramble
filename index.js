@@ -3,9 +3,11 @@ require('dotenv').config({ path: './.env' });
 const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
-const mongoClient = require('./config/mongoDB');
 const { Experiences } = require('./graphql/datasources');
+const path = require('path');
+const mongoClient = require('./config/mongoDB');
 const express = require('express');
+
 const app = express();
 
 const server = new ApolloServer({
@@ -17,6 +19,10 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
+
+app.get('*', (_, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(`Apollo server ready at ${server.graphqlPath}`);

@@ -84,7 +84,12 @@ const styles = (theme: Theme) => createStyles({
 
     peopleInput: {
         width: '47%',
-        marginRight: '3%'
+        marginRight: '3%',
+
+        [theme.breakpoints.down('xs')]: { 
+            width: '57%',
+            marginRight: '3%'
+        }
     },
 
     searchButton: {
@@ -93,7 +98,11 @@ const styles = (theme: Theme) => createStyles({
         backgroundSize: '200% auto',
         transition: 'all 400ms ease-in-out',
 
-        '&:hover': { backgroundPosition: 'right center' }
+        '&:hover': { backgroundPosition: 'right center' },
+
+        [theme.breakpoints.down('xs')]: { 
+            width: '40%'
+        }
     }
 });
 

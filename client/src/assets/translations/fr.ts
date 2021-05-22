@@ -1,4 +1,6 @@
-export default {
+import type { TranslationRecord } from '../../models/translation';
+
+const frenchTranslation: TranslationRecord = {
     Home: {
         searchTitle: "Découvrez l'inoubliable", 
         searchSubtitle: 'Découvrez et participez à des expériences uniques',
@@ -23,5 +25,21 @@ export default {
         instruction1: "Not translated not translated not translated not translated not translated not",
         instruction2: 'not',
         instruction3: 'not translated not.' 
+    },
+
+    Footer: {
+        supportColumnName: 'Support',
+        supportLink: 'Support 24/7',
+        socialColumnName: 'Réseaux sociaux',
+        languageColumnName: 'Langue',
+        languageChip: 'English',
+        copyright: 'Technologies Ramble Inc'
+    },
+
+    CustomerServiceDialog: {
+        title: 'Service à la clientèle',
+        message: "Service 24/7 pour vous aider n'importe où, n'importe quand"
     }
-} as const;
+}
+
+export default frenchTranslation;

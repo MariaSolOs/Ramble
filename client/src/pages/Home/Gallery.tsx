@@ -26,7 +26,7 @@ const Gallery = (props: Props) => {
     const { Home: text } = useLanguageContext().appText;
 
     const classes = useStyles();
-
+    
     return (
         <>
             <div className={classes.gallerySlide}>
@@ -35,6 +35,7 @@ const Gallery = (props: Props) => {
                 <div className={classes.imagesContainer}>
                     {PARTAKE_IMAGES.map(imgUrl => 
                         <img 
+                        key={imgUrl}
                         src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image}
@@ -50,6 +51,7 @@ const Gallery = (props: Props) => {
                 <div className={classes.imagesContainer}>
                     {ADVENTURE_IMAGES.map(imgUrl => 
                         <img
+                        key={imgUrl}
                         src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image}

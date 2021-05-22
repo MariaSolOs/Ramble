@@ -1,4 +1,6 @@
-export default {
+import type { TranslationRecord } from '../../models/translation';
+
+const englishTranslation: TranslationRecord = {
     Home: {
         searchTitle: 'Experience different.',
         searchSubtitle: 'Discover and attend unique experiences',
@@ -23,5 +25,21 @@ export default {
         instruction1: "Share your code with a friend. By using it for their first booking, you'll both get",
         instruction2: 'off',
         instruction3: 'your next experience.' 
+    },
+
+    Footer: {
+        supportColumnName: 'Support',
+        supportLink: '24/7 Customer Service',
+        socialColumnName: 'Social',
+        languageColumnName: 'Language',
+        languageChip: 'Français',
+        copyright: '2021 Ramble Technologies Inc'
+    },
+
+    CustomerServiceDialog: {
+        title: 'Customer service',
+        message: '24/7 service to help you anywhere, anytime'
     }
-} as const;
+}
+
+export default englishTranslation;

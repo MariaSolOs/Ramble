@@ -8,6 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import Gallery from './Gallery';
+import Footer from '../../components/Footer/Footer';
 import Autocomplete from '../../components/Autocomplete/Autocomplete';
 import PlusMinusInput from '../../components/PlusMinusInput/PlusMinusInput';
 import Button from '../../components/GradientButton/GradientButton';
@@ -105,6 +106,7 @@ const Home = () => {
                 </div>
             </div>
             <Gallery onImageClick={handleSearchFocus} />
+            <Footer />
         </div>
     );
 }

@@ -46,7 +46,7 @@ module.exports = {
             return newUser;
         },
 
-        logInUser: async (_, { email, password, rememberUser }, { dataSources }) => {
+        logInUser: async (_, { email, password, rememberUser }) => {
             let user = await User.findOneAndUpdate({
                 'email.address': email
             }, { lastLogin: new Date() });

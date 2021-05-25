@@ -4,6 +4,7 @@ import { useMutation, gql } from '@apollo/client';
 import { useLanguageContext } from '../../context/languageContext';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { closeLogInDialog, openErrorDialog } from '../../store/uiSlice';
+import { setUserProfile } from '../../store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,6 +23,7 @@ const LOG_IN_USER = gql`
     mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
         logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
             token
+            _id
             firstName
             lastName
             birthday
@@ -34,6 +36,7 @@ const LOG_IN_USER = gql`
 `;
 type LogIn = {
     token: string;
+    _id: string;
     firstName: string;
     lastName: string;
     birthday: string;
@@ -85,7 +88,17 @@ const LogInDialog = () => {
     const [logIn] = useMutation<{ logInUser: LogIn }, Form>(LOG_IN_USER, {
         onCompleted: ({ logInUser }) => {
             storeTokenData(logInUser.token, values.rememberUser);
-            console.log(logInUser);
+            dispatch(setUserProfile({
+                id: logInUser._id,
+                firstName: logInUser.firstName,
+                lastName: logInUser.lastName,
+                birthday: logInUser.birthday,
+                email: logInUser.email,
+                phoneNumber: logInUser.phoneNumber,
+                photo: logInUser.photo,
+                city: logInUser.city
+            }));
+            handleClose();
         },
         onError: ({ message }) => {
             dispatch(openErrorDialog({ 

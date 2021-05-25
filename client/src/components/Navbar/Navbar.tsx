@@ -16,9 +16,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Navbar.styles';
 const useStyles = makeStyles(styles);
 
-
 const Navbar = () => {
     const { Navbar: text } = useLanguageContext().appText;
+
+    // const { id, firstName, photo } = useAppSelector(state => state.user);
+    // const isLoggedIn = Boolean(id);
 
     const dispatch = useAppDispatch();
 

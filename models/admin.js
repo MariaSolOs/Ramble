@@ -1,5 +1,4 @@
 const mongoose = require('mongoose'),
-      passportLocalMongoose = require('passport-local-mongoose'),
       bcrypt = require('bcrypt');
 
 const AdminSchema = new mongoose.Schema({
@@ -25,11 +24,6 @@ AdminSchema.methods.validPassword = function(password) {
 };   
 AdminSchema.virtual('password').set(function(value) {
     this.passwordHash = bcrypt.hashSync(value, 10);
-});
-
-AdminSchema.plugin(passportLocalMongoose, {
-    limitAttempts: true,
-    maxAttempts: 10
 });
   
 module.exports = mongoose.model('Admin', AdminSchema);

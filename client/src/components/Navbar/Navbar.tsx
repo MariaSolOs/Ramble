@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import { useLanguageContext } from '../../context/languageContext';
+import { useAppDispatch } from '../../hooks/redux';
+import { openSignUpDialog, openLogInDialog } from '../../store/uiSlice';
 
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,6 +19,8 @@ const useStyles = makeStyles(styles);
 
 const Navbar = () => {
     const { Navbar: text } = useLanguageContext().appText;
+
+    const dispatch = useAppDispatch();
 
     const classes = useStyles();
 
@@ -65,12 +69,18 @@ const Navbar = () => {
                         </MenuItem>
                         <MenuItem
                         component="button"
-                        onClick={closeMenu}>
+                        onClick={() => {
+                            dispatch(openSignUpDialog());
+                            closeMenu();
+                        }}>
                             {text.signUp}
                         </MenuItem>
                         <MenuItem
                         component="button"
-                        onClick={closeMenu}>
+                        onClick={() => {
+                            dispatch(openLogInDialog());
+                            closeMenu();
+                        }}>
                             {text.logIn}
                         </MenuItem>
                     </Menu>
@@ -82,10 +92,12 @@ const Navbar = () => {
                         {text.becomeCreator}
                     </Link>
                     <button
+                    onClick={() => dispatch(openSignUpDialog())}
                     className={`${classes.dialogToggler} ${classes.navLink}`}>
                         {text.signUp}
                     </button>
                     <button
+                    onClick={() => dispatch(openLogInDialog())}
                     className={`${classes.dialogToggler} ${classes.navLink}`}>
                         {text.logIn}
                     </button>

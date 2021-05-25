@@ -14,6 +14,7 @@ const useStyles = makeStyles(styles);
 const AppBar: React.FC = ({ children }) => {
     const classes = useStyles();
 
+    // Fade out navbar when scrolling
     const isScrolled = useScrollTrigger({ disableHysteresis: true });
     
     return (

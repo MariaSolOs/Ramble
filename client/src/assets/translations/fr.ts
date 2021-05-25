@@ -17,7 +17,6 @@ const frenchTranslation: TranslationRecord = {
     Navbar: {
         signUp: "M'inscrire",
         logIn: 'Connexion',
-        creatorDashboard: 'Tableau de bord',
         becomeCreator: 'Devenir un Créateur'
     },
 
@@ -39,6 +38,31 @@ const frenchTranslation: TranslationRecord = {
     CustomerServiceDialog: {
         title: 'Service à la clientèle',
         message: "Service 24/7 pour vous aider n'importe où, n'importe quand"
+    },
+
+    SignUpDialog: {
+        signUp: "M'inscrire",
+        logIn: 'Connexion',
+        firstName: 'Prénom',
+        lastName: 'Nom de famille',
+        email: 'Courriel',
+        password: 'Mot de passe',
+        confirmPassword: 'Confirmer le mot de passe',
+        alreadyHaveAccount: 'Vous avez déjà un compte?',
+        continue: 'Continuer',
+        passwordMismatch: 'Les mots de passe ne correspondent pas.'
+    },
+
+    LogInDialog: {
+        logIn: 'Connexion',
+        email: 'Courriel',
+        password: 'Mot de passe',
+        forgotPassword: 'Mot de passe oublié',
+        rememberMe: 'Se souvenir de moi'
+    },
+
+    ErrorDialog: {
+        title: 'Désolé!'
     }
 }
 

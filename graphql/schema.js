@@ -2,7 +2,12 @@ const { gql } = require('apollo-server-express');
 
 module.exports = gql`
     type Query {
-        experiences: [Experience!]
+        experiences(location: String, capacity: String, status: ExperienceStatus): [Experience!]
+    }
+
+    type Mutation {
+        signUpUser(email: String!, password: String!, firstName: String!, lastName: String!): User
+        logInUser(email: String!, password: String!, rememberUser: Boolean!): User
     }
 
     type Experience {
@@ -58,6 +63,21 @@ module.exports = gql`
     type ExperienceScheduleEntry {
         day: String!
         slots: [String!]!
+    }
+
+    type User {
+        _id: ID!
+        token: String!
+        firstName: String
+        lastName: String
+        birthday: String
+        email: String!
+        phoneNumber: String
+        photo: String
+        city: String
+        savedExperiences: [Experience!]
+        bookedExperiences: [Experience!]
+        creator: Creator
     }
 
     type Creator {

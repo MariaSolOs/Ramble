@@ -15,6 +15,9 @@ const theme = createMuiTheme({
                 }
             }
         }
+    },
+    typography: {
+        fontFamily: ['Helvetica', 'sans-serif'].join(', ')
     }
 });
 

@@ -17,7 +17,6 @@ const englishTranslation: TranslationRecord = {
     Navbar: {
         signUp: 'Sign up',
         logIn: 'Log in',
-        creatorDashboard: 'Creator dashboard',
         becomeCreator: 'Become a Creator'
     },
 
@@ -39,6 +38,31 @@ const englishTranslation: TranslationRecord = {
     CustomerServiceDialog: {
         title: 'Customer service',
         message: '24/7 service to help you anywhere, anytime'
+    },
+
+    SignUpDialog: {
+        signUp: 'Sign up', 
+        logIn: 'Log in',
+        firstName: 'First name',
+        lastName: 'Last name',
+        email: 'Email',
+        password: 'Password',
+        confirmPassword: 'Confirm password',
+        alreadyHaveAccount: 'Already have an account?',
+        continue: 'Continue',
+        passwordMismatch: "The passwords don't match."
+    },
+
+    LogInDialog: {
+        logIn: 'Log in',
+        email: 'Email',
+        password: 'Password',
+        forgotPassword: 'I forgot my password',
+        rememberMe: 'Remember me'
+    },
+
+    ErrorDialog: {
+        title: "Sorry 'bout that."
     }
 }
 

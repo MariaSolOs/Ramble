@@ -38,22 +38,22 @@ const PlusMinusInput = (props: Props) => {
 
         const numericValue = +e.target.value;
         if (!isNaN(numericValue) && 
-           (!props.maxValue || (props.maxValue && numericValue <= props.maxValue)) &&
-           (!props.minValue || (props.minValue && numericValue >= props.minValue))) {
+           (!props.maxValue || numericValue <= props.maxValue) &&
+           (!props.minValue || numericValue >= props.minValue)) {
             setValue(numericValue);
         }
     }
 
     const handleInc = () => {
         const newValue = +value + props.step;
-        if (!props.maxValue || (props.maxValue && newValue <= props.maxValue)) {
+        if (!props.maxValue || newValue <= props.maxValue) {
             setValue(newValue);
         }
     }
 
     const handleDec = () => {
         const newValue = +value - props.step;
-        if (!props.minValue || (props.minValue && newValue >= props.minValue)) {
+        if (!props.minValue || newValue >= props.minValue) {
             setValue(newValue);
         }
     }

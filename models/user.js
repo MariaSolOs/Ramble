@@ -1,5 +1,4 @@
 const mongoose = require('mongoose'),
-      passportLocalMongoose = require('passport-local-mongoose'),
       bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
@@ -35,32 +34,29 @@ const UserSchema = new mongoose.Schema({
     },
     savedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Experience'
+        ref: 'Experience',
+        autopopulate: true
     }],
     bookedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Experience'
+        ref: 'Experience',
+        autopopulate: true
     }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Creator'
-    },
-    membershipProvider: {
-        type: String, 
-        required: true,
-        enum: ['facebook', 'google', 'email']
-    },
-    membershipProviderId: String,
-    stripe: {
-        customerId: {
-            type: String,
-            default: ''
-        }
+        ref: 'Creator',
+        autopopulate: true
     },
     promoCode: {
         code: {
             type: String, 
-            required: true
+            required: true,
+            default: function() {
+                const codeName = this.fstName ? this.fstName.toUpperCase() : 'RAMBLE';
+                const codeNumber = (Date.now() + Math.random()).toString().slice(0, 5);
+
+                return codeName + codeNumber;
+            }
         },
         usedBy: [{
             type: mongoose.Schema.Types.ObjectId,
@@ -73,15 +69,14 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+UserSchema.plugin(require('mongoose-autopopulate'));
+
 UserSchema.methods.validPassword = function(password) {
-    return bcrypt.compare(password, this.passwordHash);
+    return bcrypt.compareSync(password, this.passwordHash);
 }
-  
 UserSchema.virtual('password').set(function(value) {
     this.passwordHash = bcrypt.hashSync(value, 10);
 });
-
-UserSchema.plugin(passportLocalMongoose, {usernameField: 'email.address'});
   
 module.exports = mongoose.model('User', UserSchema);
 

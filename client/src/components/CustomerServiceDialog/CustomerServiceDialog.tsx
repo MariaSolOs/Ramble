@@ -1,6 +1,6 @@
 import { useLanguageContext } from '../../context/languageContext';
 
-import Dialog from '../Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhoneAlt } from '@fortawesome/free-solid-svg-icons/faPhoneAlt';
@@ -15,11 +15,14 @@ type Props = {
     onClose: () => void;
 }
 
+/* This dialog is not controlled with redux, since it can be opened
+ * only from the footer and no other dialog can be displayed 
+ * at the same time. */
 const CustomerServiceDialog = (props: Props) => {
     const { CustomerServiceDialog: text } = useLanguageContext().appText;
 
     const classes = useStyles();
-
+    
     return (
         <Dialog classes={{ paper: classes.paper }} open={props.open} onClose={props.onClose}>
             <h4 className={classes.title}>{text.title}</h4>

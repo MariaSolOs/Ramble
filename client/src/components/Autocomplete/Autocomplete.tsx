@@ -1,6 +1,5 @@
 import MUIAutocomplete, { AutocompleteProps } from '@material-ui/lab/Autocomplete';
-import TextField, { StandardTextFieldProps } from '@material-ui/core/TextField';
-import { InputBaseProps } from '@material-ui/core/InputBase';
+import { TextField, StandardTextFieldProps, InputBaseProps } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Autocomplete.styles';
@@ -13,8 +12,6 @@ interface Props extends Omit<AutocompleteProps<any, any, any, any>, 'renderInput
 
 const Autocomplete = (props: Props) => {
     const classes = useStyles();
-
-    const componentProps = props;
 
     return (
         <MUIAutocomplete
@@ -30,7 +27,7 @@ const Autocomplete = (props: Props) => {
                 ...props.inputprops
             }}/>
         )}
-        { ...componentProps } />
+        { ...props } />
     );
 }
 

@@ -53,7 +53,7 @@ const styles = (theme: Theme) => createStyles({
             '&:last-child': { margin: 0 },
 
             [theme.breakpoints.down('xs')]: {
-                height: 38,
+                height: 30,
                 minHeight: 0
             }
         },

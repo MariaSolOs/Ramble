@@ -2,6 +2,8 @@ import { createStyles, Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => createStyles({
     paper: {
+        backgroundColor: 'rgba(30, 30, 30, 0.95)',
+        borderRadius: '1.1rem',
         padding: 20
     },
 

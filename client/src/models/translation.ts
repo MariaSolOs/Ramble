@@ -1,41 +1,17 @@
 export type TranslationRecord = {
-    Home: {
-        searchTitle: string;
-        searchSubtitle: string;
-        searchbarPlaceholder: string;
-        exploreButton: string;
-        personButtonLabel: string;
-        peopleButtonLabel: string;
-        partakeTitle: string;
-        partakeSubtitle: string;
-        adventureTitle: string;
-        adventureSubtitle: string;
-    },
+    Home: Record<'searchTitle' | 'searchSubtitle' | 'searchbarPlaceholder' | 'exploreButton' | 'personButtonLabel' | 'peopleButtonLabel' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
 
-    Navbar: {
-        signUp: string;
-        logIn: string;
-        creatorDashboard: string;
-        becomeCreator: string;
-    },
+    Navbar: Record<'signUp' | 'logIn' | 'becomeCreator', string>;
 
-    ReferBox: {
-        instruction1: string;
-        instruction2: string;
-        instruction3: string;
-    },
+    ReferBox: Record<'instruction1' | 'instruction2' | 'instruction3', string>;
 
-    Footer: {
-        supportColumnName: string;
-        supportLink: string;
-        socialColumnName: string;
-        languageColumnName: string;
-        languageChip: string;
-        copyright: string;
-    },
+    Footer: Record<'supportColumnName' | 'supportLink' | 'socialColumnName' | 'languageColumnName' | 'languageChip' | 'copyright', string>;
 
-    CustomerServiceDialog: {
-        title: string;
-        message: string;
-    }
+    CustomerServiceDialog: Record<'title' | 'message', string>;
+
+    SignUpDialog: Record<'signUp' | 'logIn' | 'firstName' | 'lastName' | 'email' | 'password' | 'confirmPassword' | 'alreadyHaveAccount' | 'continue' | 'passwordMismatch', string>;
+
+    LogInDialog: Record<'logIn' | 'email' | 'password' | 'forgotPassword' | 'rememberMe', string>;
+
+    ErrorDialog: Record<'title', string>;
 }

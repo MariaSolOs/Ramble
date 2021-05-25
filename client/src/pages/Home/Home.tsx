@@ -24,7 +24,7 @@ interface ExperienceData {
 
 const GET_LOCATIONS = gql`
     query getLocations {
-        experiences {
+        experiences(status: APPROVED) {
             location
         }
     }
@@ -92,7 +92,7 @@ const Home = () => {
                                 <FontAwesomeIcon icon={faUsers} />
                             )
                         }} />
-                        <Button buttonType="experience" className={classes.searchButton}>
+                        <Button rambleButtonType="experience" className={classes.searchButton}>
                             {text.exploreButton}
                         </Button>
                     </div>

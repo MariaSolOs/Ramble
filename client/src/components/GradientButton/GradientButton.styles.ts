@@ -6,8 +6,8 @@ const styles = (theme: Theme) => createStyles({
         padding: '0.45rem 0.75rem',
         borderRadius: '2rem',
         border: 'none',
-        background: ({ rambleButtonType } : Props) => {
-            switch(rambleButtonType) {
+        background: ({ variant } : Props) => {
+            switch(variant) {
                 case 'experience': 
                     return 'linear-gradient(to right, #2BB282 0%, #2D73EA 100%)'
                 default: 

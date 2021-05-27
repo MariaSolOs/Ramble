@@ -20,10 +20,10 @@ const frenchTranslation: TranslationRecord = {
         becomeCreator: 'Devenir un Créateur'
     },
 
-    ReferBox: {
-        instruction1: "Not translated not translated not translated not translated not translated not",
-        instruction2: 'not',
-        instruction3: 'not translated not.' 
+    ProfileMenu: {
+        profile: 'Profil',
+        newExperience: 'Nouvelle expérience',
+        logout: 'Déconnexion'
     },
 
     Footer: {
@@ -63,6 +63,12 @@ const frenchTranslation: TranslationRecord = {
 
     ErrorDialog: {
         title: 'Désolé!'
+    },
+
+    SearchExperiences: {
+        personButtonLabel: 'Personne',
+        peopleButtonLabel: 'Personnes',
+        search: 'Explorer'
     }
 }
 

@@ -5,14 +5,14 @@ import styles from './GradientButton.styles';
 const useStyles = makeStyles(styles);
 
 export type Props = {
-    rambleButtonType: 'experience' | 'creator'
+    variant: 'experience'
 }
 
 const GradientButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & Props> = (props) => {
     const classes = useStyles(props);
 
     return (
-        <button className={`${classes.root} ${props.className}`}>
+        <button { ...props } className={`${classes.root} ${props.className}`}>
             { props.children }
         </button>
     );

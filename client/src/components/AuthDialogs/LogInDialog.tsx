@@ -23,7 +23,6 @@ const LOG_IN_USER = gql`
     mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
         logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
             token
-            _id
             firstName
             lastName
             birthday
@@ -31,12 +30,14 @@ const LOG_IN_USER = gql`
             phoneNumber
             photo
             city
+            creator {
+                _id
+            }
         }
     }
 `;
 type LogIn = {
     token: string;
-    _id: string;
     firstName: string;
     lastName: string;
     birthday: string;
@@ -44,6 +45,7 @@ type LogIn = {
     phoneNumber: string;
     photo: string;
     city: string;
+    creator: { _id: string; };
 }
 
 enum FormField {
@@ -63,17 +65,14 @@ const initialForm: Form = {
 }
 
 const storeTokenData = (token: string, rememberUser: boolean) => {
-    let expireTime;
-    if (rememberUser) {
-        expireTime = new Date(new Date().setDate(new Date().getDate() + 30));
-    } else {
-        expireTime = new Date(new Date().setHours(new Date().getHours() + 1));
+    // If applicable, forget user in 24 hours or at log out.
+    if (!rememberUser) {
+        const expireTime = new Date(new Date().setDate(new Date().getDate() + 1));
+        localStorage.setItem('ramble-expire_time', expireTime.toString());
     }
 
-    localStorage.setItem('ramble-expire_time', expireTime.toString());
     localStorage.setItem('ramble-token', token);
 }
-
 
 const LogInDialog = () => {
     const { LogInDialog: text } = useLanguageContext().appText;
@@ -89,7 +88,8 @@ const LogInDialog = () => {
         onCompleted: ({ logInUser }) => {
             storeTokenData(logInUser.token, values.rememberUser);
             dispatch(setUserProfile({
-                id: logInUser._id,
+                isLoggedIn: true,
+                isCreator: Boolean(logInUser.creator._id),
                 firstName: logInUser.firstName,
                 lastName: logInUser.lastName,
                 birthday: logInUser.birthday,
@@ -179,7 +179,7 @@ const LogInDialog = () => {
                         {text.forgotPassword}
                     </p>
                     <GradientButton 
-                    rambleButtonType="experience" 
+                    variant="experience" 
                     type="submit"
                     className={classes.submitButton}>
                         {text.logIn}

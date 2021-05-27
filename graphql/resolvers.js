@@ -1,10 +1,24 @@
-const { AuthenticationError } = require('apollo-server-express');
+const { AuthenticationError, ApolloError } = require('apollo-server-express');
 const { generateToken } = require('../utils/jwt');
 const { experienceReducer, userReducer } = require('../utils/dataReducers');
 const { Experience, User } = require('../models');
 
 module.exports = {
     Query: {
+        me: async (_, __, { userId, tokenExpiry }) => {
+            if (!userId) {
+                throw new ApolloError("User isn't logged in.");
+            }
+
+            let loggedUser = await User.findById(userId);
+            loggedUser = userReducer(loggedUser);
+
+            // Renew token
+            loggedUser.token = generateToken(userId, tokenExpiry);
+
+            return loggedUser;
+        },
+
         experiences: async (_, { location, capacity, status }) => {
             const filter = {}
             if (status) {
@@ -14,7 +28,7 @@ module.exports = {
                 if (location === 'Online') {
                     filter.zoomInfo = { $exists: true }
                 } else {
-                    filter.location.displayLocation = location;
+                    filter['location.displayLocation'] = location;
                 }
             }
             if (capacity) {
@@ -41,7 +55,7 @@ module.exports = {
                 lastLogin: new Date()
             });
             newUser = userReducer(newUser);
-            newUser.token = generateToken(newUser._id, '1h');
+            newUser.token = generateToken(newUser._id, '1d');
 
             return newUser;
         },
@@ -59,7 +73,7 @@ module.exports = {
                 throw new AuthenticationError('Invalid password.');
             }
             
-            const expireTime = rememberUser ? '30d' : '1h';
+            const expireTime = rememberUser ? '30d' : '1d';
             user = userReducer(user);
             user.token = generateToken(user._id, expireTime);
             

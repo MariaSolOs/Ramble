@@ -3,7 +3,7 @@ export type TranslationRecord = {
 
     Navbar: Record<'signUp' | 'logIn' | 'becomeCreator', string>;
 
-    ReferBox: Record<'instruction1' | 'instruction2' | 'instruction3', string>;
+    ProfileMenu: Record<'profile' | 'newExperience' | 'logout', string>,
 
     Footer: Record<'supportColumnName' | 'supportLink' | 'socialColumnName' | 'languageColumnName' | 'languageChip' | 'copyright', string>;
 
@@ -14,4 +14,6 @@ export type TranslationRecord = {
     LogInDialog: Record<'logIn' | 'email' | 'password' | 'forgotPassword' | 'rememberMe', string>;
 
     ErrorDialog: Record<'title', string>;
+
+    SearchExperiences: Record<'personButtonLabel' | 'peopleButtonLabel' | 'search', string>;
 }

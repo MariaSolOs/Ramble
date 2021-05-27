@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
-    id: string;
+    isLoggedIn: boolean;
+    isCreator: boolean;
     firstName: string;
     lastName: string;
     birthday: string;
@@ -12,7 +13,8 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    id: '',
+    isLoggedIn: false,
+    isCreator: false,
     firstName: '',
     lastName: '',
     birthday: '',
@@ -30,12 +32,13 @@ const userSlice = createSlice({
     reducers: {
         setUserProfile: (state, { payload }: PayloadAction<SetUserProfilePayload>) => {
             for (const [fieldName, fieldValue] of Object.entries(payload)) {
-                state[fieldName as keyof UserState] = fieldValue!;
+                (state as any)[fieldName] = fieldValue;
             }
-        }
+        },
+        logout: () => initialState
     }
 });
 
-export const { setUserProfile } = userSlice.actions;
+export const { setUserProfile, logout } = userSlice.actions;
 
 export default userSlice.reducer;

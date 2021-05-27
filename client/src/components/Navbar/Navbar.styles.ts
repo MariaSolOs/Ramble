@@ -48,13 +48,14 @@ const styles = (theme: Theme) => createStyles({
             justifyContent: 'center',
             borderRadius: '0.65rem',
             padding: 4,
-            margin: '0 0 4px 0',
+            marginBottom: 4,
 
             '&:last-child': { margin: 0 },
 
             [theme.breakpoints.down('xs')]: {
                 height: 30,
-                minHeight: 0
+                minHeight: 0,
+                overflow: 'visible'
             }
         },
 
@@ -64,6 +65,12 @@ const styles = (theme: Theme) => createStyles({
                 transition: 'all 0.3s ease-in-out'
             }
         }
+    },
+
+    profileButton: {
+        height: 45,
+
+        [theme.breakpoints.down('xs')]: { height: 40 }
     },
 
     expandedLinks: {

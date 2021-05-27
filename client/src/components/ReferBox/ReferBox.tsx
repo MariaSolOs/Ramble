@@ -1,5 +1,3 @@
-import { useLanguageContext } from '../../context/languageContext';
-
 import Avatar from '@material-ui/core/Avatar';
 import messengerIcon from '../../assets/images/messenger-icon.svg';
 import emailIcon from '../../assets/images/email-icon.svg';
@@ -16,18 +14,16 @@ const REFER_AVATARS = [
 ] as const;
 
 const ReferBox = () => {
-    const { ReferBox: text } = useLanguageContext().appText;
-
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <h3 className={classes.blackInstruction}>
-                {text.instruction1}{' '}
+                Share your code with a friend. By using it for their first booking, you'll both get{' '}
                 <span className={classes.referDiscount}>20</span>%
-                {' '}{text.instruction2}
+                {' '}off
             </h3> 
-            <h4 className={classes.greyInstruction}>{text.instruction3}</h4>
+            <h4 className={classes.greyInstruction}>your next experience.</h4>
             <div className={classes.mediaContainer}>
                 <div className={classes.mediaAvatars}>
                     <Avatar src={REFER_AVATARS[0]} alt="Refer a friend" />

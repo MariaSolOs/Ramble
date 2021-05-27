@@ -7,6 +7,7 @@ const styles = (theme: Theme) => createStyles({
         opacity: 1,
         padding: '10px 10px 0',
         transition: 'opacity 600ms',
+        zIndex: 50,
 
         '&.scrolled': {
             opacity: 0,

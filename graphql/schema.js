@@ -2,7 +2,8 @@ const { gql } = require('apollo-server-express');
 
 module.exports = gql`
     type Query {
-        experiences(location: String, capacity: String, status: ExperienceStatus): [Experience!]
+        me: User
+        experiences(location: String, capacity: Int, status: ExperienceStatus): [Experience!]
     }
 
     type Mutation {
@@ -17,9 +18,9 @@ module.exports = gql`
         description: String!
         images: [String!]!
         location: String!
-        meetingPoint: String!
-        latitude: Float!
-        longitude: Float!
+        meetingPoint: String
+        latitude: Float
+        longitude: Float
         categories: [ExperienceCategories!]!
         ageRestriction: Int
         duration: Float!
@@ -35,9 +36,6 @@ module.exports = gql`
         ratingValue: Float
         numberOfRatings: Int
         creator: Creator!
-        availableFromDate: String!
-        availableToDate: String!
-        availabilitySchedule: [ExperienceScheduleEntry!]!
     }
 
     enum ExperienceStatus {
@@ -58,11 +56,6 @@ module.exports = gql`
         PRIVATE
         SEMI_PRIVATE
         PUBLIC
-    }
-
-    type ExperienceScheduleEntry {
-        day: String!
-        slots: [String!]!
     }
 
     type User {

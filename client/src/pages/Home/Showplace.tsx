@@ -3,7 +3,7 @@ import React from 'react';
 import { useLanguageContext } from '../../context/languageContext'; 
 
 import { makeStyles } from '@material-ui/core/styles';
-import styles from './Gallery.styles';
+import styles from './Showplace.styles';
 const useStyles = makeStyles(styles);
 
 const PARTAKE_IMAGES = [

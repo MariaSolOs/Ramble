@@ -21,7 +21,6 @@ const useStyles = makeStyles(styles);
 const SIGN_UP_USER = gql`
     mutation signUp($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
         signUpUser(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
-            _id
             token
             firstName
             lastName
@@ -30,7 +29,6 @@ const SIGN_UP_USER = gql`
     }
 `;
 type SignUp = { 
-    _id: string;
     token: string;
     firstName: string; 
     lastName: string; 
@@ -78,7 +76,7 @@ const SignUpDialog = () => {
             storeTokenData(signUpUser.token);
             
             dispatch(setUserProfile({
-                id: signUpUser._id,
+                isLoggedIn: true,
                 firstName: signUpUser.firstName,
                 lastName: signUpUser.lastName,
                 email: signUpUser.email
@@ -223,7 +221,7 @@ const SignUpDialog = () => {
                     </p>
                     <GradientButton 
                     type="submit" 
-                    rambleButtonType="experience"
+                    variant="experience"
                     className={classes.submitButton}>
                         {text.continue}
                     </GradientButton>

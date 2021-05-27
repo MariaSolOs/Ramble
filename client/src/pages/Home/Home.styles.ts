@@ -101,7 +101,8 @@ const styles = (theme: Theme) => createStyles({
         '&:hover': { backgroundPosition: 'right center' },
 
         [theme.breakpoints.down('xs')]: { 
-            width: '40%'
+            width: '40%',
+            minWidth: 115
         }
     }
 });

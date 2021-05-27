@@ -5,12 +5,29 @@ const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const path = require('path');
+const logger = require('./utils/logger');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
+const decodeToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET, { issuer: 'rambleAPI' });
+    } catch (err) {
+        return null;
+    }
+}
+
 const server = new ApolloServer({
+    context: ({ req }) => {
+        const token = req.headers && (req.headers.authorization || '');
+        const user = decodeToken(token);
+        logger(req, user);
+        return user; 
+    },
     typeDefs,
     resolvers
 });

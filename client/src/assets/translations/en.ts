@@ -20,10 +20,10 @@ const englishTranslation: TranslationRecord = {
         becomeCreator: 'Become a Creator'
     },
 
-    ReferBox: {
-        instruction1: "Share your code with a friend. By using it for their first booking, you'll both get",
-        instruction2: 'off',
-        instruction3: 'your next experience.' 
+    ProfileMenu: {
+        profile: 'View Profile',
+        newExperience: 'New Experience',
+        logout: 'Logout'
     },
 
     Footer: {
@@ -63,6 +63,12 @@ const englishTranslation: TranslationRecord = {
 
     ErrorDialog: {
         title: "Sorry 'bout that."
+    },
+
+    SearchExperiences: {
+        personButtonLabel: 'Person',
+        peopleButtonLabel: 'People',
+        search: 'Search'
     }
 }
 

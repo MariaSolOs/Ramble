@@ -13,6 +13,8 @@ const REFER_AVATARS = [
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_thumb,g_face,h_80,w_80/v1/Ramble/Homepage/ref_3.jpeg`
 ] as const;
 
+// TODO: Add this box back when we add promo codes back again
+// TODO: Translate this component
 const ReferBox = () => {
     const classes = useStyles();
 

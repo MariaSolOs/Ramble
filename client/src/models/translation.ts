@@ -15,5 +15,7 @@ export type TranslationRecord = {
 
     ErrorDialog: Record<'title', string>;
 
-    SearchExperiences: Record<'personButtonLabel' | 'peopleButtonLabel' | 'search', string>;
+    SearchExperiences_Searchbar: Record<'personButtonLabel' | 'peopleButtonLabel' | 'search' | 'titlePlaceholder', string>;
+
+    ExperienceCard: Record<'perConnection' | 'perPerson', string>;
 }

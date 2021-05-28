@@ -65,13 +65,12 @@ const initialForm: Form = {
 }
 
 const storeTokenData = (token: string, rememberUser: boolean) => {
-    // If applicable, forget user in 24 hours or at log out.
-    if (!rememberUser) {
-        const expireTime = new Date(new Date().setDate(new Date().getDate() + 1));
-        localStorage.setItem('ramble-expire_time', expireTime.toString());
+    // Depending on what the user wants, store their data
+    if (rememberUser) {
+        localStorage.setItem('ramble-token', token);
+    } else {
+        sessionStorage.setItem('ramble-token', token);
     }
-
-    localStorage.setItem('ramble-token', token);
 }
 
 const LogInDialog = () => {

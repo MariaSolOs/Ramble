@@ -65,10 +65,16 @@ const englishTranslation: TranslationRecord = {
         title: "Sorry 'bout that."
     },
 
-    SearchExperiences: {
+    SearchExperiences_Searchbar: {
         personButtonLabel: 'Person',
         peopleButtonLabel: 'People',
-        search: 'Search'
+        search: 'Search',
+        titlePlaceholder: 'Search experiences'
+    },
+
+    ExperienceCard: {
+        perConnection: 'per connection',
+        perPerson: 'per person'
     }
 }
 

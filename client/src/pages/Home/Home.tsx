@@ -18,10 +18,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Home.styles';
 const useStyles = makeStyles(styles);
 
-interface ExperienceData {
-    location: string;
-}
-
 const GET_LOCATIONS = gql`
     query getLocations {
         experiences(status: APPROVED) {
@@ -29,6 +25,7 @@ const GET_LOCATIONS = gql`
         }
     }
 `;
+type LocationData = { location: string; }[];
 
 const Home = () => {
     const { Home: text } = useLanguageContext().appText;
@@ -41,7 +38,7 @@ const Home = () => {
 
     const history = useHistory();
 
-    const { data, loading } = useQuery<{ experiences: ExperienceData[] }>(GET_LOCATIONS);
+    const { data, loading } = useQuery<{ experiences: LocationData }>(GET_LOCATIONS);
 
     // Display unique list of locations
     useEffect(() => {
@@ -107,10 +104,7 @@ const Home = () => {
                         variant="experience" 
                         className={classes.searchButton}
                         onClick={() => {
-                            history.push(
-                                `/experience/search?location=${location}&capacity=${capacity}`, {
-                                locationList
-                            });
+                            history.push(`/experience/search?location=${location}&capacity=${capacity}`);
                         }}>
                             {text.exploreButton}
                         </Button>

@@ -13,7 +13,7 @@ const apolloClient = new ApolloClient({
     uri: `${process.env.REACT_APP_SERVER_URI}/graphql`,
     cache: new InMemoryCache(),
     headers: {
-        authorization: localStorage.getItem('ramble-token') || ''
+        authorization: localStorage.getItem('ramble-token') || sessionStorage.getItem('ramble-token') || ''
     }
 });
 

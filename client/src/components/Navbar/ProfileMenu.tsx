@@ -34,7 +34,7 @@ const ProfileMenu = (props: Props) => {
     const closeMenu = () => { setAnchorEl(null); }
 
     const logout = () => {
-        localStorage.removeItem('ramble-expire_time');
+        sessionStorage.removeItem('ramble-token');
         localStorage.removeItem('ramble-token');
         props.onLogout();
     }

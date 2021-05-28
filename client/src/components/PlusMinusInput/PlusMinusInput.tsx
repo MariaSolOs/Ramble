@@ -27,7 +27,7 @@ export interface StyleProps {
 
 const PlusMinusInput = (props: Props) => {
     const { onValueChange } = props;
-
+    
     const [value, setValue] = useState<number | ''>(props.value);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +58,12 @@ const PlusMinusInput = (props: Props) => {
         }
     }
 
+    // If the parent has a different value, update it
+    useEffect(() => {
+        setValue(props.value);
+    }, [props.value]);
+
+    // Report change to parent component
     useEffect(() => {
         onValueChange(+value);
     }, [value, onValueChange]);

@@ -46,15 +46,14 @@ type User = {
 }
 
 const updateToken = (token: string) => {
-    // If applicable, update the expire time of the token
-    const forgetUser = Boolean(localStorage.getItem('ramble-expire_time'));
+    // Based on if the user wants to be remembered, store new token
+    const forgetUser = Boolean(sessionStorage.getItem('ramble-token'));
 
     if (forgetUser) {
-        const expireTime = new Date(new Date().setDate(new Date().getDate() + 1));
-        localStorage.setItem('ramble-expire_time', expireTime.toString());
+        sessionStorage.setItem('ramble-token', token);
+    } else {
+        localStorage.setItem('ramble-token', token);
     }
-
-    localStorage.setItem('ramble-token', token);
 }
 
 const App = () => {
@@ -79,18 +78,13 @@ const App = () => {
         }
     });
 
+    // Try to log in back the user when the page refreshes
     useEffect(() => {
         if (!isLoggedIn) {
-            const expireTime = localStorage.getItem('ramble-expire_time');
-            const token = localStorage.getItem('ramble-token');
+            const token = localStorage.getItem('ramble-token') || sessionStorage.getItem('ramble-token');
 
             if (token) {
-                if (expireTime && (+new Date(expireTime) < +new Date())) {
-                    localStorage.removeItem('ramble-expire_time');
-                    localStorage.removeItem('ramble-token');
-                } else {
-                    fetchUser();
-                }
+                fetchUser();
             }
         }
     }, [isLoggedIn, fetchUser]);

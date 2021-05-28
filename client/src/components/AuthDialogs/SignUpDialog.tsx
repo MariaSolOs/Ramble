@@ -58,9 +58,9 @@ const initialForm: Form = {
 }
 
 const storeTokenData = (token: string) => {
-    const inOneHour = new Date(new Date().setHours(new Date().getHours() + 1));
-    localStorage.setItem('ramble-expire_time', inOneHour.toString());
-    localStorage.setItem('ramble-token', token);
+    /* During sign up, we don't "remember" the user, so data is saved
+       in session storage. */
+    sessionStorage.setItem('ramble-token', token);
 }
 
 const SignUpDialog = () => {

@@ -1,26 +1,30 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import useSearchReducer from './searchReducer';
-import { useLanguageContext } from '../../../context/languageContext';
 import { useAppDispatch } from '../../../hooks/redux';
 import { openErrorDialog } from '../../../store/uiSlice';
 import type { SearchState } from './searchReducer';
-import type { Experience } from '../../../models/experience';
+import { Experience, Experienceable } from '../../../models/experience';
 
-import InputAdornment from '@material-ui/core/InputAdornment';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
-import Autocomplete from '../../../components/Autocomplete/Autocomplete';
-import PlusMinusInput from '../../../components/PlusMinusInput/PlusMinusInput';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import Searchbar from './Searchbar';
+import ExperienceCard from '../../../components/ExperienceCard/ExperienceCard';
 import Spinner from '../../../components/Spinner/Spinner';
-import Button from '../../../components/GradientButton/GradientButton';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './SearchExperiences.styles';
 const useStyles = makeStyles(styles);
+
+const GET_LOCATIONS = gql`
+    query getLocations {
+        experiences(status: APPROVED) {
+            location
+        }
+    }
+`;
+type LocationData = { location: string; }[];
 
 const FETCH_EXPERIENCES = gql`
     query getExperiences($location: String!, $capacity: Int) {
@@ -45,12 +49,10 @@ type ExperiencesVariables = {
 }
 
 const SearchExperiences = () => {
-    const { SearchExperiences: text } = useLanguageContext().appText;
-
     const classes = useStyles();
 
     const history = useHistory();
-    const location = useLocation<{ locationList: string[] }>();
+    const location = useLocation();
     const dispatch = useAppDispatch();
 
     // Retrieve experiences from URL
@@ -59,6 +61,7 @@ const SearchExperiences = () => {
     const capacityQuery = +query.get('capacity')!;
 
     const initialState: SearchState = {
+        locationList: [],
         location: locationQuery, 
         capacity: capacityQuery,
         titleFilter: '',
@@ -68,33 +71,62 @@ const SearchExperiences = () => {
     const [searchState, searchDispatch] = useSearchReducer(initialState);
 
     const { 
-        loading, 
-        error, 
-        data
-    } = useQuery<{ experiences: Experience[] }, ExperiencesVariables>(FETCH_EXPERIENCES, {
-        variables: { location: locationQuery, capacity: capacityQuery }
-    });
-
-    // Initialize the gallery with fetched experiences
-    useEffect(() => {
-        if (!loading && data) {
-            searchDispatch({
-                type: 'SET_EXPERIENCES',
-                experiences: data.experiences
+        loading: locationsLoading 
+    } = useQuery<{ experiences: LocationData }>(GET_LOCATIONS, {
+        onCompleted: ({ experiences }) => {
+            const allLocations = experiences.map(({ location }) => location);
+            searchDispatch({ 
+                type: 'SET_LOCATIONS', 
+                locations: [ ...new Set(allLocations) ]
             });
         }
-    }, [loading, data, searchDispatch]);
+    });
+
+    const { 
+        error: experiencesError,
+        refetch: refetchExperiences
+    } = useQuery<{ experiences: Experienceable[] }, ExperiencesVariables>(FETCH_EXPERIENCES, {
+        variables: { location: locationQuery, capacity: capacityQuery },
+        onCompleted: ({ experiences }) => {
+            searchDispatch({ 
+                type: 'SET_EXPERIENCES', 
+                location: locationQuery,
+                capacity: capacityQuery,
+                experiences: experiences.map(exp => new Experience(exp))
+            });
+        }
+    });
 
     // To avoid infinite loops, manage capacity with a callback
     const handleCapacityChange = useCallback((capacity: number) => {
         searchDispatch({ type: 'UPDATE_CAPACITY', capacity });
     }, [searchDispatch]);
 
-    if (loading) {
-        return <Spinner />
-    }
+    // Refetch experiences when the  changes
+    useEffect(() => {
+        refetchExperiences();
+    }, [locationQuery, capacityQuery, refetchExperiences]);
 
-    if (error) {
+    useEffect(() => {
+        /* For a smoother effect, wait until user stops writing before
+           updating the gallery. */
+        const timeout = setTimeout(() => {
+            let filteredExperiences = searchState.allExperiences;
+
+            if (searchState.titleFilter.length > 0) {
+                filteredExperiences = searchState.allExperiences.filter(exp => 
+                    exp.title.toLowerCase().includes(searchState.titleFilter.toLowerCase())
+                );
+            }
+
+            searchDispatch({ type: 'SET_FILTERED_EXPERIENCES', filteredExperiences });
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [searchDispatch, searchState.titleFilter, searchState.allExperiences]);
+
+    // When experiences cannot be loaded, show message and go to the homepage
+    if (experiencesError) {
         dispatch(openErrorDialog({
             message: 'We cannot find your experiences right now...'
         }));
@@ -105,42 +137,40 @@ const SearchExperiences = () => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.searchContainer}>
-                <Autocomplete
-                className={classes.autocomplete}
-                value={searchState.location}
-                options={['Online', ...location.state.locationList]}
-                onChange={(_, value, reason) => {
-                    if (reason === 'select-option') {
-                        searchDispatch({
-                            type: 'UPDATE_LOCATION',
-                            location: value
-                        });
-                    }
-                }}
-                inputprops={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <LocationOnIcon />
-                        </InputAdornment>
-                    )
-                }} />
-                <PlusMinusInput
-                containerStyles={classes.capacityInput}
-                value={searchState.capacity}
-                step={1}
-                minValue={1}
-                getLabel={num => 
-                    num > 1? text.peopleButtonLabel : text.personButtonLabel 
-                }
-                onValueChange={handleCapacityChange}
-                inputProps={{
-                    startAdornment: <FontAwesomeIcon icon={faUsers} />
-                }} />
-                <Button className={classes.searchButton} variant="experience">
-                    {text.search}
-                </Button>
-            </div>
+            {locationsLoading && <Spinner />}
+            <Searchbar
+            location={searchState.location}
+            locationList={searchState.locationList}
+            onLocationChange={location => {
+                searchDispatch({ type: 'UPDATE_LOCATION', location });
+            }}
+            capacity={searchState.capacity}
+            onCapacityChange={handleCapacityChange}
+            titleFilter={searchState.titleFilter}
+            onTitleFilterChange={titleFilter => {
+                searchDispatch({ type: 'UPDATE_TITLE_FILTER', titleFilter })
+            }} />
+            <TransitionGroup className={classes.experiences}>
+                {searchState.filteredExperiences.map(exp => exp.getCardInfo()).map((exp, index) => (
+                    <CSSTransition
+                    key={exp._id}
+                    timeout={300}
+                    classNames={{
+                        enter: classes.cardFadeOut,
+                        enterActive: classes.cardFadeIn,
+                        exit: classes.cardFadeIn,
+                        exitActive: classes.cardFadeOut
+                    }}>
+                        <div style={{
+                            transitionDelay: `${index * 70}ms`
+                        }}>
+                            <ExperienceCard
+                            experience={exp}
+                            containerClass={classes.experienceCard} />
+                        </div>
+                    </CSSTransition>
+                ))}
+            </TransitionGroup>
         </div>
     );
 }

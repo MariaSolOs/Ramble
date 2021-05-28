@@ -3,6 +3,7 @@ import { useCallback, useReducer } from 'react';
 import { Experience } from '../../../models/experience';
 
 export interface SearchState {
+    locationList: string[];
     location: string;
     capacity: number;
     titleFilter: string;
@@ -11,17 +12,33 @@ export interface SearchState {
 }
 
 type Action = 
-| { type: 'SET_EXPERIENCES', experiences: Experience[] }
+| { type: 'SET_LOCATIONS', locations: string[]; }
+| { type: 'SET_EXPERIENCES', location: string; capacity: number; experiences: Experience[]; }
+| { type: 'SET_FILTERED_EXPERIENCES', filteredExperiences: Experience[] }
 | { type: 'UPDATE_LOCATION', location: string; }
-| { type: 'UPDATE_CAPACITY', capacity: number }
+| { type: 'UPDATE_CAPACITY', capacity: number; }
+| { type: 'UPDATE_TITLE_FILTER', titleFilter: string; }
 
 export default function useSearchReducer(initialState: SearchState) {
     const reducer = useCallback((state: SearchState, action: Action): SearchState => {
         switch (action.type) {
+            case 'SET_LOCATIONS': 
+                return {
+                    ...state,
+                    locationList: action.locations
+                }
             case 'SET_EXPERIENCES': 
                 return {
                     ...state,
-                    allExperiences: action.experiences
+                    location: action.location,
+                    capacity: action.capacity,
+                    allExperiences: action.experiences,
+                    filteredExperiences: action.experiences
+                }
+            case 'SET_FILTERED_EXPERIENCES':
+                return {
+                    ...state,
+                    filteredExperiences: action.filteredExperiences
                 }
             case 'UPDATE_LOCATION': 
                 return {
@@ -32,6 +49,12 @@ export default function useSearchReducer(initialState: SearchState) {
                 return {
                     ...state,
                     capacity: action.capacity
+                }
+            case 'UPDATE_TITLE_FILTER':
+                return {
+                    ...state,
+                    titleFilter: action.titleFilter,
+                    filteredExperiences: []
                 }
             default: return state;
         }

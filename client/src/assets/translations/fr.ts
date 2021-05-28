@@ -65,10 +65,16 @@ const frenchTranslation: TranslationRecord = {
         title: 'Désolé!'
     },
 
-    SearchExperiences: {
+    SearchExperiences_Searchbar: {
         personButtonLabel: 'Personne',
         peopleButtonLabel: 'Personnes',
-        search: 'Explorer'
+        search: 'Explorer',
+        titlePlaceholder: 'Découvrer des expériences'
+    },
+
+    ExperienceCard: {
+        perConnection: 'par connexion',
+        perPerson: 'par personne'
     }
 }
 

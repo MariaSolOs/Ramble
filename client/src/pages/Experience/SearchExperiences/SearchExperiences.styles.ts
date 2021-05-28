@@ -13,34 +13,35 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
-    searchContainer: {
+    experiences: {
         display: 'flex',
-        width: '100%',
+        flexWrap: 'wrap',
+        width: 'calc(265px * 4)',
+        marginBottom: 30,
 
-        [theme.breakpoints.down('xs')]: {
-            flexDirection: 'column',
-
-            '& $capacityInput, & $autocomplete, & $searchButton': {
-                minWidth: '90vw',
-                marginTop: 10
-            }
-        }
+        [theme.breakpoints.down('md')]: { width: 'calc(265px * 3)' },
+        [theme.breakpoints.down('sm')]: { 
+            width: 'calc(265px * 2)',
+            margin: '0 auto'
+        },
+        [theme.breakpoints.down('xs')]: { width: 265 }
     },
 
-    capacityInput: { 
-        width: 180,
-        marginRight: '1.5rem'
+    experienceCard: {
+        width: 240,
+        height: 290,
+        margin: '25px 25px 0 0',
+
+        [theme.breakpoints.down('xs')]: { width: 265 }
     },
 
-    autocomplete: {
-        width: '30%',
-        maxWidth: 340,
-        minWidth: 280,
-        marginRight: '1.5rem'
-    },
+    cardFadeOut: { 
+        opacity: 0,
+    }, 
 
-    searchButton: {
-        width: 90
+    cardFadeIn: { 
+        opacity: 1,
+        transition: 'all 300ms ease-in'
     }
 });
 

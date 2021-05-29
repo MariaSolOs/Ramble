@@ -31,7 +31,8 @@ const LanguageProvider: React.FC = ({ children }) => {
     const [language, setLanguage] = useState<Language>(defaultLanguage);
 
     return (
-        <LanguageContext.Provider value={{
+        <LanguageContext.Provider 
+        value={{
             language,
             appText: dictionaries[language],
             setLanguage

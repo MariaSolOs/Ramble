@@ -6,25 +6,26 @@ const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const path = require('path');
 const logger = require('./utils/logger');
+const { verifyToken } = require('./utils/jwt');
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const restRoutes = require('./restAPI');
 
 const app = express();
 
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
-
-const decodeToken = (token) => {
-    try {
-        return jwt.verify(token, process.env.JWT_SECRET, { issuer: 'rambleAPI' });
-    } catch (err) {
-        return null;
-    }
-}
+app.use('/', restRoutes);
 
 const server = new ApolloServer({
     context: ({ req }) => {
         const token = req.headers && (req.headers.authorization || '');
-        const user = decodeToken(token);
+        const user = verifyToken(token);
         logger(req, user);
         return user; 
     },
@@ -32,7 +33,7 @@ const server = new ApolloServer({
     resolvers
 });
 
-server.applyMiddleware({ app });
+server.applyMiddleware({ app, path: '/graphql' });
 
 app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

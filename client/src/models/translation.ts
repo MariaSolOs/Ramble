@@ -13,9 +13,13 @@ export type TranslationRecord = {
 
     LogInDialog: Record<'logIn' | 'email' | 'password' | 'forgotPassword' | 'rememberMe', string>;
 
+    ForgotPasswordDialog: Record<'enterEmailTitle'| 'sendLinkMessage' | 'resetPassword' | 'emailSent', string>;
+
+    ResetPasswordDialog: Record<'newPassword' | 'confirmPassword' | 'resetPassword' | 'passwordMismatch', string>;
+
     ErrorDialog: Record<'title', string>;
 
     SearchExperiences_Searchbar: Record<'personButtonLabel' | 'peopleButtonLabel' | 'search' | 'titlePlaceholder', string>;
 
-    ExperienceCard: Record<'perConnection' | 'perPerson', string>;
+    ExperienceCard: Record<'perConnection' | 'perPerson' | 'online', string>;
 }

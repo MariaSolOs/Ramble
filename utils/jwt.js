@@ -13,3 +13,11 @@ exports.generateToken = (userId, expireTime) => {
         }
     );
 }
+
+exports.verifyToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET, { issuer: 'rambleAPI' });
+    } catch (err) {
+        return null;
+    }
+}

@@ -61,6 +61,20 @@ const frenchTranslation: TranslationRecord = {
         rememberMe: 'Se souvenir de moi'
     },
 
+    ForgotPasswordDialog: {
+        enterEmailTitle: 'Entrez votre adresse courriel',
+        sendLinkMessage: 'Nous vous enverrons un lien pour que vous puissiez changer votre mot de passe.',
+        resetPassword: 'Réinitialiser mon mot de passe',
+        emailSent: 'Le courriel est en route!'
+    },
+
+    ResetPasswordDialog: {
+        newPassword: 'Nouveau mot de passe',
+        confirmPassword: 'Confirmer le mot de passe',
+        resetPassword: 'Réinitialiser le mot de passe',
+        passwordMismatch: 'Les mots de passe ne correspondent pas.'
+    },
+
     ErrorDialog: {
         title: 'Désolé!'
     },
@@ -74,7 +88,8 @@ const frenchTranslation: TranslationRecord = {
 
     ExperienceCard: {
         perConnection: 'par connexion',
-        perPerson: 'par personne'
+        perPerson: 'par personne',
+        online: 'en ligne'
     }
 }
 

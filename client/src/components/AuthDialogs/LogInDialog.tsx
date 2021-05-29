@@ -14,6 +14,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '../TextField/TextField';
 import Checkbox from '../Checkbox/Checkbox';
 import GradientButton from '../GradientButton/GradientButton';
+import ForgotPasswordDialog from '../ForgotPasswordDialog/ForgotPasswordDialog';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AuthDialogs.styles';
@@ -82,6 +83,7 @@ const LogInDialog = () => {
     const open = useAppSelector(state => state.ui.showLogInDialog);
 
     const [values, setValues] = useState(initialForm);
+    const [showForgotPwdDialog, setShowForgotPwdDialog] = useState(false);
 
     const [logIn] = useMutation<{ logInUser: LogIn }, Form>(LOG_IN_USER, {
         onCompleted: ({ logInUser }) => {
@@ -129,6 +131,14 @@ const LogInDialog = () => {
         logIn({ variables: { ...values } });
     }
 
+    if (showForgotPwdDialog) {
+        return (
+            <ForgotPasswordDialog
+            open={showForgotPwdDialog}
+            onClose={() => setShowForgotPwdDialog(false)} />
+        );
+    }
+
     return (
         <Dialog fullWidth classes={{ paper: classes.dialogPaper }} open={open} onClose={handleClose}>
             <div className={classes.header}>
@@ -174,7 +184,12 @@ const LogInDialog = () => {
                         name={FormField.RememberUser}
                         onChange={handleFormChange} />
                     </div>
-                    <p className={classes.forgotPasswordLink}>
+                    <p 
+                    className={classes.forgotPasswordLink}
+                    onClick={() => {
+                        setShowForgotPwdDialog(true);
+                        handleClose();
+                    }}>
                         {text.forgotPassword}
                     </p>
                     <GradientButton 

@@ -1,4 +1,6 @@
-import { createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+
 import type { StyleProps } from './ProfileMenu';
 
 const styles = (theme: Theme) => createStyles({

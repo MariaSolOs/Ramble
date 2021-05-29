@@ -1,5 +1,7 @@
-import { createStyles, Theme } from '@material-ui/core/styles';
-import { Props } from './GradientButton';
+import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+
+import type { Props } from './GradientButton';
 
 const styles = (theme: Theme) => createStyles({
     root: {

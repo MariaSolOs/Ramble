@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { closeErrorDialog } from '../../store/uiSlice';
 
 import { Dialog } from '@material-ui/core';
-import OhNoPic from '../../assets/images/OhNoRamble.png';
+import errorImg from '../../assets/images/error-dialog-image.png';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ErrorDialog.styles';
@@ -24,7 +24,7 @@ const ErrorDialog = () => {
         open={Boolean(message)}
         onClose={() => dispatch(closeErrorDialog())}>
             <div className={classes.header}>
-                <img src={OhNoPic} alt="Error occurred" className={classes.image} />
+                <img src={errorImg} alt="An error occurred" className={classes.image} />
                 <h4 className={classes.title}>{text.title}</h4>
             </div>
             <p className={classes.message}>

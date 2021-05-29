@@ -1,6 +1,7 @@
-import MUICheckbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import MUICheckbox from '@material-ui/core/Checkbox';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import type { CheckboxProps } from '@material-ui/core/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Checkbox.styles';

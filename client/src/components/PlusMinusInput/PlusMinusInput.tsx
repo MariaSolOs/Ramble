@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { InputBaseProps } from '@material-ui/core/InputBase';
+import type { InputBaseProps } from '@material-ui/core/InputBase';
 
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './PlusMinusInput.styles';
 const useStyles = makeStyles(styles);
 
-interface Props {
+type Props = {
     inputProps?: Partial<InputBaseProps>;
     value: number;
     minValue?: number;
@@ -21,7 +21,7 @@ interface Props {
     containerStyles?: string;
 }
 
-export interface StyleProps {
+export type StyleProps = {
     inputLength: number;
 }
 

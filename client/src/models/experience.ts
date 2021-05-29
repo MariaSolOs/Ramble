@@ -24,20 +24,17 @@ export interface Experienceable {
     readonly currency: string;
     readonly ratingValue: number;
     readonly numberOfRatings: number;
-    readonly creatorId: string;
     readonly location: string;
-    readonly meetingPoint?: string;
     readonly latitude?: number;
     readonly longitude?: number;
     readonly ageRestriction?: number;
     readonly includedItems?: string[];
     readonly toBringItems?: string[];
     readonly zoomPMI?: string;
-    readonly zoomPassword?: string;
 }
 
 export class Experience {
-    constructor(readonly data: Experienceable) {}
+    constructor(private data: Experienceable) {}
 
     get title() { return this.data.title; }
 

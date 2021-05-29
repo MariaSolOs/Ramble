@@ -1,5 +1,7 @@
-import { createStyles, Theme } from '@material-ui/core/styles';
-import { StyleProps } from './PlusMinusInput';
+import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+
+import type { StyleProps } from './PlusMinusInput';
 
 const styles = (theme: Theme) => createStyles({
     container: {

@@ -78,6 +78,17 @@ module.exports = {
             user.token = generateToken(user._id, expireTime);
             
             return user;
+        },
+
+        editUser: async (_, args, { userId }) => {
+            const user = await User.findById(userId);
+            
+            for (const [field, value] of Object.entries(args)) {
+                user[field] = value;
+            }
+            await user.save();
+
+            return userReducer(user);
         }
     }
 }

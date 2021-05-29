@@ -7,8 +7,27 @@ module.exports = gql`
     }
 
     type Mutation {
-        signUpUser(email: String!, password: String!, firstName: String!, lastName: String!): User
-        logInUser(email: String!, password: String!, rememberUser: Boolean!): User
+        signUpUser(
+            email: String!, 
+            password: String!, 
+            firstName: String!, 
+            lastName: String!
+        ): User
+        logInUser(
+            email: String!, 
+            password: String!, 
+            rememberUser: Boolean!
+        ): User
+        editUser(
+            firstName: String, 
+            lastName: String, 
+            birthday: String, 
+            email: String, 
+            password: String,
+            phoneNumber: String,
+            photo: String,
+            city: String
+        ): User
     }
 
     type Experience {

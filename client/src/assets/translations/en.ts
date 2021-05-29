@@ -61,6 +61,20 @@ const englishTranslation: TranslationRecord = {
         rememberMe: 'Remember me'
     },
 
+    ForgotPasswordDialog: {
+        enterEmailTitle: 'Enter your email address',
+        sendLinkMessage: "We'll send you a link so that you can create a new password.",
+        resetPassword: 'Reset my password',
+        emailSent: 'The email is on its way!'
+    },
+
+    ResetPasswordDialog: {
+        newPassword: 'New password',
+        confirmPassword: 'Confirm your new password',
+        resetPassword: 'Reset my password',
+        passwordMismatch: "The passwords don't match."
+    },
+
     ErrorDialog: {
         title: "Sorry 'bout that."
     },
@@ -74,7 +88,8 @@ const englishTranslation: TranslationRecord = {
 
     ExperienceCard: {
         perConnection: 'per connection',
-        perPerson: 'per person'
+        perPerson: 'per person',
+        online: 'online'
     }
 }
 

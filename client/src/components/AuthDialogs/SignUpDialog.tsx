@@ -57,12 +57,6 @@ const initialForm: Form = {
     password2: ''
 }
 
-const storeTokenData = (token: string) => {
-    /* During sign up, we don't "remember" the user, so data is saved
-       in session storage. */
-    sessionStorage.setItem('ramble-token', token);
-}
-
 const SignUpDialog = () => {
     const { SignUpDialog: text } = useLanguageContext().appText;
 
@@ -73,7 +67,9 @@ const SignUpDialog = () => {
 
     const [signUp] = useMutation<{ signUpUser: SignUp }, SignUpVariables>(SIGN_UP_USER, {
         onCompleted: ({ signUpUser }) => {
-            storeTokenData(signUpUser.token);
+            /* During sign up, we don't "remember" the user, so data is saved
+               in session storage. */
+            sessionStorage.setItem('ramble-token', signUpUser.token);
             
             dispatch(setUserProfile({
                 isLoggedIn: true,
@@ -99,6 +95,7 @@ const SignUpDialog = () => {
         const field = event.target.name;
         let newValue = event.target.value;
 
+        // Names are automatically capitalized
         if (field === FormField.FirstName || field === FormField.LastName) {
             newValue = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }

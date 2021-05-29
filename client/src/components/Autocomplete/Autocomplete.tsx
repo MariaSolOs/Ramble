@@ -1,5 +1,7 @@
-import MUIAutocomplete, { AutocompleteProps } from '@material-ui/lab/Autocomplete';
-import { TextField, StandardTextFieldProps, InputBaseProps } from '@material-ui/core';
+import MUIAutocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+import type { AutocompleteProps } from '@material-ui/lab/Autocomplete';
+import type { StandardTextFieldProps, InputBaseProps } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Autocomplete.styles';

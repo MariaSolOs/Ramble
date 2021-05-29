@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface UiState {
     showSignUpDialog: boolean;
@@ -21,7 +22,6 @@ const uiSlice = createSlice({
         openSignUpDialog: state => {
             state.showSignUpDialog = true;
             state.showLogInDialog = false;
-            state.errorMessage = '';
         },
         closeSignUpDialog: state => {
             state.showSignUpDialog = false;
@@ -29,14 +29,11 @@ const uiSlice = createSlice({
         openLogInDialog: state => {
             state.showSignUpDialog = false;
             state.showLogInDialog = true;
-            state.errorMessage = '';
         },
         closeLogInDialog: state => {
             state.showLogInDialog = false;
         },
         openErrorDialog: (state, { payload }: PayloadAction<OpenErrorDialogPayload>) => {
-            state.showSignUpDialog = false;
-            state.showLogInDialog = false;
             state.errorMessage = payload.message;
         },
         closeErrorDialog: state => {

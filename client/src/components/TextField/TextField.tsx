@@ -1,5 +1,6 @@
-import MUITextField, { OutlinedTextFieldProps } from '@material-ui/core/TextField';
-import { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
+import MUITextField from '@material-ui/core/TextField';
+import type { OutlinedTextFieldProps } from '@material-ui/core/TextField';
+import type { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './TextField.styles';

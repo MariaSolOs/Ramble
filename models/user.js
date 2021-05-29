@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'),
       bcrypt = require('bcrypt');
 
+// TODO: Remove unused fields and rename fields      
 const UserSchema = new mongoose.Schema({
     fstName: {
         type: String,

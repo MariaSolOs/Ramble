@@ -1,4 +1,5 @@
-import { createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -32,7 +33,11 @@ const styles = (theme: Theme) => createStyles({
         height: 290,
         margin: '25px 25px 0 0',
 
-        [theme.breakpoints.down('xs')]: { width: 265 }
+        [theme.breakpoints.down('xs')]: { 
+            width: 255,
+            height: 300,
+            margin: '25px auto 0' 
+        }
     },
 
     cardFadeOut: { 

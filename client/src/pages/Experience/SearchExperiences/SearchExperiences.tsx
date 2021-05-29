@@ -5,8 +5,9 @@ import { useLocation, useHistory } from 'react-router-dom';
 import useSearchReducer from './searchReducer';
 import { useAppDispatch } from '../../../hooks/redux';
 import { openErrorDialog } from '../../../store/uiSlice';
+import { Experience } from '../../../models/experience';
 import type { SearchState } from './searchReducer';
-import { Experience, Experienceable } from '../../../models/experience';
+import type { Experienceable } from '../../../models/experience';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Searchbar from './Searchbar';
@@ -37,9 +38,6 @@ const FETCH_EXPERIENCES = gql`
             numberOfRatings
             location
             zoomPMI
-            creator {
-                _id
-            }
         }
     }
 `;
@@ -92,7 +90,7 @@ const SearchExperiences = () => {
                 type: 'SET_EXPERIENCES', 
                 location: locationQuery,
                 capacity: capacityQuery,
-                experiences: experiences.map(exp => new Experience(exp))
+                experiences: experiences.map(exp => new Experience(exp).getCardInfo())
             });
         }
     });
@@ -151,7 +149,7 @@ const SearchExperiences = () => {
                 searchDispatch({ type: 'UPDATE_TITLE_FILTER', titleFilter })
             }} />
             <TransitionGroup className={classes.experiences}>
-                {searchState.filteredExperiences.map(exp => exp.getCardInfo()).map((exp, index) => (
+                {searchState.filteredExperiences.map((exp, index) => (
                     <CSSTransition
                     key={exp._id}
                     timeout={300}
@@ -161,9 +159,7 @@ const SearchExperiences = () => {
                         exit: classes.cardFadeIn,
                         exitActive: classes.cardFadeOut
                     }}>
-                        <div style={{
-                            transitionDelay: `${index * 70}ms`
-                        }}>
+                        <div style={{ transitionDelay: `${index * 70}ms` }}>
                             <ExperienceCard
                             experience={exp}
                             containerClass={classes.experienceCard} />

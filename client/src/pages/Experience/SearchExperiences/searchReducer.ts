@@ -1,20 +1,20 @@
 import { useCallback, useReducer } from 'react';
 
-import { Experience } from '../../../models/experience';
+import type { ExperienceCard } from '../../../models/experience';
 
 export interface SearchState {
     locationList: string[];
     location: string;
     capacity: number;
     titleFilter: string;
-    allExperiences: Experience[];
-    filteredExperiences: Experience[];
+    allExperiences: ExperienceCard[];
+    filteredExperiences: ExperienceCard[];
 }
 
 type Action = 
 | { type: 'SET_LOCATIONS', locations: string[]; }
-| { type: 'SET_EXPERIENCES', location: string; capacity: number; experiences: Experience[]; }
-| { type: 'SET_FILTERED_EXPERIENCES', filteredExperiences: Experience[] }
+| { type: 'SET_EXPERIENCES', location: string; capacity: number; experiences: ExperienceCard[]; }
+| { type: 'SET_FILTERED_EXPERIENCES', filteredExperiences: ExperienceCard[] }
 | { type: 'UPDATE_LOCATION', location: string; }
 | { type: 'UPDATE_CAPACITY', capacity: number; }
 | { type: 'UPDATE_TITLE_FILTER', titleFilter: string; }

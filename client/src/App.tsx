@@ -12,6 +12,7 @@ import Navbar from './components/Navbar/Navbar';
 import SignUpDialog from './components/AuthDialogs/SignUpDialog';
 import LogInDialog from './components/AuthDialogs/LogInDialog';
 import ErrorDialog from './components/ErrorDialog/ErrorDialog';
+import ResetPasswordDialog from './components/ResetPasswordDialog/ResetPasswordDialog';
 import Spinner from './components/Spinner/Spinner';
 
 const ExperienceRouter = React.lazy(() => import('./pages/Experience/Router'));
@@ -96,6 +97,7 @@ const App = () => {
                 <SignUpDialog />
                 <LogInDialog />
                 <ErrorDialog />
+                <ResetPasswordDialog />
                 <React.Suspense fallback={<Spinner />}>
                     <Switch>
                         <Route path="/experience" component={ExperienceRouter} />

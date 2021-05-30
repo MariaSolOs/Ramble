@@ -1,123 +1,100 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 import { useLanguageContext } from '../../context/languageContext';
 
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import Showplace from './Showplace';
 import Footer from '../../components/Footer/Footer';
-import Autocomplete from '../../components/Autocomplete/Autocomplete';
-import PlusMinusInput from '../../components/PlusMinusInput/PlusMinusInput';
+import Spinner from '../../components/Spinner/Spinner';
+import ExperienceCard from '../../components/ExperienceCard/ExperienceCard';
 import Button from '../../components/GradientButton/GradientButton';
+import { Experience } from '../../models/experience';
+import type { Experienceable, ExperienceCard as ExperienceCardType } from '../../models/experience';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Home.styles';
 const useStyles = makeStyles(styles);
 
-const GET_LOCATIONS = gql`
-    query getLocations {
-        experiences(status: APPROVED) {
+const GET_EXPERIENCES = gql`
+    query getExperiences {
+        experiences(location: "Montréal, Canada", capacity: 2, status: APPROVED) {
+            _id
+            title
+            images
+            pricePerPerson
+            ratingValue
+            numberOfRatings
             location
+            zoomPMI
         }
     }
 `;
-type LocationData = { location: string; }[];
+
+const GRID_IMAGE_BASE_URL = `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1592259933/Ramble/Homepage/creatorGrid`;
 
 const Home = () => {
     const { Home: text } = useLanguageContext().appText;
 
-    const classes = useStyles();
-
-    const [locationList, setLocationList] = useState<string[]>([]);
-    const [location, setLocation] = useState('Online');
-    const [capacity, setCapacity] = useState(2);
-
     const history = useHistory();
 
-    const { data, loading } = useQuery<{ experiences: LocationData }>(GET_LOCATIONS);
+    const classes = useStyles();
 
-    // Display unique list of locations
-    useEffect(() => {
-        if (!loading && data) {
-            const allLocations = data.experiences.map(({ location }) => location);
-            setLocationList([ ...new Set(allLocations) ]);
-            // Set Montreal as the default
-            setLocation('Montréal, Canada');
-        }
-    }, [loading, data]);
+    const [experiences, setExperiences] = useState<ExperienceCardType[]>([]);
 
-    // When clicking on images, focus searchbar
-    const searchRef = useRef<HTMLInputElement>();
-    const handleSearchFocus = useCallback(() => {
-        if (searchRef.current) {
-            searchRef.current.focus();
+    const { loading } = useQuery<{ experiences: Experienceable[] }>(GET_EXPERIENCES, {
+        onCompleted: ({ experiences }) => {
+            // Get the 4 experiences with the highest ratings
+            const bestExperiences = experiences.slice().sort((e1, e2) => 
+                e1.ratingValue - e2.ratingValue
+            ).splice(0, 4);
+
+            setExperiences(bestExperiences.map(exp => new Experience(exp).getCardInfo()));
         }
-    }, []);
+    });
 
     return (
         <div className={classes.slide}>
-            <div className={classes.slideContent}>
-                <div className={classes.searchBody}>
-                    <h1 className={classes.title}>{text.searchTitle}</h1>
-                    <h5 className={classes.subtitle}>{text.searchSubtitle}</h5>
-                    <div className={classes.searchBodyRow}>
-                        <Autocomplete
-                        options={['Online', ...locationList!]}
-                        loading={locationList.length === 0}
-                        fullWidth
-                        value={location}
-                        onChange={(_, value, reason) => {
-                            if (reason === 'select-option') {
-                                setLocation(value);
-                            }
-                        }}
-                        textfieldprops={{
-                            placeholder: text.searchbarPlaceholder,
-                            inputRef: searchRef
-                        }}
-                        inputprops={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment> 
-                            )
-                        }} />
-                    </div>
-                    <div className={classes.searchBodyRow}>
-                        <PlusMinusInput
-                        containerStyles={classes.peopleInput}
-                        step={1}
-                        minValue={1}
-                        value={capacity}
-                        onValueChange={val => setCapacity(val)}
-                        getLabel={num => 
-                            num > 1? text.peopleButtonLabel : text.personButtonLabel 
-                        }
-                        inputProps={{
-                            startAdornment: <FontAwesomeIcon icon={faUsers} />
-                        }} />
-                        <Button 
-                        variant="experience" 
-                        className={classes.searchButton}
-                        onClick={() => {
-                            history.push(`/experience/search?location=${location}&capacity=${capacity}`);
-                        }}>
-                            {text.exploreButton}
-                        </Button>
-                    </div>
+            {loading && <Spinner />}
+            <div className={classes.gridContainer}>
+                <div className={classes.grid}>
+                    {new Array(5).fill(0).map((_, index) => (
+                        <figure key={uuid()} className={`${classes.gridItem} grid-item-${index + 1}`}>
+                            <img
+                            src={`${GRID_IMAGE_BASE_URL}${index + 1}.png`}
+                            alt={`Experience grid: Item ${index}`}
+                            className={classes.gridImg} />
+                        </figure>
+                    ))}
+                    <figure className={classes.titleFigure}>
+                        <h5 className={classes.gridTitle}>
+                            {text.experienceTitle}
+                        </h5>
+                    </figure>
                 </div>
-                <div className={classes.imageContainer}>
-                    <img
-                    src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,g_north,h_700,w_550/v1612149396/Ramble/Homepage/cocktailparty.jpg`}
-                    alt="Cocktail party"
-                    className={classes.image} />
-                </div>
+                <h2 className={classes.title}>
+                    {text.experienceTitle}
+                </h2>
             </div>
-            <Showplace onImageClick={handleSearchFocus} />
+            <div className={classes.divider} />
+            <div className={classes.experiences}>
+                {experiences.map(exp => 
+                    <ExperienceCard
+                    key={exp._id} 
+                    experience={exp}
+                    containerClass={classes.experienceCard} />
+                )}
+            </div>
+            <Button 
+            variant="experience" 
+            className={classes.searchButton}
+            onClick={() => {
+                history.push('/experience/search?location=Montréal, Canada&capacity=2');
+            }}>
+                {text.seeAllButton}
+            </Button>
+            <Showplace />
             <Footer />
         </div>
     );

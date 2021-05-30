@@ -6,7 +6,7 @@ const styles = (theme: Theme) => createStyles({
         backgroundColor: 'transparent',
         boxShadow: 'none',
         opacity: 1,
-        padding: '10px 10px 0',
+        padding: '10px 0 0',
         transition: 'opacity 600ms',
         zIndex: 50,
 
@@ -17,30 +17,14 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
-    link: {
-        textDecoration: 'none',
-    },
+    link: { textDecoration: 'none' },
 
     brand: {
+        width: 150,
         cursor: 'pointer',
-        alignContent: 'bottom'
-    },
-
-    brandLogo: {
-        height: 48,
-        width: 85,
-        [theme.breakpoints.down('xs')]: {
-            transform: 'scale(0.8)'
-        }
-    },
-
-    brandName: {
-        height: 30,
-        paddingBottom: 2,
-        marginLeft: -5,
 
         [theme.breakpoints.down('xs')]: {
-            display: 'none'
+            transform: 'scale(0.85)'
         }
     }
 });

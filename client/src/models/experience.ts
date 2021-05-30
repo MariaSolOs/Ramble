@@ -47,7 +47,7 @@ export class Experience {
             location: this.data.location,
             price: this.data.pricePerPerson,
             ...this.data.numberOfRatings > 0 && {
-                rating: this.data.numberOfRatings
+                rating: this.data.ratingValue
             }
         }
     }

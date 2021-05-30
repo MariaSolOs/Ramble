@@ -4,8 +4,7 @@ import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
-import Logo from '../../assets/images/appBar_logo.png';
-import RambleTitle from '../../assets/images/appBar_ramble.png';
+import logo from '../../assets/images/ramble-brand.png';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AppBar.styles';
@@ -25,10 +24,7 @@ const AppBar: React.FC = ({ children }) => {
         }}>
             <Toolbar>
                 <Link to="/" className={classes.link}>
-                    <div className={classes.brand}>
-                        <img src={Logo} alt="Ramble logo" className={classes.brandLogo} />
-                        <img src={RambleTitle} alt="Ramble" className={classes.brandName} />
-                    </div>
+                    <img src={logo} alt="Ramble logo" className={classes.brand} />
                 </Link>
                 { children }
             </Toolbar>

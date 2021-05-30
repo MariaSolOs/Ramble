@@ -7,9 +7,9 @@ import styles from './Showplace.styles';
 const useStyles = makeStyles(styles);
 
 const PARTAKE_IMAGES = [
-    'Homepage/fireBalloon.jpeg',
-    'Creators/creatorGrid1.jpeg',
-    'Homepage/cityMusical.jpeg'
+    'fireBalloon.jpeg',
+    'creatorGrid1.jpeg',
+    'cityMusical.jpeg'
 ] as const;
 
 const ADVENTURE_IMAGES = [
@@ -18,11 +18,7 @@ const ADVENTURE_IMAGES = [
     'romanticCamping.jpeg'
 ] as const;
 
-type Props = {
-    onImageClick: () => void;
-}
-
-const Gallery = (props: Props) => {
+const Gallery = () => {
     const { Home: text } = useLanguageContext().appText;
 
     const classes = useStyles();
@@ -36,10 +32,9 @@ const Gallery = (props: Props) => {
                     {PARTAKE_IMAGES.map(imgUrl => 
                         <img 
                         key={imgUrl}
-                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/${imgUrl}`}
+                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
                         alt="Experience preview"
-                        className={classes.image}
-                        onClick={props.onImageClick} />
+                        className={classes.image} />
                     )}
                 </div>
             </div>
@@ -54,8 +49,7 @@ const Gallery = (props: Props) => {
                         key={imgUrl}
                         src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
                         alt="Experience preview"
-                        className={classes.image}
-                        onClick={props.onImageClick} />
+                        className={classes.image} />
                     )}
                 </div>
             </div>

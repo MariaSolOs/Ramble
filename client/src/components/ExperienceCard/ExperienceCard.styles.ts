@@ -28,7 +28,7 @@ const styles = (theme: Theme) => createStyles({
         color: '#ECEBE5',
         height: '40%',
         marginTop: -5,
-        padding: 10
+        padding: '5px 10px 10px'
     },
 
     online: {
@@ -79,13 +79,17 @@ const styles = (theme: Theme) => createStyles({
     priceInfo: {
         fontSize: '0.7rem',
         margin: (props: StyleProps) =>
-            props.hasRatingInfo ? '-10px 0 0' : 0,
-        textAlign: 'end'
+            props.hasRatingInfo ? '-8px 0 0' : 0,
+        textAlign: 'end',
+
+        [theme.breakpoints.down(380)]: { fontSize: '0.55rem' }
     },
 
     price: {
         fontSize: '1.1rem',
-        letterSpacing: '-0.02rem'
+        letterSpacing: '-0.02rem',
+
+        [theme.breakpoints.down(380)]: { fontSize: '0.9rem' }
     }
 });
 

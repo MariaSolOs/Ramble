@@ -2,12 +2,9 @@ import type { TranslationRecord } from '../../models/translation';
 
 const frenchTranslation: TranslationRecord = {
     Home: {
-        searchTitle: "Découvrez l'inoubliable", 
-        searchSubtitle: 'Découvrez et participez à des expériences uniques',
-        searchbarPlaceholder: 'Choisissez une ville',
-        exploreButton: 'Explorer',
-        personButtonLabel: 'Personne',
-        peopleButtonLabel: 'Personnes',
+        experienceTitle: "découvrez l'inoubliable", 
+        discoverTitle: 'Découvrez notre expériences',
+        seeAllButton: 'Tout voir',
         partakeTitle: 'Vivez des moments inoubliables',
         partakeSubtitle: 'Les expériences sont des activités uniques organisées par des Créateurs passionnés qui veulent partager leur expertise en donnant à leurs invités un accès privilégié à leur univers.',
         adventureTitle: "En famille, entre amis, seul ou en compagnie d'une personne bien spéciale.",

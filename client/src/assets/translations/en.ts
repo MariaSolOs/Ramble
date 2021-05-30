@@ -2,12 +2,9 @@ import type { TranslationRecord } from '../../models/translation';
 
 const englishTranslation: TranslationRecord = {
     Home: {
-        searchTitle: 'Experience different.',
-        searchSubtitle: 'Discover and attend unique experiences',
-        searchbarPlaceholder: 'Select a city',
-        exploreButton: 'Start exploring',
-        personButtonLabel: 'Person',
-        peopleButtonLabel: 'People',
+        experienceTitle: 'experience different.',
+        discoverTitle: 'Discover our experiences',
+        seeAllButton: 'See all',
         partakeTitle: 'Partake in unforgettable moments',
         partakeSubtitle: 'Experiences are unique activities organized by passionate Creators who wish to share their expertise and give their guests a privileged access to their universe.',
         adventureTitle: 'With friends, family, on your own, or with your significant other.',

@@ -1,5 +1,5 @@
 export type TranslationRecord = {
-    Home: Record<'searchTitle' | 'searchSubtitle' | 'searchbarPlaceholder' | 'exploreButton' | 'personButtonLabel' | 'peopleButtonLabel' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
+    Home: Record<'experienceTitle' | 'discoverTitle' | 'seeAllButton' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
 
     Navbar: Record<'signUp' | 'logIn' | 'becomeCreator', string>;
 

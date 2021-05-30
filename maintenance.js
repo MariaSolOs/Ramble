@@ -1,17 +1,23 @@
-const Experience = require('./models/experience'),
-      Notification = require('./models/notification'),
-      Review = require('./models/review');
+const User = require('./models/user');
+const Experience = require('./models/experience');
 
-module.exports = async () => {
-    const notifs = await Notification.find({ category: 'User-ExperienceReview' });
-    const toDel = [];
+const maintenance = async () => {
+    const users = await User.find({ }, 'bookedExperiences');
 
-    for (notif of notifs) {
-        const exists = await Experience.exists({ _id: notif.expToReview });
-        if (!exists) {
-            toDel.push(notif._id);
+    for (const user of users) {
+        const savedExps = [];
+        for (const exp of user.bookedExperiences) {
+            const exists = await Experience.exists({ _id: exp._id });
+
+            if (exists) {
+                savedExps.push(exp._id);
+            }
         }
-    }
+        user.savedExperiences = savedExps;
 
-    await Notification.deleteMany({ _id: { $in: toDel } });
+        await user.save();
+    }
 }
+
+module.exports = maintenance;
+

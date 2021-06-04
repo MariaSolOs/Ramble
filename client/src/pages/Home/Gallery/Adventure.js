@@ -6,9 +6,9 @@ import styles from './GalleryStyles';
 const useStyles = makeStyles(styles);
 
 const images = [
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Homepage/poolParty.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Homepage/motorcycles.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1/Ramble/Homepage/romanticCamping.jpeg`
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1622837502/Ramble/Homepage/street_shoots.jpg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1622837482/Ramble/Homepage/cooking_online.jpg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/c_fill,h_500,w_400/v1622837483/Ramble/Homepage/cocktail_workshop.jpg`
 ];
 
 const Adventure = ({ setSearchFocus, lang }) => {
@@ -26,9 +26,9 @@ const Adventure = ({ setSearchFocus, lang }) => {
                     </h5>
                 </div>
                 <div className={classes.images}>
-                    <img src={images[0]} alt="Pool party" onClick={setSearchFocus}/>
-                    <img src={images[1]} alt="Motorcycles" onClick={setSearchFocus}/>
-                    <img src={images[2]} alt="Romantic camping" onClick={setSearchFocus}/>
+                    {images.map(imgUrl => 
+                        <img src={imgUrl} alt="Experience preview" onClick={setSearchFocus} />
+                    )}
                 </div>
             </div>
         </div>

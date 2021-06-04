@@ -90,8 +90,9 @@ const Landing = (props) => {
             {!codeUsed && <ReferBox/>}
             </div>
             <div className={classes.image}>
-                <img src="https://res.cloudinary.com/dxod7etqu/image/upload/v1593715700/Ramble/Homepage/fireBalloon.png"
-                alt="Fire balloon"/>
+                <img 
+                src="https://res.cloudinary.com/dxod7etqu/image/upload/v1622837493/Ramble/Homepage/landing.jpg"
+                alt="Experience preview" />
             </div>
         </div>
     );

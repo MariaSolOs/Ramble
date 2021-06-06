@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
+import { useAppSelector, useAppDispatch } from '../../hooks/redux';
+import { saveExperience, unsaveExperience } from '../../store/userSlice';
 import { useLanguageContext } from '../../context/languageContext';
 
 import Showplace from './Showplace';
@@ -18,8 +20,8 @@ import styles from './Home.styles';
 const useStyles = makeStyles(styles);
 
 const GET_EXPERIENCES = gql`
-    query getExperiences {
-        experiences(location: "Montréal, Canada", capacity: 2, status: APPROVED) {
+    query getExperiences($location: String!, $capacity: Int) {
+        experiences(location: $location, capacity: $capacity) {
             _id
             title
             images
@@ -32,27 +34,52 @@ const GET_EXPERIENCES = gql`
     }
 `;
 
+type ExperiencesVariables = {
+    location: string;
+    capacity: number;
+}
+
 const GRID_IMAGE_BASE_URL = `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1592259933/Ramble/Homepage/creatorGrid`;
 
 const Home = () => {
-    const { Home: text } = useLanguageContext().appText;
-
     const history = useHistory();
-
+    const dispatch = useAppDispatch();
+    const { Home: text } = useLanguageContext().appText;
     const classes = useStyles();
 
     const [experiences, setExperiences] = useState<ExperienceCardType[]>([]);
 
-    const { loading } = useQuery<{ experiences: Experienceable[] }>(GET_EXPERIENCES, {
+    const { loading } = useQuery<{ experiences: Experienceable[] }, ExperiencesVariables>(GET_EXPERIENCES, {
+        variables: { location: 'Montréal, Canada', capacity: 2 },
         onCompleted: ({ experiences }) => {
             // Get the 4 experiences with the highest ratings
             const bestExperiences = experiences.slice().sort((e1, e2) => 
                 e1.ratingValue - e2.ratingValue
             ).splice(0, 4);
 
-            setExperiences(bestExperiences.map(exp => new Experience(exp).getCardInfo()));
+            setExperiences(bestExperiences.map(Experience.getCardInfo));
         }
     });
+
+    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+
+    const handleHeartClick = useCallback((isSaved: boolean, experienceId: string) => {
+        if (isSaved) {
+            dispatch(unsaveExperience({ experienceId }));
+        } else {
+            dispatch(saveExperience({ experienceId }));
+        }
+    }, [dispatch]);
+
+    /* If the user has a token in session storage, it will be lost when going
+       to a new tab, and so we temporarily store it in local storage. */
+    useEffect(() => {
+        const tokenInSessionStorage = sessionStorage.getItem('ramble-token');
+        if (tokenInSessionStorage) {
+            localStorage.setItem('ramble-redirect_page_token', tokenInSessionStorage);
+        }
+    }, [isLoggedIn]);
 
     return (
         <div className={classes.slide}>
@@ -78,13 +105,29 @@ const Home = () => {
                 </h2>
             </div>
             <div className={classes.divider} />
-            <div className={classes.experiences}>
-                {experiences.map(exp => 
-                    <ExperienceCard
-                    key={exp._id} 
-                    experience={exp}
-                    containerClass={classes.experienceCard} />
-                )}
+            <div className={classes.experienceContainer}>
+                <h3 className={classes.discoverTitle}>
+                    {text.discoverTitle}
+                </h3>
+                <div className={classes.experiences}>
+                    {experiences.map(exp => {
+                        const isSaved = savedExperiencesIds.includes(exp._id);
+
+                        return (
+                            <ExperienceCard
+                            key={exp._id} 
+                            experience={exp}
+                            containerClass={classes.experienceCard}
+                            isSaved={isLoggedIn ? isSaved : undefined}
+                            onHeartClick={() => handleHeartClick(isSaved, exp._id)}
+                            linkProps={{
+                                to: `/experience/view/${exp._id}`,
+                                target: '_blank',
+                                rel: 'noopener noreferrer'
+                            }} />
+                        )}
+                    )}
+                </div>
             </div>
             <Button 
             variant="experience" 

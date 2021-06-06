@@ -1,6 +1,5 @@
-exports.experienceReducer = (exp) => ({
+exports.experienceReducer = exp => ({
     _id: exp._id,
-    status: exp.status.toUpperCase(),
     title: exp.title,
     description: exp.description,
     images: exp.images,
@@ -10,7 +9,7 @@ exports.experienceReducer = (exp) => ({
         latitude: exp.location.coordinates.lat,
         longitude: exp.location.coordinates.long,
     },
-    categories: exp.categories.map(categ => categ.toUpperCase()),
+    categories: exp.categories,
     ageRestriction: exp.ageRestriction,
     duration: exp.duration,
     languages: exp.languages,
@@ -26,15 +25,10 @@ exports.experienceReducer = (exp) => ({
     currency: exp.price.currency,
     ratingValue: exp.rating.value,
     numberOfRatings: exp.rating.numRatings,
-    creator: exp.creator,
-    availableFromDate: exp.avail.from,
-    availableToDate: exp.avail.to,
-    availabilitySchedule: Object.entries(exp.avail.schedule).map(([day, slots]) => ({
-        day, slots
-    }))
+    creator: exp.creator
 });
 
-exports.userReducer = (user) => ({
+exports.userReducer = user => ({
     _id: user._id,
     firstName: user.fstName,
     lastName: user.lstName,
@@ -43,7 +37,13 @@ exports.userReducer = (user) => ({
     phoneNumber: user.phoneNumber,
     photo: user.photo,
     city: user.city,
-    savedExperiences: user.savedExperiences,
-    bookedExperiences: user.bookedExperiences,
+    savedExperiences: user.savedExperiences.map(this.experienceReducer),
+    bookedExperiences: user.bookedExperiences.map(this.experienceReducer),
     creator: user.creator
+});
+
+exports.creatorReducer = creator => ({
+    _id: creator._id,
+    bio: creator.bio,
+    user: this.userReducer(creator.user)
 });

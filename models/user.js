@@ -1,5 +1,5 @@
-const mongoose = require('mongoose'),
-      bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 // TODO: Remove unused fields and rename fields      
 const UserSchema = new mongoose.Schema({
@@ -26,8 +26,7 @@ const UserSchema = new mongoose.Schema({
     },
     passwordHash: String,
     photo: {
-        type: String, 
-        default: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,q_31,w_503/v1592335146/Ramble/Users/noPicUser.jpg`
+        type: String 
     },
     city: {
         type: String,

@@ -40,11 +40,11 @@ const ForgotPasswordDialog = (props: Props) => {
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ email })
-        }).then(res => {
+        })
+        .then(res => {
             setLoading(false);
             if (res.ok) {
                 setShowSuccessMessage(true);
@@ -53,7 +53,8 @@ const ForgotPasswordDialog = (props: Props) => {
             } else {
                 setErrorMessage('Something went wrong...');
             }
-        }).catch(() => {
+        })
+        .catch(() => {
             setLoading(false);
             setErrorMessage('Something went wrong...');
         });

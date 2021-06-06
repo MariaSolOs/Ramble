@@ -78,6 +78,7 @@ const PlusMinusInput = (props: Props) => {
             value={value}
             onChange={handleChange}
             classes={{ root: classes.textFieldRoot }}
+            inputProps={{ inputMode: 'numeric' }}
             InputProps={{
                 disableUnderline: true,
                 classes: {

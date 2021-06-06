@@ -1,4 +1,6 @@
-type Category = 'TASTE' | 'CREATE' | 'RELAX' | 'LEARN' | 'MOVE';
+import type { Creator } from './creator';
+
+export type Category = 'taste' | 'create' | 'relax' | 'learn' | 'move';
 
 export type ExperienceCard = {
     _id: string;
@@ -31,24 +33,52 @@ export interface Experienceable {
     readonly includedItems?: string[];
     readonly toBringItems?: string[];
     readonly zoomPMI?: string;
+    readonly creator?: Creator;
 }
 
 export class Experience {
     constructor(private data: Experienceable) {}
 
+    get _id() { return this.data._id; }
     get title() { return this.data.title; }
+    get description() { return this.data.description; }
+    get duration() { return this.data.duration; }
+    get languages() { return this.data.languages; }
+    get capacity() { return this.data.capacity; }
+    get categories() { return this.data.categories; }
+    get pricePerPerson() { return this.data.pricePerPerson; }
+    get pricePrivate() { return this.data.pricePrivate; }
+    get currency() { return this.data.currency; }
+    get location() { return this.data.location; }
+    get latitude() { return this.data.latitude; }
+    get longitude() { return this.data.longitude; }
+    get ageRestriction() { return this.data.ageRestriction; }
+    get includedItems() { return this.data.includedItems || []; }
+    get toBringItems() { return this.data.toBringItems || []; }
+    get isZoomExperience() { return Boolean(this.data.zoomPMI); }
+    get creator() { return this.data.creator!; }
+    get galleryImages() { 
+        return this.data.images.map(img => ({
+            original: img.replace('h_400', 'h_700'),
+            thumbnail: img.replace('h_400', 'h_200')
+        })); 
+    }
 
-    getCardInfo(): ExperienceCard {
+    static getCardInfo(exp: Experienceable): ExperienceCard {
         return {
-            _id: this.data._id,
-            title: this.data.title,
-            image: this.data.images[0],
-            isZoomExperience: Boolean(this.data.zoomPMI),
-            location: this.data.location,
-            price: this.data.pricePerPerson,
-            ...this.data.numberOfRatings > 0 && {
-                rating: this.data.ratingValue
+            _id: exp._id,
+            title: exp.title,
+            image: exp.images[0],
+            isZoomExperience: Boolean(exp.zoomPMI),
+            location: exp.location,
+            price: exp.pricePerPerson,
+            ...exp.numberOfRatings > 0 && {
+                rating: exp.ratingValue
             }
         }
+    }
+
+    getCardInfo(): ExperienceCard {
+        return Experience.getCardInfo(this.data);
     }
 }

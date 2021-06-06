@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 import { useLanguageContext } from '../../context/languageContext';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { closeLogInDialog, openErrorDialog } from '../../store/uiSlice';
-import { setUserProfile } from '../../store/userSlice';
+import { logIn } from '../../store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -20,63 +20,26 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './AuthDialogs.styles';
 const useStyles = makeStyles(styles);
 
-const LOG_IN_USER = gql`
-    mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
-        logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
-            token
-            firstName
-            lastName
-            birthday
-            email
-            phoneNumber
-            photo
-            city
-            creator {
-                _id
-            }
-        }
-    }
-`;
-type LogIn = {
-    token: string;
-    firstName: string;
-    lastName: string;
-    birthday: string;
-    email: string;
-    phoneNumber: string;
-    photo: string;
-    city: string;
-    creator: { _id: string; };
-}
-
 enum FormField {
     Email = 'email',
     Password = 'password',
     RememberUser = 'rememberUser'
 }
+
 type Form = {
     email: string;
     password: string;
     rememberUser: boolean;
 }
+
 const initialForm: Form = {
     email: '',
     password: '',
     rememberUser: false
 }
 
-const storeTokenData = (token: string, rememberUser: boolean) => {
-    // Depending on what the user wants, store their data
-    if (rememberUser) {
-        localStorage.setItem('ramble-token', token);
-    } else {
-        sessionStorage.setItem('ramble-token', token);
-    }
-}
-
 const LogInDialog = () => {
     const { LogInDialog: text } = useLanguageContext().appText;
-
     const classes = useStyles();
 
     const dispatch = useAppDispatch();
@@ -84,30 +47,6 @@ const LogInDialog = () => {
 
     const [values, setValues] = useState(initialForm);
     const [showForgotPwdDialog, setShowForgotPwdDialog] = useState(false);
-
-    const [logIn] = useMutation<{ logInUser: LogIn }, Form>(LOG_IN_USER, {
-        onCompleted: ({ logInUser }) => {
-            storeTokenData(logInUser.token, values.rememberUser);
-            dispatch(setUserProfile({
-                isLoggedIn: true,
-                isCreator: Boolean(logInUser.creator._id),
-                firstName: logInUser.firstName,
-                lastName: logInUser.lastName,
-                birthday: logInUser.birthday,
-                email: logInUser.email,
-                phoneNumber: logInUser.phoneNumber,
-                photo: logInUser.photo,
-                city: logInUser.city
-            }));
-            handleClose();
-        },
-        onError: ({ message }) => {
-            dispatch(openErrorDialog({ 
-                message: message || "We couldn't log you in."
-            }));
-            handleClose();
-        }
-    });
 
     const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fieldName = event.target.name;
@@ -128,7 +67,14 @@ const LogInDialog = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        logIn({ variables: { ...values } });
+        dispatch(logIn(values))
+        .then(unwrapResult)
+        .catch(err => {
+            dispatch(openErrorDialog({ 
+                message: err.message || "We couldn't log you in."
+            }));
+        })
+        .finally(() => handleClose());
     }
 
     if (showForgotPwdDialog) {

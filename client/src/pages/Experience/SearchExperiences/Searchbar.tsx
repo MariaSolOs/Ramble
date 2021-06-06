@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useLanguageContext } from '../../../context/languageContext';
@@ -31,6 +32,11 @@ const Searchbar = (props: Props) => {
     const history = useHistory();
 
     const classes = useStyles();
+
+    // To always load the page at the top
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []); 
 
     return (
         <>

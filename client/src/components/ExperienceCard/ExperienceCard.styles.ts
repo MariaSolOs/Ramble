@@ -16,6 +16,10 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
+    link: {
+        textDecoration: 'none'
+    },
+
     image: {
         objectFit: 'cover',
         height: '60%',
@@ -90,6 +94,21 @@ const styles = (theme: Theme) => createStyles({
         letterSpacing: '-0.02rem',
 
         [theme.breakpoints.down(380)]: { fontSize: '0.9rem' }
+    },
+
+    heartFab: {
+        position: 'absolute',
+        top: 10, 
+        right: 10,
+        height: 36, 
+        width: 36,
+        backgroundColor: 'rgba(256, 256, 256, 0.56)',
+
+        '& .fa-heart': {
+            color: props => 
+                props.isSaved ? '#FE4164' : '#FFF',
+            fontSize: '1.25rem',
+        }
     }
 });
 

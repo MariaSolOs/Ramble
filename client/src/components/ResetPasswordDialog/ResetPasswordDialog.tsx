@@ -5,7 +5,7 @@ import { useMutation, gql } from '@apollo/client';
 import { useLanguageContext } from '../../context/languageContext';
 import { useAppDispatch } from '../../hooks/redux';
 import { openErrorDialog } from '../../store/uiSlice';
-import { setUserProfile } from '../../store/userSlice';
+import { fetchProfile } from '../../store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -21,29 +21,11 @@ const useStyles = makeStyles(styles);
 const RESET_PASSWORD = gql`
     mutation updatePassword($password: String!) {
         editUser(password: $password) {
-            firstName
-            lastName
-            birthday
-            email
-            phoneNumber
-            photo
-            city
-            creator {
-                _id
-            }
+            _id
         }
     }
 `;
-type EditUser = { 
-    firstName: string;
-    lastName: string;
-    birthday: string;
-    email: string;
-    phoneNumber: string;
-    photo: string;
-    city: string;
-    creator: { _id: string; };
-}
+
 type EditUserVariables = { password: string; }
 
 enum FormField {
@@ -104,19 +86,9 @@ const ResetPasswordDialog = () => {
         resetPassword({ variables: { password: values.password1 } });
     }
 
-    const [resetPassword] = useMutation<{ editUser: EditUser }, EditUserVariables>(RESET_PASSWORD, {
-        onCompleted: ({ editUser }) => {
-            dispatch(setUserProfile({
-                isLoggedIn: true,
-                isCreator: Boolean(editUser.creator._id),
-                firstName: editUser.firstName,
-                lastName: editUser.lastName,
-                birthday: editUser.birthday,
-                email: editUser.email,
-                phoneNumber: editUser.phoneNumber,
-                photo: editUser.photo,
-                city: editUser.city
-            }));
+    const [resetPassword] = useMutation<any, EditUserVariables>(RESET_PASSWORD, {
+        onCompleted: () => {
+            dispatch(fetchProfile());
             handleClose();
         },
         onError: () => {

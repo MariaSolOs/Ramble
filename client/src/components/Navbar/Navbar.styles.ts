@@ -17,7 +17,11 @@ const styles = (theme: Theme) => createStyles({
         '& .fa-angle-double-down': {
             color: '#F6F6F6',
             height: '3rem',
-            margin: '0 10px'
+            margin: '0 10px',
+
+            [theme.breakpoints.down('xs')]: {
+                height: '2rem'
+            }
         }
     },
 

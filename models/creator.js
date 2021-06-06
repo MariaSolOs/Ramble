@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const CreatorSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        autopopulate: true
     },
     verified: {
         type: Boolean,
@@ -25,5 +26,7 @@ const CreatorSchema = new mongoose.Schema({
         ref: 'Booking'
     }]
 });
+
+CreatorSchema.plugin(require('mongoose-autopopulate'));
   
 module.exports = mongoose.model('Creator', CreatorSchema);

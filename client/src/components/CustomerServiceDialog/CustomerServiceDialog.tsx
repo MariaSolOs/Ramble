@@ -20,7 +20,6 @@ type Props = {
  * at the same time. */
 const CustomerServiceDialog = (props: Props) => {
     const { CustomerServiceDialog: text } = useLanguageContext().appText;
-
     const classes = useStyles();
     
     return (

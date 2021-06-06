@@ -49,11 +49,6 @@ const ExperienceSchema = new mongoose.Schema({
 
     ageRestriction: Number,
 
-    setting: {
-        type: String,
-        enum: ['private', 'semi-private', 'public']
-    },
-
     duration: { //In hours
         type: Number,
         required: true,

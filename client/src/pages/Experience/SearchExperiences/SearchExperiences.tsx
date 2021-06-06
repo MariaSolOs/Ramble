@@ -3,8 +3,9 @@ import { useQuery, gql } from '@apollo/client';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import useSearchReducer from './searchReducer';
-import { useAppDispatch } from '../../../hooks/redux';
+import { useAppSelector, useAppDispatch } from '../../../hooks/redux';
 import { openErrorDialog } from '../../../store/uiSlice';
+import { saveExperience, unsaveExperience } from '../../../store/userSlice';
 import { Experience } from '../../../models/experience';
 import type { SearchState } from './searchReducer';
 import type { Experienceable } from '../../../models/experience';
@@ -20,16 +21,15 @@ const useStyles = makeStyles(styles);
 
 const GET_LOCATIONS = gql`
     query getLocations {
-        experiences(status: APPROVED) {
+        experiences {
             location
         }
     }
 `;
-type LocationData = { location: string; }[];
 
 const FETCH_EXPERIENCES = gql`
     query getExperiences($location: String!, $capacity: Int) {
-        experiences(location: $location, capacity: $capacity, status: APPROVED) {
+        experiences(location: $location, capacity: $capacity) {
             _id
             title
             images
@@ -41,6 +41,9 @@ const FETCH_EXPERIENCES = gql`
         }
     }
 `;
+
+type LocationData = { location: string; }[];
+
 type ExperiencesVariables = {
     location: string;
     capacity: number;
@@ -90,7 +93,7 @@ const SearchExperiences = () => {
                 type: 'SET_EXPERIENCES', 
                 location: locationQuery,
                 capacity: capacityQuery,
-                experiences: experiences.map(exp => new Experience(exp).getCardInfo())
+                experiences: experiences.map(Experience.getCardInfo)
             });
         }
     });
@@ -133,6 +136,26 @@ const SearchExperiences = () => {
         }, 3000);
     }
 
+    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+
+    const handleHeartClick = useCallback((isSaved: boolean, experienceId: string) => {
+        if (isSaved) {
+            dispatch(unsaveExperience({ experienceId }));
+        } else {
+            dispatch(saveExperience({ experienceId }));
+        }
+    }, [dispatch]);
+
+    /* If the user has a token in session storage, it will be lost when going
+       to a new tab, and so we temporarily store it in local storage. */
+    useEffect(() => {
+        const tokenInSessionStorage = sessionStorage.getItem('ramble-token');
+        if (tokenInSessionStorage) {
+            localStorage.setItem('ramble-redirect_page_token', tokenInSessionStorage);
+        }
+    }, [isLoggedIn]);
+
     return (
         <div className={classes.root}>
             {locationsLoading && <Spinner />}
@@ -149,23 +172,34 @@ const SearchExperiences = () => {
                 searchDispatch({ type: 'UPDATE_TITLE_FILTER', titleFilter })
             }} />
             <TransitionGroup className={classes.experiences}>
-                {searchState.filteredExperiences.map((exp, index) => (
-                    <CSSTransition
-                    key={exp._id}
-                    timeout={300}
-                    classNames={{
-                        enter: classes.cardFadeOut,
-                        enterActive: classes.cardFadeIn,
-                        exit: classes.cardFadeIn,
-                        exitActive: classes.cardFadeOut
-                    }}>
-                        <div style={{ transitionDelay: `${index * 70}ms` }}>
-                            <ExperienceCard
-                            experience={exp}
-                            containerClass={classes.experienceCard} />
-                        </div>
-                    </CSSTransition>
-                ))}
+                {searchState.filteredExperiences.map((exp, index) => {
+                    const isSaved = savedExperiencesIds.includes(exp._id);
+
+                    return (
+                        <CSSTransition
+                        key={exp._id}
+                        timeout={300}
+                        classNames={{
+                            enter: classes.cardFadeOut,
+                            enterActive: classes.cardFadeIn,
+                            exit: classes.cardFadeIn,
+                            exitActive: classes.cardFadeOut
+                        }}>
+                            <div style={{ transitionDelay: `${index * 70}ms` }}>
+                                <ExperienceCard
+                                experience={exp}
+                                containerClass={classes.experienceCard}
+                                isSaved={isLoggedIn ? isSaved : undefined}
+                                onHeartClick={() => handleHeartClick(isSaved, exp._id)}
+                                linkProps={{
+                                    to: `/experience/view/${exp._id}`,
+                                    target: '_blank',
+                                    rel: 'noopener noreferrer'
+                                }} />
+                            </div>
+                        </CSSTransition>
+                    );
+                })}
             </TransitionGroup>
         </div>
     );

@@ -87,6 +87,38 @@ const englishTranslation: TranslationRecord = {
         perConnection: 'per connection',
         perPerson: 'per person',
         online: 'online'
+    },
+
+    CategoryBox: {
+        taste: 'Taste',
+        create: 'Create',
+        relax: 'Relax',
+        learn: 'Learn',
+        move: 'Move'
+    },
+
+    Experience: {
+        online: 'online',
+        duration: 'Duration',
+        upTo: 'Up to',
+        person: 'Person',
+        people: 'People',
+        language: 'Langue',
+        languages: 'Languages',
+        ageRestriction: 'Age restriction',
+        hostedBy: 'Hosted by',
+        aboutCreator: 'About creator',
+        planning: 'Planning', 
+        included: "What's included", 
+        toBring: 'What to bring',
+        location: 'Location'
+    },
+    
+    ViewExperience: {
+        bookExperience: 'Book experience',
+        perConnection: 'per connection',
+        perPerson: 'per person',
+        seeDates: 'See dates'
     }
 }
 

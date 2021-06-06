@@ -1,9 +1,16 @@
 const { gql } = require('apollo-server-express');
 
+// TODO: Add doc strings
 module.exports = gql`
     type Query {
         me: User
-        experiences(location: String, capacity: Int, status: ExperienceStatus): [Experience!]
+
+        experiences(
+            location: String, 
+            capacity: Int
+        ): [Experience!]
+
+        experience(id: String!): Experience
     }
 
     type Mutation {
@@ -13,11 +20,13 @@ module.exports = gql`
             firstName: String!, 
             lastName: String!
         ): User
+
         logInUser(
             email: String!, 
             password: String!, 
             rememberUser: Boolean!
         ): User
+
         editUser(
             firstName: String, 
             lastName: String, 
@@ -28,11 +37,19 @@ module.exports = gql`
             photo: String,
             city: String
         ): User
+
+        saveExperience(experienceId: String!): MutationResponse
+
+        unsaveExperience(experienceId: String!): MutationResponse
+    }
+
+    type MutationResponse {
+        code: Int!
+        message: String!
     }
 
     type Experience {
         _id: ID!
-        status: ExperienceStatus
         title: String!
         description: String!
         images: [String!]!
@@ -57,24 +74,12 @@ module.exports = gql`
         creator: Creator!
     }
 
-    enum ExperienceStatus {
-        PENDING
-        APPROVED
-        REJECTED
-    }
-
     enum ExperienceCategories {
-        TASTE
-        CREATE
-        RELAX
-        LEARN 
-        MOVE
-    }
-
-    enum ExperienceSetting {
-        PRIVATE
-        SEMI_PRIVATE
-        PUBLIC
+        taste
+        create
+        relax
+        learn
+        move
     }
 
     type User {
@@ -94,5 +99,7 @@ module.exports = gql`
 
     type Creator {
         _id: ID!
+        user: User!
+        bio: String
     }
 `;

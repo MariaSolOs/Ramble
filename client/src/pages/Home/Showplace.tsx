@@ -7,15 +7,15 @@ import styles from './Showplace.styles';
 const useStyles = makeStyles(styles);
 
 const PARTAKE_IMAGES = [
-    'fireBalloon.jpeg',
-    'creatorGrid1.jpeg',
-    'cityMusical.jpeg'
+    'holding_camera.jpg',
+    'bar-whitedrinks.jpg',
+    'camera_on_legs.jpg'
 ] as const;
 
 const ADVENTURE_IMAGES = [
-    'poolParty.jpeg',
-    'motorcycles.jpeg',
-    'romanticCamping.jpeg'
+    'street_shoots.jpg',
+    'cooking_online.jpg',
+    'cocktail_workshop.jpg'
 ] as const;
 
 const Gallery = () => {

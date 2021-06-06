@@ -4,7 +4,7 @@ import type { Theme } from '@material-ui/core/styles';
 const styles = (theme: Theme) => createStyles({
     gallerySlide: {
         width: '85%',
-        margin: '5% auto 10%'
+        margin: '0 auto 10%'
     },
 
     title: {

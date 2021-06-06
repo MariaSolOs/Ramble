@@ -7,24 +7,22 @@ const router = express.Router();
 
 // Send email to user for resetting their password
 router.post('/password-reset', (req, res) => {
-    User.findOne({ 'email.address': req.body.email }, '_id', (err, user) => {
-        if (err) {
-            return res.status(500).send({
-                message: 'Something went wrong...'
-            });
-        }
+    User.findOne({ 'email.address': req.body.email })
+    .select('-savedExperiences -bookedExperiences -creator _id')
+    .then(user => {
         if (!user) {
             return res.status(404).send({ 
                 message: "There's no account associated to that email." 
             });
         }
-        
-        sendPasswordResetEmail(user._id, req.body.email)
-        .then(() => {
-            return res.status(201).send({ message: 'Reset email sent' });
-        })
-        .catch(() => {
-            return res.status(500).send({ message: 'Something went wrong...' });
+        return sendPasswordResetEmail(user._id, req.body.email)
+    })
+    .then(() => {
+        return res.status(201).send({ message: 'Reset email sent' });
+    })
+    .catch(() => {
+        return res.status(500).send({
+            message: 'Something went wrong...'
         });
     });
 });

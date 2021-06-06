@@ -15,6 +15,6 @@ const ReviewSchema = new mongoose.Schema({
         required: true,
         enum: ['Experience']
     }
-}, {timestamps: true});
+}, { timestamps: true });
   
 module.exports = mongoose.model('Review', ReviewSchema);

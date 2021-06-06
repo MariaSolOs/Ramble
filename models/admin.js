@@ -1,5 +1,5 @@
-const mongoose = require('mongoose'),
-      bcrypt = require('bcrypt');
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt');
 
 const AdminSchema = new mongoose.Schema({
     username: {
@@ -18,7 +18,6 @@ const AdminSchema = new mongoose.Schema({
     }]
 });
 
-//For authenticating the passwords
 AdminSchema.methods.validPassword = function(password) {
     return bcrypt.compare(password, this.passwordHash);
 };   

@@ -1,3 +1,5 @@
+import type { Category } from './experience';
+
 export type TranslationRecord = {
     Home: Record<'experienceTitle' | 'discoverTitle' | 'seeAllButton' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
 
@@ -22,4 +24,10 @@ export type TranslationRecord = {
     SearchExperiences_Searchbar: Record<'personButtonLabel' | 'peopleButtonLabel' | 'search' | 'titlePlaceholder', string>;
 
     ExperienceCard: Record<'perConnection' | 'perPerson' | 'online', string>;
+
+    CategoryBox: Record<Category, string>;
+
+    Experience: Record<'online' | 'duration' | 'upTo' | 'person' | 'people' | 'language' | 'languages' | 'ageRestriction' | 'hostedBy' | 'aboutCreator' | 'planning' | 'included' | 'toBring' | 'location', string>;
+
+    ViewExperience: Record<'bookExperience' | 'perConnection' | 'perPerson' | 'seeDates', string>;
 }

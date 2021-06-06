@@ -2,32 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloProvider } from '@apollo/client';
 
 import store from './store/store';
+import apolloClient from './gqlClient';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-const httpLink = createHttpLink({
-    uri: `${process.env.REACT_APP_SERVER_URI}/graphql`
-});
-
-const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('ramble-token') || sessionStorage.getItem('ramble-token') || '';
-    return {
-        headers: {
-            ...headers,
-            authorization: token 
-        }
-    }
-  });
-
-const apolloClient = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
-});
 
 ReactDOM.render(
     <React.StrictMode>

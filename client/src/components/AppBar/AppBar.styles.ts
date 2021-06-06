@@ -10,6 +10,8 @@ const styles = (theme: Theme) => createStyles({
         transition: 'opacity 600ms',
         zIndex: 50,
 
+        [theme.breakpoints.down('xs')]: { height: 71 },
+
         '&.scrolled': {
             opacity: 0,
             pointerEvents: 'none',

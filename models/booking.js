@@ -42,6 +42,6 @@ const BookingSchema = new mongoose.Schema({
         taxGST: Number,
         taxQST: Number
     }
-}, {timestamps: true});
+}, { timestamps: true });
   
 module.exports = mongoose.model('Booking', BookingSchema);

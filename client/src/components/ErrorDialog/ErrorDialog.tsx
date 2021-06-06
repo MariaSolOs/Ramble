@@ -11,7 +11,6 @@ const useStyles = makeStyles(styles);
 
 const ErrorDialog = () => {
     const { ErrorDialog: text } = useLanguageContext().appText;
-
     const classes = useStyles();
 
     const message = useAppSelector(state => state.ui.errorMessage);

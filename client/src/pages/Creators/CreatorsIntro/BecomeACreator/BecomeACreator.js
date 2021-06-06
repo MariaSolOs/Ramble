@@ -10,11 +10,11 @@ import styles from './BecomeACreatorStyles';
 const useStyles = makeStyles(styles);
 
 const gridImages = [
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid1.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid2.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid3.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid4.jpeg`,
-    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Creators/creatorGrid5.jpeg`
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Homepage/creatorGrid1.jpeg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Homepage/creatorGrid2.jpeg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Homepage/creatorGrid3.jpeg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Homepage/creatorGrid4.jpeg`,
+    `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUDNAME}/image/upload/dpr_auto,q_auto/v1/Ramble/Homepage/creatorGrid5.jpeg`
 ];
 
 const BecomeACreator = (props) => {

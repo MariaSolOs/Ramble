@@ -5,7 +5,7 @@ import styles from './GradientButton.styles';
 const useStyles = makeStyles(styles);
 
 export type Props = {
-    variant: 'experience'
+    variant: 'experience' | 'creator'
 }
 
 const GradientButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & Props> = (props) => {

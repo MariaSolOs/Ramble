@@ -12,6 +12,8 @@ const styles = (theme: Theme) => createStyles({
             switch(variant) {
                 case 'experience': 
                     return 'linear-gradient(to right, #2BB282 0%, #2D73EA 100%)'
+                case 'creator':
+                    return 'radial-gradient(circle at 298%, #F7521E, #AC9EFF)'
                 default: 
                     return ''
             }

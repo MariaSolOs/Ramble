@@ -1,5 +1,3 @@
-import type { Creator } from './creator';
-
 export type Category = 'taste' | 'create' | 'relax' | 'learn' | 'move';
 
 export type ExperienceCard = {
@@ -33,7 +31,6 @@ export interface Experienceable {
     readonly includedItems?: string[];
     readonly toBringItems?: string[];
     readonly zoomPMI?: string;
-    readonly creator?: Creator;
 }
 
 export class Experience {
@@ -56,7 +53,6 @@ export class Experience {
     get includedItems() { return this.data.includedItems || []; }
     get toBringItems() { return this.data.toBringItems || []; }
     get isZoomExperience() { return Boolean(this.data.zoomPMI); }
-    get creator() { return this.data.creator!; }
     get galleryImages() { 
         return this.data.images.map(img => ({
             original: img.replace('h_400', 'h_700'),

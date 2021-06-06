@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
+
 import { useLanguageContext } from '../../context/languageContext';
 import type { Experience as ExperienceType } from '../../models/experience';
-import { v4 as uuid } from 'uuid';
+import type { Creator } from '../../models/creator';
 
 import Fab from '@material-ui/core/Fab';
 import Avatar from '@material-ui/core/Avatar';
@@ -18,14 +20,15 @@ import Carousel from 'react-image-gallery';
 import CategoryBox from '../CategoryBox/CategoryBox';
 import onlineIcon from '../../assets/images/online-experience-icon.svg';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { desktopStyles, mobileStyles } from './Experience.styles';
 
 type Props = {
     experience: ExperienceType;
+    creator: Creator;
     isExperienceSaved: boolean;
+    onHeartClick?: React.MouseEventHandler;
     isUserLoggedIn: boolean;
     useMobileDisplay?: boolean;
     containerClass?: string;
@@ -46,8 +49,7 @@ const getFormattedDuration = (duration: number) => {
 const Experience = (props: Props) => {
     const { Experience: text } = useLanguageContext().appText;
 
-    const { experience } = props;
-    const { creator } = experience;
+    const { experience, creator } = props;
     const ageRestricted = Boolean(experience.ageRestriction);
 
     const useStyles = makeStyles(props.useMobileDisplay ? mobileStyles : desktopStyles);
@@ -97,7 +99,8 @@ const Experience = (props: Props) => {
                             <Fab 
                             size="small"
                             disableRipple
-                            className={classes.shareSaveButton}>
+                            className={classes.shareSaveButton}
+                            onClick={props.onHeartClick}>
                                 <FontAwesomeIcon icon={faHeart} />
                             </Fab>}
                     </div>

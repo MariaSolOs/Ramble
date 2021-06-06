@@ -119,6 +119,13 @@ const frenchTranslation: TranslationRecord = {
         perConnection: 'par connexion',
         perPerson: 'par personne',
         seeDates: 'Voir les disponibilités'
+    },
+
+    BecomeACreator: {
+        becomeTitle: 'Devenez un créateur.',
+        shareTitle: 'Partagez votre passion.',
+        getPaidTitle: "Faites de l'argent.",
+        getStarted: 'Débuter'
     }
 }
 

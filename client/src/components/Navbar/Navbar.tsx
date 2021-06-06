@@ -80,7 +80,7 @@ const Navbar = () => {
                     }}>
                         <MenuItem
                         component={Link}
-                        to="/"
+                        to="/creator/become"
                         onClick={closeMenu}>
                             {text.becomeCreator}
                         </MenuItem>
@@ -110,7 +110,7 @@ const Navbar = () => {
                 </div>
                 <div className={classes.expandedLinks}>
                     <Link
-                    to="/"
+                    to="/creator/become"
                     className={`${classes.navLink} ${classes.whiteNavLink}`}>
                         {text.becomeCreator}
                     </Link>

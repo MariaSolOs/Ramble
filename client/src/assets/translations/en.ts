@@ -119,6 +119,13 @@ const englishTranslation: TranslationRecord = {
         perConnection: 'per connection',
         perPerson: 'per person',
         seeDates: 'See dates'
+    },
+
+    BecomeACreator: {
+        becomeTitle: 'Become a Creator.',
+        shareTitle: 'Share your passion.',
+        getPaidTitle: 'Get paid.',
+        getStarted: 'Get Started'
     }
 }
 

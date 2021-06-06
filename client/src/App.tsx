@@ -15,6 +15,7 @@ import ResetPasswordDialog from './components/ResetPasswordDialog/ResetPasswordD
 import Spinner from './components/Spinner/Spinner';
 
 const ExperienceRouter = React.lazy(() => import('./pages/Experience/Router'));
+const CreatorRouter = React.lazy(() => import('./pages/Creator/Router'));
 
 const App = () => {
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
@@ -42,6 +43,7 @@ const App = () => {
                 <React.Suspense fallback={<Spinner />}>
                     <Switch>
                         <Route path="/experience" component={ExperienceRouter} />
+                        <Route path="/creator" component={CreatorRouter} />
                         <Route path="/" component={Home} />
                     </Switch>
                 </React.Suspense>

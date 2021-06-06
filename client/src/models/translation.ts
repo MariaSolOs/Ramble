@@ -30,4 +30,6 @@ export type TranslationRecord = {
     Experience: Record<'online' | 'duration' | 'upTo' | 'person' | 'people' | 'language' | 'languages' | 'ageRestriction' | 'hostedBy' | 'aboutCreator' | 'planning' | 'included' | 'toBring' | 'location', string>;
 
     ViewExperience: Record<'bookExperience' | 'perConnection' | 'perPerson' | 'seeDates', string>;
+
+    BecomeACreator: Record<'becomeTitle' | 'shareTitle' | 'getPaidTitle' | 'getStarted', string>;
 }

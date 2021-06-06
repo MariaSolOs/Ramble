@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 
 import { useLanguageContext } from '../../../context/languageContext';
 import { useAppSelector, useAppDispatch } from '../../../hooks/redux';
-import { fetchProfile } from '../../../store/userSlice';
+import { fetchProfile, saveExperience, unsaveExperience } from '../../../store/userSlice';
 import { Experience as ExperienceType } from '../../../models/experience';
-import { Creator } from '../../../models/creator';
 import type { Experienceable } from '../../../models/experience';
-import type { Creatable } from '../../../models/creator';
+import type { Creator } from '../../../models/creator';
 import Experience from '../../../components/Experience/Experience';
 import GradientButton from '../../../components/GradientButton/GradientButton';
 import Spinner from '../../../components/Spinner/Spinner';
@@ -47,7 +46,12 @@ const GET_EXPERIENCE = gql`
     }
 `;
 
-type ExperienceQuery = Omit<Experienceable, 'creator'> & { creator: Creatable };
+type ExperienceQuery = Experienceable & {
+    creator: {
+        bio: string;
+        user: { photo: string; firstName: string; }
+    }
+};
 
 type ExperienceVariables = { id: string; }
 
@@ -65,15 +69,19 @@ const ViewExperience = () => {
 
     const classes = useStyles();
 
-    // Fetch and initialize experience
+    // Fetch and initialize experience and creator
     const [experience, setExperience] = useState<ExperienceType>();
+    const [creator, setCreator] = useState<Creator>();
     const { loading } = useQuery<{ experience: ExperienceQuery }, ExperienceVariables>(GET_EXPERIENCE, {
         variables: { id: experienceId },
         onCompleted: ({ experience }) => {
-            setExperience(new ExperienceType({
-                ...experience,
-                creator: new Creator(experience.creator)
-            }));
+            const { creator, ...experienceInfo } = experience;
+            setExperience(new ExperienceType(experienceInfo));
+            setCreator({
+                name: creator.user.firstName,
+                photo: creator.user.photo,
+                bio: creator.bio
+            });
         }
     });
 
@@ -89,6 +97,14 @@ const ViewExperience = () => {
         }
     }, [dispatch]);
 
+    const handleHeartClick = useCallback(() => {
+        if (isExpSaved) {
+            dispatch(unsaveExperience({ experienceId }));
+        } else {
+            dispatch(saveExperience({ experienceId }));
+        }
+    }, [isExpSaved, experienceId, dispatch]);
+
     if (loading || !experience) {
         return <Spinner />
     }
@@ -97,7 +113,9 @@ const ViewExperience = () => {
         <>
             <Experience
             experience={experience}
+            creator={creator!}
             isExperienceSaved={isExpSaved}
+            onHeartClick={handleHeartClick}
             isUserLoggedIn={isLoggedIn}
             containerClass={classes.experienceContainer} />
             <div className={classes.footer}>

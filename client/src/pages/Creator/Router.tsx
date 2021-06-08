@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, useRouteMatch, useLocation } from 'react-router-dom';
 
 import BecomeACreator from './BecomeACreator/BecomeACreator';
-import Spinner from '../../components/Spinner/Spinner';
+import Spinner from 'components/Spinner/Spinner';
 
 const Router = () => {
     const { path } = useRouteMatch();

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-import { useLanguageContext } from '../../context/languageContext';
+import { useLanguageContext } from 'context/languageContext';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
-import TextField from '../TextField/TextField';
-import Button from '../GradientButton/GradientButton';
-import Spinner from '../Spinner/Spinner';
+import TextField from 'components/TextField/TextField';
+import Button from 'components/GradientButton/GradientButton';
+import Spinner from 'components/Spinner/Spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ForgotPasswordDialog.styles';

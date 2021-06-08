@@ -1,4 +1,4 @@
-import { useLanguageContext } from '../../context/languageContext';
+import { useLanguageContext } from 'context/languageContext';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';

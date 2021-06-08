@@ -1,4 +1,4 @@
-import type { TranslationRecord } from '../../models/translation';
+import type { TranslationRecord } from 'models/translation';
 
 const englishTranslation: TranslationRecord = {
     Home: {
@@ -125,7 +125,14 @@ const englishTranslation: TranslationRecord = {
         becomeTitle: 'Become a Creator.',
         shareTitle: 'Share your passion.',
         getPaidTitle: 'Get paid.',
-        getStarted: 'Get Started'
+        getStarted: 'Get Started',
+        currentCreators1: 'Meet current',
+        currentCreators2: 'Creators',
+        actTitle1: 'Get your act', 
+        actTitle2: 'out there.',
+        lightbulbText: 'Find a unique way to share your passion',
+        cloudText: 'Bring people into your own world',
+        walletText: 'Make money while sharing what really matters to you'
     }
 }
 

@@ -1,9 +1,9 @@
-import { useLanguageContext } from '../../context/languageContext';
-import { useAppSelector, useAppDispatch } from '../../hooks/redux';
-import { closeErrorDialog } from '../../store/uiSlice';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { closeErrorDialog } from 'store/uiSlice';
 
 import { Dialog } from '@material-ui/core';
-import errorImg from '../../assets/images/error-dialog-image.png';
+import errorImg from 'assets/images/error-dialog-image.png';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ErrorDialog.styles';

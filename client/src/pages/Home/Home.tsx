@@ -3,17 +3,17 @@ import { useQuery, gql } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
-import { useAppSelector, useAppDispatch } from '../../hooks/redux';
-import { saveExperience, unsaveExperience } from '../../store/userSlice';
-import { useLanguageContext } from '../../context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { saveExperience, unsaveExperience } from 'store/userSlice';
+import { useLanguageContext } from 'context/languageContext';
 
 import Showplace from './Showplace';
-import Footer from '../../components/Footer/Footer';
-import Spinner from '../../components/Spinner/Spinner';
-import ExperienceCard from '../../components/ExperienceCard/ExperienceCard';
-import Button from '../../components/GradientButton/GradientButton';
-import { Experience } from '../../models/experience';
-import type { Experienceable, ExperienceCard as ExperienceCardType } from '../../models/experience';
+import Footer from 'components/Footer/Footer';
+import Spinner from 'components/Spinner/Spinner';
+import ExperienceCard from 'components/ExperienceCard/ExperienceCard';
+import Button from 'components/GradientButton/GradientButton';
+import { Experience } from 'models/experience';
+import type { Experienceable, ExperienceCard as ExperienceCardType } from 'models/experience';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Home.styles';
@@ -89,7 +89,7 @@ const Home = () => {
                     {new Array(5).fill(0).map((_, index) => (
                         <figure key={uuid()} className={`${classes.gridItem} grid-item-${index + 1}`}>
                             <img
-                            src={`${GRID_IMAGE_BASE_URL}${index + 1}.png`}
+                            src={`${GRID_IMAGE_BASE_URL}${index + 1}.jpg`}
                             alt={`Experience grid: Item ${index}`}
                             className={classes.gridImg} />
                         </figure>

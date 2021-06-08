@@ -4,7 +4,7 @@ import MUIAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
-import logo from '../../assets/images/ramble-brand.png';
+import logo from 'assets/images/ramble-brand.png';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AppBar.styles';

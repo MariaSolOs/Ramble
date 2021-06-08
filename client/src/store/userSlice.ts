@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { gql } from '@apollo/client';
 
-import type { Client } from '../gqlClient';
+import type { Client } from 'gqlClient';
 
 const USER_DATA = gql`
     fragment UserData on User {

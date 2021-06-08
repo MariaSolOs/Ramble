@@ -7,8 +7,10 @@ const styles = (theme: Theme) => createStyles({
         maxWidth: '100vw',
         margin: '0 auto 2rem 12rem',
 
-        [theme.breakpoints.down('sm')]: {
-            margin: '0 auto 2rem 1rem'
+        [theme.breakpoints.down('sm')]: { margin: '0 auto 2rem 1rem' },
+        [theme.breakpoints.down('xs')]: { 
+            width: '98vw',
+            margin: '0 auto 2rem 2vw'
         }
     },
 

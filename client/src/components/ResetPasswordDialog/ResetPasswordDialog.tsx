@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useMutation, gql } from '@apollo/client';
 
-import { useLanguageContext } from '../../context/languageContext';
-import { useAppDispatch } from '../../hooks/redux';
-import { openErrorDialog } from '../../store/uiSlice';
-import { fetchProfile } from '../../store/userSlice';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppDispatch } from 'hooks/redux';
+import { openErrorDialog } from 'store/uiSlice';
+import { fetchProfile } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import TextField from '../TextField/TextField';
-import Button from '../GradientButton/GradientButton';
+import TextField from 'components/TextField/TextField';
+import Button from 'components/GradientButton/GradientButton';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ResetPasswordDialog.styles';

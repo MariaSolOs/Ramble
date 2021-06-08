@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { useLanguageContext } from '../../context/languageContext';
-import type { Experience as ExperienceType } from '../../models/experience';
-import type { Creator } from '../../models/creator';
+import { useLanguageContext } from 'context/languageContext';
+import type { Experience as ExperienceType } from 'models/experience';
+import type { Creator } from 'models/creator';
 
 import Fab from '@material-ui/core/Fab';
 import Avatar from '@material-ui/core/Avatar';
@@ -17,8 +17,8 @@ import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import Carousel from 'react-image-gallery';
-import CategoryBox from '../CategoryBox/CategoryBox';
-import onlineIcon from '../../assets/images/online-experience-icon.svg';
+import CategoryBox from 'components/CategoryBox/CategoryBox';
+import onlineIcon from 'assets/images/online-experience-icon.svg';
 
 import 'react-image-gallery/styles/css/image-gallery.css';
 import { makeStyles } from '@material-ui/core/styles';

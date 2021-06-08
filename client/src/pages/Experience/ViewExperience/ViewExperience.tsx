@@ -2,15 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 
-import { useLanguageContext } from '../../../context/languageContext';
-import { useAppSelector, useAppDispatch } from '../../../hooks/redux';
-import { fetchProfile, saveExperience, unsaveExperience } from '../../../store/userSlice';
-import { Experience as ExperienceType } from '../../../models/experience';
-import type { Experienceable } from '../../../models/experience';
-import type { Creator } from '../../../models/creator';
-import Experience from '../../../components/Experience/Experience';
-import GradientButton from '../../../components/GradientButton/GradientButton';
-import Spinner from '../../../components/Spinner/Spinner';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { fetchProfile, saveExperience, unsaveExperience } from 'store/userSlice';
+import { Experience as ExperienceType } from 'models/experience';
+import type { Experienceable } from 'models/experience';
+import type { Creator } from 'models/creator';
+import Experience from 'components/Experience/Experience';
+import GradientButton from 'components/GradientButton/GradientButton';
+import Spinner from 'components/Spinner/Spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ViewExperience.styles';

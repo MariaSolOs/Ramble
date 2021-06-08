@@ -1,4 +1,4 @@
-import type { TranslationRecord } from '../../models/translation';
+import type { TranslationRecord } from 'models/translation';
 
 const frenchTranslation: TranslationRecord = {
     Home: {
@@ -125,7 +125,14 @@ const frenchTranslation: TranslationRecord = {
         becomeTitle: 'Devenez un créateur.',
         shareTitle: 'Partagez votre passion.',
         getPaidTitle: "Faites de l'argent.",
-        getStarted: 'Débuter'
+        getStarted: 'Débuter',
+        currentCreators1: 'Rencontrez quelques', 
+        currentCreators2: 'Créateurs',
+        actTitle1: 'Partagez votre passion',
+        actTitle2: 'dès maintenant.',
+        lightbulbText: 'Trouvez une manière unique de partager votre passion',
+        cloudText: 'Invitez des gens dans votre univers',
+        walletText: 'Transmettez ce qui vous passionne, tout en étant payé'
     }
 }
 

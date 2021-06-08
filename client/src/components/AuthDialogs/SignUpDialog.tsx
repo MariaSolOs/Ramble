@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-import { useLanguageContext } from '../../context/languageContext';
-import { useAppSelector, useAppDispatch } from '../../hooks/redux';
-import { closeSignUpDialog, openLogInDialog, openErrorDialog } from '../../store/uiSlice';
-import { signUp } from '../../store/userSlice';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { closeSignUpDialog, openLogInDialog, openErrorDialog } from 'store/uiSlice';
+import { signUp } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import TextField from '../TextField/TextField';
-import GradientButton from '../GradientButton/GradientButton';
+import TextField from 'components/TextField/TextField';
+import GradientButton from 'components/GradientButton/GradientButton';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AuthDialogs.styles';

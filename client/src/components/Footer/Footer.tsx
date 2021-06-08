@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { useLanguageContext } from '../../context/languageContext';
+import { useLanguageContext } from 'context/languageContext';
 
 import Chip from '@material-ui/core/Chip';
 import LanguageIcon from '@material-ui/icons/Language';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
-import CustomerServiceDialog from '../CustomerServiceDialog/CustomerServiceDialog';
+import CustomerServiceDialog from 'components/CustomerServiceDialog/CustomerServiceDialog';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Footer.styles';

@@ -4,11 +4,11 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
-import store from './store/store';
-import apolloClient from './gqlClient';
+import store from 'store/store';
+import apolloClient from 'gqlClient';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from 'App';
+import reportWebVitals from 'reportWebVitals';
 
 ReactDOM.render(
     <React.StrictMode>

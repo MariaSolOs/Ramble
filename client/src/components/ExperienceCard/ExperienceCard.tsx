@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import type { LinkProps } from 'react-router-dom';
 
-import { useLanguageContext } from '../../context/languageContext';
-import type { ExperienceCard as CardType } from '../../models/experience';
+import { useLanguageContext } from 'context/languageContext';
+import type { ExperienceCard as CardType } from 'models/experience';
 
-import onlineIcon from '../../assets/images/online-experience-icon.svg';
+import onlineIcon from 'assets/images/online-experience-icon.svg';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import Fab from '@material-ui/core/Fab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

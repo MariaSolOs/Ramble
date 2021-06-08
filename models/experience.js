@@ -121,4 +121,6 @@ const ExperienceSchema = new mongoose.Schema({
     }
 });
 
+// TODO: Delete setting field from all experiences
+
 module.exports = mongoose.model('Experience', ExperienceSchema);

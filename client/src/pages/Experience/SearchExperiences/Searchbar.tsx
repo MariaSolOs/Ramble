@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useLanguageContext } from '../../../context/languageContext';
+import { useLanguageContext } from 'context/languageContext';
 
 import InputBase from '@material-ui/core/InputBase';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -9,9 +9,9 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import SearchIcon from '@material-ui/icons/Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
-import Autocomplete from '../../../components/Autocomplete/Autocomplete';
-import PlusMinusInput from '../../../components/PlusMinusInput/PlusMinusInput';
-import Button from '../../../components/GradientButton/GradientButton';
+import Autocomplete from 'components/Autocomplete/Autocomplete';
+import PlusMinusInput from 'components/PlusMinusInput/PlusMinusInput';
+import Button from 'components/GradientButton/GradientButton';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Searchbar.styles';

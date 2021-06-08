@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useLanguageContext } from '../../context/languageContext'; 
+import { useLanguageContext } from 'context/languageContext'; 
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Showplace.styles';

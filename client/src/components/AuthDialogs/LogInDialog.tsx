@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-import { useLanguageContext } from '../../context/languageContext';
-import { useAppSelector, useAppDispatch } from '../../hooks/redux';
-import { closeLogInDialog, openErrorDialog } from '../../store/uiSlice';
-import { logIn } from '../../store/userSlice';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { closeLogInDialog, openErrorDialog } from 'store/uiSlice';
+import { logIn } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import TextField from '../TextField/TextField';
-import Checkbox from '../Checkbox/Checkbox';
-import GradientButton from '../GradientButton/GradientButton';
-import ForgotPasswordDialog from '../ForgotPasswordDialog/ForgotPasswordDialog';
+import TextField from 'components/TextField/TextField';
+import Checkbox from 'components/Checkbox/Checkbox';
+import GradientButton from 'components/GradientButton/GradientButton';
+import ForgotPasswordDialog from 'components/ForgotPasswordDialog/ForgotPasswordDialog';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './AuthDialogs.styles';

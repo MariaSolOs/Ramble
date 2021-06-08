@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import type { Language } from '../models/language';
-import En from '../assets/translations/en';
-import Fr from '../assets/translations/fr';
+import type { Language } from 'models/language';
+import En from 'assets/translations/en';
+import Fr from 'assets/translations/fr';
 
 type TranslationRecord = typeof En | typeof Fr;
 

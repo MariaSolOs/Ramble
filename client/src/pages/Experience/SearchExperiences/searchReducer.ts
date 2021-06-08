@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react';
 
-import type { ExperienceCard } from '../../../models/experience';
+import type { ExperienceCard } from 'models/experience';
 
 export interface SearchState {
     locationList: string[];

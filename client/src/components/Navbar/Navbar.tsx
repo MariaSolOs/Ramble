@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
-import { useLanguageContext } from '../../context/languageContext';
-import { useAppSelector, useAppDispatch } from '../../hooks/redux';
-import { openSignUpDialog, openLogInDialog } from '../../store/uiSlice';
-import { logout } from '../../store/userSlice';
+import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { openSignUpDialog, openLogInDialog } from 'store/uiSlice';
+import { logout } from 'store/userSlice';
 
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons/faAngleDoubleDown';
-import AppBar from '../AppBar/AppBar';
+import AppBar from 'components/AppBar/AppBar';
 import ProfileMenu from './ProfileMenu';
 
 import { makeStyles } from '@material-ui/core/styles';

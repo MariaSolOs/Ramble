@@ -1,4 +1,4 @@
-import type { Category } from './experience';
+import type { Category } from 'models/experience';
 
 export type TranslationRecord = {
     Home: Record<'experienceTitle' | 'discoverTitle' | 'seeAllButton' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
@@ -31,5 +31,5 @@ export type TranslationRecord = {
 
     ViewExperience: Record<'bookExperience' | 'perConnection' | 'perPerson' | 'seeDates', string>;
 
-    BecomeACreator: Record<'becomeTitle' | 'shareTitle' | 'getPaidTitle' | 'getStarted', string>;
+    BecomeACreator: Record<'becomeTitle' | 'shareTitle' | 'getPaidTitle' | 'getStarted' | 'currentCreators1' | 'currentCreators2' | 'actTitle1' | 'actTitle2' | 'lightbulbText' | 'cloudText' | 'walletText', string>;
 }

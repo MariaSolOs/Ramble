@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import LanguageProvider from './context/languageContext';
-import GlobalStyles from './assets/styles/GlobalStyles';
-import { useAppSelector, useAppDispatch } from './hooks/redux';
-import { fetchProfile } from './store/userSlice';
+import LanguageProvider from 'context/languageContext';
+import GlobalStyles from 'assets/styles/GlobalStyles';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { fetchProfile } from 'store/userSlice';
 
-import Home from './pages/Home/Home';
-import Navbar from './components/Navbar/Navbar';
-import SignUpDialog from './components/AuthDialogs/SignUpDialog';
-import LogInDialog from './components/AuthDialogs/LogInDialog';
-import ErrorDialog from './components/ErrorDialog/ErrorDialog';
-import ResetPasswordDialog from './components/ResetPasswordDialog/ResetPasswordDialog';
-import Spinner from './components/Spinner/Spinner';
+import Home from 'pages/Home/Home';
+import Navbar from 'components/Navbar/Navbar';
+import SignUpDialog from 'components/AuthDialogs/SignUpDialog';
+import LogInDialog from 'components/AuthDialogs/LogInDialog';
+import ErrorDialog from 'components/ErrorDialog/ErrorDialog';
+import ResetPasswordDialog from 'components/ResetPasswordDialog/ResetPasswordDialog';
+import Spinner from 'components/Spinner/Spinner';
 
-const ExperienceRouter = React.lazy(() => import('./pages/Experience/Router'));
-const CreatorRouter = React.lazy(() => import('./pages/Creator/Router'));
+const ExperienceRouter = React.lazy(() => import('pages/Experience/Router'));
+const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
 
 const App = () => {
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);

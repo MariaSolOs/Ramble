@@ -3,17 +3,17 @@ import { useQuery, gql } from '@apollo/client';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import useSearchReducer from './searchReducer';
-import { useAppSelector, useAppDispatch } from '../../../hooks/redux';
-import { openErrorDialog } from '../../../store/uiSlice';
-import { saveExperience, unsaveExperience } from '../../../store/userSlice';
-import { Experience } from '../../../models/experience';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { openErrorDialog } from 'store/uiSlice';
+import { saveExperience, unsaveExperience } from 'store/userSlice';
+import { Experience } from 'models/experience';
 import type { SearchState } from './searchReducer';
-import type { Experienceable } from '../../../models/experience';
+import type { Experienceable } from 'models/experience';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Searchbar from './Searchbar';
-import ExperienceCard from '../../../components/ExperienceCard/ExperienceCard';
-import Spinner from '../../../components/Spinner/Spinner';
+import ExperienceCard from 'components/ExperienceCard/ExperienceCard';
+import Spinner from 'components/Spinner/Spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './SearchExperiences.styles';

@@ -1,11 +1,11 @@
-import { useLanguageContext } from '../../context/languageContext';
-import type { Category } from '../../models/experience';
+import { useLanguageContext } from 'context/languageContext';
+import type { Category } from 'models/experience';
 
-import tasteIcon from '../../assets/images/category-taste.svg';
-import createIcon from '../../assets/images/category-create.svg';
-import relaxIcon from '../../assets/images/category-relax.svg';
-import learnIcon from '../../assets/images/category-learn.svg';
-import moveIcon from '../../assets/images/category-move.svg';
+import tasteIcon from 'assets/images/category-taste.svg';
+import createIcon from 'assets/images/category-create.svg';
+import relaxIcon from 'assets/images/category-relax.svg';
+import learnIcon from 'assets/images/category-learn.svg';
+import moveIcon from 'assets/images/category-move.svg';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './CategoryBox.styles';

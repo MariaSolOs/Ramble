@@ -14,8 +14,11 @@ const UserSchema = new mongoose.Schema({
     },
     birthday: Date,
     email: {
-        type: String,
-        default: ''
+        address: {
+            type: String,
+            default: ''
+        },
+        verified: Boolean
     },
     phoneNumber: {
         type: String,

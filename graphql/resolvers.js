@@ -105,7 +105,26 @@ module.exports = {
             }
             await user.save();
             
-            userReducer(user);
+            return userReducer(user);
+        },
+
+        signUpCreator: async (_, { bio, governmentIds }, { userId }) => {
+            if (!userId) {
+                throw new AuthenticationError("User isn't logged in.");
+            }
+
+            const creator = await Creator.create({
+                user: userId,
+                bio,
+                verified: false,
+                governmentIds
+            });
+
+            await User.findByIdAndUpdate(userId, {
+                creator: creator._id
+            });
+
+            return creatorReducer(creator);
         },
 
         saveExperience: async (_, { experienceId }, { userId }) => {

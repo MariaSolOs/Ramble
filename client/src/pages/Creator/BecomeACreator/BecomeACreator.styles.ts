@@ -83,6 +83,7 @@ const styles = (theme: Theme) => createStyles({
         textAlign: 'center',
         margin: '20px auto 0',
         width: '50%',
+        height: 250,
         [theme.breakpoints.down('sm')]: { width: '80%' }
     },
 
@@ -108,16 +109,8 @@ const styles = (theme: Theme) => createStyles({
     creatorName: {
         fontSize: '1.5rem',
         color: '#FFF',
-        margin: '10px 0 -5px 0',
+        margin: '10px 0 5px 0',
         [theme.breakpoints.down('xs')]: { fontSize: '1.1rem' }
-    },
-
-    creatorCity: {
-        fontSize: '1rem',
-        color: '#DCDCD6',
-        margin: '0.5rem auto 0 auto',
-        fontWeight: theme.typography.fontWeightRegular,
-        [theme.breakpoints.down('xs')]: { fontSize: '0.9rem' }
     },
 
     creatorBio: {
@@ -139,6 +132,15 @@ const styles = (theme: Theme) => createStyles({
             cursor: 'pointer'
         }
     },
+
+    zoomEnter: { opacity: 0 },
+
+    zoomEnterActive: { 
+        opacity: 1,
+        transition: 'all 400ms ease-in'
+    },
+
+    zoomExit: { display: 'none' },
 
     actSlide: {
         width: '65vw',

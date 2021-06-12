@@ -114,6 +114,11 @@ const englishTranslation: TranslationRecord = {
         location: 'Location'
     },
     
+    ShareExperienceDialog: {
+        shareExperience: 'Share this experience',
+        copyLink: 'Copy link'
+    },
+
     ViewExperience: {
         bookExperience: 'Book experience',
         perConnection: 'per connection',
@@ -133,6 +138,29 @@ const englishTranslation: TranslationRecord = {
         lightbulbText: 'Find a unique way to share your passion',
         cloudText: 'Bring people into your own world',
         walletText: 'Make money while sharing what really matters to you'
+    },
+
+    CreatorForm: {
+        headerTitle: 'Before giving life to your experience we would like to get to know you a little bit better.',
+        profilePicture: 'Profile picture',
+        showSmile: 'Show us your best smile',
+        aboutYouTitle: 'About you',
+        aboutYouSubtitle: 'Tell us a bit about yourself. How would your friends describe you?',
+        aboutYouTip: "Include fun facts, what you're passionate about, your professional experience and other pertinent information.",
+        phoneNumberTitle: "What's your phone number?",
+        phoneNumberSubtitle: 'Only us and guests who book your experience will have access to your phone number.',
+        phoneNumberError: 'Please provide a valid phone number', 
+        idTitle: 'Government ID',
+        idSubtitle: "That just allows us to check if it's really you. By verifying the identity of guests and Creators, we make sure everyone feels safe.",
+        idTip1: "Your ID won't be shared with anyone else.",
+        idTip2: "Please upload an ID with your picture on it, like your driver's license, passport or identity card. We accept .jpg, .jpeg or .png files.",
+        front: 'Front',
+        back: 'Back',
+        frontIdText: 'Show the front of your ID',
+        backIdText: 'Add the back of your ID',
+        addFront: 'Add front',
+        addBack: 'Add back',
+        done: 'Done'
     }
 }
 

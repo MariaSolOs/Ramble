@@ -6,6 +6,7 @@ import type { Client } from 'gqlClient';
 
 const USER_DATA = gql`
     fragment UserData on User {
+        _id
         token
         firstName
         photo
@@ -62,6 +63,7 @@ const UNSAVE_EXPERIENCE = gql`
 `;
 
 type UserData = {
+    _id: string;
     token: string;
     firstName: string;
     photo: string;
@@ -80,6 +82,12 @@ type SignUpPayload = {
     password: string;
     firstName: string; 
     lastName: string; 
+}
+
+type UpdateUIProfilePayload = {
+    isCreator?: boolean;
+    firstName?: string;
+    photo?: string;
 }
 
 type EditSavedExperiencesPayload = { experienceId: string; }
@@ -207,6 +215,11 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        updateUIProfile: (state, { payload }: PayloadAction<UpdateUIProfilePayload>) => {
+            for (const [field, value] of Object.entries(payload)) {
+                (state as any)[field] = value;
+            }
+        },
         logout: () => initialState
     },
     extraReducers: builder => {
@@ -233,6 +246,6 @@ const userSlice = createSlice({
     }
 });
 
-export const { logout } = userSlice.actions;
+export const { updateUIProfile, logout } = userSlice.actions;
 
 export default userSlice.reducer;

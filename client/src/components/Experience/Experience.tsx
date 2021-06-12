@@ -18,6 +18,7 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import Carousel from 'react-image-gallery';
 import CategoryBox from 'components/CategoryBox/CategoryBox';
+import ShareExperienceDialog from 'components/ShareExperienceDialog/ShareExperienceDialog';
 import onlineIcon from 'assets/images/online-experience-icon.svg';
 
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -28,8 +29,8 @@ type Props = {
     experience: ExperienceType;
     creator: Creator;
     isExperienceSaved: boolean;
-    onHeartClick?: React.MouseEventHandler;
     isUserLoggedIn: boolean;
+    onHeartClick?: React.MouseEventHandler;
     useMobileDisplay?: boolean;
     containerClass?: string;
 }
@@ -59,8 +60,14 @@ const Experience = (props: Props) => {
     });
 
     const [isBioExpanded, setIsBioExpanded] = useState(false);
+    const [openShareDialog, setOpenShareDialog] = useState(false);
 
     return (
+        <>
+        <ShareExperienceDialog 
+        open={openShareDialog}
+        onClose={() => setOpenShareDialog(false)}
+        experienceTitle={experience.title} />
         <div className={`${props.containerClass}`}>
             <Carousel
             additionalClass={classes.carousel}
@@ -92,7 +99,8 @@ const Experience = (props: Props) => {
                         <Fab
                         size="small" 
                         disableRipple
-                        className={classes.shareSaveButton}>
+                        className={classes.shareSaveButton}
+                        onClick={() => setOpenShareDialog(true)}>
                             <FontAwesomeIcon icon={faShareSquare} />
                         </Fab>
                         {props.isUserLoggedIn &&
@@ -219,6 +227,7 @@ const Experience = (props: Props) => {
                     </>}
             </div>
         </div>
+        </>
     );
 }
 

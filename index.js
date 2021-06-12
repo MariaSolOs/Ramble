@@ -8,7 +8,6 @@ const path = require('path');
 const logger = require('./utils/logger');
 const { verifyToken } = require('./utils/jwt');
 const express = require('express');
-const compression = require('compression');
 const cors = require('cors');
 const restRoutes = require('./restAPI');
 
@@ -21,7 +20,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
-app.use(compression());
 app.use('/', restRoutes);
 
 const server = new ApolloServer({

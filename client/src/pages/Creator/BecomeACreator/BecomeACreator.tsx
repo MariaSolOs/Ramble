@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
+import { useHistory } from 'react-router-dom';
 
 import { useLanguageContext } from 'context/languageContext';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { openSignUpDialog } from 'store/uiSlice';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -19,10 +23,21 @@ const useStyles = makeStyles(styles);
 const BecomeACreator = () => {
     const { appText, language } = useLanguageContext();
     const { BecomeACreator: text } = appText;
+    const history = useHistory();
     const classes = useStyles();
+
+    const dispatch = useAppDispatch();
+    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isCreator = useAppSelector(state => state.user.isCreator);
 
     const [creatorSlide, setCreatorSlide] = useState(0);
     const creator = creatorBios[creatorSlide];
+
+    const handleGetStartedClick = () => {
+        isLoggedIn ? 
+            isCreator ? history.push('/experience/new') : history.push('/creator/join')
+            : dispatch(openSignUpDialog());
+    }
 
     return (
         <>
@@ -31,7 +46,10 @@ const BecomeACreator = () => {
                     <h1 className={classes.title}>{text.becomeTitle}</h1>
                     <h1 className={classes.title}>{text.shareTitle}</h1>
                     <h1 className={classes.title}>{text.getPaidTitle}</h1>
-                    <Button className={classes.getStartedButton} variant="creator">
+                    <Button 
+                    className={classes.getStartedButton} 
+                    variant="creator"
+                    onClick={handleGetStartedClick}>
                         {text.getStarted}
                     </Button>
                 </div>
@@ -52,13 +70,18 @@ const BecomeACreator = () => {
                     <CSSTransition
                     unmountOnExit
                     timeout={400}
-                    key={creatorSlide}>
+                    key={uuid()}
+                    classNames={{
+                        enter: classes.zoomEnter,
+                        enterActive: classes.zoomEnterActive,
+                        exitActive: classes.zoomExit
+                    }}>
                         <div className={classes.creatorCard}>
                             <div className={classes.creatorImgContainer}>
                                 <KeyboardArrowLeftIcon 
                                 className={classes.bioArrow}
                                 onClick={() => {
-                                    setCreatorSlide((creatorSlide + 3) % creatorBios.length)
+                                    setCreatorSlide((creatorSlide + 2) % creatorBios.length)
                                 }} />
                                 <img 
                                 src={creator.imageUrl}
@@ -71,7 +94,6 @@ const BecomeACreator = () => {
                                 }} />
                             </div>
                             <h5 className={classes.creatorName}>{creator.name}</h5>
-                            <p className={classes.creatorCity}>{creator.city}</p>
                             <p className={classes.creatorBio}>{creator.bio[language]}</p>
                         </div>
                     </CSSTransition>

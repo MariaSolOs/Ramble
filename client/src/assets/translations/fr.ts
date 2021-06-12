@@ -113,6 +113,11 @@ const frenchTranslation: TranslationRecord = {
         toBring: 'Quoi emporter',
         location: 'Localisation'
     },
+
+    ShareExperienceDialog: {
+        shareExperience: 'Partager cette expérience',
+        copyLink: "Copier l'url"
+    },
     
     ViewExperience: {
         bookExperience: 'Réserver',
@@ -133,6 +138,29 @@ const frenchTranslation: TranslationRecord = {
         lightbulbText: 'Trouvez une manière unique de partager votre passion',
         cloudText: 'Invitez des gens dans votre univers',
         walletText: 'Transmettez ce qui vous passionne, tout en étant payé'
+    },
+
+    CreatorForm: {
+        headerTitle: 'Avant de donner vie à votre expérience, nous aimerions vous connaître un peu mieux.',
+        profilePicture: 'Photo de profil',
+        showSmile: 'Montrez-nous votre plus beau sourire',
+        aboutYouTitle: 'À propos de vous',
+        aboutYouSubtitle: 'Parlez nous un peu de vous. Comment vos amis vous décriraient-ils?',
+        aboutYouTip: "Incluez des faits amusants, ce qui vous passionne, votre expérience professionnelle et d'autres informations pertinentes.",
+        phoneNumberTitle: 'Quel est votre numéro de téléphone?',
+        phoneNumberSubtitle: 'Seuls nous et les invités qui réservent votre expérience auront accès à votre numéro de téléphone.',
+        phoneNumberError: 'Veuillez indiquer un numéro de téléphone valable', 
+        idTitle: "Pièce d'identité",
+        idSubtitle: "Cela nous permet seulement de vérifier qu’il s’agît bien de vous. En vérifiant l'identité des invités et des créateurs, nous nous assurons que tout le monde se sent en sécurité.",
+        idTip1: "Votre pièce d’identité ne sera partagée avec personne d'autre.",
+        idTip2: "Veuillez télécharger une pièce d'identité avec votre photo, comme votre permis de conduire, votre passeport ou votre carte d'identité en fichier .jpg, .jpeg ou .png.",
+        front: 'Recto',
+        back: 'Verso',
+        frontIdText: "Montrez le recto de votre pièce d'identité",
+        backIdText: "Ajoutez le verso de votre pièce d'identité",
+        addFront: 'Recto',
+        addBack: 'Verso',
+        done: 'Terminé'
     }
 }
 

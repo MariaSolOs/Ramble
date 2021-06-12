@@ -33,10 +33,15 @@ module.exports = gql`
             birthday: String, 
             email: String, 
             password: String,
-            phoneNumber: String,
             photo: String,
+            phoneNumber: String,
             city: String
         ): User
+
+        signUpCreator(
+            bio: String!,
+            governmentIds: [String!]!
+        ): Creator
 
         saveExperience(experienceId: String!): MutationResponse
 

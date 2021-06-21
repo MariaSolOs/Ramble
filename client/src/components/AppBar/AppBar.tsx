@@ -20,7 +20,7 @@ const AppBar: React.FC = ({ children }) => {
         <MUIAppBar 
         position="fixed" 
         classes={{ 
-            root: `${classes.root} ${isScrolled && 'scrolled'}`
+            root: `${classes.root} ${isScrolled && classes.scrolled}`
         }}>
             <Toolbar>
                 <Link to="/" className={classes.link}>

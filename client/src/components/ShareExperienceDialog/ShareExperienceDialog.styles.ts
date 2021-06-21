@@ -73,7 +73,8 @@ const styles = (theme: Theme) => createStyles({
     shareLink: {
         maxWidth: 'calc(65% - 14px)',
         overflowX: 'hidden',
-        fontWeight: 400
+        fontWeight: 400,
+        whiteSpace: 'nowrap'
     },
 
     copyButton: {

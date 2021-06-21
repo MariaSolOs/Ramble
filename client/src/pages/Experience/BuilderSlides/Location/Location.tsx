@@ -98,6 +98,7 @@ const Location = (props: Props) => {
             <Subtitle className={classes.subtitle}>{text.cityQuestion}</Subtitle>
             <Autocomplete 
             className={classes.locationAutocomplete}
+            paperclass={classes.autocompletePaper}
             options={props.storedLocations}
             value={location}
             freeSolo

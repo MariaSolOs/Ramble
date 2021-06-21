@@ -61,22 +61,22 @@ const CreateExperience = () => {
 
     useEffect(() => {
         // Start animation on mounting
-        // setAnimationIn(false);
+        setAnimationIn(false);
         // TODO: Put the animation back in
-        setAnimationIn(true);
+        // setAnimationIn(true);
 
         // After 2 seconds start fade out
         const animationStartTimer = setTimeout(() => {
             setAnimationIn(false);
         }, 2000);
         // After 3 seconds, hide the animation slide
-        const animationDoneTimer = setTimeout(() => {
+        // const animationDoneTimer = setTimeout(() => {
             setAnimationDone(true);
-        }, 3000);
+        // }, 3000);
 
         return () => {
             clearTimeout(animationStartTimer);
-            clearTimeout(animationDoneTimer);
+            // clearTimeout(animationDoneTimer);
         }
      }, []);
 
@@ -189,7 +189,9 @@ const CreateExperience = () => {
                         onSlideComplete={handleFieldValidity} />
                     </Route>
                     <Route path={`${path}/capacity`}>
-                        <Slides.Capacity />
+                        <Slides.Capacity
+                        capacity={state.form.capacity}
+                        onSlideComplete={handleFieldValidity} />
                     </Route>
                 </Switch>
             </Layout>

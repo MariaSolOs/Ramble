@@ -10,13 +10,18 @@ const styles = (theme: Theme) => createStyles({
         transition: 'opacity 600ms',
         zIndex: 50,
 
-        [theme.breakpoints.down('xs')]: { height: 71 },
-
-        '&.scrolled': {
-            opacity: 0,
-            pointerEvents: 'none',
-            transition: 'opacity 600ms'
+        [theme.breakpoints.down('xs')]: { 
+            height: 71,
+            '& .MuiToolbar-gutters': {
+                paddingLeft: '2.5vw'
+            }
         }
+    },
+
+    scrolled: {
+        opacity: 0,
+        pointerEvents: 'none',
+        transition: 'opacity 600ms'
     },
 
     link: { textDecoration: 'none' },
@@ -26,7 +31,7 @@ const styles = (theme: Theme) => createStyles({
         cursor: 'pointer',
 
         [theme.breakpoints.down('xs')]: {
-            transform: 'scale(0.85)'
+            width: 120
         }
     }
 });

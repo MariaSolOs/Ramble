@@ -8,7 +8,10 @@ const styles = (theme: Theme) => createStyles({
         paddingTop: 100,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#000'
+        backgroundColor: '#000',
+        boxSizing: 'border-box',
+
+        [theme.breakpoints.down('xs')]: { paddingTop: 80 }
     },
 
     footer: {
@@ -16,9 +19,7 @@ const styles = (theme: Theme) => createStyles({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 55,
-        
-        [theme.breakpoints.down('xs')]: { height: 45 }
+        height: 55
     },
     
     footerButtons: {
@@ -36,7 +37,7 @@ const styles = (theme: Theme) => createStyles({
         fontSize: 14,
 
         [theme.breakpoints.down('xs')]: { 
-            height: 30,
+            height: 35,
             width: 75,
             fontSize: 12
         }
@@ -127,9 +128,7 @@ const styles = (theme: Theme) => createStyles({
 
     navbarButton: {
         color: '#FFF',
-        width: 30,
-
-        [theme.breakpoints.down('xs')]: { width: 22 }
+        width: 30
     },
 
     navbarDrawer: {

@@ -1,12 +1,22 @@
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
 
 import { useLanguageContext } from 'context/languageContext';
 
-const Capacity = () => {
+type Props = {
+    capacity: number;
+    onSlideComplete: (canContinue: boolean) => void;
+}
+
+const Capacity = (props: Props) => {
     const { BuilderSlides_Capacity: text } = useLanguageContext().appText;
+
+    const { capacity, onSlideComplete } = props;
+    useEffect(() => {
+        onSlideComplete(capacity >= 1);
+    }, [capacity, onSlideComplete]);
 
     return (
         <>

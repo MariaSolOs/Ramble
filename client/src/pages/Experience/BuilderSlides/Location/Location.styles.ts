@@ -67,6 +67,24 @@ const styles = (theme: Theme) => createStyles({
         '& .MuiInputBase-root': { borderRadius: 4 }
     },
 
+    autocompletePaper: {
+        fontSize: '0.85rem',
+        maxHeight: 200,
+        overflowY: 'scroll',
+
+        [theme.breakpoints.down('xs')]: { 
+            maxHeight: 150,
+            '& .MuiAutocomplete-listbox': {
+                maxHeight: '100%',
+                padding: 0
+            },
+            '& .MuiAutocomplete-option': {
+                minHeight: 0,
+                padding: '8px 0 6px 10px'
+            }
+        },
+    },
+
     locationInfoContainer: { 
         marginTop: 50,
         [theme.breakpoints.down('xs')]: { marginTop: 35 }
@@ -90,7 +108,7 @@ const styles = (theme: Theme) => createStyles({
         borderRadius: '1rem',
         marginBottom: 15,
 
-        '&::placeholder': { fontSize: '0.8rem' },
+        [theme.breakpoints.down('xs')]: { fontSize: '0.9rem' },
 
         '& .MuiSvgIcon-root': { fill: '#929293' }
     },

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
 
 import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
@@ -11,6 +10,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import StripeMessage from './StripeMessage';
 import Spinner from 'components/Spinner/Spinner';
 import Dropzone from 'components/Dropzone/Dropzone';
 import TextField from 'components/TextField/TextField';
@@ -61,6 +61,10 @@ type SignUpCreatorVariables = {
     governmentIds: string[];
 }
 
+type SignUpCreatorDetails = {
+    _id: string;
+}
+
 type EditUserVariables = {
     phoneNumber?: string; 
     photo?: string;
@@ -83,7 +87,6 @@ const CreatorForm = () => {
     const { CreatorForm: text } = useLanguageContext().appText;
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const history = useHistory();
 
     const [profilePic, setProfilePic] = useState<PreviewableFile>(null);
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -98,25 +101,23 @@ const CreatorForm = () => {
             setPhoneNumber(me.phoneNumber || '');
         }
     });
-    const [editUser] = useMutation<{ editUser: EditUserDetails }, EditUserVariables>(EDIT_USER, {
+    const [
+        editUser, 
+        { loading: editUserLoading }
+    ] = useMutation<{ editUser: EditUserDetails }, EditUserVariables>(EDIT_USER, {
         onError: () => {
             dispatch(openErrorDialog({ message: "We couldn't update your profile..." }));
         },
         onCompleted: ({ editUser }) => {
-            dispatch(updateUIProfile({
-                isCreator: true,
-                photo: editUser.photo
-            }));
+            dispatch(updateUIProfile({ photo: editUser.photo }));
         }
     });
-    const [signUpCreator] = useMutation<any, SignUpCreatorVariables>(SIGN_UP_CREATOR, {
+    const [
+        signUpCreator,
+        { data: creatorData }
+    ] = useMutation<{ signUpCreator: SignUpCreatorDetails}, SignUpCreatorVariables>(SIGN_UP_CREATOR, {
         onError: () => {
             dispatch(openErrorDialog({ message: "We couldn't create your creator profile..." }));
-        },
-        onCompleted: () => {
-            dispatch(updateUIProfile({ isCreator: true }));
-            // Go to experience creation
-            history.push('/experience/new');
         }
     });
 
@@ -132,6 +133,7 @@ const CreatorForm = () => {
         // Check if phone number is valid
         if (!VALID_PHONE_NUMBER_REG.test(phoneNumber)) {
             setPhoneError(true);
+            setUploading(false);
             return;
         }
 
@@ -202,8 +204,21 @@ const CreatorForm = () => {
         }
     }, [profilePic, frontId, backId]);
 
+    // Stop the spinner when both mutations are completed
+    useEffect(() => {
+        if (creatorData && !editUserLoading) {
+            // Stop the spinner
+            setUploading(false);
+        }
+    }, [creatorData, editUserLoading]);
+
     if (loading || !data) {
-        return <Spinner />;
+        return <Spinner />; 
+    }
+
+    // When the form was successfully submitted, start Stripe onboarding
+    if (creatorData && !editUserLoading) {
+        return <StripeMessage creatorId={creatorData.signUpCreator._id} />;
     }
 
     return (
@@ -347,7 +362,13 @@ const CreatorForm = () => {
                 type="submit" 
                 variant="creator" 
                 className={classes.doneButton}
-                disabled={(bio.length === 0) || (phoneNumber.length === 0) || !frontId || !backId}>
+                disabled={
+                    (!data.me.photo && !profilePic) ||
+                    (bio.length === 0) || 
+                    (phoneNumber.length === 0) || 
+                    !frontId || 
+                    !backId
+                }>
                     {text.done}
                 </Button>
             </div>

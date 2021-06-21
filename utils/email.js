@@ -7,7 +7,7 @@ const { compile } = require('handlebars');
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
+// TODO: Translate emails
 exports.sendPasswordResetEmail = async (userId, emailAddress) => {
     const source = fs.readFileSync(path.resolve(__dirname, '../emailTemplates/passwordReset.mjml'), 'utf-8');              
     const template = compile(source);

@@ -37,13 +37,19 @@ exports.userReducer = user => ({
     phoneNumber: user.phoneNumber,
     photo: user.photo,
     city: user.city,
-    savedExperiences: user.savedExperiences.map(this.experienceReducer),
-    bookedExperiences: user.bookedExperiences.map(this.experienceReducer),
+    savedExperiences: user.savedExperiences,
+    bookedExperiences: user.bookedExperiences,
     creator: user.creator
 });
 
-exports.creatorReducer = creator => ({
-    _id: creator._id,
-    bio: creator.bio,
-    user: this.userReducer(creator.user)
-});
+exports.creatorReducer = creator => {
+    return creator ? {
+        _id: creator._id,
+        bio: creator.bio,
+        user: creator.user,
+        stripeProfile: {
+            onboarded: creator.stripe ? creator.stripe.onboarded : false,
+            accountId: creator.stripe ? creator.stripe.accountId : ''
+        }
+    } : { _id: '' };
+}

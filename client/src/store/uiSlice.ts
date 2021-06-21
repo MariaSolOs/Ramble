@@ -5,15 +5,17 @@ interface UiState {
     showSignUpDialog: boolean;
     showLogInDialog: boolean;
     errorMessage: string;
+    snackbarMessage: string;
 }
 
 const initialState: UiState = {
     showSignUpDialog: false,
     showLogInDialog: false,
-    errorMessage: ''
+    errorMessage: '',
+    snackbarMessage: ''
 }
 
-type OpenErrorDialogPayload = { message: string }
+type MessagePayload = { message: string }
 
 const uiSlice = createSlice({
     name: 'ui',
@@ -33,11 +35,17 @@ const uiSlice = createSlice({
         closeLogInDialog: state => {
             state.showLogInDialog = false;
         },
-        openErrorDialog: (state, { payload }: PayloadAction<OpenErrorDialogPayload>) => {
+        openErrorDialog: (state, { payload }: PayloadAction<MessagePayload>) => {
             state.errorMessage = payload.message;
         },
         closeErrorDialog: state => {
             state.errorMessage = '';
+        },
+        openSnackbar: (state, { payload }: PayloadAction<MessagePayload>) => {
+            state.snackbarMessage = payload.message;
+        },
+        closeSnackbar: state => {
+            state.snackbarMessage = '';
         }
     }
 });
@@ -48,7 +56,9 @@ export const {
     openLogInDialog,
     closeLogInDialog,
     openErrorDialog,
-    closeErrorDialog
+    closeErrorDialog,
+    openSnackbar,
+    closeSnackbar
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -1,9 +1,11 @@
 import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
 
-const styles = () => createStyles({
+const styles = (theme: Theme) => createStyles({
     root: {
         color: '#CDCDCD',
-        fontSize: '0.95rem'
+        fontSize: '0.95rem',
+        fontWeight: theme.typography.fontWeightRegular
     },
 
     icon: {

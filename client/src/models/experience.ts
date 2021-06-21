@@ -1,4 +1,30 @@
-export type Category = 'taste' | 'create' | 'relax' | 'learn' | 'move';
+export const EXPERIENCE_CATEGORIES = [
+    'taste',
+    'create',
+    'relax',
+    'learn',
+    'move'
+];
+export type Category = typeof EXPERIENCE_CATEGORIES[number];
+
+// The following are ordered as displayed on the creation navbar
+export const CREATION_STEPS = [
+    'location',
+    'title',
+    'category',
+    'planning',
+    'duration',
+    'language',
+    'capacity',
+    'age',
+    'preview', 
+    'included',
+    'toBring',
+    'price',
+    'availabilities',
+    'review'
+] as const;
+export type CreationStep = typeof CREATION_STEPS[number];
 
 export type ExperienceCard = {
     _id: string;

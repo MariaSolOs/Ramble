@@ -82,7 +82,8 @@ const ViewExperience = () => {
                 photo: creator.user.photo,
                 bio: creator.bio
             });
-        }
+        },
+        onError: (error) => console.log(error)
     });
 
     /* If applicable, remove the temporary token and authenticate the user

@@ -14,7 +14,8 @@ const frenchTranslation: TranslationRecord = {
     Navbar: {
         signUp: "M'inscrire",
         logIn: 'Connexion',
-        becomeCreator: 'Devenir un Créateur'
+        becomeCreator: 'Devenir un Créateur',
+        creatorDashboard: 'Tableau de bord'
     },
 
     ProfileMenu: {
@@ -161,6 +162,105 @@ const frenchTranslation: TranslationRecord = {
         addFront: 'Recto',
         addBack: 'Verso',
         done: 'Terminé'
+    },
+
+    CreatorForm_StripeMessage: {
+        formSubmittedMessage: "Votre formulaire a été soumis. Il ne vous reste plus qu'à choisir la manière dont vous souhaitez recevoir vos paiements.",
+        stripeMessage: 'Afin de protéger vos informations, tous les paiements sont traités par Stripe.',
+        continueWithStripe: 'Continuer avec Stripe'
+    },
+
+    StripeRedirect: {
+        onboardingMessage: 'Vous y êtes presque! Avant de débuter, nous avons besoin que vous configuriez vos informations de paiement avec Stripe.',
+        help: "Si vous avez besoin d'aide, faites-le nous savoir!",
+        continueWithStripe: 'Continuer avec Stripe'
+    },
+
+    CreateExperience: {
+        animationTitle1: 'Tout comme vous.',
+        animationTitle2: 'Nous voulons créer de moments inoubliables.',
+    },
+    
+    CreateExperience_Layout: {
+        back: 'Retour',
+        next: 'Suivant',
+        location: 'Localisation',
+        title: 'Titre',
+        category: 'Catégorie',
+        planning: 'Ce que vous ferez',
+        duration: 'Durée',
+        language: 'Langue',
+        capacity: 'Capacité',
+        age: 'Âge requis',
+        preview: 'Aperçu',
+        included: 'Ce qui est inclus',
+        toBring: 'Quoi emporter',
+        price: 'Prix',
+        availabilities: 'Disponibilités',
+        review: 'Reviser & soumettre'
+    },
+
+    BuilderSlides_Location: {
+        experienceTypeQuestion: "Quel genre d'expérience allez vous animer?",
+        online: 'En ligne',
+        onlineOption: 'Animez votre expérience à travers Zoom',
+        inPerson: 'En personne',
+        inPersonOption: 'Rencontrez vos invités en personne',
+        locationTitle: 'Localisation',
+        cityQuestion: 'Dans quelle ville est-ce que votre expérience aura lieu?',
+        meetingPoint: 'Point de rencontre',
+        meetingPointQuestion: 'Où exactement allez-vous rencontrer vos invités?',
+        accessTip: 'Choisissez un endroit facilement accessible.',
+        sharedInfoRemark: "Cette information ne sera partagée qu'après la réservation.",
+        zoomPMI: 'ZOOM NUMÉRO DE RÉUNION',
+        zoomPassword: 'MOT DE PASSE POUR LA RÉUNION',
+        zoomPMIHelp: "Pour obtenir de l'aide, consultez les",
+        zoomPasswordHelp: "Pour obtenir de l'aide, consultez les",
+        zoomDocs: 'Zoom docs'
+    },
+
+    BuilderSlides_Title: {
+        title: 'Titre',
+        subtitle: 'Donnez un titre attirant à votre expérience.',
+        tip: 'Optez pour quelque chose de concis et excitant.'
+    },
+
+    BuilderSlides_Category: {
+        title: 'Catégorie',
+        of: 'sur',
+        question1: 'À quelle catégorie est-ce que votre expérience correspond le mieux?',
+        question2: 'Quelle autre catégorie correspond à votre expérience?',
+        tip: 'Ajoutez une deuxième catégorie pour donner une touche unique à votre expérience.'
+    },
+
+    BuilderSlides_Planning: {
+        title: 'Ce que vous ferez',
+        subtitle: "Fournissez un résumé détaillé de votre expérience. Cette description sera affichée sur la page de l'expérience.",
+        textfieldLabel: 'Décrivez votre expérience'
+    },
+
+    BuilderSlides_Duration: {
+        title: 'Durée',
+        subtitle: 'Quelle est la durée de votre expérience?',
+        tip: 'La plupart des expériences durent entre 1 à 3 heures.',
+        hour: 'heure',
+        hours: 'heures',
+        halfHour: 'et 30 minutes'
+    },
+
+    BuilderSlides_Language: {
+        title: 'Langue',
+        subtitle: 'Dans quelle langue allez-vous interagir avec vos invités?',
+        tip: 'Vous devriez animer votre expérience dans une langue que vous maitrisez parfaitement.',
+        maxLanguagesMessage: "Vous pouvez choisir jusqu'à trois langues."    
+    },
+
+    BuilderSlides_Capacity: {
+        title: 'Capacité',
+        subtitle: 'Établissez un nombre maximal de participants.',
+        tip: "Considérez la nature de votre expérience. Certaines expériences nécessitent une certaine intimité alors que d'autres fonctionnent mieux avec un plus grand groupe.",
+        people: 'Personnes',
+        person: 'Personne'
     }
 }
 

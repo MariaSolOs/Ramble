@@ -5,9 +5,23 @@ const { Experience, User, Creator } = require('../models');
 
 module.exports = {
     Experience: {
-        creator: (exp) => {
-            return Creator.findById(exp.creator).then(creatorReducer);
+        creator: (exp) => Creator.findById(exp.creator).then(creatorReducer)
+    },
+
+    User: {
+        creator: (user) => Creator.findById(user.creator).then(creatorReducer),
+        savedExperiences: (user) => {
+            return Experience.find({ _id: { $in: user.savedExperiences } })
+            .then(exps => exps.map(experienceReducer));
+        },
+        bookedExperiences: (user) => {
+            return Experience.find({ _id: { $in: user.bookedExperiences } })
+            .then(exps => exps.map(experienceReducer));
         }
+    },
+
+    Creator: {
+        user: (creator) => User.findById(creator.user).then(userReducer)
     },
 
     Query: {
@@ -46,7 +60,6 @@ module.exports = {
 
         experience: async (_, { id }) => {
             const exp = await Experience.findById(id);
-
             return experienceReducer(exp);
         }
     },
@@ -67,8 +80,6 @@ module.exports = {
             });
             newUser = userReducer(newUser);
             newUser.token = generateToken(newUser._id, '1d');
-            // The user doesn't have a creator account, so creator will be null.
-            newUser.creator = { _id: '' }
 
             return newUser;
         },
@@ -117,7 +128,8 @@ module.exports = {
                 user: userId,
                 bio,
                 verified: false,
-                governmentIds
+                governmentIds,
+                stripe: { onboarded: false }
             });
 
             await User.findByIdAndUpdate(userId, {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useLanguageContext } from 'context/languageContext';
 import type { Category } from 'models/experience';
 
@@ -49,6 +51,9 @@ type Props = {
     category: Category;
     iconLocation: 'top' | 'left';
     boxClass?: string;
+    iconClass?: string;
+    titleClass?: string;
+    divProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 export type StyleProps = {
@@ -72,10 +77,13 @@ const CategoryBox = (props: Props) => {
     });
 
     return (
-        <div className={`${classes.root} ${props.boxClass}`}>
+        <div className={`${classes.root} ${props.boxClass}`} { ...props.divProps }>
             <div className={classes.content}>
-                <img src={category.icon} alt={category.title} className={classes.icon} />
-                <span className={classes.title}>
+                <img 
+                src={category.icon} 
+                alt={category.title} 
+                className={`${classes.icon} ${props.iconClass}`} />
+                <span className={`${classes.title} ${props.titleClass}`}>
                     {category.title}
                 </span>
             </div>

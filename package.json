@@ -30,8 +30,8 @@
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.9.3",
     "mongoose": "^5.12.13",
-    "mongoose-autopopulate": "^0.14.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "stripe": "^8.154.0"
   },
   "engines": {
     "node": "14.17.0"

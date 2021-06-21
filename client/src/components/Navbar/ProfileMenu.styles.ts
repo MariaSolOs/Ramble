@@ -14,6 +14,7 @@ const styles = (theme: Theme) => createStyles({
         alignItems: 'center',
         cursor: 'pointer',
         border: props => props.isCreator ? 'solid 1px black' : 'none',
+        '&:focus-visible': { outline: 'none' },
 
         [theme.breakpoints.down('xs')]: { height: 40 }
     },

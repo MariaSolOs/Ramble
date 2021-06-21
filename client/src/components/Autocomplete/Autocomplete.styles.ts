@@ -11,7 +11,7 @@ const styles = (theme: Theme) => createStyles({
         fontSize: '0.9rem',
         letterSpacing: '-0.05rem',
 
-        '& li:hover': { 
+        '& li:hover': {
             color: '#FFF',
             transition: 'all 200ms ease-in-out'
         }

@@ -23,12 +23,10 @@ const styles = (_: Theme) => createStyles({
     icon: {
         width: 25, 
         height: 25,
-        marginRight: 4
+        marginRight: props => props.iconLocation === 'left' ? 4 : 0
     },
 
-    title: {
-        textAlign: 'center'
-    }
+    title: { textAlign: 'center' }
 });
 
 export default styles;

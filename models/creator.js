@@ -4,29 +4,34 @@ const CreatorSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        autopopulate: true
     },
+
+    // True if we verified their government ID
     verified: {
         type: Boolean,
         required: true
     },
+
     governmentIds: {
         type: [String],
         required: true
     },
+
     bio: {
         type: String,
         required: true
     },
+
     stripe: {
         accountId: String,
+        // True if they completed Stripe's onboarding
+        onboarded: Boolean
     },
+
     bookingRequests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Booking'
     }]
 });
-
-CreatorSchema.plugin(require('mongoose-autopopulate'));
   
 module.exports = mongoose.model('Creator', CreatorSchema);

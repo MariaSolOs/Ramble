@@ -88,7 +88,7 @@ module.exports = gql`
     }
 
     type User {
-        _id: ID!
+        _id: ID
         token: String!
         firstName: String
         lastName: String
@@ -103,8 +103,14 @@ module.exports = gql`
     }
 
     type Creator {
-        _id: ID!
+        _id: ID
         user: User!
         bio: String
+        stripeProfile: StripeInfo
+    }
+
+    type StripeInfo {
+        onboarded: Boolean
+        accountId: String
     }
 `;

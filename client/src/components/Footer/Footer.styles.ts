@@ -55,7 +55,7 @@ const styles = (theme: Theme) => createStyles({
         color: '#C0BFBA',
         fontSize: '1.8rem',
         marginRight: 10,
-        transition: 'all 150ms ease-in-out'
+        transition: 'all 300ms ease-in-out'
     },
 
     facebookIcon: {

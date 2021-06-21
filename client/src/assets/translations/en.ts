@@ -14,7 +14,8 @@ const englishTranslation: TranslationRecord = {
     Navbar: {
         signUp: 'Sign up',
         logIn: 'Log in',
-        becomeCreator: 'Become a Creator'
+        becomeCreator: 'Become a Creator',
+        creatorDashboard: 'Creator dashboard'
     },
 
     ProfileMenu: {
@@ -161,6 +162,105 @@ const englishTranslation: TranslationRecord = {
         addFront: 'Add front',
         addBack: 'Add back',
         done: 'Done'
+    },
+
+    CreatorForm_StripeMessage: {
+        formSubmittedMessage: 'Your form was submitted. All you have left to do is choose the way you want to receive your payments.',
+        stripeMessage: 'In order to keep your information secure, all payments are handled and processed by Stripe.',
+        continueWithStripe: 'Continue with Stripe'
+    },
+
+    StripeRedirect: {
+        onboardingMessage: 'You’re almost there! Before you start creating, we need you to set up your payment information with Stripe.',
+        help: 'If you need help, please let us know!',
+        continueWithStripe: 'Continue with Stripe'
+    },
+
+    CreateExperience: {
+        animationTitle1: 'Just like you.',
+        animationTitle2: "We're all about creating special moments.",
+    },
+    
+    CreateExperience_Layout: {
+        back: 'Back',
+        next: 'Next',
+        location: 'Location',
+        title: 'Title',
+        category: 'Category',
+        planning: 'Planning',
+        duration: 'Duration',
+        language: 'Language',
+        capacity: 'Capacity',
+        age: 'Required age',
+        preview: 'Preview',
+        included: "What's included",
+        toBring: 'What to bring',
+        price: 'Pricing',
+        availabilities: 'Availabilities',
+        review: 'Review and submit'
+    },
+
+    BuilderSlides_Location: {
+        experienceTypeQuestion: 'What type of experience are you hosting?',
+        online: 'Online',
+        onlineOption: 'Host your experience via Zoom',
+        inPerson: 'In person',
+        inPersonOption: 'Meet your guests in person',
+        locationTitle: 'Location',
+        cityQuestion: 'In which city will your experience take place?',
+        meetingPoint: 'Meeting point', 
+        meetingPointQuestion: 'Where exactly will you meet your guests?',
+        accessTip: 'Choose an easily accessible location.',
+        sharedInfoRemark: 'This information will be shared with guests only after booking.',
+        zoomPMI: 'ZOOM MEETING PERSONAL ID (PMI)',
+        zoomPassword: 'MEETING PASSWORD',
+        zoomPMIHelp: 'For help on setting your PMI, check the',
+        zoomPasswordHelp: 'For help on managing your password, check the',
+        zoomDocs: 'Zoom docs',
+    },
+
+    BuilderSlides_Title: {
+        title: 'Title',
+        subtitle: 'Give your experience a compelling title.',
+        tip: 'Try keeping it short and exciting.'
+    },
+
+    BuilderSlides_Category: {
+        title: 'Category',
+        of: 'of',
+        question1: 'Which category would you say your experience fits the most?',
+        question2: 'Which other category would your experience fit in?',
+        tip: 'Add a second category to give a unique touch to your experience.'
+    },
+
+    BuilderSlides_Planning: {
+        title: 'Planning',
+        subtitle: 'Please provide a precise summary of your experience. This description will be displayed on the experience page.',
+        textfieldLabel: 'Describe your experience'
+    },
+
+    BuilderSlides_Duration: {
+        title: 'Duration', 
+        subtitle: 'How long is your experience?',
+        tip: 'Most experiences are between 1 to 3 hours.',
+        hour: 'hour',
+        hours: 'hours',
+        halfHour: 'and 30 minutes'
+    },
+
+    BuilderSlides_Language: {
+        title: 'Language',
+        subtitle: 'In which language will you interact with your guests?',
+        tip: 'You should host your experience in a language you speak fluently.',
+        maxLanguagesMessage: 'You can pick a maximum of 3 languages.'
+    },
+
+    BuilderSlides_Capacity: {
+        title: 'Capacity', 
+        subtitle: 'Set a maximum number of guests for your experience.',
+        tip: 'Consider the nature of your experience. Some experiences require a certain intimacy and others work better with a bigger group.',
+        people: 'People',
+        person: 'Person'
     }
 }
 

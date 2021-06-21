@@ -36,6 +36,8 @@ const ProfileMenu = (props: Props) => {
     const logout = () => {
         sessionStorage.removeItem('ramble-token');
         localStorage.removeItem('ramble-token');
+        localStorage.removeItem('ramble-redirect_page_token');
+        closeMenu();
         props.onLogout();
     }
 
@@ -74,6 +76,7 @@ const ProfileMenu = (props: Props) => {
             }}>
                 <MenuItem
                 component={NavLink}
+                onClick={closeMenu}
                 to="/"
                 className={classes.link}>
                     {text.profile}
@@ -81,7 +84,8 @@ const ProfileMenu = (props: Props) => {
                 {props.isCreator &&
                     <MenuItem
                     component={NavLink}
-                    to="/"
+                    onClick={closeMenu}
+                    to="/experience/new"
                     className={classes.link}>
                         {text.newExperience}
                     </MenuItem>}

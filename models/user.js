@@ -34,18 +34,15 @@ const UserSchema = new mongoose.Schema({
     },
     savedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Experience',
-        autopopulate: true
+        ref: 'Experience'
     }],
     bookedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Experience',
-        autopopulate: true
+        ref: 'Experience'
     }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Creator',
-        autopopulate: true
+        ref: 'Creator'
     },
     promoCode: {
         code: {
@@ -68,8 +65,6 @@ const UserSchema = new mongoose.Schema({
         default: new Date()
     }
 });
-
-UserSchema.plugin(require('mongoose-autopopulate'));
 
 UserSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.passwordHash);

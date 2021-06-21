@@ -28,16 +28,9 @@ const BecomeACreator = () => {
 
     const dispatch = useAppDispatch();
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
-    const isCreator = useAppSelector(state => state.user.isCreator);
 
     const [creatorSlide, setCreatorSlide] = useState(0);
     const creator = creatorBios[creatorSlide];
-
-    const handleGetStartedClick = () => {
-        isLoggedIn ? 
-            isCreator ? history.push('/experience/new') : history.push('/creator/join')
-            : dispatch(openSignUpDialog());
-    }
 
     return (
         <>
@@ -49,7 +42,9 @@ const BecomeACreator = () => {
                     <Button 
                     className={classes.getStartedButton} 
                     variant="creator"
-                    onClick={handleGetStartedClick}>
+                    onClick={() => {
+                        isLoggedIn ? history.push('/creator/join') : dispatch(openSignUpDialog());
+                    }}>
                         {text.getStarted}
                     </Button>
                 </div>

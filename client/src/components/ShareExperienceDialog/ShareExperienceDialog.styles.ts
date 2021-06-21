@@ -66,13 +66,12 @@ const styles = (theme: Theme) => createStyles({
 
     shareButton: {
         width: '100%',
-        justifyContent: 'space-between',
         cursor: 'default',
         padding: '0 7px'
     },
 
     shareLink: {
-        maxWidth: 'calc(65%)',
+        maxWidth: 'calc(65% - 14px)',
         overflowX: 'hidden',
         fontWeight: 400
     },
@@ -84,7 +83,7 @@ const styles = (theme: Theme) => createStyles({
         borderRadius: '0.6rem',
         height: '80%',
         width: '22%',
-        marginLeft: '3%',
+        margin: '0 0 0 auto',
         fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         letterSpacing: '-0.04rem',

@@ -80,9 +80,9 @@ const Navbar = () => {
                     }}>
                         <MenuItem
                         component={Link}
-                        to="/creator/become"
+                        to={isCreator ? '/creator/dashboard' : '/creator/become'}
                         onClick={closeMenu}>
-                            {text.becomeCreator}
+                            {isCreator ? text.creatorDashboard : text.becomeCreator}
                         </MenuItem>
                         {isLoggedIn ? 
                             <MenuItem className={classes.profileButton}>
@@ -110,9 +110,9 @@ const Navbar = () => {
                 </div>
                 <div className={classes.expandedLinks}>
                     <Link
-                    to="/creator/become"
+                    to={isCreator ? '/creator/dashboard' : '/creator/become'}
                     className={`${classes.navLink} ${classes.whiteNavLink}`}>
-                        {text.becomeCreator}
+                        {isCreator ? text.creatorDashboard : text.becomeCreator}
                     </Link>
                     {isLoggedIn ? 
                         profileMenu : 

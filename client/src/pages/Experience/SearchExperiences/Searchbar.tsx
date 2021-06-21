@@ -46,7 +46,6 @@ const Searchbar = (props: Props) => {
                 value={props.location}
                 loading={props.locationList.length === 0}
                 options={['Online', ...props.locationList]}
-                getOptionSelected={(option, value) => option.value === value.value}
                 onChange={(_, value, reason) => {
                     if (reason === 'select-option') {
                         props.onLocationChange(value);

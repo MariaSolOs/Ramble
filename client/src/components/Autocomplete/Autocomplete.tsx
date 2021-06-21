@@ -10,6 +10,7 @@ const useStyles = makeStyles(styles);
 interface Props extends Omit<AutocompleteProps<any, any, any, any>, 'renderInput'> {
     textfieldprops?: Partial<StandardTextFieldProps>;
     inputprops?: Partial<InputBaseProps>;
+    paperclass?: string;
 }
 
 const Autocomplete = (props: Props) => {
@@ -17,7 +18,8 @@ const Autocomplete = (props: Props) => {
 
     return (
         <MUIAutocomplete
-        classes={{ paper: classes.paper }}
+        classes={{ paper: `${classes.paper} ${props.paperclass}` }}
+        getOptionSelected={(option, value) => option.value === value.value}
         renderInput={params => (
             <TextField 
             { ...params }

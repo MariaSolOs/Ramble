@@ -1,0 +1,157 @@
+import { createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+
+import type { StyleProps } from './Layout';
+
+const styles = (theme: Theme) => createStyles({
+    root: {
+        paddingTop: 100,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#000'
+    },
+
+    footer: {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 55,
+        
+        [theme.breakpoints.down('xs')]: { height: 45 }
+    },
+    
+    footerButtons: {
+        backgroundColor: '#1C1C1C',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        height: 'calc(100% - 6px)'
+    },
+
+    footerButton: {
+        borderRadius: 8,
+        height: 35,
+        width: 90,
+        fontSize: 14,
+
+        [theme.breakpoints.down('xs')]: { 
+            height: 30,
+            width: 75,
+            fontSize: 12
+        }
+    },
+
+    nextButton: { 
+        margin: '0 10px',
+        '&:disabled': { filter: 'brightness(40%)' }
+    },
+
+    backButton: {
+        background: 'radial-gradient(circle at 96%, #2E2E2E, #6F6F6F)',
+        fontFamily: theme.typography.fontFamily,
+        fontWeight: theme.typography.fontWeightBold,
+        letterSpacing: '-0.05rem',
+        color: '#FFF',
+        border: 'none',
+        cursor: 'pointer',
+        '&:focus': { outline: 'none' }
+    },
+
+    progress: {
+        height: 6,
+        '& .MuiLinearProgress-barColorPrimary': {
+            background: (props: StyleProps) =>
+             `linear-gradient(to right, #2BB282 ${100 - props.progressValue}%, #2D73EA 100%)`,
+            borderRadius: '1rem'
+        },
+        '&.MuiLinearProgress-colorPrimary': {
+            backgroundColor: 'transparent'
+        }
+    },
+
+    pageContainer: {
+        display: 'flex'
+    },
+
+    navbar: {
+        listStyle: 'none',
+        padding: 0,
+        width: 'fit-content',
+        margin: '0 20px'
+    },
+
+    navLink: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '1.1rem',
+        margin: '0 0 8px',
+        textIndent: 30,
+        cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        [theme.breakpoints.down('xs')]: { 
+            fontSize: '1rem',
+            margin: '0 0 10px' 
+        }
+    },
+
+    inactiveNavLink: {
+        opacity: 0.55,
+        cursor: 'default'
+    },
+
+    checkIconContainer: {
+        background: 'linear-gradient(to right, #2BB282 0%, #2D73EA 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 20,
+        height: 20,
+        marginRight: 10,
+        borderRadius: '50%'
+    },
+
+    checkIcon: {
+        color: '#FFF',
+        fontSize: 18
+    },
+
+    navbarButtonContainer: {
+        margin: '0 auto 0 10px',
+        borderRadius: 4,
+        backgroundColor: '#757575',
+        cursor: 'pointer',
+        padding: '3px 3px 0',
+        boxSizing: 'border-box'
+    },
+
+    navbarButton: {
+        color: '#FFF',
+        width: 30,
+
+        [theme.breakpoints.down('xs')]: { width: 22 }
+    },
+
+    navbarDrawer: {
+        '& .MuiPaper-root': {
+            backgroundColor: 'transparent',
+            color: '#FFF',
+            justifyContent: 'center',
+            backdropFilter: 'blur(5px)'
+        },
+        
+        '& .MuiBackdrop-root': { backdropFilter: 'blur(5px)' }
+    },
+
+    pageContent: {
+        marginLeft: 80,
+        
+        [theme.breakpoints.down('sm')]: { marginLeft: 50 },
+        [theme.breakpoints.down('xs')]: {
+            margin: '0 auto',
+            width: '95vw'
+        }
+    }
+});
+
+export default styles;

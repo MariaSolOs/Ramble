@@ -9,6 +9,7 @@ export type Category = typeof EXPERIENCE_CATEGORIES[number];
 
 // The following are ordered as displayed on the creation navbar
 export const CREATION_STEPS = [
+    'setting',
     'location',
     'title',
     'category',

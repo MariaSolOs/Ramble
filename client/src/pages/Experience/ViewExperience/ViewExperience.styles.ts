@@ -5,7 +5,6 @@ const styles = (theme: Theme) => createStyles({
     experienceContainer: {
         height: 'calc(100vh - 100px)',
         marginTop: 100,
-        boxSizing: 'border-box',
         width: '100vw',
         backgroundColor: '#000',
         display: 'flex',

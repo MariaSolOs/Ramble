@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Div100vh from 'react-div-100vh';
 
 import { useLanguageContext } from 'context/languageContext';
 import { CREATION_STEPS } from 'models/experience';
@@ -32,7 +33,7 @@ const Layout: React.FC<Props> = (props) => {
     const { CreateExperience_Layout: text} = useLanguageContext().appText;
 
     // The linear progress bar takes a value between 0 and 100
-    const progressValue = props.stepsCompleted * 10;
+    const progressValue = (props.stepsCompleted / CREATION_STEPS.length) * 100;
     const classes = useStyles({ progressValue });
 
     // The navbar is in a drawer in mobile
@@ -76,50 +77,52 @@ const Layout: React.FC<Props> = (props) => {
     );
 
     return (
-        <div className={classes.root}>
-            <div className={classes.pageContainer}>
-                {isMobile ? 
-                    <Drawer 
-                    elevation={0}
-                    className={classes.navbarDrawer} 
-                    open={openDrawer} 
-                    onClose={collapseDrawer}>
-                        {navbar}
-                    </Drawer> : 
-                    <ul className={classes.navbar}>{navbar}</ul>}
-                <div className={classes.pageContent}>{props.children}</div>
-            </div>
-            <div className={classes.footer}>
-                <LinearProgress 
-                value={progressValue} 
-                variant="determinate" 
-                className={classes.progress} />
-                <div className={classes.footerButtons}>
-                    {isMobile && 
-                        <div 
-                        className={classes.navbarButtonContainer} 
-                        onClick={expandDrawer}>
-                            <img 
-                            src={MenuIcon} 
-                            alt="Drawer toggler" 
-                            className={classes.navbarButton} />
-                        </div>}
-                    {props.currentStepIdx > 0 &&
-                        <button 
-                        className={`${classes.footerButton} ${classes.backButton}`}
-                        onClick={props.onBack}>
-                            {text.back}
-                        </button>}
-                    <GradientButton 
-                    disabled={!props.canContinue}
-                    className={`${classes.footerButton} ${classes.nextButton}`} 
-                    variant="experience"
-                    onClick={props.onNext}>
-                        {text.next}
-                    </GradientButton>
+        <Div100vh>
+            <div className={classes.root}>
+                <div className={classes.pageContainer}>
+                    {isMobile ? 
+                        <Drawer 
+                        elevation={0}
+                        className={classes.navbarDrawer} 
+                        open={openDrawer} 
+                        onClose={collapseDrawer}>
+                            {navbar}
+                        </Drawer> : 
+                        <ul className={classes.navbar}>{navbar}</ul>}
+                    <div className={classes.pageContent}>{props.children}</div>
+                </div>
+                <div className={classes.footer}>
+                    <LinearProgress 
+                    value={progressValue} 
+                    variant="determinate" 
+                    className={classes.progress} />
+                    <div className={classes.footerButtons}>
+                        {isMobile && 
+                            <div 
+                            className={classes.navbarButtonContainer} 
+                            onClick={expandDrawer}>
+                                <img 
+                                src={MenuIcon} 
+                                alt="Drawer toggler" 
+                                className={classes.navbarButton} />
+                            </div>}
+                        {props.currentStepIdx > 0 &&
+                            <button 
+                            className={`${classes.footerButton} ${classes.backButton}`}
+                            onClick={props.onBack}>
+                                {text.back}
+                            </button>}
+                        <GradientButton 
+                        disabled={!props.canContinue}
+                        className={`${classes.footerButton} ${classes.nextButton}`} 
+                        variant="experience"
+                        onClick={props.onNext}>
+                            {text.next}
+                        </GradientButton>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Div100vh>
     );
 }
 

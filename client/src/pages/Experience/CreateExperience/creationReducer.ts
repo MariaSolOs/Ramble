@@ -2,6 +2,7 @@ import { useReducer, useCallback } from 'react';
 
 import { CREATION_STEPS } from 'models/experience';
 import type { CreationStep, Category } from 'models/experience';
+import type { PreviewableFile } from 'models/file';
 
 interface CreationState {
     currentStep: CreationStep;
@@ -22,8 +23,8 @@ interface CreationState {
         languages: string[];
         capacity: number;
         isAgeRestricted: boolean;
-        ageRequired?: number; 
-        images: [string, string, string, string];
+        ageRequired: number; 
+        images: [PreviewableFile, PreviewableFile, PreviewableFile, PreviewableFile];
         included: string[];
         toBring: string[];
         pricePerPerson: number;
@@ -54,7 +55,7 @@ export type NumberField =
 | 'privatePrice';
 
 const initialState: CreationState = {
-    currentStep: 'location',
+    currentStep: 'setting',
     currentStepIdx: 0,
     stepsCompleted: 0,
     canContinue: false,
@@ -70,7 +71,8 @@ const initialState: CreationState = {
         languages: [],
         capacity: 10,
         isAgeRestricted: false,
-        images: ['', '', '', ''],
+        ageRequired: 18,
+        images: [null, null, null, null],
         included: [],
         toBring: [],
         pricePerPerson: 0,
@@ -86,6 +88,8 @@ type Action =
 | { type: 'SET_BOOLEAN_FIELD'; field: BooleanField; value: boolean; }
 | { type: 'SET_NUMBER_FIELD'; field: NumberField; value: number; }
 | { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
+| { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
+| { type: 'SET_IMAGE_FILE'; index: number; value: PreviewableFile; }
 | { type: 'SET_LANGUAGES'; value: string[]; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
 
@@ -133,6 +137,17 @@ export default function useCreationReducer() {
                             state.form.categories.length < 2 ?
                             [ ...state.form.categories, action.value ] :
                             state.form.categories
+                    }
+                }
+            case 'SET_IMAGE_FILE':
+                const images = state.form.images;
+                images[action.index] = action.value;
+
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        images
                     }
                 }
             case 'SET_LANGUAGES':

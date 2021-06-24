@@ -61,35 +61,39 @@ const CreateExperience = () => {
 
     useEffect(() => {
         // Start animation on mounting
-        setAnimationIn(false);
+        // setAnimationIn(false);
         // TODO: Put the animation back in
-        // setAnimationIn(true);
+        setAnimationIn(true);
 
         // After 2 seconds start fade out
         const animationStartTimer = setTimeout(() => {
             setAnimationIn(false);
         }, 2000);
         // After 3 seconds, hide the animation slide
-        // const animationDoneTimer = setTimeout(() => {
+        const animationDoneTimer = setTimeout(() => {
             setAnimationDone(true);
-        // }, 3000);
+        }, 3000);
 
         return () => {
             clearTimeout(animationStartTimer);
-            // clearTimeout(animationDoneTimer);
+            clearTimeout(animationDoneTimer);
         }
      }, []);
 
     const { 
         data: stripeData, 
         loading: loadingStripeData 
-    } = useQuery<{ me: StripeInfoQuery }>(GET_STRIPE_INFO);
+    } = useQuery<{ me: StripeInfoQuery }>(GET_STRIPE_INFO, {
+        onError: () => history.replace('/')
+    });
 
     // Use existing locations for location autocomplete
     const {
         data: locationData,
         loading: loadingLocationData
-    } = useQuery<{ experiences: LocationQuery }>(GET_LOCATIONS);
+    } = useQuery<{ experiences: LocationQuery }>(GET_LOCATIONS, {
+        onError: () => history.replace('/')
+    });
 
     const [state, dispatch] = useCreationReducer();
     const handleStringValueChange = useCallback((field: StringField, value: string) => {
@@ -132,13 +136,18 @@ const CreateExperience = () => {
             onBack={() => dispatch({ type: 'GO_TO_PREV_STEP' })}
             onNavigate={stepIdx => dispatch({ type: 'GO_TO_STEP', stepIdx })}>
                 <Switch location={location}>
-                    <Route path={`${path}/location`}>
-                        <Slides.Location
+                    <Route path={`${path}/setting`}>
+                        <Slides.Setting
                         isOnlineExperience={state.form.isOnlineExperience}
                         onSelectType={val => handleBooleanValueChange('isOnlineExperience', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/location`}>
+                        <Slides.Location
                         storedLocations={[ ...new Set(locationData.experiences.map(({ location }) => 
                             location
                         ))]}
+                        isOnlineExperience={state.form.isOnlineExperience!}
                         location={state.form.location}
                         onLocationChange={val => handleStringValueChange('location', val)}
                         meetingPoint={state.form.meetingPoint}
@@ -191,7 +200,24 @@ const CreateExperience = () => {
                     <Route path={`${path}/capacity`}>
                         <Slides.Capacity
                         capacity={state.form.capacity}
+                        onCapacityChange={val => handleNumberValueChange('capacity', val)}
                         onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/age`}>
+                        <Slides.AgeRequirements
+                        isAgeRestricted={state.form.isAgeRestricted}
+                        onAgeRestrictionChange={val => handleBooleanValueChange('isAgeRestricted', val)}
+                        ageRequired={state.form.ageRequired}
+                        onAgeRequiredChange={val => handleNumberValueChange('ageRequired', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/preview`}>
+                        <Slides.Preview
+                        images={state.form.images}
+                        onSlideComplete={handleFieldValidity}
+                        onImageChange={(index, value) => {
+                            dispatch({ type: 'SET_IMAGE_FILE', index, value });
+                        }} />
                     </Route>
                 </Switch>
             </Layout>

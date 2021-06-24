@@ -3,6 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import useSearchReducer from './searchReducer';
+import useTokenStorage from 'hooks/useTokenStorage';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
 import { saveExperience, unsaveExperience } from 'store/userSlice';
@@ -138,6 +139,8 @@ const SearchExperiences = () => {
 
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+    // Save the auth state when opening new tabs
+    useTokenStorage(isLoggedIn);
 
     const handleHeartClick = useCallback((isSaved: boolean, experienceId: string) => {
         if (isSaved) {
@@ -146,15 +149,6 @@ const SearchExperiences = () => {
             dispatch(saveExperience({ experienceId }));
         }
     }, [dispatch]);
-
-    /* If the user has a token in session storage, it will be lost when going
-       to a new tab, and so we temporarily store it in local storage. */
-    useEffect(() => {
-        const tokenInSessionStorage = sessionStorage.getItem('ramble-token');
-        if (tokenInSessionStorage) {
-            localStorage.setItem('ramble-redirect_page_token', tokenInSessionStorage);
-        }
-    }, [isLoggedIn]);
 
     return (
         <div className={classes.root}>

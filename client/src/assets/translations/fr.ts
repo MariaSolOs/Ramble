@@ -184,6 +184,7 @@ const frenchTranslation: TranslationRecord = {
     CreateExperience_Layout: {
         back: 'Retour',
         next: 'Suivant',
+        setting: 'Environnement',
         location: 'Localisation',
         title: 'Titre',
         category: 'Catégorie',
@@ -200,12 +201,16 @@ const frenchTranslation: TranslationRecord = {
         review: 'Reviser & soumettre'
     },
 
-    BuilderSlides_Location: {
-        experienceTypeQuestion: "Quel genre d'expérience allez vous animer?",
+    BuilderSlides_Setting: {
+        title: 'Environnement',
+        subtitle: "Quel genre d'expérience allez vous animer?",
         online: 'En ligne',
         onlineOption: 'Animez votre expérience à travers Zoom',
         inPerson: 'En personne',
         inPersonOption: 'Rencontrez vos invités en personne',
+    },
+
+    BuilderSlides_Location: {
         locationTitle: 'Localisation',
         cityQuestion: 'Dans quelle ville est-ce que votre expérience aura lieu?',
         meetingPoint: 'Point de rencontre',
@@ -261,6 +266,29 @@ const frenchTranslation: TranslationRecord = {
         tip: "Considérez la nature de votre expérience. Certaines expériences nécessitent une certaine intimité alors que d'autres fonctionnent mieux avec un plus grand groupe.",
         people: 'Personnes',
         person: 'Personne'
+    },
+
+    BuilderSlides_AgeRequirements: {
+        title: 'Âge requis',
+        subtitle: 'Vos invités doivent-ils avoir un âge minimal pour participer à votre expérience?',
+        tip: "Si votre expérience comprend de l'alcool ou tout autre élément soumis à une limite d'âge, un âge limite doit être fixé en conséquence.",
+        yes: 'Oui',
+        no: 'Non',
+        yearsOld: 'ans'
+    },
+
+    BuilderSlides_Preview: {
+        title: 'Aperçu',
+        subtitle: "Offrez à vos invités un aperçu de ce qu'ils vont faire.",
+        tip: "Utilisez des images de haute qualité pour que votre expérience se démarque. Essayez d'inclure des personnes dans les photos.",
+        coverImgTitle: 'Photo de couverture',
+        coverImgText: 'Cette image apparaîtra comme photo de couverture de votre expérience',
+        creatorImgTitle: 'Créateur',
+        creatorImgText: "Partagez une photo de vous en train d'animer votre expérience",
+        actionImgTitle: 'En action',
+        actionImgText: "Montrez vos invités qui s'amusent",
+        locationImgTitle: 'Lieu',
+        locationImgText: 'Incluez une image des environs dans lesquels vous vous trouverez'
     }
 }
 

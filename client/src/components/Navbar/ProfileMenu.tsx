@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
 import { useLanguageContext } from 'context/languageContext';
@@ -31,7 +31,13 @@ const ProfileMenu = (props: Props) => {
     const { ProfileMenu: text } = useLanguageContext().appText;
 
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-    const closeMenu = () => { setAnchorEl(null); }
+
+    const { onClose } = props;
+    const closeMenu = useCallback(() => { 
+        // When closing, collapse both the parent menu and this menu
+        setAnchorEl(null); 
+        onClose();
+    }, [onClose]);
 
     const logout = () => {
         sessionStorage.removeItem('ramble-token');
@@ -46,7 +52,7 @@ const ProfileMenu = (props: Props) => {
         window.addEventListener('resize', closeMenu);
 
         return () => { window.removeEventListener('resize', closeMenu); }
-    }, []);
+    }, [closeMenu]);
 
     return (
         <div>
@@ -85,7 +91,7 @@ const ProfileMenu = (props: Props) => {
                     <MenuItem
                     component={NavLink}
                     onClick={closeMenu}
-                    to="/experience/new"
+                    to="/experience/new/setting"
                     className={classes.link}>
                         {text.newExperience}
                     </MenuItem>}

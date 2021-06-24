@@ -7,11 +7,15 @@ const styles = (theme: Theme) => createStyles({
     root: {
         paddingTop: 100,
         width: '100vw',
-        height: '100vh',
+        height: '100%',
         backgroundColor: '#000',
-        boxSizing: 'border-box',
 
-        [theme.breakpoints.down('xs')]: { paddingTop: 80 }
+        [theme.breakpoints.down('xs')]: { 
+            paddingTop: 80,
+            overflowY: 'scroll',
+            height: 'auto',
+            minHeight: '100%'
+        }
     },
 
     footer: {
@@ -19,7 +23,8 @@ const styles = (theme: Theme) => createStyles({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 55
+        height: 55,
+        width: '100%'
     },
     
     footerButtons: {
@@ -71,9 +76,7 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
-    pageContainer: {
-        display: 'flex'
-    },
+    pageContainer: { display: 'flex' },
 
     navbar: {
         listStyle: 'none',

@@ -184,6 +184,7 @@ const englishTranslation: TranslationRecord = {
     CreateExperience_Layout: {
         back: 'Back',
         next: 'Next',
+        setting: 'Setting',
         location: 'Location',
         title: 'Title',
         category: 'Category',
@@ -200,12 +201,16 @@ const englishTranslation: TranslationRecord = {
         review: 'Review and submit'
     },
 
-    BuilderSlides_Location: {
-        experienceTypeQuestion: 'What type of experience are you hosting?',
+    BuilderSlides_Setting: {
+        title: 'Setting',
+        subtitle: 'What type of experience are you hosting?',
         online: 'Online',
         onlineOption: 'Host your experience via Zoom',
         inPerson: 'In person',
         inPersonOption: 'Meet your guests in person',
+    },
+
+    BuilderSlides_Location: {
         locationTitle: 'Location',
         cityQuestion: 'In which city will your experience take place?',
         meetingPoint: 'Meeting point', 
@@ -261,6 +266,29 @@ const englishTranslation: TranslationRecord = {
         tip: 'Consider the nature of your experience. Some experiences require a certain intimacy and others work better with a bigger group.',
         people: 'People',
         person: 'Person'
+    },
+
+    BuilderSlides_AgeRequirements: {
+        title: 'Age restriction',
+        subtitle: 'Do your guests have to be a certain age to access this experience?',
+        tip: 'If your experience includes alcohol or any other age-restricted matter, an age limit must be fixed accordingly.',
+        yes: 'Yes',
+        no: 'No',
+        yearsOld: 'years old'
+    },
+
+    BuilderSlides_Preview: {
+        title: 'Preview',
+        subtitle: "Provide your guests with a teaser of what they'll do.",
+        tip: 'Use high quality pictures so that your experience sticks out. Try to include people in the pictures.',
+        coverImgTitle: 'Cover Picture',
+        coverImgText: 'This picture will appear on the front page of your experience',
+        creatorImgTitle: 'Creator',
+        creatorImgText: 'Share a picture of you conducting your experience',
+        actionImgTitle: 'Action Shot',
+        actionImgText: 'Show your guests having a great time',
+        locationImgTitle: 'Location',
+        locationImgText: 'Include a shot of the surroundings'
     }
 }
 

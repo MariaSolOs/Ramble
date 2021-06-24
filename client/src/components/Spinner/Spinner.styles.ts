@@ -4,7 +4,7 @@ import type { Theme } from '@material-ui/core/styles';
 const styles = (theme: Theme) => createStyles({
     backdrop: {
         width: '100vw',
-        height: '100vh',
+        height: '100%',
         position: 'fixed',
         zIndex: 100,
         display: 'flex',

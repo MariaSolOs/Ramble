@@ -5,6 +5,7 @@ import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
 import { updateUIProfile } from 'store/userSlice';
+import type { PreviewableFile } from 'models/file';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
@@ -12,7 +13,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import StripeMessage from './StripeMessage';
 import Spinner from 'components/Spinner/Spinner';
-import Dropzone from 'components/Dropzone/Dropzone';
+import Dropzone from 'components/Dropzone';
 import TextField from 'components/TextField/TextField';
 import Tip from 'components/Tip/Tip';
 import Button from 'components/GradientButton/GradientButton';
@@ -74,11 +75,6 @@ type EditUserDetails = {
     _id: string;
     photo: string;
 }
-
-type PreviewableFile = { 
-    file: File; 
-    preview: string; 
-} | null;
 
 const VALID_PHONE_NUMBER_REG = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
 const MAX_BIO_LENGTH = 500;

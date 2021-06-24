@@ -48,7 +48,9 @@ export type TranslationRecord = {
     
     CreateExperience_Layout: Record<'back' | 'next' | ExperienceCreationStep, string>;
 
-    BuilderSlides_Location: Record<'experienceTypeQuestion' | 'online' | 'onlineOption' | 'inPerson' | 'inPersonOption' | 'locationTitle' | 'cityQuestion' | 'meetingPoint' | 'meetingPointQuestion' | 'accessTip' | 'sharedInfoRemark' | 'zoomPMI' | 'zoomPassword' | 'zoomPMIHelp' | 'zoomPasswordHelp' | 'zoomDocs', string>;
+    BuilderSlides_Setting: Record<'title' | 'subtitle' | 'online' | 'onlineOption' | 'inPerson' | 'inPersonOption', string>;
+    
+    BuilderSlides_Location: Record<'locationTitle' | 'cityQuestion' | 'meetingPoint' | 'meetingPointQuestion' | 'accessTip' | 'sharedInfoRemark' | 'zoomPMI' | 'zoomPassword' | 'zoomPMIHelp' | 'zoomPasswordHelp' | 'zoomDocs', string>;
 
     BuilderSlides_Title: Record<'title' | 'subtitle' | 'tip', string>;
 
@@ -61,4 +63,8 @@ export type TranslationRecord = {
     BuilderSlides_Language: Record<'title' | 'subtitle' | 'tip' | 'maxLanguagesMessage', string>;
     
     BuilderSlides_Capacity: Record<'title' | 'subtitle' | 'tip' | 'person' | 'people', string>;
+
+    BuilderSlides_AgeRequirements: Record<'title' | 'subtitle' | 'tip' | 'yes' | 'no' | 'yearsOld', string>;
+    
+    BuilderSlides_Preview: Record<'title' | 'subtitle' | 'tip' | 'coverImgTitle' | 'coverImgText' | 'creatorImgTitle' | 'creatorImgText' | 'actionImgTitle' | 'actionImgText' | 'locationImgTitle' | 'locationImgText', string>;
 }

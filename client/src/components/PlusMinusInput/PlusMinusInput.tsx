@@ -18,16 +18,14 @@ type Props = {
     step: number;
     getLabel: (val: number) => string;
     onValueChange: (val: number) => void;
-    containerStyles?: string;
+    containerClass?: string;
 }
 
 export type StyleProps = {
     inputLength: number;
 }
 
-const PlusMinusInput = (props: Props) => {
-    const { onValueChange } = props;
-    
+const PlusMinusInput = (props: Props) => {    
     const [value, setValue] = useState<number | ''>(props.value);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,15 +63,18 @@ const PlusMinusInput = (props: Props) => {
 
     // Report change to parent component
     useEffect(() => {
-        onValueChange(+value);
-    }, [value, onValueChange]);
+        props.onValueChange(+value);
+        /* onValueChange is not added to the dependency array because
+           it should never change. */
+        // eslint-disable-next-line
+    }, [value]);
 
     const classes = useStyles({ 
         inputLength: `${value}`.length
     });
 
     return (
-        <div className={`${classes.container} ${props.containerStyles}`}>
+        <div className={`${classes.container} ${props.containerClass}`}>
             <TextField
             value={value}
             onChange={handleChange}

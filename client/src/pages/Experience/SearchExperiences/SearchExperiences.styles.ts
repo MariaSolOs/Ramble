@@ -6,12 +6,11 @@ const styles = (theme: Theme) => createStyles({
         width: '80vw',
         minWidth: 290,
         maxWidth: '100vw',
-        minHeight: 'calc(100vh - 100px)',
+        minHeight: 'calc(100% - 100px)',
         margin: '100px auto 0',
 
-        [theme.breakpoints.down('sm')]: {
-            width: '90vw'
-        }
+        [theme.breakpoints.down('sm')]: { width: '90vw' },  
+        [theme.breakpoints.down('xs')]: { margin: '80px auto 30px' }
     },
 
     experiences: {

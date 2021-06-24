@@ -9,9 +9,6 @@ import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
 import Tip from 'components/Tip/Tip';
 import HelpIcon from '@material-ui/icons/Help';
-import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLaptop } from '@fortawesome/free-solid-svg-icons/faLaptop';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Location.styles';
@@ -21,8 +18,7 @@ const ZOOM_PMI_DOCS = 'https://support.zoom.us/hc/en-us/articles/203276937-Using
 const ZOOM_PASSWORD_DOCS = 'https://support.zoom.us/hc/en-us/articles/203276937-Using-Personal-Meeting-ID-PMI-';
 
 type Props = {
-    isOnlineExperience?: boolean;
-    onSelectType: (isOnline: boolean) => void; 
+    isOnlineExperience: boolean;
     storedLocations: string[];
     location: string;
     onLocationChange: (loc: string) => void;
@@ -40,7 +36,7 @@ const Location = (props: Props) => {
     const classes = useStyles();
 
     const { 
-        isOnlineExperience, 
+        isOnlineExperience,
         onSlideComplete,
         location,
         meetingPoint,
@@ -48,50 +44,21 @@ const Location = (props: Props) => {
         zoomPassword
     } = props;
     useEffect(() => {
-        if (typeof isOnlineExperience !== 'undefined') {
-            if (isOnlineExperience) {
-                onSlideComplete(
-                    location.trim().length > 0 &&
-                    zoomPMI.trim().length > 0 && 
-                    zoomPassword.trim().length > 0
-                );
-            } else {
-                onSlideComplete(
-                    location.trim().length > 0 &&
-                    meetingPoint.trim().length > 0
-                );
-            }
+        if (isOnlineExperience) {
+            onSlideComplete(
+                location.trim().length > 0 &&
+                zoomPMI.trim().length > 0 && 
+                zoomPassword.trim().length > 0
+            );
+        } else {
+            onSlideComplete(
+                location.trim().length > 0 &&
+                meetingPoint.trim().length > 0
+            );
         }
     }, [isOnlineExperience, onSlideComplete, location, meetingPoint, zoomPMI, zoomPassword]);
 
-    // Set the experience type first
-    if (typeof isOnlineExperience === 'undefined') {
-        return (
-            <>
-                <Title>{text.experienceTypeQuestion}</Title>
-                <div className={classes.typeBoxes}>
-                    <div className={classes.typeBox} onClick={() => props.onSelectType(false)}>
-                        <div className={classes.typeBoxHeader}>
-                            <EmojiPeopleIcon className={classes.personIcon} />
-                            {text.inPerson}
-                        </div>
-                        <div className={classes.typeBoxDivider} />
-                        <p className={classes.typeBoxMessage}>{text.inPersonOption}</p>
-                    </div>
-                    <div className={classes.typeBox} onClick={() => props.onSelectType(true)}>
-                        <div className={classes.typeBoxHeader}>
-                            <FontAwesomeIcon icon={faLaptop} className={classes.onlineIcon} />
-                            {text.online}
-                        </div>
-                        <div className={classes.typeBoxDivider} />
-                        <p className={classes.typeBoxMessage}>{text.onlineOption}</p>
-                    </div>
-                </div>
-            </>
-        );
-    }
-
-    // Fill Zoom info or meeting point info
+    // Depending on the experience type, fill Zoom info or meeting point info
     return (
         <>
             <Title>{text.locationTitle}</Title>

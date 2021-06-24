@@ -60,7 +60,7 @@ const Searchbar = (props: Props) => {
                 }} />
                 <div className={classes.collapsibleRow}>
                     <PlusMinusInput
-                    containerStyles={classes.capacityInput}
+                    containerClass={classes.capacityInput}
                     value={props.capacity}
                     step={1}
                     minValue={1}

@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
+import useTokenStorage from 'hooks/useTokenStorage';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { saveExperience, unsaveExperience } from 'store/userSlice';
 import { useLanguageContext } from 'context/languageContext';
@@ -63,7 +64,9 @@ const Home = () => {
 
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
-
+    // Save the auth state when opening new tabs
+    useTokenStorage(isLoggedIn);
+    
     const handleHeartClick = useCallback((isSaved: boolean, experienceId: string) => {
         if (isSaved) {
             dispatch(unsaveExperience({ experienceId }));
@@ -71,15 +74,6 @@ const Home = () => {
             dispatch(saveExperience({ experienceId }));
         }
     }, [dispatch]);
-
-    /* If the user has a token in session storage, it will be lost when going
-       to a new tab, and so we temporarily store it in local storage. */
-    useEffect(() => {
-        const tokenInSessionStorage = sessionStorage.getItem('ramble-token');
-        if (tokenInSessionStorage) {
-            localStorage.setItem('ramble-redirect_page_token', tokenInSessionStorage);
-        }
-    }, [isLoggedIn]);
 
     return (
         <div className={classes.slide}>

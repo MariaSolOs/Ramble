@@ -3,7 +3,6 @@ import type { Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => createStyles({
     slide: {
-        minHeight: 'calc(100vh - 100px)',
         marginTop: 100,
         boxSizing: 'border-box',
         overflowX: 'hidden',

@@ -13,14 +13,6 @@ const ExperienceSchema = new mongoose.Schema({
     },
 
     location: {
-        city: {
-            type: String,
-            required: true
-        },
-        region: {
-            type: String,
-            required: true
-        },
         displayLocation: { //Used for autocomplete searchbars
             type: String, 
             required: true

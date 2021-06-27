@@ -42,8 +42,6 @@ export const prepareReview = (values, user) => {
             status: 'pending',
 
             location: {
-                city: locArray[0],
-                region: locArray.length === 3 && locArray[1],
                 displayLocation: locArray.length === 3? 
                                  `${locArray[0]}, ${locArray[2]}` : 
                                  `${locArray[0]}, ${locArray[1]}`,

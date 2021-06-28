@@ -381,6 +381,7 @@ export const mobileStyles = (theme: Theme) => createStyles({
 
     mainInfos: {
         width: '100%',
+        display: 'flex',
         justifyContent: 'space-between' 
     },
 

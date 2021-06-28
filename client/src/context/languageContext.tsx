@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import type { Language } from 'models/language';
+import type { Language } from 'models/translation';
 import En from 'assets/translations/en';
 import Fr from 'assets/translations/fr';
 

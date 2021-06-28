@@ -184,6 +184,7 @@ const englishTranslation: TranslationRecord = {
     CreateExperience_Layout: {
         back: 'Back',
         next: 'Next',
+        submit: 'Submit my experience',
         setting: 'Setting',
         location: 'Location',
         title: 'Title',
@@ -289,6 +290,60 @@ const englishTranslation: TranslationRecord = {
         actionImgText: 'Show your guests having a great time',
         locationImgTitle: 'Location',
         locationImgText: 'Include a shot of the surroundings'
+    },
+
+    BuilderSlides_IncludedItems: {
+        title: "What's included",
+        subtitle: 'Please list the items you will provide your guests for this experience.',
+        tip: 'If your guests build or create something they will leave with, list it on here too.',
+        fieldLabel: 'I will provide...',
+        placeholder: 'E.g.: Paint brushes',
+        alreadyIncluded: 'You already included that item!'
+    },
+
+    BuilderSlides_ToBringItems: {
+        title: 'What to bring',
+        subtitle1: 'Should your guests be bringing anything?',
+        subtitle2: 'What should your guests bring?',
+        tip: 'Be as precise as possible so your guests can prepare appropriately.',
+        yes: 'Yes',
+        no: 'No',
+        fieldLabel: 'My guests need...',
+        placeholder: 'E.g.: A canvas',
+        alreadyIncluded: 'You already included that item!'
+    },
+
+    BuilderSlides_Pricing: {
+        title: 'Pricing',
+        subtitle1: 'Enter the price each guest should pay.',
+        subtitle2: 'Enable private bookings',
+        tip1: 'This price will be displayed as "Per person"',
+        tip2: 'This is a fixed price private groups have to pay to book the entire experience.',
+        tip3: 'This option will be offered to your guests if all spots are available for a time slot.',
+        pricePerPerson: 'Price per person',
+        currency: 'Currency',
+        guest: 'guest',
+        guests: 'guests',
+        revenue: 'Projected revenue',
+        privatePriceDescription: 'Charge a special price for people who want to be the only guests at your experience.',
+        privatePrice: 'Price for private bookings'
+    },
+
+    BuilderSlides_Availabilities: {
+        title: 'Availabilities',
+        subtitle: 'Pick the days and time slots for which guests can book your experience.',
+        tip1: 'Consider your weekly schedule. Set realistic availabilities during which you are sure to be free.',
+        tip2: "In your creator dashboard, you'll be able to add time slots for a certain date, or remove them if no bookings have been made yet."
+    },
+
+    BuilderSlides_Review: {
+        title: 'Review & Submit'
+    },
+
+    CreatorCalendar: {
+        today: 'Today',
+        month: 'Month',
+        day: 'Day'
     }
 }
 

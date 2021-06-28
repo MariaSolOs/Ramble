@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
 
 import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
 import { updateUIProfile } from 'store/userSlice';
-import type { PreviewableFile } from 'models/file';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import StripeMessage from './StripeMessage';
 import Spinner from 'components/Spinner/Spinner';
@@ -84,12 +81,12 @@ const CreatorForm = () => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
 
-    const [profilePic, setProfilePic] = useState<PreviewableFile>(null);
+    const [profilePic, setProfilePic] = useState<File>();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [phoneError, setPhoneError] = useState(false);
     const [bio, setBio] = useState('');
-    const [frontId, setFrontId] = useState<PreviewableFile>(null);
-    const [backId, setBackId] = useState<PreviewableFile>(null);
+    const [frontId, setFrontId] = useState<File>();
+    const [backId, setBackId] = useState<File>();
     const [uploading, setUploading] = useState(false);
 
     const { loading, data } = useQuery<{ me: ProfileDetails }>(GET_PROFILE, {
@@ -117,10 +114,6 @@ const CreatorForm = () => {
         }
     });
 
-    const handleCreatePreview = useCallback((setter: React.Dispatch<React.SetStateAction<any>>, files: File[]) => {
-        setter({ file: files[0], preview: URL.createObjectURL(files[0]) });
-    }, []);
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -139,7 +132,7 @@ const CreatorForm = () => {
         // Upload profile picture if the user didn't have one
         if (!data!.me.photo) {
             const photoData = new FormData();
-            photoData.append('file', profilePic!.file);
+            photoData.append('file', profilePic!);
             photoData.append('upload_preset', 'RAMBLE-users');
             photoData.append('public_id', data!.me._id);
 
@@ -152,7 +145,7 @@ const CreatorForm = () => {
 
         // Upload IDs
         const idData1 = new FormData();
-        idData1.append('file', frontId!.file);
+        idData1.append('file', frontId!);
         idData1.append('upload_preset', 'RAMBLE-creators');
         const { secure_url: idUrl1 } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
             method: 'POST',
@@ -161,7 +154,7 @@ const CreatorForm = () => {
         governmentIds.push(idUrl1);
 
         const idData2 = new FormData();
-        idData2.append('file', backId!.file);
+        idData2.append('file', backId!);
         idData2.append('upload_preset', 'RAMBLE-creators');
         const { secure_url: idUrl2 } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
             method: 'POST',
@@ -184,21 +177,6 @@ const CreatorForm = () => {
             });
         }
     }
-
-    // Revoke data URIs to avoid memory leaks
-    useEffect(() => {
-        return () => {
-            if (profilePic) {
-                URL.revokeObjectURL(profilePic.preview);
-            }
-            if (frontId) { 
-                URL.revokeObjectURL(frontId.preview);
-            }
-            if (backId) { 
-                URL.revokeObjectURL(backId.preview);
-            }
-        }
-    }, [profilePic, frontId, backId]);
 
     // Stop the spinner when both mutations are completed
     useEffect(() => {
@@ -234,23 +212,13 @@ const CreatorForm = () => {
                             <h2 className={classes.title}>{text.profilePicture}</h2>
                             <h5 className={classes.subtitle}>{text.showSmile}</h5>
                         </div>
-                        {profilePic ? 
-                            <div className={classes.photoPreviewContainer}>
-                                <HighlightOffIcon 
-                                className={classes.deleteIcon}
-                                onClick={() => setProfilePic(null)} />
-                                <img 
-                                className={classes.photoPreview} 
-                                src={profilePic.preview} 
-                                alt="Ramble creator" />
-                            </div> : 
-                            <Dropzone 
-                            className={classes.photoDropzone}
-                            iconComponent={AddCircleIcon}
-                            iconClassName={classes.addIcon}
-                            extraOptions={{
-                                onDrop: files => handleCreatePreview(setProfilePic, files)
-                            }} />}
+                        <Dropzone
+                        dropzoneClassName={classes.photoDropzone}
+                        addButtonClassName={classes.addIcon}
+                        deleteButtonClassName={classes.deleteIcon}
+                        previewImageClassName={classes.photoPreview}
+                        image={profilePic}
+                        onFileDrop={setProfilePic} />
                     </>}
                 <div className={classes.fieldContainer}>
                     <h2 className={classes.title}>{text.aboutYouTitle}</h2>
@@ -299,27 +267,17 @@ const CreatorForm = () => {
                             <p className={classes.idDropzoneSubtitle}>
                                 {text.frontIdText}
                             </p>
-                            {frontId ?
-                                <>
-                                    <HighlightOffIcon 
-                                    className={classes.deleteIcon}
-                                    onClick={() => setFrontId(null)} />
-                                    <img
-                                    className={classes.idPreview}
-                                    src={frontId.preview}
-                                    alt="Front of government ID" />
-                                </> :
-                                <Dropzone
-                                className={classes.idDropzone}
-                                iconComponent={AddCircleIcon}
-                                iconClassName={classes.addIcon}
-                                extraOptions={{
-                                    onDrop: files => handleCreatePreview(setFrontId, files)
-                                }}>
-                                    <span className={classes.idDropzoneText}>
-                                        {text.addFront}
-                                    </span>
-                                </Dropzone>}
+                            <Dropzone
+                            dropzoneClassName={classes.idDropzone}
+                            addButtonClassName={classes.addIcon}
+                            deleteButtonClassName={classes.deleteIcon}
+                            previewImageClassName={classes.idPreview}
+                            image={frontId}
+                            onFileDrop={setFrontId}>
+                                <span className={classes.idDropzoneText}>
+                                    {text.addFront}
+                                </span>
+                            </Dropzone>
                         </div>
                         <div className={classes.idDropzoneContainer}>
                             <p className={classes.idDropzoneTitle}>
@@ -328,27 +286,17 @@ const CreatorForm = () => {
                             <p className={classes.idDropzoneSubtitle}>
                                 {text.backIdText}
                             </p>
-                            {backId ?
-                                <>
-                                    <HighlightOffIcon 
-                                    className={classes.deleteIcon}
-                                    onClick={() => setBackId(null)} />
-                                    <img
-                                    className={classes.idPreview}
-                                    src={backId.preview}
-                                    alt="Back of government ID" />
-                                </> :
-                                <Dropzone
-                                className={classes.idDropzone}
-                                iconComponent={AddCircleIcon}
-                                iconClassName={classes.addIcon}
-                                extraOptions={{
-                                    onDrop: files => handleCreatePreview(setBackId, files)
-                                }}>
-                                    <span className={classes.idDropzoneText}>
-                                        {text.addBack}
-                                    </span>
-                                </Dropzone>}
+                            <Dropzone
+                            dropzoneClassName={classes.idDropzone}
+                            addButtonClassName={classes.addIcon}
+                            deleteButtonClassName={classes.deleteIcon}
+                            previewImageClassName={classes.idPreview}
+                            image={backId}
+                            onFileDrop={setBackId}>
+                                <span className={classes.idDropzoneText}>
+                                    {text.addBack}
+                                </span>
+                            </Dropzone>
                         </div>
                     </div>
                 </div>

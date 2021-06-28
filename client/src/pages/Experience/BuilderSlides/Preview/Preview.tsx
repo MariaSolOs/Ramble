@@ -1,43 +1,34 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { useLanguageContext } from 'context/languageContext';
-import type { PreviewableFile } from 'models/file';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
 import Tip from 'components/Tip/Tip';
 import Dropzone from 'components/Dropzone';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Preview.styles';
 const useStyles = makeStyles(styles);
 
-type Props = {
-    images: PreviewableFile[];
-    onSlideComplete: (canContinue: boolean) => void;
-    onImageChange: (index: number, imgFile: PreviewableFile) => void;
+interface Props extends CompletableSlide {
+    images: (File | string | undefined)[];
+    onImageChange: (index: number, imgFile?: File) => void;
 }
 
 const Preview = (props: Props) => {
     const { BuilderSlides_Preview: text } = useLanguageContext().appText;
     const classes = useStyles();
 
-    const { images, onSlideComplete, onImageChange } = props;
+    const { images, onSlideComplete } = props;
     useEffect(() => {
-        onSlideComplete(images.every(img => img !== null));
+        onSlideComplete(
+            images.length === 4 &&
+            images.every(img => img)
+        );
     }, [onSlideComplete, images]);
-
-    const handleCreatePreview = useCallback((idx: number, files: File[]) => {
-        const imgFile = { file: files[0], preview: URL.createObjectURL(files[0]) };
-        onImageChange(idx, imgFile);
-    }, [onImageChange]);
-
-    const handleDelete = useCallback((idx: number) => {
-        onImageChange(idx, null);
-    }, [onImageChange]);
 
     return (
         <>  
@@ -58,23 +49,13 @@ const Preview = (props: Props) => {
                     <p className={`${classes.picText} ${classes.picDescription}`}>
                         {description}
                     </p>
-                    {images[idx] ? 
-                        <div className={classes.dropzone}>
-                            <HighlightOffIcon 
-                            className={classes.deleteIcon}
-                            onClick={() => handleDelete(idx)} />
-                            <img 
-                            className={classes.previewImg} 
-                            alt={title} 
-                            src={images[idx]!.preview} />
-                        </div> :
-                        <Dropzone
-                        iconComponent={AddCircleIcon}
-                        iconClassName={classes.addIcon}
-                        className={classes.dropzone}
-                        extraOptions={{
-                            onDrop: files => handleCreatePreview(idx, files)
-                        }} />}
+                    <Dropzone
+                    image={images[idx]}
+                    onFileDrop={file => props.onImageChange(idx, file)}
+                    dropzoneClassName={classes.dropzone}
+                    addButtonClassName={classes.addIcon}
+                    deleteButtonClassName={classes.deleteIcon}
+                    previewImageClassName={classes.previewImg} />
                 </div>)}
             </div>
         </>

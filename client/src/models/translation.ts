@@ -3,6 +3,8 @@ import type {
     CreationStep as ExperienceCreationStep
 } from './experience';
 
+export type Language = 'en' | 'fr';
+
 export type TranslationRecord = {
     Home: Record<'experienceTitle' | 'discoverTitle' | 'seeAllButton' | 'partakeTitle' | 'partakeSubtitle' | 'adventureTitle' | 'adventureSubtitle', string>;
 
@@ -46,7 +48,7 @@ export type TranslationRecord = {
 
     CreateExperience: Record<'animationTitle1' | 'animationTitle2', string>;
     
-    CreateExperience_Layout: Record<'back' | 'next' | ExperienceCreationStep, string>;
+    CreateExperience_Layout: Record<'back' | 'next' | 'submit' | ExperienceCreationStep, string>;
 
     BuilderSlides_Setting: Record<'title' | 'subtitle' | 'online' | 'onlineOption' | 'inPerson' | 'inPersonOption', string>;
     
@@ -67,4 +69,16 @@ export type TranslationRecord = {
     BuilderSlides_AgeRequirements: Record<'title' | 'subtitle' | 'tip' | 'yes' | 'no' | 'yearsOld', string>;
     
     BuilderSlides_Preview: Record<'title' | 'subtitle' | 'tip' | 'coverImgTitle' | 'coverImgText' | 'creatorImgTitle' | 'creatorImgText' | 'actionImgTitle' | 'actionImgText' | 'locationImgTitle' | 'locationImgText', string>;
+
+    BuilderSlides_IncludedItems: Record<'title' | 'subtitle' | 'tip' | 'fieldLabel' | 'placeholder' | 'alreadyIncluded', string>;
+    
+    BuilderSlides_ToBringItems: Record<'title' | 'subtitle1' | 'subtitle2' | 'tip' | 'yes' | 'no' | 'fieldLabel' | 'placeholder' | 'alreadyIncluded', string>;
+
+    BuilderSlides_Pricing: Record<'title' | 'subtitle1' | 'subtitle2' | 'tip1' | 'tip2' | 'tip3' | 'pricePerPerson' | 'currency' | 'revenue' | 'guest' | 'guests' | 'privatePriceDescription' | 'privatePrice', string>;
+
+    BuilderSlides_Availabilities: Record<'title' | 'subtitle' | 'tip1' | 'tip2', string>;
+
+    BuilderSlides_Review: Record<'title', string>;
+
+    CreatorCalendar: Record<'today' | 'month' | 'day', string>;
 }

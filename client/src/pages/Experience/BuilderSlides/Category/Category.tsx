@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { useLanguageContext } from 'context/languageContext';
 import { EXPERIENCE_CATEGORIES } from 'models/experience';
 import type { Category as CategoryType } from 'models/experience';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
@@ -16,10 +17,9 @@ const useStyles = makeStyles(styles);
 
 const NUM_STEPS = 2;
 
-type Props = {
+interface Props extends CompletableSlide {
     categories: CategoryType[];
     onSelectCategory: (category: CategoryType, remove: boolean) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const Category = (props: Props) => {

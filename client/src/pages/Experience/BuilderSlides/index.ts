@@ -8,6 +8,11 @@ import Language from './Language/Language';
 import Capacity from './Capacity/Capacity';
 import AgeRequirements from './AgeRequirements/AgeRequirements';
 import Preview from './Preview/Preview';
+import IncludedItems from './IncludedItems/IncludedItems';
+import ToBringItems from './toBringItems/toBringItems';
+import Pricing from './Pricing/Pricing';
+import Availabilities from './Availabilities/Availabilities';
+import Review from './Review/Review';
 
 export {
     Setting,
@@ -19,5 +24,10 @@ export {
     Language,
     Capacity,
     AgeRequirements,
-    Preview
+    Preview,
+    IncludedItems,
+    ToBringItems,
+    Pricing,
+    Availabilities,
+    Review
 }

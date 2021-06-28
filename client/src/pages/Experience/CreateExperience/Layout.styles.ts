@@ -38,12 +38,12 @@ const styles = (theme: Theme) => createStyles({
     footerButton: {
         borderRadius: 8,
         height: 35,
-        width: 90,
+        minWidth: 90,
         fontSize: 14,
 
         [theme.breakpoints.down('xs')]: { 
             height: 35,
-            width: 75,
+            minWidth: 75,
             fontSize: 12
         }
     },
@@ -76,7 +76,10 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
-    pageContainer: { display: 'flex' },
+    pageContainer: { 
+        display: 'flex',
+        height: 'calc(100% - 55px)'
+    },
 
     navbar: {
         listStyle: 'none',
@@ -147,11 +150,13 @@ const styles = (theme: Theme) => createStyles({
 
     pageContent: {
         marginLeft: 80,
+        overflowY: 'scroll',
+        maxHeight: 'calc(100% - 10px)',
         
         [theme.breakpoints.down('sm')]: { marginLeft: 50 },
         [theme.breakpoints.down('xs')]: {
-            margin: '0 auto',
-            width: '95vw'
+            margin: '0 auto 60px',
+            width: '95vw',
         }
     }
 });

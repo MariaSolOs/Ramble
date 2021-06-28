@@ -1,27 +1,40 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { generateToken } = require('../utils/jwt');
-const { experienceReducer, userReducer, creatorReducer } = require('../utils/dataReducers');
-const { Experience, User, Creator } = require('../models');
+const { 
+    experienceReducer, 
+    userReducer, 
+    creatorReducer, 
+    bookingReducer 
+} = require('../utils/dataReducers');
+const { Experience, Booking, User, Creator } = require('../models');
 
 module.exports = {
     Experience: {
-        creator: (exp) => Creator.findById(exp.creator).then(creatorReducer)
+        creator: exp => Creator.findById(exp.creator).then(creatorReducer)
+    },
+
+    Occurrence: {
+        experience: occ => Experience.findById(occ.experience).then(experienceReducer),
+        bookings: occ => {
+            return Booking.find({ _id: { $in: occ.bookings } })
+            .then(bookings => bookings.map(bookingReducer));
+        }
     },
 
     User: {
-        creator: (user) => Creator.findById(user.creator).then(creatorReducer),
-        savedExperiences: (user) => {
+        creator: user => Creator.findById(user.creator).then(creatorReducer),
+        savedExperiences: user => {
             return Experience.find({ _id: { $in: user.savedExperiences } })
             .then(exps => exps.map(experienceReducer));
         },
-        bookedExperiences: (user) => {
+        bookedExperiences: user => {
             return Experience.find({ _id: { $in: user.bookedExperiences } })
             .then(exps => exps.map(experienceReducer));
         }
     },
 
     Creator: {
-        user: (creator) => User.findById(creator.user).then(userReducer)
+        user: creator => User.findById(creator.user).then(userReducer)
     },
 
     Query: {

@@ -1,36 +1,15 @@
 import { useReducer, useCallback } from 'react';
+import type { EventInput } from '@fullcalendar/react';
 
 import { CREATION_STEPS } from 'models/experience';
-import type { CreationStep, Category } from 'models/experience';
-import type { PreviewableFile } from 'models/file';
+import type { CreationStep, Category, ExperienceForm } from 'models/experience';
 
 interface CreationState {
     currentStep: CreationStep;
     currentStepIdx: number;
     stepsCompleted: number;
     canContinue: boolean;
-    form: {
-        isOnlineExperience?: boolean;
-        location: string;
-        zoomMeetingId: string;
-        zoomMeetingPassword: string;
-        meetingPoint: string;
-        coordinates?: string[];
-        title: string;
-        categories: Category[];
-        planning: string;
-        duration: number; // In hours
-        languages: string[];
-        capacity: number;
-        isAgeRestricted: boolean;
-        ageRequired: number; 
-        images: [PreviewableFile, PreviewableFile, PreviewableFile, PreviewableFile];
-        included: string[];
-        toBring: string[];
-        pricePerPerson: number;
-        privatePrice?: number;
-        currency: 'CAD' | 'USD';
-    }
+    form: ExperienceForm;
 }
 
 // Form fields that have a string as a value
@@ -48,11 +27,16 @@ export type BooleanField = 'isOnlineExperience' | 'isAgeRestricted';
 
 // Form fields that have a numerical value
 export type NumberField = 
+| 'latitude'
+| 'longitude'
 | 'duration' 
 | 'capacity' 
 | 'ageRequired' 
 | 'pricePerPerson'
 | 'privatePrice';
+
+// Form fields corresponding to arrays of strings
+export type ArrayField = 'languages' | 'included' | 'toBring' | 'slots';
 
 const initialState: CreationState = {
     currentStep: 'setting',
@@ -62,21 +46,25 @@ const initialState: CreationState = {
     form: {
         location: '',
         meetingPoint: '',
+        latitude: 0,
+        longitude: 0,
         zoomMeetingId: '',
         zoomMeetingPassword: '',
         title: '',
         categories: [],
         planning: '',
-        duration: 1,
+        duration: 2,
         languages: [],
         capacity: 10,
         isAgeRestricted: false,
         ageRequired: 18,
-        images: [null, null, null, null],
+        images: [],
         included: [],
         toBring: [],
         pricePerPerson: 0,
-        currency: 'CAD'
+        privatePrice: 0,
+        currency: 'CAD',
+        slots: []
     }
 }
 
@@ -89,8 +77,8 @@ type Action =
 | { type: 'SET_NUMBER_FIELD'; field: NumberField; value: number; }
 | { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
 | { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
-| { type: 'SET_IMAGE_FILE'; index: number; value: PreviewableFile; }
-| { type: 'SET_LANGUAGES'; value: string[]; }
+| { type: 'SET_IMAGE_FILE'; index: number; value?: File; }
+| { type: 'SET_ARRAY_FIELD'; field: ArrayField; value: string[] | EventInput[]; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
 
 export default function useCreationReducer() {
@@ -140,7 +128,7 @@ export default function useCreationReducer() {
                     }
                 }
             case 'SET_IMAGE_FILE':
-                const images = state.form.images;
+                const images = [ ...state.form.images ];
                 images[action.index] = action.value;
 
                 return {
@@ -150,12 +138,12 @@ export default function useCreationReducer() {
                         images
                     }
                 }
-            case 'SET_LANGUAGES':
+            case 'SET_ARRAY_FIELD':
                 return {
                     ...state,
                     form: {
                         ...state.form,
-                        languages: action.value
+                        [action.field]: action.value
                     }
                 }
             case 'SET_CAN_CONTINUE':

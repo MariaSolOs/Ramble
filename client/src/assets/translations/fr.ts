@@ -184,6 +184,7 @@ const frenchTranslation: TranslationRecord = {
     CreateExperience_Layout: {
         back: 'Retour',
         next: 'Suivant',
+        submit: 'Soumettre mon expérience',
         setting: 'Environnement',
         location: 'Localisation',
         title: 'Titre',
@@ -289,6 +290,60 @@ const frenchTranslation: TranslationRecord = {
         actionImgText: "Montrez vos invités qui s'amusent",
         locationImgTitle: 'Lieu',
         locationImgText: 'Incluez une image des environs dans lesquels vous vous trouverez'
+    },
+
+    BuilderSlides_IncludedItems: {
+        title: 'Ce qui est inclus',
+        subtitle: 'Énumérez les items que vous allez fournir à vos invités.',
+        tip: 'Si vos invités fabriquent ou créent quelque chose avec lequel ils quitteront, indiquez-le également ici.',
+        fieldLabel: 'Je fournirai...',
+        placeholder: 'E.g.: Pinceaux',
+        alreadyIncluded: 'Vous avez déjà inclus cet item!'
+    },
+
+    BuilderSlides_ToBringItems: {
+        title: 'Quoi emporter',
+        subtitle1: 'Vos invités doivent-ils apporter quelque chose?',
+        subtitle2: "Qu'est-ce que vos invités doivent apporter?",
+        tip: 'Soyez le plus précis possible pour que vos invités puissent se préparer convenablement.',
+        yes: 'Oui',
+        no: 'Non',
+        fieldLabel: 'Mes invités ont besoin de...',
+        placeholder: 'E.g.: Une toile',
+        alreadyIncluded: 'Vous avez déjà inclus cet item!'
+    },
+
+    BuilderSlides_Pricing: {
+        title: 'Prix',
+        subtitle1: 'Entrez le prix que chaque invité devra payer.',
+        subtitle2: 'Permettre les réservations privées',
+        tip1: 'Ce prix sera affiché comme "Par Personne"',
+        tip2: "Il s'agit d'un prix fixe que les groupes privés doivent payer pour réserver l'expérience au complet.",
+        tip3: 'Cette option sera proposée à vos invités si toutes les places sont disponibles pour une plage horaire.',
+        pricePerPerson: 'Prix par personne',
+        currency: 'Devise',
+        guest: 'invité',
+        guests: 'invités',
+        revenue: 'Revenu projeté',
+        privatePriceDescription: 'Chargez un prix spécial pour les personnes qui souhaitent être les seuls invités à votre expérience.',
+        privatePrice: 'Prix pour les réservations privées'
+    },
+
+    BuilderSlides_Availabilities: {
+        title: 'Disponibilités',
+        subtitle: 'Choisissez les dates et les plages horaires pour lesquels les invités peuvent réserver votre expérience.',
+        tip1: "Tenez compte de votre horaire hebdomadaire. Définissez des disponibilités réalistes pendant lesquelles vous êtes sûr d'être libre.",
+        tip2: "Dans le tableau de bord, vous pourrez ajouter des plages horaires pour une certaine date ou les supprimer si aucune réservation n'a encore été effectuée."
+    },
+
+    BuilderSlides_Review: {
+        title: 'Reviser & Soumettre'
+    },
+
+    CreatorCalendar: {
+        today: "Aujourd'hui",
+        month: 'Mois',
+        day: 'Jour'
     }
 }
 

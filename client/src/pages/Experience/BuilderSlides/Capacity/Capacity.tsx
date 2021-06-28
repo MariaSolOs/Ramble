@@ -6,15 +6,15 @@ import Tip from 'components/Tip/Tip';
 import PlusMinusInput from 'components/PlusMinusInput/PlusMinusInput';
 
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './Capacity.styles';
 const useStyles = makeStyles(styles);
 
-type Props = {
+interface Props extends CompletableSlide {
     capacity: number;
     onCapacityChange: (capacity: number) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const Capacity = (props: Props) => {

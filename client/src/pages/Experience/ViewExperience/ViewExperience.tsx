@@ -10,6 +10,7 @@ import type { Experienceable } from 'models/experience';
 import type { Creator } from 'models/creator';
 
 import Experience from 'components/Experience/Experience';
+import ShareExperienceDialog from 'components/ShareExperienceDialog/ShareExperienceDialog';
 import GradientButton from 'components/GradientButton/GradientButton';
 import Spinner from 'components/Spinner/Spinner';
 
@@ -73,6 +74,7 @@ const ViewExperience = () => {
     // Fetch and initialize experience and creator
     const [experience, setExperience] = useState<ExperienceType>();
     const [creator, setCreator] = useState<Creator>();
+    const [openShareDialog, setOpenShareDialog] = useState(false);
     const { loading } = useQuery<{ experience: ExperienceQuery }, ExperienceVariables>(GET_EXPERIENCE, {
         variables: { id: experienceId },
         onCompleted: ({ experience }) => {
@@ -113,12 +115,16 @@ const ViewExperience = () => {
 
     return (
         <>
+            <ShareExperienceDialog 
+            open={openShareDialog}
+            onClose={() => setOpenShareDialog(false)}
+            experienceTitle={experience.title} />
             <Experience
             experience={experience}
             creator={creator!}
             isExperienceSaved={isExpSaved}
             onHeartClick={handleHeartClick}
-            isUserLoggedIn={isLoggedIn}
+            onShareClick={() => setOpenShareDialog(true)}
             containerClass={classes.experienceContainer} />
             <div className={classes.footer}>
                 <p className={classes.footerPriceInfo}>

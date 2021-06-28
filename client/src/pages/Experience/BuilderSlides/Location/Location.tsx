@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import InputBase from '@material-ui/core/InputBase';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -17,18 +19,18 @@ const useStyles = makeStyles(styles);
 const ZOOM_PMI_DOCS = 'https://support.zoom.us/hc/en-us/articles/203276937-Using-Personal-Meeting-ID-PMI-';
 const ZOOM_PASSWORD_DOCS = 'https://support.zoom.us/hc/en-us/articles/203276937-Using-Personal-Meeting-ID-PMI-';
 
-type Props = {
-    isOnlineExperience: boolean;
+interface Props extends CompletableSlide {
     storedLocations: string[];
+    isOnlineExperience: boolean;
     location: string;
-    onLocationChange: (loc: string) => void;
     meetingPoint: string;
-    onMeetingPointChange: (meetPoint: string) => void;
-    onSlideComplete: (canContinue: boolean) => void;
     zoomPMI: string;
-    onZoomPMIChange: (pmi: string) => void;
     zoomPassword: string;
+    onLocationChange: (loc: string) => void;
+    onMeetingPointChange: (meetPoint: string) => void;
+    onZoomPMIChange: (pmi: string) => void;
     onZoomPasswordChange: (pwd: string) => void;
+    setCoordinates: (lat: number, long: number) => void;
 }
 
 const Location = (props: Props) => {
@@ -57,6 +59,31 @@ const Location = (props: Props) => {
             );
         }
     }, [isOnlineExperience, onSlideComplete, location, meetingPoint, zoomPMI, zoomPassword]);
+
+    // For in person experiences, get coordinates for the map
+    useEffect(() => {
+        if (!isOnlineExperience && location && meetingPoint) {
+            let mounted = true;
+            const query = `${location}, ${meetingPoint}`;
+    
+            fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${query}&limit=1&apiKey=${process.env.REACT_APP_HERE_API_KEY}`)
+            .then(res => {
+                if (mounted && res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(res => {
+                if (res?.items?.length > 0) {
+                    const coords = res.items[0].position;
+                    props.setCoordinates(coords.lat, coords.lng);
+                }
+            });
+    
+            return () => { mounted = false; }
+        }
+        // We can assume the set coordinates never changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOnlineExperience, location, meetingPoint]);
 
     // Depending on the experience type, fill Zoom info or meeting point info
     return (

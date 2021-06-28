@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { useHistory, useLocation, useRouteMatch, Switch, Route } from 'react-router-dom';
+import type { EventInput } from '@fullcalendar/react';
 
 import { useLanguageContext } from 'context/languageContext';
 import useLanguages from 'hooks/useLanguages';
 import useCreationReducer from './creationReducer';
-import type { StringField, BooleanField, NumberField } from './creationReducer';
+import type { StringField, BooleanField, NumberField, ArrayField } from './creationReducer';
 
+import Div100vh from 'react-div-100vh';
 import { CSSTransition } from 'react-transition-group';
 import Spinner from 'components/Spinner/Spinner';
 import StripeRedirect from 'pages/Creator/StripeRedirect/StripeRedirect';
@@ -17,11 +19,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './CreateExperience.styles';
 const useStyles = makeStyles(styles);
 
-const GET_STRIPE_INFO = gql`
+const GET_CREATOR_INFO = gql`
     query getStripeInfo {
         me {
+            firstName
+            photo
             creator {
                 _id
+                bio
                 stripeProfile {
                     onboarded
                 }
@@ -38,9 +43,12 @@ const GET_LOCATIONS = gql`
     }
 `;
 
-type StripeInfoQuery = {
+type CreatorInfoQuery = {
+    firstName: string;
+    photo: string;
     creator: {
         _id: string;
+        bio: string;
         stripeProfile: { onboarded: boolean };
     }
 }
@@ -61,9 +69,8 @@ const CreateExperience = () => {
 
     useEffect(() => {
         // Start animation on mounting
-        // setAnimationIn(false);
-        // TODO: Put the animation back in
         setAnimationIn(true);
+        // setAnimationIn(false);
 
         // After 2 seconds start fade out
         const animationStartTimer = setTimeout(() => {
@@ -81,9 +88,9 @@ const CreateExperience = () => {
      }, []);
 
     const { 
-        data: stripeData, 
-        loading: loadingStripeData 
-    } = useQuery<{ me: StripeInfoQuery }>(GET_STRIPE_INFO, {
+        data: creatorData, 
+        loading: loadingCreatorData 
+    } = useQuery<{ me: CreatorInfoQuery }>(GET_CREATOR_INFO, {
         onError: () => history.replace('/')
     });
 
@@ -95,16 +102,25 @@ const CreateExperience = () => {
         onError: () => history.replace('/')
     });
 
+    // Form management
     const [state, dispatch] = useCreationReducer();
+
     const handleStringValueChange = useCallback((field: StringField, value: string) => {
         dispatch({ type: 'SET_STRING_FIELD', field, value });
     }, [dispatch]);
+
     const handleBooleanValueChange = useCallback((field: BooleanField, value: boolean) => {
         dispatch({ type: 'SET_BOOLEAN_FIELD', field, value });
     }, [dispatch]);
+
     const handleNumberValueChange = useCallback((field: NumberField, value: number) => {
         dispatch({ type: 'SET_NUMBER_FIELD', field, value });
     }, [dispatch]);
+
+    const handleArrayValueChange = useCallback((field: ArrayField, value: string[] | EventInput[]) => {
+        dispatch({ type: 'SET_ARRAY_FIELD', field, value });
+    }, [dispatch]);
+
     const handleFieldValidity = useCallback((value: boolean) => {
         dispatch({ type: 'SET_CAN_CONTINUE', value });
     }, [dispatch]);
@@ -113,13 +129,17 @@ const CreateExperience = () => {
     useEffect(() => {
         history.push(`/experience/new/${state.currentStep}`);
     }, [state.currentStep, history]);
+
+    const handleSubmit = () => {
+        
+    }
     
-    if (loadingStripeData || !stripeData || loadingLocationData || !locationData) {
+    if (loadingCreatorData || !creatorData || loadingLocationData || !locationData) {
         return <Spinner />;
     }
 
-    const creatorId = stripeData.me.creator._id;
-    const onboardedWithStripe = stripeData.me.creator.stripeProfile.onboarded;
+    const creatorId = creatorData.me.creator._id;
+    const onboardedWithStripe = creatorData.me.creator.stripeProfile.onboarded;
 
     // If creator hasn't completed the Stripe onboarding, let them try again
     if (!onboardedWithStripe) {
@@ -131,10 +151,14 @@ const CreateExperience = () => {
             <Layout 
             stepsCompleted={state.stepsCompleted} 
             currentStepIdx={state.currentStepIdx}
+            currentStep={state.currentStep}
             canContinue={state.canContinue}
-            onNext={() => dispatch({ type: 'GO_TO_NEXT_STEP' })}
+            onNavigate={stepIdx => dispatch({ type: 'GO_TO_STEP', stepIdx })}
             onBack={() => dispatch({ type: 'GO_TO_PREV_STEP' })}
-            onNavigate={stepIdx => dispatch({ type: 'GO_TO_STEP', stepIdx })}>
+            onNext={
+                state.currentStep === 'review' ?
+                handleSubmit : () => dispatch({ type: 'GO_TO_NEXT_STEP' })
+            }>
                 <Switch location={location}>
                     <Route path={`${path}/setting`}>
                         <Slides.Setting
@@ -149,13 +173,17 @@ const CreateExperience = () => {
                         ))]}
                         isOnlineExperience={state.form.isOnlineExperience!}
                         location={state.form.location}
-                        onLocationChange={val => handleStringValueChange('location', val)}
                         meetingPoint={state.form.meetingPoint}
-                        onMeetingPointChange={val => handleStringValueChange('meetingPoint', val)}
                         zoomPMI={state.form.zoomMeetingId}
-                        onZoomPMIChange={val => handleStringValueChange('zoomMeetingId', val)}
                         zoomPassword={state.form.zoomMeetingPassword}
+                        onLocationChange={val => handleStringValueChange('location', val)}
+                        onMeetingPointChange={val => handleStringValueChange('meetingPoint', val)}
+                        onZoomPMIChange={val => handleStringValueChange('zoomMeetingId', val)}
                         onZoomPasswordChange={val => handleStringValueChange('zoomMeetingPassword', val)}
+                        setCoordinates={(lat, long) => {
+                            handleNumberValueChange('latitude', lat);
+                            handleNumberValueChange('longitude', long);
+                        }}
                         onSlideComplete={handleFieldValidity} />
                     </Route>
                     <Route path={`${path}/title`}>
@@ -192,9 +220,7 @@ const CreateExperience = () => {
                         <Slides.Language
                         languageList={languageList}
                         languages={state.form.languages}
-                        onLanguagesChange={value => {
-                            dispatch({ type: 'SET_LANGUAGES', value });
-                        }}
+                        onLanguagesChange={val => handleArrayValueChange('languages', val)}
                         onSlideComplete={handleFieldValidity} />
                     </Route>
                     <Route path={`${path}/capacity`}>
@@ -206,8 +232,8 @@ const CreateExperience = () => {
                     <Route path={`${path}/age`}>
                         <Slides.AgeRequirements
                         isAgeRestricted={state.form.isAgeRestricted}
-                        onAgeRestrictionChange={val => handleBooleanValueChange('isAgeRestricted', val)}
                         ageRequired={state.form.ageRequired}
+                        onAgeRestrictionChange={val => handleBooleanValueChange('isAgeRestricted', val)}
                         onAgeRequiredChange={val => handleNumberValueChange('ageRequired', val)}
                         onSlideComplete={handleFieldValidity} />
                     </Route>
@@ -219,24 +245,66 @@ const CreateExperience = () => {
                             dispatch({ type: 'SET_IMAGE_FILE', index, value });
                         }} />
                     </Route>
+                    <Route path={`${path}/included`}>
+                        <Slides.IncludedItems
+                        items={state.form.included}
+                        onItemsChange={val => handleArrayValueChange('included', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/toBring`}>
+                        <Slides.ToBringItems
+                        items={state.form.toBring}
+                        onItemsChange={val => handleArrayValueChange('toBring', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/price`}>
+                        <Slides.Pricing
+                        pricePerPerson={state.form.pricePerPerson}
+                        privatePrice={state.form.privatePrice}
+                        currency={state.form.currency}
+                        capacity={state.form.capacity}
+                        onPricePerPersonChange={val => handleNumberValueChange('pricePerPerson', val)}
+                        onPrivatePriceChange={val => handleNumberValueChange('privatePrice', val)}
+                        onCurrencyChange={val => handleStringValueChange('currency', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/availabilities`}>
+                        <Slides.Availabilities
+                        slots={state.form.slots!}
+                        duration={state.form.duration}
+                        onSlotsChange={val => handleArrayValueChange('slots', val)}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
+                    <Route path={`${path}/review`}>
+                        <Slides.Review
+                        form={state.form}
+                        creator={{
+                            name: creatorData.me.firstName,
+                            photo: creatorData.me.photo,
+                            bio: creatorData.me.creator.bio
+                        }}
+                        onSlideComplete={handleFieldValidity} />
+                    </Route>
                 </Switch>
             </Layout>
         );
     } else { // Show start animation
         return (
-            <CSSTransition
-            in={animationIn}
-            timeout={1000}
-            unmountOnExit
-            classNames={{
-                exit: classes.fadeExit,
-                exitActive: classes.fadeExitActive
-            }}>
-                <div className={classes.container}>
-                    <h2 className={classes.title}>{text.animationTitle1}</h2>
-                    <h2 className={classes.title}>{text.animationTitle2}</h2>
-                </div>
-            </CSSTransition>
+            <Div100vh>
+                <CSSTransition
+                in={animationIn}
+                timeout={1000}
+                unmountOnExit
+                classNames={{
+                    exit: classes.fadeExit,
+                    exitActive: classes.fadeExitActive
+                }}>
+                    <div className={classes.container}>
+                        <h2 className={classes.title}>{text.animationTitle1}</h2>
+                        <h2 className={classes.title}>{text.animationTitle2}</h2>
+                    </div>
+                </CSSTransition>
+            </Div100vh>
         );
     }
 }

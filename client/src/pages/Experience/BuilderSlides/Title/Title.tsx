@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import SlideTitle from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
@@ -14,10 +15,9 @@ const useStyles = makeStyles(styles);
 
 const MAX_LENGTH = 50;
 
-type Props = {
+interface Props extends CompletableSlide {
     title: string;
     onTitleChange: (title: string) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const Title = (props: Props) => {

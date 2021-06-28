@@ -72,7 +72,7 @@ const styles = (theme: Theme) => createStyles({
     photoPreview: {
         objectFit: 'cover',
         borderRadius: '100%',
-        margin: '20px 0 0 20px',
+        margin: 0,
         height: 200,
         width: 200
     },
@@ -93,9 +93,9 @@ const styles = (theme: Theme) => createStyles({
 
     deleteIcon: {
         position: 'absolute',
-        top: 20, 
+        top: 0, 
         right: 5,
-        fontSize: '1.1rem',
+        fontSize: '1.2rem',
         cursor: 'pointer',
         color: '#808080',
         transition: 'all 200ms ease-in-out',
@@ -112,6 +112,7 @@ const styles = (theme: Theme) => createStyles({
 
     aboutYouTextField: {
         width: '90%',
+        [theme.breakpoints.down('xs')]: { width: '100%' },
         '& .MuiOutlinedInput-multiline': {
             padding: '1rem',
             borderRadius: 10
@@ -129,6 +130,7 @@ const styles = (theme: Theme) => createStyles({
     phoneTextField: {
         marginTop: 20,
         width: 250,
+        [theme.breakpoints.down('xs')]: { width: '100%' },
         '& .MuiOutlinedInput-root': { borderRadius: 10 }
     },
 
@@ -197,7 +199,7 @@ const styles = (theme: Theme) => createStyles({
 
     idPreview: {
         borderRadius: '1rem',
-        height: '75%',
+        height: '85%',
         maxWidth: '90%'
     },
 

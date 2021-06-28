@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
@@ -12,11 +13,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Language.styles';
 const useStyles = makeStyles(styles);
 
-type Props = {
+interface Props extends CompletableSlide {
     languageList: string[];
     languages: string[];
     onLanguagesChange: (langs: string[]) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const MAX_LANGUAGES = 3;

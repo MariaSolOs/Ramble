@@ -28,6 +28,20 @@ exports.experienceReducer = exp => ({
     creator: exp.creator
 });
 
+exports.occurrenceReducer = occ => ({
+    _id: occ._id,
+    experience: occ.experience,
+    dateStart: occ.dateStart.toISOString(),
+    dateEnd: occ.dateEnd.toISOString(),
+    spotsLeft: occ.spotsLeft,
+    creatorProfit: occ.creatorProfit,
+    bookings: occ.bookings
+});
+
+exports.bookingReducer = booking => ({
+    _id: booking._id
+});
+
 exports.userReducer = user => ({
     _id: user._id,
     firstName: user.fstName,

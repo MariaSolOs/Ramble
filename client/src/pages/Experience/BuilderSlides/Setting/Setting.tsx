@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
@@ -12,10 +13,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Setting.styles';
 const useStyles = makeStyles(styles);
 
-type Props = {
+interface Props extends CompletableSlide {
     isOnlineExperience?: boolean;
     onSelectType: (isOnline: boolean) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const Setting = (props: Props) => {

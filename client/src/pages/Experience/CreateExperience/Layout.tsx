@@ -5,6 +5,7 @@ import Div100vh from 'react-div-100vh';
 
 import { useLanguageContext } from 'context/languageContext';
 import { CREATION_STEPS } from 'models/experience';
+import type { CreationStep } from 'models/experience';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,6 +19,7 @@ const useStyles = makeStyles(styles);
 
 type Props = {
     stepsCompleted: number;
+    currentStep: CreationStep;
     currentStepIdx: number;
     canContinue: boolean;
     onNext: () => void;
@@ -30,7 +32,7 @@ export type StyleProps = {
 }
 
 const Layout: React.FC<Props> = (props) => {
-    const { CreateExperience_Layout: text} = useLanguageContext().appText;
+    const { CreateExperience_Layout: text } = useLanguageContext().appText;
 
     // The linear progress bar takes a value between 0 and 100
     const progressValue = (props.stepsCompleted / CREATION_STEPS.length) * 100;
@@ -113,11 +115,12 @@ const Layout: React.FC<Props> = (props) => {
                                 {text.back}
                             </button>}
                         <GradientButton 
-                        disabled={!props.canContinue}
+                        // TODO: Comment this back
+                        // disabled={!props.canContinue}
                         className={`${classes.footerButton} ${classes.nextButton}`} 
                         variant="experience"
                         onClick={props.onNext}>
-                            {text.next}
+                            {props.currentStep === 'review' ? text.submit : text.next}
                         </GradientButton>
                     </div>
                 </div>

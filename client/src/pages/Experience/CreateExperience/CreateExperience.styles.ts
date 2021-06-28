@@ -5,7 +5,7 @@ const styles = (theme: Theme) => createStyles({
     container: {
         textAlign: 'left',
         width: '100vw',
-        height: '100vh',
+        height: '100%',
         backgroundColor: '#000',
         margin: 0,
         display: 'flex',

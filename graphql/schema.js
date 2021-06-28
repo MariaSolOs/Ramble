@@ -87,6 +87,20 @@ module.exports = gql`
         move
     }
 
+    type Occurrence {
+        _id: ID!
+        experience: Experience!
+        dateStart: String!
+        dateEnd: String!
+        spotsLeft: Int!
+        creatorProfit: Int!
+        bookings: [Booking!]
+    }
+
+    type Booking {
+        _id: ID!
+    }
+
     type User {
         _id: ID
         token: String!

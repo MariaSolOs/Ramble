@@ -18,7 +18,6 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import Carousel from 'react-image-gallery';
 import CategoryBox from 'components/CategoryBox/CategoryBox';
-import ShareExperienceDialog from 'components/ShareExperienceDialog/ShareExperienceDialog';
 import onlineIcon from 'assets/images/online-experience-icon.svg';
 
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -28,9 +27,9 @@ import { desktopStyles, mobileStyles } from './Experience.styles';
 type Props = {
     experience: ExperienceType;
     creator: Creator;
-    isExperienceSaved: boolean;
-    isUserLoggedIn: boolean;
+    isExperienceSaved?: boolean;
     onHeartClick?: React.MouseEventHandler;
+    onShareClick?: React.MouseEventHandler;
     useMobileDisplay?: boolean;
     containerClass?: string;
 }
@@ -55,19 +54,13 @@ const Experience = (props: Props) => {
 
     const useStyles = makeStyles(props.useMobileDisplay ? mobileStyles : desktopStyles);
     const classes = useStyles({ 
-        isExpSaved: props.isExperienceSaved,
+        isExpSaved: Boolean(props.isExperienceSaved),
         numQuickInfoColumns: ageRestricted ? 4 : 3
     });
 
     const [isBioExpanded, setIsBioExpanded] = useState(false);
-    const [openShareDialog, setOpenShareDialog] = useState(false);
 
     return (
-        <>
-        <ShareExperienceDialog 
-        open={openShareDialog}
-        onClose={() => setOpenShareDialog(false)}
-        experienceTitle={experience.title} />
         <div className={`${props.containerClass}`}>
             <Carousel
             additionalClass={classes.carousel}
@@ -96,14 +89,15 @@ const Experience = (props: Props) => {
                         </h3>
                     </div>
                     <div className={classes.shareSaveContainer}>
-                        <Fab
-                        size="small" 
-                        disableRipple
-                        className={classes.shareSaveButton}
-                        onClick={() => setOpenShareDialog(true)}>
-                            <FontAwesomeIcon icon={faShareSquare} />
-                        </Fab>
-                        {props.isUserLoggedIn &&
+                        {props.onShareClick && 
+                            <Fab
+                            size="small" 
+                            disableRipple
+                            className={classes.shareSaveButton}
+                            onClick={props.onShareClick}>
+                                <FontAwesomeIcon icon={faShareSquare} />
+                            </Fab>}
+                        {props.onHeartClick &&
                             <Fab 
                             size="small"
                             disableRipple
@@ -227,7 +221,6 @@ const Experience = (props: Props) => {
                     </>}
             </div>
         </div>
-        </>
     );
 }
 

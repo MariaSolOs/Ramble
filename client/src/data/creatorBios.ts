@@ -1,4 +1,4 @@
-import type { Language } from 'models/language';
+import type { Language } from 'models/translation';
 
 type CreatorData = {
     name: string;

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
+import type { CompletableSlide } from 'models/prop-interfaces';
 
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
@@ -13,12 +14,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './AgeRequirements.styles';
 const useStyles = makeStyles(styles);
 
-type Props = {
+interface Props extends CompletableSlide {
     isAgeRestricted: boolean;
-    onAgeRestrictionChange: (restricted: boolean) => void;
     ageRequired: number;
+    onAgeRestrictionChange: (restricted: boolean) => void;
     onAgeRequiredChange: (age: number) => void;
-    onSlideComplete: (canContinue: boolean) => void;
 }
 
 const AgeRequirements = (props: Props) => {
@@ -44,7 +44,7 @@ const AgeRequirements = (props: Props) => {
                     checked={props.isAgeRestricted}
                     onChange={(_, checked) => {
                         if (checked) {
-                            props.onAgeRestrictionChange(checked);
+                            props.onAgeRestrictionChange(true);
                         }
                     }} />
                     <label>{text.yes}</label>
@@ -54,7 +54,7 @@ const AgeRequirements = (props: Props) => {
                     checked={!props.isAgeRestricted}
                     onChange={(_, checked) => {
                         if (checked) {
-                            props.onAgeRestrictionChange(!checked);
+                            props.onAgeRestrictionChange(false);
                         }
                     }} />
                     <label>{text.no}</label>

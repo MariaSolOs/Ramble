@@ -70,7 +70,6 @@ const CreateExperience = () => {
     useEffect(() => {
         // Start animation on mounting
         setAnimationIn(true);
-        // setAnimationIn(false);
 
         // After 2 seconds start fade out
         const animationStartTimer = setTimeout(() => {

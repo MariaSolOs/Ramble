@@ -115,8 +115,7 @@ const Layout: React.FC<Props> = (props) => {
                                 {text.back}
                             </button>}
                         <GradientButton 
-                        // TODO: Comment this back
-                        // disabled={!props.canContinue}
+                        disabled={!props.canContinue}
                         className={`${classes.footerButton} ${classes.nextButton}`} 
                         variant="experience"
                         onClick={props.onNext}>

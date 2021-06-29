@@ -181,6 +181,14 @@ const englishTranslation: TranslationRecord = {
         animationTitle2: "We're all about creating special moments.",
     },
     
+    CreateExperience_Submitted: {
+        title: 'Your experience was submitted',
+        message1: 'Your experience',
+        message2: 'was submitted successfully.',
+        message3: "We'll review it and get back to you shortly so you can get your act out there as soon as possible.",
+        button: 'Got it'
+    },
+    
     CreateExperience_Layout: {
         back: 'Back',
         next: 'Next',

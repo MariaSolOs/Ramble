@@ -17,8 +17,7 @@ exports.experienceReducer = exp => ({
     toBringItems: exp.toBring,
     capacity: exp.capacity,
     ...exp.zoomInfo && {
-        zoomPMI: exp.zoomInfo.PMI,
-        zoomPassword: exp.zoomInfo.password
+        zoomPMI: exp.zoomInfo.PMI
     },
     pricePerPerson: exp.price.perPerson,
     pricePrivate: exp.price.private,

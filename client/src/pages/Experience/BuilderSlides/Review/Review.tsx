@@ -30,6 +30,7 @@ const Review = (props: Props) => {
         wasFile: isFile(img!)
     }));
 
+    // Make the form appropriate for the component
     const experience = getFormPreview(
         props.form, 
         images.map(({ url }) => url), 
@@ -58,8 +59,8 @@ const Review = (props: Props) => {
             <div className={classes.experienceContainer}>
                 <Experience
                 experience={experience}
-                useMobileDisplay
-                creator={props.creator} />
+                creator={props.creator}
+                useMobileDisplay />
             </div>
         </>
     );

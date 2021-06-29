@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
 import store from 'store/store';
-import apolloClient from 'gqlClient';
+import apolloClient from 'store/gqlClient';
 
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';

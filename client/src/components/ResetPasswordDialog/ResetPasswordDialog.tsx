@@ -26,7 +26,9 @@ const RESET_PASSWORD = gql`
     }
 `;
 
-type EditUserVariables = { password: string; }
+type EditUserVariables = { password: string; };
+
+type EditUserData = { _id: string };
 
 enum FormField {
     Password1 = 'password1',
@@ -86,7 +88,9 @@ const ResetPasswordDialog = () => {
         resetPassword({ variables: { password: values.password1 } });
     }
 
-    const [resetPassword] = useMutation<any, EditUserVariables>(RESET_PASSWORD, {
+    const [
+        resetPassword
+    ] = useMutation<{ editUser: EditUserData }, EditUserVariables>(RESET_PASSWORD, {
         onCompleted: () => {
             dispatch(fetchProfile());
             handleClose();

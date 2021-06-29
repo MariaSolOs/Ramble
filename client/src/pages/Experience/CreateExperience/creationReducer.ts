@@ -9,6 +9,7 @@ interface CreationState {
     currentStepIdx: number;
     stepsCompleted: number;
     canContinue: boolean;
+    loading: boolean;
     form: ExperienceForm;
 }
 
@@ -43,6 +44,7 @@ const initialState: CreationState = {
     currentStepIdx: 0,
     stepsCompleted: 0,
     canContinue: false,
+    loading: false,
     form: {
         location: '',
         meetingPoint: '',
@@ -80,6 +82,8 @@ type Action =
 | { type: 'SET_IMAGE_FILE'; index: number; value?: File; }
 | { type: 'SET_ARRAY_FIELD'; field: ArrayField; value: string[] | EventInput[]; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
+| { type: 'START_SUBMIT' }
+| { type: 'END_SUBMIT' }
 
 export default function useCreationReducer() {
     const reducer = useCallback((state: CreationState, action: Action): CreationState => {
@@ -150,6 +154,15 @@ export default function useCreationReducer() {
                 return {
                     ...state,
                     canContinue: action.value
+                }
+            case 'START_SUBMIT': 
+                return {
+                    ...state,
+                    loading: true
+                }
+            case 'END_SUBMIT':
+                return {
+                    ...initialState
                 }
             default: return state;
         }

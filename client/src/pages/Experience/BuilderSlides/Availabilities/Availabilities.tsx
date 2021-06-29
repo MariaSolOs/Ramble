@@ -57,7 +57,8 @@ const Availabilities = (props: Props) => {
                 onUnselect={handleUnselect}
                 extraOptions={{
                     events: slots,
-                    height: 500
+                    height: 500,
+                    longPressDelay: 300
                 }} />
             </div>
         </div>

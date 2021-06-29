@@ -63,6 +63,7 @@ module.exports = {
                     filter['location.displayLocation'] = location;
                 }
             }
+            // The capacity is just a lower bound
             if (capacity) {
                 filter.capacity = { $gte: capacity }
             }
@@ -145,6 +146,7 @@ module.exports = {
                 stripe: { onboarded: false }
             });
 
+            // Connect user account
             await User.findByIdAndUpdate(userId, {
                 creator: creator._id
             });
@@ -183,5 +185,55 @@ module.exports = {
                 return { code: 409, message: "Experience couldn't be unsaved." }
             }
         },
+
+        createExperience: async (_, args, { userId }) => {
+            if (!userId) {
+                throw new AuthenticationError("Creator isn't logged in.");
+            }
+
+            // If we have Zoom info, create online experience
+            const isOnlineExperience = Boolean(args.zoomPMI);
+
+            // Create the experience
+            const experience = await Experience.create({
+                status: 'pending',
+                title: args.title,
+                description: args.description,
+                images: args.images,
+                categories: args.categories,
+                duration: args.duration,
+                languages: args.languages,
+                capacity: args.capacity,
+                included: args.includedItems,
+                toBring: args.toBringItems,
+                creator: userId,
+                price: {
+                    perPerson: args.pricePerPerson,
+                    currency: args.currency,
+                    ...args.privatePrice && {
+                        private: args.privatePrice
+                    }
+                },
+                ...isOnlineExperience && {
+                    zoomInfo: {
+                        PMI: args.zoomPMI,
+                        password: args.zoomPassword
+                    }
+                },
+                location: {
+                    displayLocation: args.location,
+                    ...!isOnlineExperience && {
+                        meetingPoint: args.meetingPoint,
+                        latitude: args.latitude,
+                        longitude: args.longitude
+                    }
+                },
+                ...args.ageRestriction && {
+                    ageRestriction: args.ageRestriction
+                }
+            });
+
+            return experienceReducer(experience);
+        }
     }
 }

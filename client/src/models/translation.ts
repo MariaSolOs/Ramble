@@ -48,6 +48,8 @@ export type TranslationRecord = {
 
     CreateExperience: Record<'animationTitle1' | 'animationTitle2', string>;
     
+    CreateExperience_Submitted: Record<'title' | 'message1' | 'message2' | 'message3' | 'button', string>;
+    
     CreateExperience_Layout: Record<'back' | 'next' | 'submit' | ExperienceCreationStep, string>;
 
     BuilderSlides_Setting: Record<'title' | 'subtitle' | 'online' | 'onlineOption' | 'inPerson' | 'inPersonOption', string>;

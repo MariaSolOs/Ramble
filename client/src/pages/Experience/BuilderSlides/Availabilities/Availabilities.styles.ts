@@ -17,7 +17,7 @@ const styles = (theme: Theme) => createStyles({
         [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
             alignItems: 'center',
-            height: 'calc(100vh - 180px)',
+            marginBottom: 20,
             width: '95%'
         },
         [theme.breakpoints.down('sm')]: { width: '100%' }
@@ -36,7 +36,10 @@ const styles = (theme: Theme) => createStyles({
     calendar: {
         '& .fc.fc-media-screen': {
             width: 420,
-            [theme.breakpoints.down('xs')]: { width: '100%' }
+            [theme.breakpoints.down('xs')]: { 
+                width: '100%',
+                minWidth: 280 
+            }
         }
     }
 });

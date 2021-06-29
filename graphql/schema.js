@@ -46,6 +46,28 @@ module.exports = gql`
         saveExperience(experienceId: String!): MutationResponse
 
         unsaveExperience(experienceId: String!): MutationResponse
+
+        createExperience(
+            title: String!
+            description: String!
+            images: [String!]!
+            location: String!
+            meetingPoint: String
+            latitude: Float
+            longitude: Float
+            categories: [ExperienceCategories!]!
+            ageRestriction: Int
+            duration: Float!
+            languages: [String!]!
+            includedItems: [String!]!
+            toBringItems: [String!]!
+            capacity: Int!
+            zoomPMI: String
+            zoomPassword: String
+            pricePerPerson: Int!
+            privatePrice: Int
+            currency: String!
+        ): Experience
     }
 
     type MutationResponse {
@@ -70,9 +92,8 @@ module.exports = gql`
         toBringItems: [String!]
         capacity: Int!
         zoomPMI: String
-        zoomPassword: String
         pricePerPerson: Int!
-        pricePrivate: Int
+        privatePrice: Int
         currency: String!
         ratingValue: Float
         numberOfRatings: Int

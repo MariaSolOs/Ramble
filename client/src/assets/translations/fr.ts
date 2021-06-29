@@ -181,6 +181,14 @@ const frenchTranslation: TranslationRecord = {
         animationTitle2: 'Nous voulons créer de moments inoubliables.',
     },
     
+    CreateExperience_Submitted: {
+        title: 'Votre expérience a été soumise',
+        message1: 'Votre expérience',
+        message2: 'a été soumise avec succès.',
+        message3: "Nous la passerons en revue et vous contacterons dès qu'elle est en ligne.",
+        button: 'Parfait'
+    },
+    
     CreateExperience_Layout: {
         back: 'Retour',
         next: 'Suivant',

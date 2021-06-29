@@ -24,7 +24,8 @@ const styles = (theme: Theme) => createStyles({
         left: 0,
         right: 0,
         height: 55,
-        width: '100%'
+        width: '100%',
+        zIndex: 1
     },
     
     footerButtons: {

@@ -104,7 +104,7 @@ const SearchExperiences = () => {
         searchDispatch({ type: 'UPDATE_CAPACITY', capacity });
     }, [searchDispatch]);
 
-    // Refetch experiences when the  changes
+    // Refetch experiences when the URL changes
     useEffect(() => {
         refetchExperiences();
     }, [locationQuery, capacityQuery, refetchExperiences]);

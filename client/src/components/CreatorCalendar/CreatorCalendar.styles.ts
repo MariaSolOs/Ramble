@@ -27,7 +27,8 @@ const styles = (theme: Theme) => createStyles({
         },
 
         '& .fc .fc-toolbar-title': {
-            fontSize: '1.15rem'
+            fontSize: '1.15rem',
+            [theme.breakpoints.down('xs')]: { fontSize: '0.95rem' }
         },
 
         '& .fc .fc-daygrid-day.fc-day-today': {
@@ -76,6 +77,10 @@ const styles = (theme: Theme) => createStyles({
 
         '& .fc .fc-daygrid-day-events': {
             marginTop: -5
+        },
+
+        '& .fc .fc-prev-button, & .fc .fc-next-button': {
+            [theme.breakpoints.down('xs')]: { padding: '2px 3px' }
         }
     }
 });

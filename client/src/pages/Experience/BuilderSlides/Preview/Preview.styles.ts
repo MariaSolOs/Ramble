@@ -28,7 +28,7 @@ const styles = (theme: Theme) => createStyles({
             width: 130 
         },
         [theme.breakpoints.down('xs')]: { 
-            margin: '0 auto 50px',
+            margin: '0 auto 40px',
             width: 140
         }
     },

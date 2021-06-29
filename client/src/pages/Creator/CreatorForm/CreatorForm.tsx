@@ -127,7 +127,7 @@ const CreatorForm = () => {
         }
 
         let photoUrl = '';
-        const governmentIds = [];
+        const governmentIds: string[] = [];
 
         // Upload profile picture if the user didn't have one
         if (!data!.me.photo) {
@@ -144,23 +144,16 @@ const CreatorForm = () => {
         }
 
         // Upload IDs
-        const idData1 = new FormData();
-        idData1.append('file', frontId!);
-        idData1.append('upload_preset', 'RAMBLE-creators');
-        const { secure_url: idUrl1 } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
-            method: 'POST',
-            body: idData1
-        }).then(res => res.json());
-        governmentIds.push(idUrl1);
-
-        const idData2 = new FormData();
-        idData2.append('file', backId!);
-        idData2.append('upload_preset', 'RAMBLE-creators');
-        const { secure_url: idUrl2 } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
-            method: 'POST',
-            body: idData2
-        }).then(res => res.json());
-        governmentIds.push(idUrl2);
+        for (const id of [frontId, backId]) {
+            const idData = new FormData();
+            idData.append('file', id!);
+            idData.append('upload_preset', 'RAMBLE-creators');
+            const { secure_url } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
+                method: 'POST',
+                body: idData
+            }).then(res => res.json());
+            governmentIds.push(secure_url);
+        }
 
         // Sign up creator
         signUpCreator({ variables: { bio, governmentIds }});

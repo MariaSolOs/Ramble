@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import uiReducer from './uiSlice';
 import userReducer from './userSlice';
-import apolloClient from 'gqlClient';
+import apolloClient from 'store/gqlClient';
 
 const store = configureStore({
     reducer: {

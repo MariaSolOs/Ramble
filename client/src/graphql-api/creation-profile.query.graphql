@@ -1,0 +1,14 @@
+# import './user-avatar.fragment.graphql'
+# import './creator-bio.fragment.graphql'
+
+query getCreationProfile {
+    me {
+        ...UserAvatar
+        creator {
+            stripeProfile {
+                onboarded
+            }
+            ...CreatorBio
+        }
+    }
+}

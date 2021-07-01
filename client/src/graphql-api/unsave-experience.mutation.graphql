@@ -1,0 +1,5 @@
+mutation unsaveExperience($experienceId: String!) {
+    unsaveExperience(experienceId: $experienceId) {
+        _id
+    }
+}

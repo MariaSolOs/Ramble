@@ -1,12 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery, gql } from '@apollo/client';
 
+import { updateToken } from 'utils/auth';
+import { useGetExperienceQuery, useGetCoreProfileLazyQuery } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { fetchProfile, saveExperience, unsaveExperience } from 'store/userSlice';
+import useHeartClick from 'hooks/useHeartClick';
+import { setProfile } from 'store/userSlice';
 import { Experience as ExperienceType } from 'models/experience';
-import type { Experienceable } from 'models/experience';
 import type { Creator } from 'models/creator';
 
 import Experience from 'components/Experience/Experience';
@@ -18,48 +19,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './ViewExperience.styles';
 const useStyles = makeStyles(styles);
 
-const GET_EXPERIENCE = gql`
-    query getExp($id: String!) {
-        experience(id: $id) {
-            _id
-            title
-            description
-            images
-            location
-            latitude
-            longitude
-            categories
-            ageRestriction
-            duration
-            languages
-            includedItems
-            toBringItems
-            capacity
-            zoomPMI
-            pricePerPerson
-            creator {
-                bio
-                user {
-                    photo
-                    firstName
-                }
-            }
-        }
-    }
-`;
-
-type ExperienceQuery = Experienceable & {
-    creator: {
-        bio: string;
-        user: { photo: string; firstName: string; }
-    }
-};
-
-type ExperienceVariables = { id: string; }
-
 const ViewExperience = () => {
     const { ViewExperience: text } = useLanguageContext().appText;
     const dispatch = useAppDispatch();
+    const handleHeartClick = useHeartClick();
     
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
@@ -75,18 +38,30 @@ const ViewExperience = () => {
     const [experience, setExperience] = useState<ExperienceType>();
     const [creator, setCreator] = useState<Creator>();
     const [openShareDialog, setOpenShareDialog] = useState(false);
-    const { loading } = useQuery<{ experience: ExperienceQuery }, ExperienceVariables>(GET_EXPERIENCE, {
+
+    // For logging the user back 
+    const [fetchProfile] = useGetCoreProfileLazyQuery({
+        onCompleted: ({ me }) => {
+            /* If we reach this point, the user for sure 
+                didn't choose the "remember me option", so save
+                token in session storage. */
+            updateToken(me.token!, false);
+            dispatch(setProfile(me));
+        }
+    });
+
+    const { loading } = useGetExperienceQuery({
         variables: { id: experienceId },
         onCompleted: ({ experience }) => {
             const { creator, ...experienceInfo } = experience;
             setExperience(new ExperienceType(experienceInfo));
             setCreator({
                 name: creator.user.firstName,
-                photo: creator.user.photo,
-                bio: creator.bio
+                photo: creator.user.photo!,
+                bio: creator.bio!
             });
         },
-        onError: (error) => console.log(error)
+        onError: (error) => console.error(error)
     });
 
     /* If applicable, remove the temporary token and authenticate the user
@@ -97,17 +72,9 @@ const ViewExperience = () => {
         if (tempToken) {
             localStorage.removeItem('ramble-redirect_page_token');
             sessionStorage.setItem('ramble-token', tempToken);
-            dispatch(fetchProfile());
+            fetchProfile();
         }
-    }, [dispatch]);
-
-    const handleHeartClick = useCallback(() => {
-        if (isExpSaved) {
-            dispatch(unsaveExperience({ experienceId }));
-        } else {
-            dispatch(saveExperience({ experienceId }));
-        }
-    }, [isExpSaved, experienceId, dispatch]);
+    }, [fetchProfile]);
 
     if (loading || !experience) {
         return <Spinner />
@@ -123,7 +90,7 @@ const ViewExperience = () => {
             experience={experience}
             creator={creator!}
             isExperienceSaved={isExpSaved}
-            onHeartClick={handleHeartClick}
+            onHeartClick={() => handleHeartClick(isExpSaved, experienceId)}
             onShareClick={() => setOpenShareDialog(true)}
             containerClass={classes.experienceContainer} />
             <div className={classes.footer}>

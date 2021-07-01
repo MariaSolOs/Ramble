@@ -12,9 +12,9 @@ exports.experienceReducer = exp => ({
     categories: exp.categories,
     ageRestriction: exp.ageRestriction,
     duration: exp.duration,
-    languages: exp.languages,
-    includedItems: exp.included,
-    toBringItems: exp.toBring,
+    languages: exp.languages || [],
+    includedItems: exp.included || [],
+    toBringItems: exp.toBring || [],
     capacity: exp.capacity,
     ...exp.zoomInfo && {
         zoomPMI: exp.zoomInfo.PMI

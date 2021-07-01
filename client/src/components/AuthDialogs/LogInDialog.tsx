@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { unwrapResult } from '@reduxjs/toolkit';
 
+import { updateToken } from 'utils/auth';
+import { useLogInMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { closeLogInDialog, openErrorDialog } from 'store/uiSlice';
-import { logIn } from 'store/userSlice';
+import { setProfile } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -45,6 +46,22 @@ const LogInDialog = () => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.showLogInDialog);
 
+    const [logIn] = useLogInMutation({
+        onCompleted: ({ logInUser }) => {
+            if (logInUser) {
+                updateToken(logInUser.token!, values.rememberUser);
+                dispatch(setProfile(logInUser));
+            }
+            handleClose();
+        },
+        onError: ({ graphQLErrors }) => {
+            const message = graphQLErrors[0].message || "We couldn't log you in.";
+            dispatch(openErrorDialog({ message }));
+            handleClose(); 
+        }
+    });
+
+    // Form management
     const [values, setValues] = useState(initialForm);
     const [showForgotPwdDialog, setShowForgotPwdDialog] = useState(false);
 
@@ -67,14 +84,7 @@ const LogInDialog = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        dispatch(logIn(values))
-        .then(unwrapResult)
-        .catch(err => {
-            dispatch(openErrorDialog({ 
-                message: err.message || "We couldn't log you in."
-            }));
-        })
-        .finally(() => handleClose());
+        logIn({ variables: values });
     }
 
     if (showForgotPwdDialog) {

@@ -1,5 +1,5 @@
 require('dotenv').config({ path: './.env' });
-require('./config/mongoDB');
+require('./mongoDB');
 
 const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/schema');

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { useMutation, gql } from '@apollo/client';
 
+import { updateToken } from 'utils/auth';
+import { useUpdateProfileMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
-import { fetchProfile } from 'store/userSlice';
+import { setProfile } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,18 +18,6 @@ import Button from 'components/GradientButton/GradientButton';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './ResetPasswordDialog.styles';
 const useStyles = makeStyles(styles);
-
-const RESET_PASSWORD = gql`
-    mutation updatePassword($password: String!) {
-        editUser(password: $password) {
-            _id
-        }
-    }
-`;
-
-type EditUserVariables = { password: string; };
-
-type EditUserData = { _id: string };
 
 enum FormField {
     Password1 = 'password1',
@@ -88,11 +77,10 @@ const ResetPasswordDialog = () => {
         resetPassword({ variables: { password: values.password1 } });
     }
 
-    const [
-        resetPassword
-    ] = useMutation<{ editUser: EditUserData }, EditUserVariables>(RESET_PASSWORD, {
-        onCompleted: () => {
-            dispatch(fetchProfile());
+    const [resetPassword] = useUpdateProfileMutation({
+        onCompleted: ({ editUser }) => {
+            updateToken(editUser.token!, false);
+            dispatch(setProfile(editUser));
             handleClose();
         },
         onError: () => {

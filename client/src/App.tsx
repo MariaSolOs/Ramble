@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+import { updateToken } from 'utils/auth';
+import { useGetCoreProfileLazyQuery } from 'graphql-api';
 import LanguageProvider from 'context/languageContext';
 import GlobalStyles from 'assets/styles/GlobalStyles';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { fetchProfile } from 'store/userSlice';
+import { setProfile } from 'store/userSlice';
 import { openSnackbar } from 'store/uiSlice';
 
 import Home from 'pages/Home/Home';
@@ -23,17 +25,27 @@ const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
 const App = () => {
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const dispatch = useAppDispatch();
+    const [rememberUser, setRememberUser] = useState(false);
+
+    const [fetchProfile] = useGetCoreProfileLazyQuery({
+        onCompleted: ({ me }) => {
+            updateToken(me.token!, rememberUser);
+            dispatch(setProfile(me));
+        }
+    });
 
     // Try to log in back the user when the page refreshes
     useEffect(() => {
         if (!isLoggedIn) {
-            const token = localStorage.getItem('ramble-token') || sessionStorage.getItem('ramble-token');
+            const persistentToken = localStorage.getItem('ramble-token');
+            const sessionToken = sessionStorage.getItem('ramble-token');
             
-            if (token) {
-                dispatch(fetchProfile());
+            if (persistentToken || sessionToken) {
+                setRememberUser(Boolean(persistentToken));
+                fetchProfile();
             }
         }
-    }, [isLoggedIn, dispatch]);
+    }, [isLoggedIn, fetchProfile]);
 
     // Log user in when redirected from the server
     useEffect(() => {
@@ -42,9 +54,10 @@ const App = () => {
         if (serverCookie) {
             Cookies.remove('ramble-server_cookie');
             sessionStorage.setItem('ramble-token', serverCookie);
-            dispatch(fetchProfile());
+            setRememberUser(false);
+            fetchProfile();
         }
-    }, [dispatch]);
+    }, [fetchProfile]);
 
     // Show Snackbar with server messages
     useEffect(() => {

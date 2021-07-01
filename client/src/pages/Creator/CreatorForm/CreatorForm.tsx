@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import {
+    useGetCreatorFormFieldsQuery,
+    useUpdateProfileMutation,
+    useSignUpCreatorMutation
+} from 'graphql-api';
 
 import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
-import { updateUIProfile } from 'store/userSlice';
+import { setProfile } from 'store/userSlice';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
@@ -18,60 +22,6 @@ import Button from 'components/GradientButton/GradientButton';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './CreatorForm.styles';
 const useStyles = makeStyles(styles);
-
-const GET_PROFILE = gql`
-    query getProfile {
-        me {
-            _id
-            firstName
-            phoneNumber
-            photo
-        }
-    }
-`;
-
-const SIGN_UP_CREATOR = gql`
-    mutation signUpCreator($bio: String!, $governmentIds: [String!]!) {
-        signUpCreator(bio: $bio, governmentIds: $governmentIds) {
-            _id
-        }
-    }
-`;
-
-const EDIT_USER = gql`
-    mutation editUser($phoneNumber: String, $photo: String) {
-        editUser(phoneNumber: $phoneNumber, photo: $photo) {
-            _id
-            photo
-        }
-    }
-`;
-
-type ProfileDetails = {
-    _id: string;
-    firstName: string;
-    phoneNumber: string;
-    photo: string;
-}
-
-type SignUpCreatorVariables = {
-    bio: string;
-    governmentIds: string[];
-}
-
-type SignUpCreatorDetails = {
-    _id: string;
-}
-
-type EditUserVariables = {
-    phoneNumber?: string; 
-    photo?: string;
-}
-
-type EditUserDetails = {
-    _id: string;
-    photo: string;
-}
 
 const VALID_PHONE_NUMBER_REG = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
 const MAX_BIO_LENGTH = 500;
@@ -89,26 +39,34 @@ const CreatorForm = () => {
     const [backId, setBackId] = useState<File>();
     const [uploading, setUploading] = useState(false);
 
-    const { loading, data } = useQuery<{ me: ProfileDetails }>(GET_PROFILE, {
+    const { loading, data } = useGetCreatorFormFieldsQuery({
         onCompleted: ({ me }) => {
-            setPhoneNumber(me.phoneNumber || '');
+            if (me.phoneNumber) {
+                setPhoneNumber(me.phoneNumber);
+            }
         }
-    });
+    })
+
     const [
-        editUser, 
+        editUser,
         { loading: editUserLoading }
-    ] = useMutation<{ editUser: EditUserDetails }, EditUserVariables>(EDIT_USER, {
+    ] = useUpdateProfileMutation({
+        onCompleted: ({ editUser }) => {
+            if (editUser) {
+                /* Because creators have a different UI, we need
+                   to update their profile on Redux */
+                dispatch(setProfile(editUser));
+            }
+        },
         onError: () => {
             dispatch(openErrorDialog({ message: "We couldn't update your profile..." }));
-        },
-        onCompleted: ({ editUser }) => {
-            dispatch(updateUIProfile({ photo: editUser.photo }));
         }
     });
+
     const [
         signUpCreator,
-        { data: creatorData }
-    ] = useMutation<{ signUpCreator: SignUpCreatorDetails}, SignUpCreatorVariables>(SIGN_UP_CREATOR, {
+        { data: creatorData, loading: creatorLoading }
+    ] = useSignUpCreatorMutation({
         onError: () => {
             dispatch(openErrorDialog({ message: "We couldn't create your creator profile..." }));
         }
@@ -130,11 +88,11 @@ const CreatorForm = () => {
         const governmentIds: string[] = [];
 
         // Upload profile picture if the user didn't have one
-        if (!data!.me.photo) {
+        if (data && !data.me!.photo) {
             const photoData = new FormData();
             photoData.append('file', profilePic!);
             photoData.append('upload_preset', 'RAMBLE-users');
-            photoData.append('public_id', data!.me._id);
+            photoData.append('public_id', data.me._id);
 
             const { secure_url } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
                 method: 'POST',
@@ -159,11 +117,12 @@ const CreatorForm = () => {
         signUpCreator({ variables: { bio, governmentIds }});
 
         // Update user information if needed
-        if (profilePic || data!.me.phoneNumber !== phoneNumber) {
+        const isNewPhoneNumber = data?.me.phoneNumber !== phoneNumber;
+        if (profilePic || isNewPhoneNumber) {
             editUser({ 
                 variables: {
                     ...profilePic && { photo: photoUrl },
-                    ...data!.me.phoneNumber !== phoneNumber && { 
+                    ...isNewPhoneNumber && { 
                         phoneNumber: phoneNumber.replace(VALID_PHONE_NUMBER_REG, '($1) $2-$3') 
                     }
                 }
@@ -173,18 +132,18 @@ const CreatorForm = () => {
 
     // Stop the spinner when both mutations are completed
     useEffect(() => {
-        if (creatorData && !editUserLoading) {
+        if (!creatorLoading && !editUserLoading) {
             // Stop the spinner
             setUploading(false);
         }
-    }, [creatorData, editUserLoading]);
+    }, [creatorLoading, editUserLoading]);
 
     if (loading || !data) {
         return <Spinner />; 
     }
 
     // When the form was successfully submitted, start Stripe onboarding
-    if (creatorData && !editUserLoading) {
+    if (!creatorLoading && !editUserLoading && creatorData) {
         return <StripeMessage creatorId={creatorData.signUpCreator._id} />;
     }
 

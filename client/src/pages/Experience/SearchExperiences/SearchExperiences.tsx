@@ -1,15 +1,14 @@
 import { useCallback, useEffect } from 'react';
-import { useQuery, gql } from '@apollo/client';
 import { useLocation, useHistory } from 'react-router-dom';
 
+import { useGetExperiencesQuery, useGetLocationsQuery } from 'graphql-api';
 import useSearchReducer from './searchReducer';
 import useTokenStorage from 'hooks/useTokenStorage';
+import useHeartClick from 'hooks/useHeartClick';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
-import { saveExperience, unsaveExperience } from 'store/userSlice';
 import { Experience } from 'models/experience';
 import type { SearchState } from './searchReducer';
-import type { Experienceable } from 'models/experience';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Searchbar from './Searchbar';
@@ -19,36 +18,6 @@ import Spinner from 'components/Spinner/Spinner';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './SearchExperiences.styles';
 const useStyles = makeStyles(styles);
-
-const GET_LOCATIONS = gql`
-    query getLocations {
-        experiences {
-            location
-        }
-    }
-`;
-
-const FETCH_EXPERIENCES = gql`
-    query getExperiences($location: String!, $capacity: Int) {
-        experiences(location: $location, capacity: $capacity) {
-            _id
-            title
-            images
-            pricePerPerson
-            ratingValue
-            numberOfRatings
-            location
-            zoomPMI
-        }
-    }
-`;
-
-type LocationData = { location: string; }[];
-
-type ExperiencesVariables = {
-    location: string;
-    capacity: number;
-}
 
 const SearchExperiences = () => {
     const classes = useStyles();
@@ -72,22 +41,22 @@ const SearchExperiences = () => {
     }
     const [searchState, searchDispatch] = useSearchReducer(initialState);
 
-    const { 
+    const {
         loading: locationsLoading 
-    } = useQuery<{ experiences: LocationData }>(GET_LOCATIONS, {
+    } = useGetLocationsQuery({
         onCompleted: ({ experiences }) => {
             const allLocations = experiences.map(({ location }) => location);
             searchDispatch({ 
                 type: 'SET_LOCATIONS', 
                 locations: [ ...new Set(allLocations) ]
             });
-        }
-    });
+        }}
+    );
 
-    const { 
+    const {
         error: experiencesError,
         refetch: refetchExperiences
-    } = useQuery<{ experiences: Experienceable[] }, ExperiencesVariables>(FETCH_EXPERIENCES, {
+    } = useGetExperiencesQuery({
         variables: { location: locationQuery, capacity: capacityQuery },
         onCompleted: ({ experiences }) => {
             searchDispatch({ 
@@ -139,16 +108,10 @@ const SearchExperiences = () => {
 
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+    const handleHeartClick = useHeartClick();
+
     // Save the auth state when opening new tabs
     useTokenStorage(isLoggedIn);
-
-    const handleHeartClick = useCallback((isSaved: boolean, experienceId: string) => {
-        if (isSaved) {
-            dispatch(unsaveExperience({ experienceId }));
-        } else {
-            dispatch(saveExperience({ experienceId }));
-        }
-    }, [dispatch]);
 
     return (
         <div className={classes.root}>

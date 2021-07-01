@@ -1,15 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
-import { gql, useQuery, useMutation } from '@apollo/client';
 import { useHistory, useLocation, useRouteMatch, Switch, Route } from 'react-router-dom';
 import type { EventInput } from '@fullcalendar/react';
 
+import { 
+    useGetLocationsQuery, 
+    useCreateExperienceMutation, 
+    useGetCreationProfileQuery 
+} from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import useLanguages from 'hooks/useLanguages';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
 import useCreationReducer from './creationReducer';
 import type { StringField, BooleanField, NumberField, ArrayField } from './creationReducer';
-import type { Category, Currency } from 'models/experience';
 
 import Div100vh from 'react-div-100vh';
 import { CSSTransition } from 'react-transition-group';
@@ -22,118 +25,6 @@ import Submitted from './Submitted';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './CreateExperience.styles';
 const useStyles = makeStyles(styles);
-
-const GET_CREATOR_INFO = gql`
-    query getStripeInfo {
-        me {
-            firstName
-            photo
-            creator {
-                _id
-                bio
-                stripeProfile {
-                    onboarded
-                }
-            }
-        }
-    }
-`;
-
-const GET_LOCATIONS = gql`
-    query getLocations {
-        experiences {
-            location
-        }
-    }
-`;
-
-const CREATE_EXPERIENCE = gql`
-    mutation createExperience(
-        $title: String!
-        $description: String!
-        $images: [String!]!
-        $location: String!
-        $meetingPoint: String
-        $latitude: Float
-        $longitude: Float
-        $categories: [ExperienceCategories!]!
-        $ageRestriction: Int
-        $duration: Float!
-        $languages: [String!]!
-        $includedItems: [String!]!
-        $toBringItems: [String!]!
-        $capacity: Int!
-        $zoomPMI: String
-        $zoomPassword: String
-        $pricePerPerson: Int!
-        $privatePrice: Int
-        $currency: String!
-    ) {
-        createExperience(
-            title: $title
-            description: $description
-            images: $images
-            location: $location
-            meetingPoint: $meetingPoint
-            latitude: $latitude
-            longitude: $longitude
-            categories: $categories
-            ageRestriction: $ageRestriction
-            duration: $duration
-            languages: $languages
-            includedItems: $includedItems
-            toBringItems: $toBringItems
-            capacity: $capacity
-            zoomPMI: $zoomPMI
-            zoomPassword: $zoomPassword
-            pricePerPerson: $pricePerPerson
-            privatePrice: $privatePrice
-            currency: $currency
-        ) {
-            _id
-            title
-        }
-    }
-`;
-
-type CreatorInfoQuery = {
-    firstName: string;
-    photo: string;
-    creator: {
-        _id: string;
-        bio: string;
-        stripeProfile: { onboarded: boolean };
-    }
-}
-
-type LocationQuery = { location: string; }[];
-
-type CreateExperienceVariables = {
-    title: string;
-    description: string;
-    images: string[];
-    location: string;
-    meetingPoint?: string;
-    latitude?: number;
-    longitude?: number;
-    categories: Category[];
-    ageRestriction?: number; 
-    duration: number;
-    languages: string[];
-    includedItems: string[];
-    toBringItems: string[];
-    capacity: number;
-    zoomPMI?: string;
-    zoomPassword?: string;
-    pricePerPerson: number;
-    privatePrice?: number;
-    currency: Currency;
-}
-
-type CreateExperienceData = {
-    _id: string;
-    title: string;
-}
 
 const CreateExperience = () => {
     const { CreateExperience: text } = useLanguageContext().appText;
@@ -177,27 +68,24 @@ const CreateExperience = () => {
     }
 
     const { 
-        data: creatorData, 
-        loading: loadingCreatorData 
-    } = useQuery<{ me: CreatorInfoQuery }>(GET_CREATOR_INFO, {
+        data: creatorData,
+        loading: loadingCreatorData
+    } = useGetCreationProfileQuery({
         onError: handleError
     });
 
     // Use existing locations for location autocomplete
     const {
-        data: locationData,
-        loading: loadingLocationData
-    } = useQuery<{ experiences: LocationQuery }>(GET_LOCATIONS, {
+        data: locationsData,
+        loading: loadingLocationsData
+    } = useGetLocationsQuery({
         onError: handleError
     });
 
     const [
         createExperience,
         { data: creationData }
-    ] = useMutation<{ createExperience: CreateExperienceData }, CreateExperienceVariables>(CREATE_EXPERIENCE, {
-        onCompleted: () => {
-            formDispatch({ type: 'END_SUBMIT' });
-        },
+    ] = useCreateExperienceMutation({
         onError: handleError
     });
 
@@ -228,6 +116,11 @@ const CreateExperience = () => {
     useEffect(() => {
         history.push(`/experience/new/${state.currentStep}`);
     }, [state.currentStep, history]);
+
+    // Reset the form when leaving the page
+    useEffect(() => {   
+        return () => { formDispatch({ type: 'END_SUBMIT' }); }
+    }, [formDispatch]);
 
     const handleSubmit = async () => {
         formDispatch({ type: 'START_SUBMIT' });
@@ -275,25 +168,29 @@ const CreateExperience = () => {
                 pricePerPerson: state.form.pricePerPerson,
                 privatePrice: state.form.privatePrice > 0 ?
                     state.form.privatePrice : undefined,
-                currency: state.form.currency
+                currency: state.form.currency,
+                slots: state.form.slots!.map(({ startStr, endStr }) => ({
+                    start: startStr,
+                    end: endStr
+                }))
             }
         });
     }
     
-    if (loadingCreatorData || !creatorData || loadingLocationData || !locationData) {
+    if (loadingCreatorData || !creatorData || loadingLocationsData || !locationsData) {
         return <Spinner />;
     }
 
-    const creatorId = creatorData.me.creator._id;
-    const onboardedWithStripe = creatorData.me.creator.stripeProfile.onboarded;
+    const creatorId = creatorData?.me.creator?._id;
+    const onboardedWithStripe = creatorData?.me.creator?.stripeProfile.onboarded;
 
     // If creator hasn't completed the Stripe onboarding, let them try again
-    if (!onboardedWithStripe) {
+    if (!onboardedWithStripe && creatorId) {
         return <StripeRedirect creatorId={creatorId} />;
     }
 
     // When done, show Submitted slide
-    if (creationData) {
+    if (creationData?.createExperience) {
         return <Submitted experienceTitle={creationData.createExperience.title} />;
     }
 
@@ -320,7 +217,7 @@ const CreateExperience = () => {
                     </Route>
                     <Route path={`${path}/location`}>
                         <Slides.Location
-                        storedLocations={[ ...new Set(locationData.experiences.map(({ location }) => 
+                        storedLocations={[ ...new Set(locationsData.experiences.map(({ location }) => 
                             location
                         ))]}
                         isOnlineExperience={state.form.isOnlineExperience!}
@@ -432,8 +329,8 @@ const CreateExperience = () => {
                         form={state.form}
                         creator={{
                             name: creatorData.me.firstName,
-                            photo: creatorData.me.photo,
-                            bio: creatorData.me.creator.bio
+                            photo: creatorData.me.photo!,
+                            bio: creatorData.me.creator!.bio
                         }}
                         onSlideComplete={handleFieldValidity} />
                     </Route>

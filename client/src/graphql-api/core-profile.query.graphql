@@ -1,0 +1,7 @@
+# import './core-profile.fragment.graphql'
+
+query getCoreProfile {
+    me {
+        ...CoreProfile
+    }
+}

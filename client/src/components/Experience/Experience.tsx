@@ -108,7 +108,7 @@ const Experience = (props: Props) => {
                     </div>
                 </div>
                 <div className={classes.categories}>
-                    {experience.categories.map(categ =>
+                    {experience.categories!.map(categ =>
                         <CategoryBox 
                         key={uuid()}
                         category={categ}

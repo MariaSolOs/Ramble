@@ -1,0 +1,25 @@
+# import './core-profile.fragment.graphql'
+
+mutation updateProfile(
+    $firstName: String, 
+    $lastName: String, 
+    $birthday: String, 
+    $email: String, 
+    $password: String,
+    $photo: String,
+    $phoneNumber: String,
+    $city: String
+) {
+    editUser(
+        firstName: $firstName,
+        lastName: $lastName,
+        birthday: $birthday,
+        email: $email,
+        password: $password,
+        photo: $photo,
+        phoneNumber: $phoneNumber,
+        city: $city
+    ) {
+        ...CoreProfile
+    }
+}

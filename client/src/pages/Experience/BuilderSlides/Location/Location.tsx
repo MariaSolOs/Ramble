@@ -106,6 +106,7 @@ const Location = (props: Props) => {
                     className={classes.zoomTextfield}
                     endAdornment={
                         <Tooltip
+                        enterTouchDelay={300}
                         title={
                             <span>
                                 {text.zoomPMIHelp}{' '}

@@ -1,32 +1,38 @@
 const { gql } = require('apollo-server-express');
 
-// TODO: Add doc strings
 module.exports = gql`
     type Query {
-        me: User
+        # The current logged in user.
+        me: User!
 
+        # Experiences filtered by location and with capacity >= to 
+        # the indicated capacity.
         experiences(
-            location: String, 
+            location: String
             capacity: Int
-        ): [Experience!]
+        ): [Experience!]!
 
-        experience(id: String!): Experience
+        # Get experience by its ID.
+        experience(id: String!): Experience!
     }
 
     type Mutation {
+        # User sign up
         signUpUser(
             email: String!, 
             password: String!, 
             firstName: String!, 
             lastName: String!
-        ): User
+        ): User!
 
+        # User log in
         logInUser(
             email: String!, 
             password: String!, 
             rememberUser: Boolean!
-        ): User
+        ): User!
 
+        # Profile editing
         editUser(
             firstName: String, 
             lastName: String, 
@@ -36,17 +42,19 @@ module.exports = gql`
             photo: String,
             phoneNumber: String,
             city: String
-        ): User
+        ): User!
 
+        # Creator onboarding
         signUpCreator(
             bio: String!,
             governmentIds: [String!]!
-        ): Creator
+        ): Creator!
 
-        saveExperience(experienceId: String!): MutationResponse
-
-        unsaveExperience(experienceId: String!): MutationResponse
-
+        # For users to save/unsave an experience
+        saveExperience(experienceId: String!): Experience!
+        unsaveExperience(experienceId: String!): Experience!
+        
+        # Experience creation
         createExperience(
             title: String!
             description: String!
@@ -55,7 +63,7 @@ module.exports = gql`
             meetingPoint: String
             latitude: Float
             longitude: Float
-            categories: [ExperienceCategories!]!
+            categories: [ExperienceCategory!]!
             ageRestriction: Int
             duration: Float!
             languages: [String!]!
@@ -67,14 +75,21 @@ module.exports = gql`
             pricePerPerson: Int!
             privatePrice: Int
             currency: String!
+            slots: [OccurrenceInput!]!
         ): Experience
     }
 
-    type MutationResponse {
-        code: Int!
-        message: String!
+    """
+    Input types
+    """
+    input OccurrenceInput {
+        start: String!
+        end: String!
     }
 
+    """
+    Experiences
+    """
     type Experience {
         _id: ID!
         title: String!
@@ -84,23 +99,26 @@ module.exports = gql`
         meetingPoint: String
         latitude: Float
         longitude: Float
-        categories: [ExperienceCategories!]!
+        categories: [ExperienceCategory!]!
         ageRestriction: Int
         duration: Float!
-        languages: [String!]
-        includedItems: [String!]
-        toBringItems: [String!]
+        languages: [String!]!
+        includedItems: [String!]!
+        toBringItems: [String!]!
         capacity: Int!
         zoomPMI: String
         pricePerPerson: Int!
         privatePrice: Int
         currency: String!
-        ratingValue: Float
-        numberOfRatings: Int
+        ratingValue: Float!
+        numberOfRatings: Int!
         creator: Creator!
     }
 
-    enum ExperienceCategories {
+    """
+    Ramble's experience categories.
+    """
+    enum ExperienceCategory {
         taste
         create
         relax
@@ -108,6 +126,10 @@ module.exports = gql`
         move
     }
 
+    """
+    Representation of a single occurrence in time of an
+    experience.
+    """
     type Occurrence {
         _id: ID!
         experience: Experience!
@@ -118,32 +140,44 @@ module.exports = gql`
         bookings: [Booking!]
     }
 
+    """
+    Bookings associated to an occurrence.
+    """
     type Booking {
         _id: ID!
     }
 
+    """
+    Application's users.
+    """
     type User {
-        _id: ID
-        token: String!
-        firstName: String
-        lastName: String
+        _id: ID!
+        token: String
+        firstName: String!
+        lastName: String!
         birthday: String
         email: String!
         phoneNumber: String
         photo: String
         city: String
-        savedExperiences: [Experience!]
-        bookedExperiences: [Experience!]
+        savedExperiences: [Experience!]!
+        bookedExperiences: [Experience!]!
         creator: Creator
     }
 
+    """
+    Experience creators.
+    """
     type Creator {
-        _id: ID
+        _id: ID!
         user: User!
-        bio: String
-        stripeProfile: StripeInfo
+        bio: String!
+        stripeProfile: StripeInfo!
     }
 
+    """
+    Representation of a creator's Stripe profile.
+    """
     type StripeInfo {
         onboarded: Boolean
         accountId: String

@@ -6,7 +6,13 @@ const {
     creatorReducer, 
     bookingReducer 
 } = require('../utils/dataReducers');
-const { Experience, Booking, User, Creator } = require('../models');
+const { 
+    Experience, 
+    Occurrence,
+    Booking, 
+    User, 
+    Creator 
+} = require('../models');
 
 module.exports = {
     Experience: {
@@ -34,7 +40,7 @@ module.exports = {
     },
 
     Creator: {
-        user: creator => User.findById(creator.user).then(userReducer)
+        user: creator => User.findById(creator.user).then(userReducer),
     },
 
     Query: {
@@ -159,15 +165,11 @@ module.exports = {
                 throw new AuthenticationError("User isn't logged in.");
             }
 
-            try {
-                await User.findByIdAndUpdate(
-                    userId, 
-                    { $addToSet: { savedExperiences: experienceId } }
-                );
-                return { code: 201, message: 'Experience saved.' }
-            } catch (err) {
-                return { code: 409, message: "Experience couldn't be saved." }
-            }
+            await User.findByIdAndUpdate(userId, { 
+                $addToSet: { savedExperiences: experienceId } 
+            });
+
+            return Experience.findById(experienceId).then(experienceReducer);
         },
 
         unsaveExperience: async (_, { experienceId }, { userId }) => {
@@ -175,15 +177,10 @@ module.exports = {
                 throw new AuthenticationError("User isn't logged in.");
             }
 
-            try {
-                await User.findByIdAndUpdate(
-                    userId, 
-                    { $pull: { savedExperiences: experienceId } }
-                );
-                return { code: 201, message: 'Experience unsaved.' }
-            } catch (err) {
-                return { code: 409, message: "Experience couldn't be unsaved." }
-            }
+            await User.findByIdAndUpdate(userId, { 
+                $pull: { savedExperiences: experienceId } 
+            });
+            return Experience.findById(experienceId).then(experienceReducer);
         },
 
         createExperience: async (_, args, { userId }) => {
@@ -191,49 +188,64 @@ module.exports = {
                 throw new AuthenticationError("Creator isn't logged in.");
             }
 
-            // If we have Zoom info, create online experience
-            const isOnlineExperience = Boolean(args.zoomPMI);
+            try {
+                // If we have Zoom info, create online experience
+                const isOnlineExperience = Boolean(args.zoomPMI);
 
-            // Create the experience
-            const experience = await Experience.create({
-                status: 'pending',
-                title: args.title,
-                description: args.description,
-                images: args.images,
-                categories: args.categories,
-                duration: args.duration,
-                languages: args.languages,
-                capacity: args.capacity,
-                included: args.includedItems,
-                toBring: args.toBringItems,
-                creator: userId,
-                price: {
-                    perPerson: args.pricePerPerson,
-                    currency: args.currency,
-                    ...args.privatePrice && {
-                        private: args.privatePrice
+                // Create the experience
+                const experience = await Experience.create({
+                    status: 'pending',
+                    title: args.title,
+                    description: args.description,
+                    images: args.images,
+                    categories: args.categories,
+                    duration: args.duration,
+                    languages: args.languages,
+                    capacity: args.capacity,
+                    included: args.includedItems,
+                    toBring: args.toBringItems,
+                    creator: userId,
+                    price: {
+                        perPerson: args.pricePerPerson,
+                        currency: args.currency,
+                        ...args.privatePrice && {
+                            private: args.privatePrice
+                        }
+                    },
+                    ...isOnlineExperience && {
+                        zoomInfo: {
+                            PMI: args.zoomPMI,
+                            password: args.zoomPassword
+                        }
+                    },
+                    location: {
+                        displayLocation: args.location,
+                        ...!isOnlineExperience && {
+                            meetingPoint: args.meetingPoint,
+                            latitude: args.latitude,
+                            longitude: args.longitude
+                        }
+                    },
+                    ...args.ageRestriction && {
+                        ageRestriction: args.ageRestriction
                     }
-                },
-                ...isOnlineExperience && {
-                    zoomInfo: {
-                        PMI: args.zoomPMI,
-                        password: args.zoomPassword
-                    }
-                },
-                location: {
-                    displayLocation: args.location,
-                    ...!isOnlineExperience && {
-                        meetingPoint: args.meetingPoint,
-                        latitude: args.latitude,
-                        longitude: args.longitude
-                    }
-                },
-                ...args.ageRestriction && {
-                    ageRestriction: args.ageRestriction
+                });
+
+                // Create the initial occurrences
+                for (const occ of args.slots) {
+                    await Occurrence.create({
+                        experience: experience._id,
+                        dateStart: new Date(occ.start),
+                        dateEnd: new Date(occ.end),
+                        spotsLeft: experience.capacity,
+                        creatorProfit: 0
+                    });
                 }
-            });
 
-            return experienceReducer(experience);
+                return experienceReducer(experience);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }

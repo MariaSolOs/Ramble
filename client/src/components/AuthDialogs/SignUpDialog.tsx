@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { unwrapResult } from '@reduxjs/toolkit';
 
+import { updateToken } from 'utils/auth';
+import { useSignUpMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { closeSignUpDialog, openLogInDialog, openErrorDialog } from 'store/uiSlice';
-import { signUp } from 'store/userSlice';
+import { setProfile } from 'store/userSlice';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -46,6 +47,21 @@ const SignUpDialog = () => {
     const [values, setValues] = useState(initialForm);
     const [passwordError, setPasswordError] = useState(false);
 
+    const [signUp] = useSignUpMutation({
+        onCompleted: ({ signUpUser }) => {
+            updateToken(signUpUser.token!, false);
+            dispatch(setProfile(signUpUser));
+            handleClose();
+        },
+        onError: ({ graphQLErrors }) => {
+            const message = graphQLErrors[0].message || "We couldn't sign you in.";
+            dispatch(openErrorDialog({
+                message: message
+            }));
+            handleClose();
+        }
+    });
+
     const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const field = event.target.name;
         let newValue = event.target.value;
@@ -66,19 +82,14 @@ const SignUpDialog = () => {
             return;
         }
 
-        dispatch(signUp({
-            email: values.email,
-            password: values.password1,
-            firstName: values.firstName,
-            lastName: values.lastName
-        }))
-        .then(unwrapResult)
-        .catch(err => {
-            dispatch(openErrorDialog({
-                message: err.message || "We couldn't sign you in."
-            }))
-        })
-        .finally(() => handleClose());
+        signUp({
+            variables: {
+                email: values.email,
+                password: values.password1,
+                firstName: values.firstName,
+                lastName: values.lastName
+            }
+        });
     }
 
     const handleClose = () => {

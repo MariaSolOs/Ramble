@@ -1,13 +1,13 @@
 import { v4 as uuid } from 'uuid';
 import type { EventInput } from '@fullcalendar/react';
 
-export const EXPERIENCE_CATEGORIES = [
-    'taste',
-    'create',
-    'relax',
-    'learn',
-    'move'
-];
+import { ExperienceCategory } from 'graphql-api';
+import type { CardContentFragment as ExperienceCardInput } from 'graphql-api';
+
+export const EXPERIENCE_CATEGORIES = Object.values(ExperienceCategory).filter(
+    val => isNaN(+val)
+);
+
 export type Category = typeof EXPERIENCE_CATEGORIES[number];
 
 export const CURRENCIES = [
@@ -46,27 +46,28 @@ export type ExperienceCard = {
     rating?: number;
 }
 
+// Some fields can be null because of our GraphQL schema
 export interface Experienceable {
     readonly _id: string;
     readonly title: string;
     readonly description: string;
     readonly images: string[];
-    readonly categories: [Category, Category];
+    readonly categories: Category[];
     readonly duration: number;
     readonly languages: string[];
     readonly capacity: number;
     readonly pricePerPerson: number;
-    readonly pricePrivate: number;
-    readonly currency: string;
-    readonly ratingValue: number;
-    readonly numberOfRatings: number;
+    readonly pricePrivate?: number;
+    readonly currency?: string;
+    readonly ratingValue?: number;
+    readonly numberOfRatings?: number;
     readonly location: string;
-    readonly latitude?: number;
-    readonly longitude?: number;
-    readonly ageRestriction?: number;
+    readonly latitude?: number | null;
+    readonly longitude?: number | null;
+    readonly ageRestriction?: number | null;
     readonly includedItems?: string[];
     readonly toBringItems?: string[];
-    readonly zoomPMI?: string;
+    readonly zoomPMI?: string | null;
 }
 
 export interface ExperienceForm {
@@ -147,8 +148,15 @@ export class Experience {
     get pricePrivate() { return this.data.pricePrivate; }
     get currency() { return this.data.currency; }
     get location() { return this.data.location; }
-    get latitude() { return this.data.latitude; }
-    get longitude() { return this.data.longitude; }
+
+    // We cast null coordinates to undefined because of Mapbox 
+    get latitude() { 
+        return this.data.latitude === null ? undefined : this.data.latitude; 
+    }
+    get longitude() { 
+        return this.data.longitude === null ? undefined : this.data.longitude; 
+    }
+
     get ageRestriction() { return this.data.ageRestriction; }
     get includedItems() { return this.data.includedItems || []; }
     get toBringItems() { return this.data.toBringItems || []; }
@@ -160,7 +168,7 @@ export class Experience {
         })); 
     }
 
-    static getCardInfo(exp: Experienceable): ExperienceCard {
+    static getCardInfo(exp: ExperienceCardInput): ExperienceCard {
         return {
             _id: exp._id,
             title: exp.title,
@@ -168,13 +176,9 @@ export class Experience {
             isZoomExperience: Boolean(exp.zoomPMI),
             location: exp.location,
             price: exp.pricePerPerson,
-            ...exp.numberOfRatings > 0 && {
+            ...exp.numberOfRatings! > 0 && {
                 rating: exp.ratingValue
             }
         }
-    }
-
-    getCardInfo(): ExperienceCard {
-        return Experience.getCardInfo(this.data);
     }
 }

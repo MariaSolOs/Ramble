@@ -1,0 +1,7 @@
+# import './core-profile.fragment.graphql'
+
+mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
+    logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
+        ...CoreProfile
+    }
+}

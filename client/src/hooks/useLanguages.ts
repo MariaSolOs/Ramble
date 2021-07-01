@@ -4,6 +4,10 @@ const API_URL = 'https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d
 
 type Data = Record<string, { name: string; nativeName: string; }>;
 
+/**
+ * @returns Array of (all?) possible languages. 
+ * Used with the Autocomplete component.
+ */
 export default function useLanguages() {
     const [languages, setLanguages] = useState<string[]>([]);
 

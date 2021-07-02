@@ -1,29 +1,5 @@
-# import './user-avatar.fragment.graphql'
-# import './creator-bio.fragment.graphql'
-
 query getExperience($id: String!) {
     experience(id: $id) {
-        _id
-        title
-        description
-        images
-        location
-        latitude
-        longitude
-        categories
-        ageRestriction
-        duration
-        languages
-        includedItems
-        toBringItems
-        capacity
-        zoomPMI
-        pricePerPerson
-        creator {
-            ...CreatorBio
-            user {
-                ...UserAvatar
-            }
-        }
+        ...ExperienceView
     }
 }

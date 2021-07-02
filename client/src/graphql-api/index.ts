@@ -64,12 +64,18 @@ export enum ExperienceCategory {
 }
 
 export type Mutation = {
+  /** User sign up */
   signUpUser: User;
+  /** User log in */
   logInUser: User;
+  /** Profile editing */
   editUser: User;
+  /** Creator onboarding  */
   signUpCreator: Creator;
+  /** For users to save/unsave an experience */
   saveExperience: Experience;
   unsaveExperience: Experience;
+  /** Experience creation */
   createExperience?: Maybe<Experience>;
 };
 
@@ -161,8 +167,14 @@ export type OccurrenceInput = {
 };
 
 export type Query = {
+  /** The current logged in user. */
   me: User;
+  /**
+   * Experiences filtered by location and with capacity >= to
+   * the indicated capacity.
+   */
   experiences: Array<Experience>;
+  /** Get experience by its ID. */
   experience: Experience;
 };
 
@@ -259,18 +271,20 @@ export type GetCreatorFormFieldsQuery = { me: (
 
 export type CardContentFragment = Pick<Experience, '_id' | 'title' | 'images' | 'pricePerPerson' | 'ratingValue' | 'numberOfRatings' | 'location' | 'zoomPMI'>;
 
+export type ExperienceViewFragment = (
+  Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'zoomPMI' | 'pricePerPerson'>
+  & { creator: (
+    { user: UserAvatarFragment }
+    & CreatorBioFragment
+  ) }
+);
+
 export type GetExperienceQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetExperienceQuery = { experience: (
-    Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'zoomPMI' | 'pricePerPerson'>
-    & { creator: (
-      { user: UserAvatarFragment }
-      & CreatorBioFragment
-    ) }
-  ) };
+export type GetExperienceQuery = { experience: ExperienceViewFragment };
 
 export type GetExperiencesQueryVariables = Exact<{
   location: Scalars['String'];
@@ -361,12 +375,6 @@ export const CoreProfileFragmentDoc = gql`
   ...UserAvatar
 }
     ${UserAvatarFragmentDoc}`;
-export const CreatorBioFragmentDoc = gql`
-    fragment CreatorBio on Creator {
-  _id
-  bio
-}
-    `;
 export const CardContentFragmentDoc = gql`
     fragment CardContent on Experience {
   _id
@@ -379,6 +387,39 @@ export const CardContentFragmentDoc = gql`
   zoomPMI
 }
     `;
+export const CreatorBioFragmentDoc = gql`
+    fragment CreatorBio on Creator {
+  _id
+  bio
+}
+    `;
+export const ExperienceViewFragmentDoc = gql`
+    fragment ExperienceView on Experience {
+  _id
+  title
+  description
+  images
+  location
+  latitude
+  longitude
+  categories
+  ageRestriction
+  duration
+  languages
+  includedItems
+  toBringItems
+  capacity
+  zoomPMI
+  pricePerPerson
+  creator {
+    ...CreatorBio
+    user {
+      ...UserAvatar
+    }
+  }
+}
+    ${CreatorBioFragmentDoc}
+${UserAvatarFragmentDoc}`;
 export const GetCoreProfileDocument = gql`
     query getCoreProfile {
   me {
@@ -567,32 +608,10 @@ export type GetCreatorFormFieldsQueryResult = Apollo.QueryResult<GetCreatorFormF
 export const GetExperienceDocument = gql`
     query getExperience($id: String!) {
   experience(id: $id) {
-    _id
-    title
-    description
-    images
-    location
-    latitude
-    longitude
-    categories
-    ageRestriction
-    duration
-    languages
-    includedItems
-    toBringItems
-    capacity
-    zoomPMI
-    pricePerPerson
-    creator {
-      ...CreatorBio
-      user {
-        ...UserAvatar
-      }
-    }
+    ...ExperienceView
   }
 }
-    ${CreatorBioFragmentDoc}
-${UserAvatarFragmentDoc}`;
+    ${ExperienceViewFragmentDoc}`;
 
 /**
  * __useGetExperienceQuery__

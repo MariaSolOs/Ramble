@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useHistory, useLocation, useRouteMatch, Switch, Route } from 'react-router-dom';
+import { 
+    useHistory, 
+    useLocation, 
+    useRouteMatch, 
+    Switch, 
+    Route, 
+    Prompt 
+} from 'react-router-dom';
 import type { EventInput } from '@fullcalendar/react';
 
 import { 
@@ -11,8 +18,8 @@ import { useLanguageContext } from 'context/languageContext';
 import useLanguages from 'hooks/useLanguages';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
-import useCreationReducer from './creationReducer';
-import type { StringField, BooleanField, NumberField, ArrayField } from './creationReducer';
+import useCreationReducer from './useCreationReducer';
+import type { StringField, BooleanField, NumberField, ArrayField } from './useCreationReducer';
 
 import Div100vh from 'react-div-100vh';
 import { CSSTransition } from 'react-transition-group';
@@ -205,9 +212,10 @@ const CreateExperience = () => {
             onBack={() => formDispatch({ type: 'GO_TO_PREV_STEP' })}
             onNext={
                 state.currentStep === 'review' ?
-                handleSubmit : () => formDispatch({ type: 'GO_TO_NEXT_STEP' })
+                    handleSubmit : () => formDispatch({ type: 'GO_TO_NEXT_STEP' })
             }>
                 {state.loading && <Spinner />}
+                <Prompt message={text.leavePageAlert} />
                 <Switch location={location}>
                     <Route path={`${path}/setting`}>
                         <Slides.Setting

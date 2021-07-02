@@ -2,22 +2,30 @@ const { gql } = require('apollo-server-express');
 
 module.exports = gql`
     type Query {
-        # The current logged in user.
+        """
+        The current logged in user.
+        """
         me: User!
 
-        # Experiences filtered by location and with capacity >= to 
-        # the indicated capacity.
+        """
+        Experiences filtered by location and with capacity >= to 
+        the indicated capacity.
+        """
         experiences(
             location: String
             capacity: Int
         ): [Experience!]!
 
-        # Get experience by its ID.
+        """
+        Get experience by its ID.
+        """
         experience(id: String!): Experience!
     }
 
     type Mutation {
-        # User sign up
+        """
+        User sign up
+        """
         signUpUser(
             email: String!, 
             password: String!, 
@@ -25,14 +33,18 @@ module.exports = gql`
             lastName: String!
         ): User!
 
-        # User log in
+        """
+        User log in
+        """
         logInUser(
             email: String!, 
             password: String!, 
             rememberUser: Boolean!
         ): User!
 
-        # Profile editing
+        """
+        Profile editing
+        """
         editUser(
             firstName: String, 
             lastName: String, 
@@ -44,17 +56,23 @@ module.exports = gql`
             city: String
         ): User!
 
-        # Creator onboarding
+        """
+        Creator onboarding 
+        """
         signUpCreator(
             bio: String!,
             governmentIds: [String!]!
         ): Creator!
 
-        # For users to save/unsave an experience
+        """
+        For users to save/unsave an experience
+        """
         saveExperience(experienceId: String!): Experience!
         unsaveExperience(experienceId: String!): Experience!
         
-        # Experience creation
+        """
+        Experience creation
+        """
         createExperience(
             title: String!
             description: String!

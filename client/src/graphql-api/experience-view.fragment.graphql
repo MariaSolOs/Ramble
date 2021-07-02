@@ -1,0 +1,24 @@
+fragment ExperienceView on Experience {
+    _id
+    title
+    description
+    images
+    location
+    latitude
+    longitude
+    categories
+    ageRestriction
+    duration
+    languages
+    includedItems
+    toBringItems
+    capacity
+    zoomPMI
+    pricePerPerson
+    creator {
+        ...CreatorBio
+        user {
+            ...UserAvatar
+        }
+    }
+}

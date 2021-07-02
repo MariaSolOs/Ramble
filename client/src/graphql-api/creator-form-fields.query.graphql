@@ -1,5 +1,3 @@
-# import './user-avatar.fragment.graphql'
-
 query getCreatorFormFields {
     me {
         _id

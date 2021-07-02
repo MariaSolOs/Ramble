@@ -36,7 +36,7 @@ export type TranslationRecord = {
 
     ShareExperienceDialog: Record<'shareExperience' | 'copyLink', string>;
 
-    ViewExperience: Record<'bookExperience' | 'perConnection' | 'perPerson' | 'seeDates', string>;
+    ViewExperience: Record<'bookExperience' | 'perConnection' | 'perPerson', string>;
 
     BecomeACreator: Record<'becomeTitle' | 'shareTitle' | 'getPaidTitle' | 'getStarted' | 'currentCreators1' | 'currentCreators2' | 'actTitle1' | 'actTitle2' | 'lightbulbText' | 'cloudText' | 'walletText', string>;
 
@@ -46,7 +46,7 @@ export type TranslationRecord = {
 
     StripeRedirect: Record<'onboardingMessage' | 'help' | 'continueWithStripe', string>;
 
-    CreateExperience: Record<'animationTitle1' | 'animationTitle2', string>;
+    CreateExperience: Record<'animationTitle1' | 'animationTitle2' | 'leavePageAlert', string>;
     
     CreateExperience_Submitted: Record<'title' | 'message1' | 'message2' | 'message3' | 'button', string>;
     

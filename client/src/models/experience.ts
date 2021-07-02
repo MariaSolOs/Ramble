@@ -176,9 +176,18 @@ export class Experience {
             isZoomExperience: Boolean(exp.zoomPMI),
             location: exp.location,
             price: exp.pricePerPerson,
-            ...exp.numberOfRatings! > 0 && {
+            ...exp.numberOfRatings > 0 && {
                 rating: exp.ratingValue
             }
         }
+    }
+
+    getCardInfo() {
+        return Experience.getCardInfo({ 
+            ...this.data,
+            // Pass default values for rating
+            ratingValue: this.data.ratingValue || 5,
+            numberOfRatings: this.data.numberOfRatings || 0
+        });
     }
 }

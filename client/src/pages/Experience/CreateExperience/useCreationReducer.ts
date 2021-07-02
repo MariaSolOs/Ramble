@@ -39,6 +39,21 @@ export type NumberField =
 // Form fields corresponding to arrays of strings
 export type ArrayField = 'languages' | 'included' | 'toBring' | 'slots';
 
+type Action = 
+| { type: 'GO_TO_NEXT_STEP'; }
+| { type: 'GO_TO_PREV_STEP'; }
+| { type: 'GO_TO_STEP'; stepIdx: number; }
+| { type: 'SET_STRING_FIELD'; field: StringField; value: string; }
+| { type: 'SET_BOOLEAN_FIELD'; field: BooleanField; value: boolean; }
+| { type: 'SET_NUMBER_FIELD'; field: NumberField; value: number; }
+| { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
+| { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
+| { type: 'SET_IMAGE_FILE'; index: number; value?: File; }
+| { type: 'SET_ARRAY_FIELD'; field: ArrayField; value: string[] | EventInput[]; }
+| { type: 'SET_CAN_CONTINUE'; value: boolean; }
+| { type: 'START_SUBMIT' }
+| { type: 'END_SUBMIT' }
+
 const initialState: CreationState = {
     currentStep: 'setting',
     currentStepIdx: 0,
@@ -69,21 +84,6 @@ const initialState: CreationState = {
         slots: []
     }
 }
-
-type Action = 
-| { type: 'GO_TO_NEXT_STEP'; }
-| { type: 'GO_TO_PREV_STEP'; }
-| { type: 'GO_TO_STEP'; stepIdx: number; }
-| { type: 'SET_STRING_FIELD'; field: StringField; value: string; }
-| { type: 'SET_BOOLEAN_FIELD'; field: BooleanField; value: boolean; }
-| { type: 'SET_NUMBER_FIELD'; field: NumberField; value: number; }
-| { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
-| { type: 'SET_CATEGORY'; value: Category; remove: boolean; }
-| { type: 'SET_IMAGE_FILE'; index: number; value?: File; }
-| { type: 'SET_ARRAY_FIELD'; field: ArrayField; value: string[] | EventInput[]; }
-| { type: 'SET_CAN_CONTINUE'; value: boolean; }
-| { type: 'START_SUBMIT' }
-| { type: 'END_SUBMIT' }
 
 export default function useCreationReducer() {
     const reducer = useCallback((state: CreationState, action: Action): CreationState => {

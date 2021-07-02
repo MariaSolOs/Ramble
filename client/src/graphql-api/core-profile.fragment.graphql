@@ -1,5 +1,3 @@
-# import './user-avatar.fragment.graphql'
-
 fragment CoreProfile on User {
     _id
     token

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { updateToken } from 'utils/auth';
 import { useGetExperienceQuery, useGetCoreProfileLazyQuery } from 'graphql-api';
@@ -7,6 +7,7 @@ import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import useHeartClick from 'hooks/useHeartClick';
 import { setProfile } from 'store/userSlice';
+import { openSignUpDialog } from 'store/uiSlice';
 import { Experience as ExperienceType } from 'models/experience';
 import type { Creator } from 'models/creator';
 
@@ -23,6 +24,7 @@ const ViewExperience = () => {
     const { ViewExperience: text } = useLanguageContext().appText;
     const dispatch = useAppDispatch();
     const handleHeartClick = useHeartClick();
+    const history = useHistory();
     
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
@@ -76,6 +78,14 @@ const ViewExperience = () => {
         }
     }, [fetchProfile]);
 
+    const handleBookingClick = () => {
+        if (isLoggedIn) {
+            history.push(`/experience/booking/${experienceId}`);
+        } else {
+            dispatch(openSignUpDialog());
+        }
+    }
+
     if (loading || !experience) {
         return <Spinner />
     }
@@ -101,8 +111,11 @@ const ViewExperience = () => {
                     {experience.isZoomExperience ? 
                         text.perConnection : text.perPerson}
                 </p>
-                <GradientButton variant="experience" className={classes.bookingButton}>
-                    {isLoggedIn ? text.bookExperience : text.seeDates}
+                <GradientButton 
+                variant="experience" 
+                className={classes.bookingButton}
+                onClick={handleBookingClick}>
+                    {text.bookExperience}
                 </GradientButton>
             </div>
         </>

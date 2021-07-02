@@ -5,6 +5,7 @@ import Spinner from 'components/Spinner/Spinner';
 const SearchExperiences = React.lazy(() => import('./SearchExperiences/SearchExperiences'));
 const ViewExperience = React.lazy(() => import('./ViewExperience/ViewExperience'));
 const CreateExperience = React.lazy(() => import('./CreateExperience/CreateExperience'));
+const BookExperience = React.lazy(() => import('./BookExperience/BookExperience'));
 
 const Router = () => {
     const { path } = useRouteMatch();
@@ -16,6 +17,7 @@ const Router = () => {
                 <Route path={`${path}/search`} component={SearchExperiences} />
                 <Route path={`${path}/view/:experienceId`} component={ViewExperience} />
                 <Route path={`${path}/new`} component={CreateExperience} />
+                <Route path={`${path}/booking/:experienceId`} component={BookExperience} />
             </Switch>
         </React.Suspense>
     );

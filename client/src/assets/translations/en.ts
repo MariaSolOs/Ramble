@@ -123,8 +123,7 @@ const englishTranslation: TranslationRecord = {
     ViewExperience: {
         bookExperience: 'Book experience',
         perConnection: 'per connection',
-        perPerson: 'per person',
-        seeDates: 'See dates'
+        perPerson: 'per person'
     },
 
     BecomeACreator: {
@@ -179,6 +178,7 @@ const englishTranslation: TranslationRecord = {
     CreateExperience: {
         animationTitle1: 'Just like you.',
         animationTitle2: "We're all about creating special moments.",
+        leavePageAlert: 'If you leave this page, your changes will be lost.'
     },
     
     CreateExperience_Submitted: {

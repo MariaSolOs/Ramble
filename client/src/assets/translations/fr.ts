@@ -123,8 +123,7 @@ const frenchTranslation: TranslationRecord = {
     ViewExperience: {
         bookExperience: 'Réserver',
         perConnection: 'par connexion',
-        perPerson: 'par personne',
-        seeDates: 'Voir les disponibilités'
+        perPerson: 'par personne'
     },
 
     BecomeACreator: {
@@ -179,6 +178,7 @@ const frenchTranslation: TranslationRecord = {
     CreateExperience: {
         animationTitle1: 'Tout comme vous.',
         animationTitle2: 'Nous voulons créer de moments inoubliables.',
+        leavePageAlert: 'Si vous quittez cette page, les changements ne seront pas sauvegardés.'
     },
     
     CreateExperience_Submitted: {

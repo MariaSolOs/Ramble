@@ -1,5 +1,3 @@
-# import './experience-card-content.fragment.graphql'
-
 query getExperiences($location: String!, $capacity: Int) {
     experiences(location: $location, capacity: $capacity) {
         ...CardContent

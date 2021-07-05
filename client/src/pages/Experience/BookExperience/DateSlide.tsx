@@ -42,7 +42,7 @@ const DateSlide = (props: Props) => {
                     // Use Montreal's timezone
                     timeZone="America/Toronto"
                     initialView="dayGridMonth"
-                    longPressDelay={200}
+                    longPressDelay={50}
                     selectable
                     select={({ startStr }) => {
                         const dateStr = startStr.split('T')[0];

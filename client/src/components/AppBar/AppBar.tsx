@@ -14,7 +14,10 @@ const AppBar: React.FC = ({ children }) => {
     const classes = useStyles();
 
     // Fade out navbar when scrolling
-    const isScrolled = useScrollTrigger({ disableHysteresis: true });
+    const isScrolled = useScrollTrigger({ 
+        disableHysteresis: true,
+        threshold: 50
+    });
     
     return (
         <MUIAppBar 

@@ -86,7 +86,7 @@ const Pricing = (props: Props) => {
                     required
                     select
                     value={props.currency}
-                    onChange={e => props.onCurrencyChange(e.target.value)}
+                    onChange={e => props.onCurrencyChange(e.target.value as Currency)}
                     SelectProps={{
                         MenuProps: {
                             classes: { paper: classes.selectMenu },

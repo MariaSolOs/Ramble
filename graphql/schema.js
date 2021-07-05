@@ -19,7 +19,12 @@ module.exports = gql`
         """
         Get experience by its ID.
         """
-        experience(id: String!): Experience!
+        experience(id: ID!): Experience!
+
+        """
+        Get the occurences of the indicated experience.
+        """
+        occurrences(experienceId: ID!): [Occurrence!]!
     }
 
     type Mutation {
@@ -155,7 +160,7 @@ module.exports = gql`
         dateEnd: String!
         spotsLeft: Int!
         creatorProfit: Int!
-        bookings: [Booking!]
+        bookings: [Booking!]!
     }
 
     """

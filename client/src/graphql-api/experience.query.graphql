@@ -1,4 +1,4 @@
-query getExperience($id: String!) {
+query getExperience($id: ID!) {
     experience(id: $id) {
         ...ExperienceView
     }

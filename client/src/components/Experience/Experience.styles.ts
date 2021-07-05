@@ -255,15 +255,12 @@ export const desktopStyles = (theme: Theme) => createStyles({
         borderRadius: '0.5rem',
         color: '#ECEBE5',
         fontSize: '0.9rem',
-        fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         letterSpacing: '-0.05rem',
         border: 'none',
         marginLeft: 15,
-        padding: '0.8rem 0.9rem',
-        width: 130,
-        cursor: 'pointer',
-        '&:focus': { outline: 'none' }
+        padding: '0.6rem 0.9rem',
+        width: 130
     },
 
     bodyText: {
@@ -507,15 +504,12 @@ export const mobileStyles = (theme: Theme) => createStyles({
         borderRadius: '0.5rem',
         color: '#ECEBE5',
         fontSize: '0.9rem',
-        fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         letterSpacing: '-0.05rem',
         border: 'none',
         marginLeft: 15,
-        padding: '0.8rem 0.9rem',
-        width: 130,
-        cursor: 'pointer',
-        '&:focus': { outline: 'none' }
+        padding: '0.6rem 0.9rem',
+        width: 130
     },
 
     bodyText: {

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
 import { useLanguageContext } from 'context/languageContext';
+import { removeTokens } from 'utils/auth';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -40,9 +41,7 @@ const ProfileMenu = (props: Props) => {
     }, [onClose]);
 
     const logout = () => {
-        sessionStorage.removeItem('ramble-token');
-        localStorage.removeItem('ramble-token');
-        localStorage.removeItem('ramble-redirect_page_token');
+        removeTokens();
         closeMenu();
         props.onLogout();
     }

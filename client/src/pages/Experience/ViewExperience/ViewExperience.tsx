@@ -7,7 +7,6 @@ import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import useHeartClick from 'hooks/useHeartClick';
 import { setProfile } from 'store/userSlice';
-import { openSignUpDialog } from 'store/uiSlice';
 import { Experience as ExperienceType } from 'models/experience';
 import type { Creator } from 'models/creator';
 
@@ -29,7 +28,6 @@ const ViewExperience = () => {
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
     
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const isExpSaved = useAppSelector(state => 
         state.user.savedExperiences.includes(experienceId)
     );
@@ -72,19 +70,10 @@ const ViewExperience = () => {
         const tempToken = localStorage.getItem('ramble-redirect_page_token');
 
         if (tempToken) {
-            localStorage.removeItem('ramble-redirect_page_token');
             sessionStorage.setItem('ramble-token', tempToken);
             fetchProfile();
         }
     }, [fetchProfile]);
-
-    const handleBookingClick = () => {
-        if (isLoggedIn) {
-            history.push(`/experience/booking/${experienceId}`);
-        } else {
-            dispatch(openSignUpDialog());
-        }
-    }
 
     if (loading || !experience) {
         return <Spinner />
@@ -114,7 +103,9 @@ const ViewExperience = () => {
                 <GradientButton 
                 variant="experience" 
                 className={classes.bookingButton}
-                onClick={handleBookingClick}>
+                onClick={() => {
+                    history.push(`/experience/booking/${experienceId}`);
+                }}>
                     {text.bookExperience}
                 </GradientButton>
             </div>

@@ -10,13 +10,20 @@ import apolloClient from 'store/gqlClient';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY!);
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <ApolloProvider client={apolloClient}>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
+                <Elements stripe={stripePromise}>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </Elements>
             </ApolloProvider>
         </Provider>
     </React.StrictMode>,

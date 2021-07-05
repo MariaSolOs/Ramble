@@ -1,0 +1,8 @@
+query getOccurrences($experienceId: ID!) {
+    occurrences(experienceId: $experienceId) {
+        _id
+        dateStart
+        dateEnd
+        spotsLeft
+    }
+}

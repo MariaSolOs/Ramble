@@ -1,0 +1,6 @@
+query getBookingExperience($id: ID!) {
+    experience(id: $id) {
+        ...ExperienceView
+        privatePrice
+    }
+}

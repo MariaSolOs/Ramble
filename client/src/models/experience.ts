@@ -13,7 +13,7 @@ export type Category = typeof EXPERIENCE_CATEGORIES[number];
 export const CURRENCIES = [
     'CAD',
     'USD'
-];
+] as const;
 export type Currency = typeof CURRENCIES[number];
 
 // The following are ordered as displayed on the creation navbar
@@ -57,7 +57,7 @@ export interface Experienceable {
     readonly languages: string[];
     readonly capacity: number;
     readonly pricePerPerson: number;
-    readonly pricePrivate?: number;
+    readonly privatePrice?: number;
     readonly currency?: string;
     readonly ratingValue?: number;
     readonly numberOfRatings?: number;
@@ -125,7 +125,7 @@ export const getFormPreview = (form: ExperienceForm, images: string[], experienc
         includedItems: form.included,
         toBringItems: form.toBring,
         pricePerPerson: form.pricePerPerson,
-        pricePrivate: form.privatePrice,
+        privatePrice: form.privatePrice,
         currency: form.currency,
         ratingValue: 5,
         numberOfRatings: 0
@@ -145,7 +145,7 @@ export class Experience {
     get capacity() { return this.data.capacity; }
     get categories() { return this.data.categories; }
     get pricePerPerson() { return this.data.pricePerPerson; }
-    get pricePrivate() { return this.data.pricePrivate; }
+    get privatePrice() { return this.data.privatePrice; }
     get currency() { return this.data.currency; }
     get location() { return this.data.location; }
 

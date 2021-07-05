@@ -33,7 +33,6 @@ const server = new ApolloServer({
     resolvers
 });
 
-// TODO: Rename master to main in repo and Heroku
 server.applyMiddleware({ app, path: '/graphql' });
 
 app.get('*', (_, res) => {

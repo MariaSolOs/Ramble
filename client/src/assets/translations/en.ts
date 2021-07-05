@@ -121,7 +121,7 @@ const englishTranslation: TranslationRecord = {
     },
 
     ViewExperience: {
-        bookExperience: 'Book experience',
+        bookExperience: 'Book',
         perConnection: 'per connection',
         perPerson: 'per person'
     },
@@ -352,6 +352,51 @@ const englishTranslation: TranslationRecord = {
         today: 'Today',
         month: 'Month',
         day: 'Day'
+    },
+
+    BookExperience_Layout: {
+        dateAndTime: 'Date & Time',
+        completeBooking: 'Complete booking',
+        payment: 'Payment',
+        next: 'Next',
+        confirmPayment: 'Confirm payment'
+    },
+
+    BookExperience_DateSlide: {
+        title: 'Please select a date'
+    },
+
+    BookExperience_TimeslotSlide: {
+        title: 'What time of the day would suit you best?',
+        join: 'Join',
+        guest: 'guest',
+        guests: 'guests',
+        firstBooking: 'Be the first to book',
+        bookingUnavailable: 'Booking unavailable'
+    },
+
+    BookExperience_BookingTypeSlide: {
+        title: 'Booking options',
+        privateBookingTitle: 'Book entire experience',
+        privateBookingSubtitle: 'Be the only guest(s) at this experience',
+        publicBookingTitle: 'Book per person',
+        publicBookingSubtitle: 'Join other guests',
+        upTo: 'Up to',
+        join: 'Join',
+        person: 'person',
+        people: 'people',
+        perPerson: 'per person',
+        guest: 'guest',
+        guests: 'guests',
+        numberOfGuests: 'Number of guest(s)'
+    },
+
+    BookExperience_PaymentSlide: {
+        cardNumberPlaceholder: 'Credit card number',
+        expiryDatePlaceholder: 'MM / YY',
+        cvcPlaceholder: 'CVC',
+        zipCodePlaceholder: 'ZIP code',
+        emailPlaceholder: 'Email address'
     }
 }
 

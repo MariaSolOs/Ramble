@@ -1,6 +1,7 @@
 fragment CoreProfile on User {
     _id
     token
+    email
     savedExperiences {
         _id
     }

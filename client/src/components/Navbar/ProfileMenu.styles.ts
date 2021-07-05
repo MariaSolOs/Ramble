@@ -12,7 +12,6 @@ const styles = (theme: Theme) => createStyles({
         borderRadius: '1.5rem',
         display: 'flex',
         alignItems: 'center',
-        cursor: 'pointer',
         border: props => props.isCreator ? 'solid 1px black' : 'none',
         '&:focus-visible': { outline: 'none' },
 

@@ -41,7 +41,7 @@ const CreateExperience = () => {
     const history = useHistory();
     const location = useLocation();
     const { path } = useRouteMatch();
-    const dispatch = useAppDispatch();
+    const appDispatch = useAppDispatch();
 
     const [animationIn, setAnimationIn] = useState(false);
     const [animationDone, setAnimationDone] = useState(false);
@@ -66,7 +66,7 @@ const CreateExperience = () => {
      }, []);
 
     const handleError = () => {
-        dispatch(openErrorDialog({
+        appDispatch(openErrorDialog({
             message: 'Something went wrong...'
         }));
         setTimeout(() => {
@@ -97,27 +97,27 @@ const CreateExperience = () => {
     });
 
     // Form management
-    const [state, formDispatch] = useCreationReducer();
+    const [state, dispatch] = useCreationReducer();
 
     const handleStringValueChange = useCallback((field: StringField, value: string) => {
-        formDispatch({ type: 'SET_STRING_FIELD', field, value });
-    }, [formDispatch]);
+        dispatch({ type: 'SET_STRING_FIELD', field, value });
+    }, [dispatch]);
 
     const handleBooleanValueChange = useCallback((field: BooleanField, value: boolean) => {
-        formDispatch({ type: 'SET_BOOLEAN_FIELD', field, value });
-    }, [formDispatch]);
+        dispatch({ type: 'SET_BOOLEAN_FIELD', field, value });
+    }, [dispatch]);
 
     const handleNumberValueChange = useCallback((field: NumberField, value: number) => {
-        formDispatch({ type: 'SET_NUMBER_FIELD', field, value });
-    }, [formDispatch]);
+        dispatch({ type: 'SET_NUMBER_FIELD', field, value });
+    }, [dispatch]);
 
     const handleArrayValueChange = useCallback((field: ArrayField, value: string[] | EventInput[]) => {
-        formDispatch({ type: 'SET_ARRAY_FIELD', field, value });
-    }, [formDispatch]);
+        dispatch({ type: 'SET_ARRAY_FIELD', field, value });
+    }, [dispatch]);
 
     const handleFieldValidity = useCallback((value: boolean) => {
-        formDispatch({ type: 'SET_CAN_CONTINUE', value });
-    }, [formDispatch]);
+        dispatch({ type: 'SET_CAN_CONTINUE', value });
+    }, [dispatch]);
 
     // Every time the step changes, go to that slide
     useEffect(() => {
@@ -126,11 +126,11 @@ const CreateExperience = () => {
 
     // Reset the form when leaving the page
     useEffect(() => {   
-        return () => { formDispatch({ type: 'END_SUBMIT' }); }
-    }, [formDispatch]);
+        return () => { dispatch({ type: 'END_SUBMIT' }); }
+    }, [dispatch]);
 
     const handleSubmit = async () => {
-        formDispatch({ type: 'START_SUBMIT' });
+        dispatch({ type: 'START_SUBMIT' });
         
         // Upload images to Cloudinary
         const images: string[] = [];
@@ -208,14 +208,17 @@ const CreateExperience = () => {
             currentStepIdx={state.currentStepIdx}
             currentStep={state.currentStep}
             canContinue={state.canContinue}
-            onNavigate={stepIdx => formDispatch({ type: 'GO_TO_STEP', stepIdx })}
-            onBack={() => formDispatch({ type: 'GO_TO_PREV_STEP' })}
+            onNavigate={stepIdx => dispatch({ type: 'GO_TO_STEP', stepIdx })}
+            onBack={() => dispatch({ type: 'GO_TO_PREV_STEP' })}
             onNext={
                 state.currentStep === 'review' ?
-                    handleSubmit : () => formDispatch({ type: 'GO_TO_NEXT_STEP' })
+                    handleSubmit : () => dispatch({ type: 'GO_TO_NEXT_STEP' })
             }>
                 {state.loading && <Spinner />}
-                <Prompt message={text.leavePageAlert} />
+                <Prompt message={({ pathname }) => {
+                    return pathname.includes('/experience/new') ? 
+                        true : text.leavePageAlert;
+                }} />
                 <Switch location={location}>
                     <Route path={`${path}/setting`}>
                         <Slides.Setting
@@ -253,7 +256,7 @@ const CreateExperience = () => {
                         <Slides.Category
                         categories={state.form.categories}
                         onSelectCategory={(value, remove) => {
-                            formDispatch({
+                            dispatch({
                                 type: 'SET_CATEGORY',
                                 value,
                                 remove
@@ -299,7 +302,7 @@ const CreateExperience = () => {
                         images={state.form.images}
                         onSlideComplete={handleFieldValidity}
                         onImageChange={(index, value) => {
-                            formDispatch({ type: 'SET_IMAGE_FILE', index, value });
+                            dispatch({ type: 'SET_IMAGE_FILE', index, value });
                         }} />
                     </Route>
                     <Route path={`${path}/included`}>

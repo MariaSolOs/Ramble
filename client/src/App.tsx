@@ -19,9 +19,6 @@ import Snackbar from 'components/Snackbar/Snackbar';
 import ResetPasswordDialog from 'components/ResetPasswordDialog/ResetPasswordDialog';
 import Spinner from 'components/Spinner/Spinner';
 
-// CSS for custom scroll
-import 'react-custom-scroll/dist/customScroll.css';
-
 const ExperienceRouter = React.lazy(() => import('pages/Experience/Router'));
 const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
 

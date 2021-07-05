@@ -38,7 +38,6 @@ const styles = (theme: Theme) => createStyles({
     },
 
     button: {
-        cursor: 'pointer',
         backgroundColor: '#2A2A2A',
         color: '#CCC', 
         fontFamily: theme.typography.fontFamily,
@@ -53,7 +52,6 @@ const styles = (theme: Theme) => createStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        '&:focus': { outline: 'none' },
 
         [theme.breakpoints.down('xs')]: { fontSize: '0.8rem' }
     },
@@ -85,12 +83,9 @@ const styles = (theme: Theme) => createStyles({
         height: '80%',
         width: '22%',
         margin: '0 0 0 auto',
-        fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         letterSpacing: '-0.04rem',
         fontSize: '0.85rem',
-        cursor: 'pointer',
-        '&:focus': { outline: 'none' },
 
         [theme.breakpoints.down('xs')]: {
             fontSize: '0.7rem',

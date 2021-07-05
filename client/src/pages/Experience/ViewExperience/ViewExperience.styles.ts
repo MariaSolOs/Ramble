@@ -55,7 +55,7 @@ const styles = (theme: Theme) => createStyles({
 
     bookingButton: {
         height: 40,
-        width: '8.5rem',
+        width: '7rem',
         borderRadius: '0.5rem',
         fontSize: '1rem',
         padding: '0 10px',

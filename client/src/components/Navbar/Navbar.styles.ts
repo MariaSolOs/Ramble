@@ -90,10 +90,7 @@ const styles = (theme: Theme) => createStyles({
 
     dialogToggler: {
         background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-
-        '&:focus': { outline: 'none' }
+        border: 'none'
     },
 
     navLink: {
@@ -106,10 +103,11 @@ const styles = (theme: Theme) => createStyles({
         marginRight: 10,
         color: '#ACACAC',
         textDecoration: 'none',
-
-        '&$whiteNavLink': { color: '#FFF' }
     },
-    whiteNavLink: {}
+
+    whiteNavLink: {
+        color: '#FFF'
+    }
 });
 
 export default styles;

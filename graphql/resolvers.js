@@ -2,6 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { generateToken } = require('../utils/jwt');
 const { 
     experienceReducer, 
+    occurrenceReducer,
     userReducer, 
     creatorReducer, 
     bookingReducer 
@@ -81,6 +82,17 @@ module.exports = {
         experience: async (_, { id }) => {
             const exp = await Experience.findById(id);
             return experienceReducer(exp);
+        },
+
+        occurrences: async (_, { experienceId }) => {
+            const occs = await Occurrence.find({
+                experience: experienceId,
+                dateStart: {
+                    $gte: new Date(new Date().setUTCHours(0, 0, 0))
+                }
+            });
+
+            return occs.map(occurrenceReducer);
         }
     },
 
@@ -192,6 +204,9 @@ module.exports = {
                 // If we have Zoom info, create online experience
                 const isOnlineExperience = Boolean(args.zoomPMI);
 
+                // Get the creator ID
+                const { creator } = await User.findById(userId, 'creator');
+
                 // Create the experience
                 const experience = await Experience.create({
                     status: 'pending',
@@ -204,7 +219,7 @@ module.exports = {
                     capacity: args.capacity,
                     included: args.includedItems,
                     toBring: args.toBringItems,
-                    creator: userId,
+                    creator,
                     price: {
                         perPerson: args.pricePerPerson,
                         currency: args.currency,

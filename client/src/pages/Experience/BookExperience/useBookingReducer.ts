@@ -1,25 +1,159 @@
 import { useReducer, useCallback } from 'react';
+import type { EventInput } from '@fullcalendar/react';
+import { DateTime } from 'luxon';
+import type { DateTimeOptions } from 'luxon';
+
+import type { 
+    ExperienceViewFragment as ExperienceData,
+    GetOccurrencesQuery as OccurrencesData
+} from 'graphql-api';
+import { Experience } from 'models/experience';
+import type { BookingType } from 'models/experience-occurrence';
+import type { Creator } from 'models/creator';
 
 interface BookingState {
     step: BookingStep;
+    experience?: Experience;
+    creator?: Creator;
+    occurrences: Map<string, Occurrence[]>;
+    canContinue: boolean;
+    form: {
+        date?: string;
+        timeslot?: Occurrence;
+        bookingType?: BookingType;
+        numGuests: number;
+    }
 }
 
-export type BookingStep = 'dateAndTime' | 'bookingType' | 'payment';
+const BOOKING_STEPS = [
+    'date',
+    'time',
+    'bookingType',
+    'payment'
+] as const;
+export type BookingStep = typeof BOOKING_STEPS[number];
+
+export type Occurrence = EventInput & {
+    dateStart: DateTime;
+    dateEnd: DateTime;
+    spotsLeft: number;
+}
 
 type Action = 
-| { type: 'SET_STEP'; step: BookingStep; }
+| { type: 'SET_EXPERIENCE'; experienceData: ExperienceData; }
+| { type: 'SET_OCCURRENCES'; occurrences: OccurrencesData; }
+| { type: 'SET_DATE'; date: string; }
+| { type: 'SET_TIMESLOT'; timeslot: Occurrence; }
+| { type: 'SET_BOOKING_TYPE'; bookingType: BookingType; }
+| { type: 'SET_NUM_GUESTS'; numGuests: number; }
+| { type: 'SET_CAN_CONTINUE'; value: boolean; }
+| { type: 'GO_BACK'; }
+| { type: 'GO_TO_NEXT_STEP' }
 
 const initialState: BookingState = {
-    step: 'dateAndTime'
+    step: 'date',
+    occurrences: new Map(),
+    canContinue: false,
+    form: {
+        numGuests: 2
+    }
+}
+
+const TIMEZONE_CONFIG: DateTimeOptions = {
+    zone: 'America/Toronto'
 }
 
 export default function useBookingReducer() {
     const reducer = useCallback((state: BookingState, action: Action): BookingState => {
         switch (action.type) {
-            case 'SET_STEP':
+            case 'SET_EXPERIENCE':
+                const { creator, ...experienceInfo } = action.experienceData;
                 return {
                     ...state,
-                    step: action.step
+                    experience: new Experience(experienceInfo),
+                    creator: {
+                        name: creator.user.firstName,
+                        photo: creator.user.photo!,
+                        bio: creator.bio
+                    }
+                }
+            case 'SET_OCCURRENCES':
+                const occurrences = new Map<string, Occurrence[]>();
+                for (const occ of action.occurrences.occurrences) {
+                    const start = DateTime.fromISO(occ.dateStart, TIMEZONE_CONFIG);
+                    const end = DateTime.fromISO(occ.dateEnd, TIMEZONE_CONFIG);
+                    const dateKey = start.toISODate();
+                    const value: Occurrence = { 
+                        id: occ._id, 
+                        start: start.toISO(), 
+                        end: end.toISO(),
+                        dateStart: start,
+                        dateEnd: end,
+                        spotsLeft: occ.spotsLeft
+                    }
+                    
+                    if (occurrences.has(dateKey)) {
+                        occurrences.get(dateKey)!.push(value);
+                    } else {
+                        occurrences.set(dateKey, [value]);
+                    }
+                }
+
+                return {
+                    ...state,
+                    occurrences
+                }
+            case 'SET_DATE':
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        date: action.date,
+                        timeslot: undefined,
+                        bookingType: undefined
+                    }
+                }
+            case 'SET_TIMESLOT':
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        timeslot: action.timeslot,
+                        bookingType: undefined
+                    }
+                }
+            case 'SET_BOOKING_TYPE':
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        bookingType: action.bookingType
+                    }
+                }
+            case 'SET_NUM_GUESTS':
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        numGuests: action.numGuests
+                    }
+                }
+            case 'SET_CAN_CONTINUE':
+                return {
+                    ...state,
+                    canContinue: action.value
+                }
+            case 'GO_BACK': 
+                const currentIdx = BOOKING_STEPS.indexOf(state.step);
+                return {
+                    ...state,
+                    step: BOOKING_STEPS[Math.max(0, currentIdx - 1)]
+                }
+            case 'GO_TO_NEXT_STEP': 
+                const nextIdx = BOOKING_STEPS.indexOf(state.step) + 1;
+                return {
+                    ...state,
+                    step: BOOKING_STEPS[Math.min(BOOKING_STEPS.length - 1, nextIdx)]
                 }
             default: return state;
         }

@@ -12,7 +12,7 @@ const GradientButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & P
     const classes = useStyles(props);
 
     return (
-        <button { ...props } className={`${classes.root} ${props.className}`}>
+        <button { ...props } className={`${props.className} ${classes.root}`}>
             { props.children }
         </button>
     );

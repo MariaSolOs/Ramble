@@ -157,7 +157,7 @@ export type Occurrence = {
   dateEnd: Scalars['String'];
   spotsLeft: Scalars['Int'];
   creatorProfit: Scalars['Int'];
-  bookings?: Maybe<Array<Booking>>;
+  bookings: Array<Booking>;
 };
 
 /** Input types */
@@ -176,6 +176,8 @@ export type Query = {
   experiences: Array<Experience>;
   /** Get experience by its ID. */
   experience: Experience;
+  /** Get the occurences of the indicated experience. */
+  occurrences: Array<Occurrence>;
 };
 
 
@@ -186,7 +188,12 @@ export type QueryExperiencesArgs = {
 
 
 export type QueryExperienceArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
+};
+
+
+export type QueryOccurrencesArgs = {
+  experienceId: Scalars['ID'];
 };
 
 /** Representation of a creator's Stripe profile. */
@@ -211,8 +218,18 @@ export type User = {
   creator?: Maybe<Creator>;
 };
 
+export type GetBookingExperienceQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetBookingExperienceQuery = { experience: (
+    Pick<Experience, 'privatePrice'>
+    & ExperienceViewFragment
+  ) };
+
 export type CoreProfileFragment = (
-  Pick<User, '_id' | 'token'>
+  Pick<User, '_id' | 'token' | 'email'>
   & { savedExperiences: Array<Pick<Experience, '_id'>>, creator?: Maybe<Pick<Creator, '_id'>> }
   & UserAvatarFragment
 );
@@ -253,7 +270,7 @@ export type GetCreationProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCreationProfileQuery = { me: (
     { creator?: Maybe<(
-      { stripeProfile: Pick<StripeInfo, 'onboarded'> }
+      StripeProfileFragment
       & CreatorBioFragment
     )> }
     & UserAvatarFragment
@@ -280,7 +297,7 @@ export type ExperienceViewFragment = (
 );
 
 export type GetExperienceQueryVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -308,6 +325,13 @@ export type LogInMutationVariables = Exact<{
 
 export type LogInMutation = { logInUser: CoreProfileFragment };
 
+export type GetOccurrencesQueryVariables = Exact<{
+  experienceId: Scalars['ID'];
+}>;
+
+
+export type GetOccurrencesQuery = { occurrences: Array<Pick<Occurrence, '_id' | 'dateStart' | 'dateEnd' | 'spotsLeft'>> };
+
 export type SaveExperienceMutationVariables = Exact<{
   experienceId: Scalars['String'];
 }>;
@@ -332,6 +356,8 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { signUpUser: CoreProfileFragment };
+
+export type StripeProfileFragment = { stripeProfile: Pick<StripeInfo, 'accountId' | 'onboarded'> };
 
 export type UnsaveExperienceMutationVariables = Exact<{
   experienceId: Scalars['String'];
@@ -366,6 +392,7 @@ export const CoreProfileFragmentDoc = gql`
     fragment CoreProfile on User {
   _id
   token
+  email
   savedExperiences {
     _id
   }
@@ -420,6 +447,50 @@ export const ExperienceViewFragmentDoc = gql`
 }
     ${CreatorBioFragmentDoc}
 ${UserAvatarFragmentDoc}`;
+export const StripeProfileFragmentDoc = gql`
+    fragment StripeProfile on Creator {
+  stripeProfile {
+    accountId
+    onboarded
+  }
+}
+    `;
+export const GetBookingExperienceDocument = gql`
+    query getBookingExperience($id: ID!) {
+  experience(id: $id) {
+    ...ExperienceView
+    privatePrice
+  }
+}
+    ${ExperienceViewFragmentDoc}`;
+
+/**
+ * __useGetBookingExperienceQuery__
+ *
+ * To run a query within a React component, call `useGetBookingExperienceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBookingExperienceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBookingExperienceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBookingExperienceQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>(GetBookingExperienceDocument, options);
+      }
+export function useGetBookingExperienceLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>(GetBookingExperienceDocument, options);
+        }
+export type GetBookingExperienceQueryHookResult = ReturnType<typeof useGetBookingExperienceQuery>;
+export type GetBookingExperienceLazyQueryHookResult = ReturnType<typeof useGetBookingExperienceLazyQuery>;
+export type GetBookingExperienceQueryResult = Apollo.QueryResult<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>;
 export const GetCoreProfileDocument = gql`
     query getCoreProfile {
   me {
@@ -533,14 +604,13 @@ export const GetCreationProfileDocument = gql`
   me {
     ...UserAvatar
     creator {
-      stripeProfile {
-        onboarded
-      }
+      ...StripeProfile
       ...CreatorBio
     }
   }
 }
     ${UserAvatarFragmentDoc}
+${StripeProfileFragmentDoc}
 ${CreatorBioFragmentDoc}`;
 
 /**
@@ -606,7 +676,7 @@ export type GetCreatorFormFieldsQueryHookResult = ReturnType<typeof useGetCreato
 export type GetCreatorFormFieldsLazyQueryHookResult = ReturnType<typeof useGetCreatorFormFieldsLazyQuery>;
 export type GetCreatorFormFieldsQueryResult = Apollo.QueryResult<GetCreatorFormFieldsQuery, GetCreatorFormFieldsQueryVariables>;
 export const GetExperienceDocument = gql`
-    query getExperience($id: String!) {
+    query getExperience($id: ID!) {
   experience(id: $id) {
     ...ExperienceView
   }
@@ -745,6 +815,44 @@ export function useLogInMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
 export type LogInMutationResult = Apollo.MutationResult<LogInMutation>;
 export type LogInMutationOptions = Apollo.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
+export const GetOccurrencesDocument = gql`
+    query getOccurrences($experienceId: ID!) {
+  occurrences(experienceId: $experienceId) {
+    _id
+    dateStart
+    dateEnd
+    spotsLeft
+  }
+}
+    `;
+
+/**
+ * __useGetOccurrencesQuery__
+ *
+ * To run a query within a React component, call `useGetOccurrencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOccurrencesQuery({
+ *   variables: {
+ *      experienceId: // value for 'experienceId'
+ *   },
+ * });
+ */
+export function useGetOccurrencesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetOccurrencesQuery, GetOccurrencesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetOccurrencesQuery, GetOccurrencesQueryVariables>(GetOccurrencesDocument, options);
+      }
+export function useGetOccurrencesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetOccurrencesQuery, GetOccurrencesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetOccurrencesQuery, GetOccurrencesQueryVariables>(GetOccurrencesDocument, options);
+        }
+export type GetOccurrencesQueryHookResult = ReturnType<typeof useGetOccurrencesQuery>;
+export type GetOccurrencesLazyQueryHookResult = ReturnType<typeof useGetOccurrencesLazyQuery>;
+export type GetOccurrencesQueryResult = Apollo.QueryResult<GetOccurrencesQuery, GetOccurrencesQueryVariables>;
 export const SaveExperienceDocument = gql`
     mutation saveExperience($experienceId: String!) {
   saveExperience(experienceId: $experienceId) {

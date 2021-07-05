@@ -10,6 +10,7 @@ interface UserState {
     isLoggedIn: boolean;
     isCreator: boolean;
     firstName: string;
+    email: string,
     photo: string;
     savedExperiences: string[];
 }
@@ -18,6 +19,7 @@ const initialState: UserState = {
     isLoggedIn: false,
     isCreator: false,
     firstName: '',
+    email: '',
     photo: '',
     savedExperiences: []
 }
@@ -30,6 +32,7 @@ const userSlice = createSlice({
             state.isLoggedIn = true;
             state.isCreator = Boolean(payload.creator?._id);
             state.firstName = payload.firstName;
+            state.email = payload.email;
             state.photo = payload.photo || '';
             state.savedExperiences = payload.savedExperiences.map(({ _id }) => _id);
         },

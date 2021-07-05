@@ -13,4 +13,10 @@ export default function useTokenStorage(isLoggedIn: boolean) {
             localStorage.setItem('ramble-redirect_page_token', tokenInSessionStorage);
         }
     }, [isLoggedIn]);
+
+    useEffect(() => {
+        return () => {
+            localStorage.removeItem('ramble-redirect_page_token');
+        }
+    }, []);
 }

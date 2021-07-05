@@ -40,11 +40,11 @@ const styles = (theme: Theme) => createStyles({
 
         [theme.breakpoints.down('xs')]: {
             '& $capacityInput': {
-                width: 'calc(55% - 10px)',
+                width: 'calc(65% - 10px)',
                 marginRight: 10
             },
             '& $searchButton': {
-                width: '45%'
+                width: '35%'
             }
         }
     },

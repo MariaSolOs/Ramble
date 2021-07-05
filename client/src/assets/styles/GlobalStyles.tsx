@@ -6,12 +6,18 @@ const theme = createMuiTheme({
     overrides: {
         MuiCssBaseline: {
             '@global': {
-               body: {
+                body: {
                     backgroundColor: '#151515',
                     fontFamily: 'Helvetica, sans-serif',
                     fontWeight: 'bold',
                     letterSpacing: '-0.05rem',
                     color: '#FFF'
+                },
+
+                button: {
+                    fontFamily: 'Helvetica, sans-serif',
+                    cursor: 'pointer',
+                    '&:focus': { outline: 'none' }
                 }
             }
         }

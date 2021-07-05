@@ -56,13 +56,10 @@ const styles = (theme: Theme) => createStyles({
 
     backButton: {
         background: 'radial-gradient(circle at 96%, #2E2E2E, #6F6F6F)',
-        fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         letterSpacing: '-0.05rem',
         color: '#FFF',
-        border: 'none',
-        cursor: 'pointer',
-        '&:focus': { outline: 'none' }
+        border: 'none'
     },
 
     progress: {
@@ -157,7 +154,7 @@ const styles = (theme: Theme) => createStyles({
         [theme.breakpoints.down('sm')]: { marginLeft: 50 },
         [theme.breakpoints.down('xs')]: {
             margin: '0 auto 60px',
-            width: '95vw',
+            width: '95vw'
         }
     }
 });

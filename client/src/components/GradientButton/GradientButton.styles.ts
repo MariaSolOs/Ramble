@@ -18,14 +18,11 @@ const styles = (theme: Theme) => createStyles({
                     return ''
             }
         },
-        fontFamily: theme.typography.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
         fontSize: '0.9rem',
         letterSpacing: '-0.04rem',
         color: '#ECEBE5',
-        cursor: 'pointer',
 
-        '&:focus': { outline: 'none' },
         '&:disabled': { 
             pointerEvents: 'none'
         }

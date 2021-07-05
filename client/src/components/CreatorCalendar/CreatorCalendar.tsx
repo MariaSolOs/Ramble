@@ -37,7 +37,7 @@ const getFormattedTime = (time: number) => {
 const getSlotMaxTime = (duration: number) => {
     let start = START_TIME, end = START_TIME, i = 0;
     for (; 
-         start + duration <= END_TIME; 
+         start + duration < END_TIME; 
          start += duration, end = start + duration, i += 1
     ) {}
     return { maxTime: getFormattedTime(end), numSlots: i }

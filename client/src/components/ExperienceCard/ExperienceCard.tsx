@@ -44,7 +44,7 @@ const ExperienceCard = (props: Props) => {
                 onClick={props.onHeartClick}>
                     <FontAwesomeIcon icon={faHeart} />
                 </Fab>}
-                <Link { ...props.linkProps} className={classes.link}>
+                <Link { ...props.linkProps } className={classes.link}>
                     {props.experience.isZoomExperience && 
                         <div className={classes.online}>
                             <img 

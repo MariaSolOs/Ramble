@@ -1,0 +1,6 @@
+fragment StripeProfile on Creator {
+    stripeProfile {
+        accountId
+        onboarded
+    }
+}

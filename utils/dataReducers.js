@@ -20,7 +20,7 @@ exports.experienceReducer = exp => ({
         zoomPMI: exp.zoomInfo.PMI
     },
     pricePerPerson: exp.price.perPerson,
-    pricePrivate: exp.price.private,
+    privatePrice: exp.price.private,
     currency: exp.price.currency,
     ratingValue: exp.rating.value,
     numberOfRatings: exp.rating.numRatings,

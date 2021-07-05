@@ -352,6 +352,51 @@ const frenchTranslation: TranslationRecord = {
         today: "Aujourd'hui",
         month: 'Mois',
         day: 'Jour'
+    },
+
+    BookExperience_Layout: {
+        dateAndTime: 'Date & Heure',
+        completeBooking: 'Compléter la réservation',
+        payment: 'Paiement',
+        next: 'Suivant',
+        confirmPayment: 'Confirmer le paiement'
+    },
+
+    BookExperience_DateSlide: {
+        title: 'Veuillez choisir une date'
+    },
+
+    BookExperience_TimeslotSlide: {
+        title: 'Quel moment de la journée vous conviendrait le mieux?',
+        join: 'Joignez',
+        guest: 'invité',
+        guests: 'invités',
+        firstBooking: 'Soyez les premiers à reserver',
+        bookingUnavailable: 'Réservation indisponible'
+    },
+
+    BookExperience_BookingTypeSlide: {
+        title: 'Options de réservation',
+        privateBookingTitle: "Réserver l'expérience au complet",
+        privateBookingSubtitle: 'Soyez les seuls invités lors de cette expérience',
+        publicBookingTitle: 'Réserver par personne',
+        publicBookingSubtitle: "Joignez vous à d'autres invités",
+        upTo: "Jusqu'à",
+        person: 'personne',
+        people: 'personnes',
+        perPerson: 'par personne',
+        guest: 'invité',
+        guests: 'invités',
+        join: 'Joignez',
+        numberOfGuests: "Nombre d'invités"
+    },
+
+    BookExperience_PaymentSlide: {
+        cardNumberPlaceholder: 'Numéro de carte de crédit',
+        expiryDatePlaceholder: 'MM / AA',
+        cvcPlaceholder: 'CVC',
+        zipCodePlaceholder: 'Code postal',
+        emailPlaceholder: 'Courriel'
     }
 }
 

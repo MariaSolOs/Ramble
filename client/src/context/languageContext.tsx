@@ -30,14 +30,19 @@ const LanguageProvider: React.FC = ({ children }) => {
 
     const [language, setLanguage] = useState<Language>(defaultLanguage);
 
+    const handleLanguageChange = (lang: Language) => {
+        localStorage.setItem('ramble-userLang', lang);
+        setLanguage(lang);
+    }
+
     return (
         <LanguageContext.Provider 
         value={{
             language,
             appText: dictionaries[language],
-            setLanguage
+            setLanguage: handleLanguageChange
         }}>
-            { children }
+            {children}
         </LanguageContext.Provider>
     );    
 }

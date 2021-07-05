@@ -8,58 +8,47 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: ''
     },
+
     lstName: {
         type: String,
         default: ''
     },
+
     birthday: Date,
+
     email: {
         address: {
             type: String,
             default: ''
-        },
-        verified: Boolean
+        }
     },
+
     phoneNumber: {
         type: String,
         validate: /\(([0-9]{3})\) ([0-9]{3})-([0-9]{4})/
     },
+
     passwordHash: String,
-    photo: {
-        type: String 
-    },
-    city: {
-        type: String,
-        default: ''
-    },
+
+    photo: String,
+
+    city: String,
+
     savedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],
+
     bookedExperiences: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Experience'
     }],
+
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Creator'
     },
-    promoCode: {
-        code: {
-            type: String, 
-            required: true,
-            default: function() {
-                const codeName = this.fstName ? this.fstName.toUpperCase() : 'RAMBLE';
-                const codeNumber = (Date.now() + Math.random()).toString().slice(0, 5);
 
-                return codeName + codeNumber;
-            }
-        },
-        usedBy: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }]
-    },
     lastLogin: {
         type: Date,
         default: new Date()

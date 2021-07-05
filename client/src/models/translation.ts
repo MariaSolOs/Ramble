@@ -83,4 +83,14 @@ export type TranslationRecord = {
     BuilderSlides_Review: Record<'title', string>;
 
     CreatorCalendar: Record<'today' | 'month' | 'day', string>;
+
+    BookExperience_Layout: Record<'dateAndTime' | 'completeBooking' | 'payment' | 'next' | 'confirmPayment', string>;
+
+    BookExperience_DateSlide: Record<'title', string>;
+
+    BookExperience_TimeslotSlide: Record<'title' | 'join' | 'guest' | 'guests' | 'bookingUnavailable' | 'firstBooking', string>;
+
+    BookExperience_BookingTypeSlide: Record<'title' | 'privateBookingTitle' | 'privateBookingSubtitle' | 'publicBookingTitle' | 'publicBookingSubtitle' | 'upTo' | 'person' | 'people' | 'perPerson' | 'join' | 'guest' | 'guests' | 'numberOfGuests', string>;
+
+    BookExperience_PaymentSlide: Record<'cardNumberPlaceholder' | 'expiryDatePlaceholder' | 'cvcPlaceholder' | 'zipCodePlaceholder' | 'emailPlaceholder', string>;
 }

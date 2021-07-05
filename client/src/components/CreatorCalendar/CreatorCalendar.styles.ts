@@ -59,6 +59,7 @@ const styles = (theme: Theme) => createStyles({
                 color: '#2B2B2B'
             }
         },
+        
         '& .fc .fc-button-primary:disabled': {
             backgroundColor: '#2A2A2A'
         },

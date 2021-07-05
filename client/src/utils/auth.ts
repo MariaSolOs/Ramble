@@ -11,3 +11,12 @@ export const updateToken = (token: string, rememberUser: boolean) => {
         sessionStorage.setItem('ramble-token', token);
     }
 }
+
+/**
+ * Removes all the authentication tokens from session/local storage.
+ */
+export const removeTokens = () => {
+    sessionStorage.removeItem('ramble-token');
+    localStorage.removeItem('ramble-token');
+    localStorage.removeItem('ramble-redirect_page_token');
+}

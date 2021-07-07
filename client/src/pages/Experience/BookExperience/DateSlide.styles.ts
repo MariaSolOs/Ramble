@@ -5,6 +5,7 @@ const styles = (theme: Theme) => createStyles({
     title: {
         fontSize: '1.5rem',
         margin: '0 0 1rem',
+        textTransform: 'capitalize',
 
         [theme.breakpoints.down('xs')]: { fontSize: '1.3rem' }
     },

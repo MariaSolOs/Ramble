@@ -99,6 +99,11 @@ export default function useBookingReducer() {
                     }
                 }
 
+                // Sort the occurrences chronologically 
+                for (const [, occList] of occurrences) {
+                    occList.sort();
+                }
+
                 return {
                     ...state,
                     occurrences

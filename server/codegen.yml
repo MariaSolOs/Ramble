@@ -1,0 +1,32 @@
+overwrite: true
+schema: './graphql/schema.ts'
+watch: true
+documents: ['../client/src/graphql-api/*.graphql']
+generates:
+  ../client/src/graphql-api/index.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      skipTypename: true
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      apolloReactHooksImportFrom: '@apollo/client'
+  ./graphql/intro-schema.json:
+    plugins:
+      - introspection
+  ./graphql/resolvers-types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      useIndexSignature: true
+      mappers:
+        Experience: apollo-server-types#ExperienceType
+        Occurrence: apollo-server-types#OccurrenceType
+        Booking: apollo-server-types#BookingType
+        User: apollo-server-types#UserType
+        Creator: apollo-server-types#CreatorType
+      contextType: apollo-server-types#Context

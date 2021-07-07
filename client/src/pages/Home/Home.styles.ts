@@ -164,7 +164,7 @@ const styles = (theme: Theme) => createStyles({
 
         [theme.breakpoints.down('xs')]: { 
             width: '47vw',
-            margin: '1.5vw 1.5vw 0'
+            margin: '3vw 1.5vw 0'
         }
     },
 

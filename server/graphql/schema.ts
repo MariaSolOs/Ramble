@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server-express');
+import { gql } from 'apollo-server-express';
 
-module.exports = gql`
+export const typeDefs = gql`
     type Query {
         """
         The current logged in user.

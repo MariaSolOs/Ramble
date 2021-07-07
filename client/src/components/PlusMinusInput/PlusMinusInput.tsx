@@ -69,9 +69,7 @@ const PlusMinusInput = (props: Props) => {
         // eslint-disable-next-line
     }, [value]);
 
-    const classes = useStyles({ 
-        inputLength: `${value}`.length
-    });
+    const classes = useStyles({ inputLength: `${value}`.length });
 
     return (
         <div className={`${classes.container} ${props.containerClass}`}>
@@ -94,8 +92,8 @@ const PlusMinusInput = (props: Props) => {
                 ...props.inputProps
             }} />
             <div className={classes.buttons}>
-                <AddCircleIcon onClick={handleInc} />
-                <RemoveCircleIcon onClick={handleDec} />
+                <AddCircleIcon className={classes.button} onClick={handleInc} />
+                <RemoveCircleIcon className={classes.button} onClick={handleDec} />
             </div>
         </div>
     );

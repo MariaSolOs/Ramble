@@ -62,7 +62,7 @@ export const desktopStyles = (theme: Theme) => createStyles({
     },
 
     online: {
-        width: 70,
+        width: 75,
         color: '#2D2E2E',
         backgroundColor: 'rgba(256, 256, 256, 0.56)',
         borderRadius: 5,
@@ -73,7 +73,7 @@ export const desktopStyles = (theme: Theme) => createStyles({
         textTransform: 'uppercase',
         fontWeight: theme.typography.fontWeightBold,
         [theme.breakpoints.down('xs')]: {
-            width: 60,
+            width: 65,
             fontSize: '0.55rem'
         }
     },

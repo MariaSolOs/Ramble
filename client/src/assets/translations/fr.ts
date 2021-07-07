@@ -3,7 +3,7 @@ import type { TranslationRecord } from 'models/translation';
 const frenchTranslation: TranslationRecord = {
     Home: {
         experienceTitle: "découvrez l'inoubliable", 
-        discoverTitle: 'Découvrez notre expériences',
+        discoverTitle: 'Découvrez des expériences uniques à Montréal',
         seeAllButton: 'Tout voir',
         partakeTitle: 'Vivez des moments inoubliables',
         partakeSubtitle: 'Les expériences sont des activités uniques organisées par des Créateurs passionnés qui veulent partager leur expertise en donnant à leurs invités un accès privilégié à leur univers.',
@@ -81,7 +81,7 @@ const frenchTranslation: TranslationRecord = {
         personButtonLabel: 'Personne',
         peopleButtonLabel: 'Personnes',
         search: 'Explorer',
-        titlePlaceholder: 'Découvrer des expériences'
+        titlePlaceholder: 'Découvrer'
     },
 
     ExperienceCard: {

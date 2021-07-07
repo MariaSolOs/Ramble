@@ -1,5 +1,5 @@
 module.exports = {
-    schema: './graphql/intro-schema.json',
+    schema: './server/graphql/intro-schema.json',
     documents: ['./client/src/graphql-api/*.graphql'],
     extensions: {
         endpoints: {

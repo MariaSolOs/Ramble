@@ -31,11 +31,26 @@ const styles = (theme: Theme) => createStyles({
         width: 70
     },
 
-    stripeInput: {
+    input: {
         marginTop: '1rem',
         padding: 10,
         backgroundColor: '#FFF',
-        borderRadius: 8
+        borderRadius: 8,
+        height: 39,
+
+        '& ::placeholder': {
+            opacity: 1,
+            color: '#CBCBCB'
+        }
+    },
+
+    cardInfoRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+
+        '& $input': {
+            width: '31%'
+        }
     }
 });
 
@@ -45,6 +60,7 @@ export const stripeStyles: StripeElementStyle = {
         backgroundColor: '#FFF',
         color: '#2A2A2A',
         fontSize: '16px',
+        letterSpacing: '-0.8px',
 
         '::placeholder': {
             color: '#CBCBCB'

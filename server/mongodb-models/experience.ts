@@ -1,19 +1,57 @@
-const mongoose = require('mongoose');
+import { Schema, model, Types } from 'mongoose';
+import mongooseLeanDefaults from 'mongoose-lean-defaults';
 
-const ExperienceSchema = new mongoose.Schema({
+export interface Experience {
+    _id: Types.ObjectId;
+    status: 'pending' | 'approved' | 'rejected';
+    zoomInfo?: { // For Zoom experiences
+        PMI: string;
+        password: string;
+    }
+    location: {
+        displayLocation: string; // Used for autocomplete searchbars
+        meetPoint?: string;
+        coordinates?: {
+            lat: number;
+            long: number;
+        }
+    }
+    title: string;
+    categories: ('taste' | 'create' | 'relax' | 'learn' | 'move')[];
+    description: string;
+    ageRestriction?: number;
+    duration: number;
+    languages: string[];
+    capacity: number;
+    images: string[];
+    included?: string[];
+    toBring?: string[];
+    price: {
+        perPerson: number;
+        private?: number;
+        currency: 'CAD' | 'USD';
+    }
+    rating: {
+        value: number;
+        numRatings: number;
+    }
+    creator: Types.ObjectId;
+}
+
+const experienceSchemaFields: Record<keyof Omit<Experience, '_id'>, any> = {
     status: {
         type: String,
         required: true,
         enum: ['pending', 'approved', 'rejected']
     },
 
-    zoomInfo: { // For Zoom experiences
+    zoomInfo: { 
         PMI: String,
         password: String
     },
 
     location: {
-        displayLocation: { // Used for autocomplete searchbars
+        displayLocation: { 
             type: String, 
             required: true
         }, 
@@ -41,7 +79,7 @@ const ExperienceSchema = new mongoose.Schema({
 
     ageRestriction: Number,
 
-    duration: { //In hours
+    duration: { 
         type: Number,
         required: true,
         min: 0.5
@@ -88,12 +126,14 @@ const ExperienceSchema = new mongoose.Schema({
     },
     
     creator: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true, 
         ref: 'Creator'
     }
-});
+}
+
+const experienceSchema = new Schema<Experience>(experienceSchemaFields);
+experienceSchema.plugin(mongooseLeanDefaults);
 
 // TODO: Update all experiences with new schema
-
-module.exports = mongoose.model('Experience', ExperienceSchema);
+export default model<Experience>('Experience', experienceSchema);

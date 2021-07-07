@@ -6,7 +6,8 @@ import type { CompletableSlide } from 'models/prop-interfaces';
 import type { Occurrence } from './useBookingReducer';
 import { getTimePieces } from 'utils/dates';
 
-import { CardNumberElement } from '@stripe/react-stripe-js';
+import InputBase from '@material-ui/core/InputBase';
+import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles, { stripeStyles } from './PaymentSlide.styles';
@@ -56,11 +57,28 @@ const PaymentSlide = (props: Props) => {
             </h3>
             <div className={classes.divisor} />
             <CardNumberElement 
-            className={classes.stripeInput} 
+            className={classes.input} 
             options={{
                 style: stripeStyles,
                 placeholder: text.cardNumberPlaceholder
             }} />
+            <div className={classes.cardInfoRow}>
+                <CardExpiryElement
+                className={classes.input}
+                options={{
+                    style: stripeStyles,
+                    placeholder: text.expiryDatePlaceholder
+                }} />
+                <CardCvcElement
+                className={classes.input}
+                options={{
+                    style: stripeStyles,
+                    placeholder: text.cvcPlaceholder
+                }} />
+                <InputBase
+                className={classes.input}
+                placeholder={text.zipCodePlaceholder} />
+            </div>
         </div>
     );
 }

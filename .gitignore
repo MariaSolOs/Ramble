@@ -14,5 +14,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/graphql/intro-schema.json
-/scripts.js
+/build/
+/server/graphql/intro-schema.json

@@ -33,22 +33,22 @@ const styles = (theme: Theme) => createStyles({
     },
 
     input: {
-        width: ({ inputLength } : StyleProps) => theme.spacing(inputLength * 3),
+        width: (props : StyleProps) => theme.spacing(props.inputLength * 3),
         textAlign: 'center',
         padding: '6px 0'
     },
 
     buttons: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
+    },
 
-        '& .MuiSvgIcon-root': {
-            color: '#2A2A2A',
-            cursor: 'pointer',
-            '&:hover': {
-                color: '#FFF',
-                transition: 'all 200ms ease-in-out',
-            }
+    button: {
+        color: '#2A2A2A',
+        cursor: 'pointer',
+        '&:hover': {
+            color: '#FFF',
+            transition: 'all 200ms ease-in-out',
         }
     }
 });

@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './AppBar.styles';
 const useStyles = makeStyles(styles);
 
-const AppBar: React.FC = ({ children }) => {
+const AppBar: React.FC = (props) => {
     const classes = useStyles();
 
     // Fade out navbar when scrolling
@@ -27,9 +27,14 @@ const AppBar: React.FC = ({ children }) => {
         }}>
             <Toolbar>
                 <Link to="/" className={classes.link}>
-                    <img src={logo} alt="Ramble logo" className={classes.brand} />
+                    <img 
+                    width={150} 
+                    height={43} 
+                    src={logo} 
+                    alt="Ramble logo" 
+                    className={classes.brand} />
                 </Link>
-                { children }
+                {props.children}
             </Toolbar>
         </MUIAppBar>
     );

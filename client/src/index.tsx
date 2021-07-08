@@ -15,6 +15,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY!);
 
+// TODO: Make sure that the source map isn't generated on Heroku
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>

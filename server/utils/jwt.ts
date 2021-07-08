@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import type { Context } from 'apollo-server-types';
+import type { Context } from '../server-types';
 
 /**
  * Generates a JSON web token for communicating with the client.

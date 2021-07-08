@@ -396,7 +396,11 @@ const englishTranslation: TranslationRecord = {
         expiryDatePlaceholder: 'MM / YY',
         cvcPlaceholder: 'CVC',
         zipCodePlaceholder: 'ZIP code',
-        emailPlaceholder: 'Email address'
+        emailPlaceholder: 'Email address',
+        emailMessage: "We'll send your receipt to this email address.",
+        subtotal: 'Subtotal',
+        total: 'Total',
+        serviceFee: 'Service fee'
     }
 }
 

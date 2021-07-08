@@ -1,8 +1,8 @@
-import type { Experience } from 'mongodb-models/experience';
-import type { Occurrence } from 'mongodb-models/occurrence';
-import type { Booking } from 'mongodb-models/booking';
-import type { User } from 'mongodb-models/user';
-import type { Creator } from 'mongodb-models/creator';
+import type { Experience } from '../mongodb-models/experience';
+import type { Occurrence } from '../mongodb-models/occurrence';
+import type { Booking } from '../mongodb-models/booking';
+import type { User } from '../mongodb-models/user';
+import type { Creator } from '../mongodb-models/creator';
 
 // Note that the _id field is set by the GraphQL resolvers when using lean()
 

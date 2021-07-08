@@ -37,10 +37,6 @@ const BookExperience = () => {
         onError: (error) => console.error(error)
     });
 
-    const handleContinue = useCallback((value: boolean) => {
-        dispatch({ type: 'SET_CAN_CONTINUE', value });
-    }, [dispatch]);
-
     // Get occurrences
     const {
         loading: occsLoading
@@ -50,6 +46,23 @@ const BookExperience = () => {
             dispatch({ type: 'SET_OCCURRENCES', occurrences });
         }
     });
+
+    // Pre-fill the email field with the stored one
+    useEffect(() => {
+        dispatch({ type: 'SET_EMAIL', email: userEmail });
+    }, [userEmail, dispatch]);
+
+    // If the user isn't logged in, prompt sign up before payment
+    useEffect(() => {
+        if (state.step === 'payment' && !isLoggedIn) {
+            appDispatch(openSignUpDialog());
+            dispatch({ type: 'GO_BACK' });
+        }
+    }, [state.step, isLoggedIn, appDispatch, dispatch]);
+
+    const handleContinue = useCallback((value: boolean) => {
+        dispatch({ type: 'SET_CAN_CONTINUE', value });
+    }, [dispatch]);
 
     const handleSubmit = () => {
 
@@ -99,7 +112,8 @@ const BookExperience = () => {
             case 'payment':
                 return (
                     <PaymentSlide
-                    userEmail={userEmail}
+                    email={state.form.email}
+                    zipCode={state.form.zipCode}
                     selectedDate={state.form.date!}
                     selectedSlot={state.form.timeslot!}
                     price={
@@ -111,17 +125,17 @@ const BookExperience = () => {
                         state.form.bookingType === 'public' ? 
                         state.form.numGuests : undefined
                     }
+                    isOnlineExperience={state.experience?.isZoomExperience!}
+                    onEmailChange={email => {
+                        dispatch({ type: 'SET_EMAIL', email });
+                    }}
+                    onZipCodeChange={zipCode => {
+                        dispatch({ type: 'SET_ZIP_CODE', zipCode });
+                    }}
                     onSlideComplete={handleContinue} />
                 );
         }
     }
-
-    // If the user isn't logged in, prompt sign up before payment
-    useEffect(() => {
-        if (state.step === 'payment' && !isLoggedIn) {
-            appDispatch(openSignUpDialog());
-        }
-    }, [state.step, isLoggedIn, appDispatch]);
 
     if (experienceLoading || occsLoading || !state.experience || !state.creator) {
         return <Spinner />;

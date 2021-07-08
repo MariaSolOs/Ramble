@@ -18,8 +18,7 @@ import {
     occurrenceReducer
 } from '../utils/data-reducers';
 import type { Resolvers } from './resolvers-types';
-
-const LEAN_DEFAULTS = { defaults: true } as const;
+import { LEAN_DEFAULTS } from '../server-types';
 
 export const resolvers: Resolvers = {
     Experience: {

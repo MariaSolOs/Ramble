@@ -27,7 +27,7 @@ const StripeMessage = (props: Props) => {
         setLoading(true);
 
         // Get Stripe link from the server
-        fetch(`${process.env.REACT_APP_SERVER_URI}/stripe-onboarding`, {
+        fetch(`${process.env.REACT_APP_SERVER_URI}/stripe/onboarding`, {
             method: 'POST',
             mode: 'cors',
             headers: {

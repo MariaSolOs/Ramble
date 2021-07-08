@@ -4,7 +4,10 @@ import {
     bookingReducer,
     userReducer,
     creatorReducer, 
-} from 'utils/data-reducers';
+} from './utils/data-reducers';
+
+// Configuration for MongoDB lean()
+export const LEAN_DEFAULTS = { defaults: true } as const;
 
 // GraphQL context
 export type Context = {
@@ -12,6 +15,7 @@ export type Context = {
     tokenExpiry: string;
 }
 
+// Mappers
 export type ExperienceType = ReturnType<typeof experienceReducer>;
 
 export type OccurrenceType = ReturnType<typeof occurrenceReducer>;

@@ -24,9 +24,9 @@ generates:
     config:
       useIndexSignature: true
       mappers:
-        Experience: apollo-server-types#ExperienceType
-        Occurrence: apollo-server-types#OccurrenceType
-        Booking: apollo-server-types#BookingType
-        User: apollo-server-types#UserType
-        Creator: apollo-server-types#CreatorType
-      contextType: apollo-server-types#Context
+        Experience: server-types#ExperienceType
+        Occurrence: server-types#OccurrenceType
+        Booking: server-types#BookingType
+        User: server-types#UserType
+        Creator: server-types#CreatorType
+      contextType: server-types#Context

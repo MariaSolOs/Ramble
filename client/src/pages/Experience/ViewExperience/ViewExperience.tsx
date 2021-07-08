@@ -28,6 +28,7 @@ const ViewExperience = () => {
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
     
+    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const isExpSaved = useAppSelector(state => 
         state.user.savedExperiences.includes(experienceId)
     );
@@ -89,7 +90,10 @@ const ViewExperience = () => {
             experience={experience}
             creator={creator!}
             isExperienceSaved={isExpSaved}
-            onHeartClick={() => handleHeartClick(isExpSaved, experienceId)}
+            onHeartClick={
+                isLoggedIn ?
+                    () => handleHeartClick(isExpSaved, experienceId) : undefined
+            }
             onShareClick={() => setOpenShareDialog(true)}
             containerClass={classes.experienceContainer} />
             <div className={classes.footer}>

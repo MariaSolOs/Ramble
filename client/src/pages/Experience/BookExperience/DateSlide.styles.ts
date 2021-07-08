@@ -11,6 +11,10 @@ const styles = (theme: Theme) => createStyles({
     },
 
     calendar: {
+        '& .fc td, & .fc th, & .fc .fc-scrollgrid-liquid': {
+            border: 'none'
+        },
+
         '& .fc.fc-media-screen': {
             width: 330,
             margin: '0 auto',
@@ -26,14 +30,21 @@ const styles = (theme: Theme) => createStyles({
 
         '& .fc .fc-day-disabled .fc-daygrid-day-frame': {
             cursor: 'not-allowed',
-            opacity: 0.8,
+            opacity: 0.3,
             height: 40,
             fontWeight: theme.typography.fontWeightRegular,
-            fontSize: 12
+            fontSize: 15
         },
 
         '& .fc .fc-day-disabled': {
             backgroundColor: 'transparent'
+        },
+
+        '& .fc .fc-daygrid-day-frame, & .fc .fc-daygrid-day-top': {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center', 
+            alignItems: 'center'
         },
 
         '& .fc .fc-toolbar-title': {
@@ -52,6 +63,10 @@ const styles = (theme: Theme) => createStyles({
 
         '& .fc .fc-daygrid-day.fc-day-today': {
             backgroundColor: 'transparent'
+        },
+
+        '& .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events': {
+            display: 'none'
         },
 
         '& .fc .fc-button': {
@@ -90,9 +105,9 @@ const styles = (theme: Theme) => createStyles({
     bookableDate: {
         '& .fc-daygrid-day-frame': {
             fontWeight: theme.typography.fontWeightBold,
-            fontSize: 15,
             height: 40,
             cursor: 'pointer',
+            borderRadius: '50%',
 
             '&:hover': {
                 transition: 'all 300ms ease-in-out',
@@ -104,7 +119,8 @@ const styles = (theme: Theme) => createStyles({
 
     selectedDate: {
         backgroundColor: '#FFF',
-        color: '#2A2A2A'
+        color: '#2A2A2A',
+        borderRadius: '50%'
     }
 });
 

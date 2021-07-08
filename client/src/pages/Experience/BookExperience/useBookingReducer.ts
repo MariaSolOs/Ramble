@@ -22,6 +22,8 @@ interface BookingState {
         timeslot?: Occurrence;
         bookingType?: BookingType;
         numGuests: number;
+        zipCode: string;
+        email: string; // Email address to send the receipt to
     }
 }
 
@@ -46,6 +48,8 @@ type Action =
 | { type: 'SET_TIMESLOT'; timeslot: Occurrence; }
 | { type: 'SET_BOOKING_TYPE'; bookingType: BookingType; }
 | { type: 'SET_NUM_GUESTS'; numGuests: number; }
+| { type: 'SET_ZIP_CODE'; zipCode: string; }
+| { type: 'SET_EMAIL'; email: string; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
 | { type: 'GO_BACK'; }
 | { type: 'GO_TO_NEXT_STEP' }
@@ -55,7 +59,9 @@ const initialState: BookingState = {
     occurrences: new Map(),
     canContinue: false,
     form: {
-        numGuests: 2
+        numGuests: 2,
+        zipCode: '',
+        email: ''
     }
 }
 
@@ -141,6 +147,22 @@ export default function useBookingReducer() {
                     form: {
                         ...state.form,
                         numGuests: action.numGuests
+                    }
+                }
+            case 'SET_EMAIL':
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        email: action.email
+                    }
+                }
+            case 'SET_ZIP_CODE': 
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        zipCode: action.zipCode
                     }
                 }
             case 'SET_CAN_CONTINUE':

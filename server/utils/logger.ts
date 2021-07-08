@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import type { Context } from 'apollo-server-types';
+import type { Context } from '../server-types';
 
 const logger = (req: Request, context: Context | null) => {
     console.log(`[ ${new Date().toISOString()} ]`, 

@@ -396,7 +396,11 @@ const frenchTranslation: TranslationRecord = {
         expiryDatePlaceholder: 'MM / AA',
         cvcPlaceholder: 'CVC',
         zipCodePlaceholder: 'Code postal',
-        emailPlaceholder: 'Courriel'
+        emailPlaceholder: 'Courriel',
+        emailMessage: 'Nous enverrons votre reçu à cette adresse courriel.',
+        subtotal: 'Sous-total',
+        total: 'Total',
+        serviceFee: 'Frais de service'
     }
 }
 

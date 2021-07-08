@@ -224,7 +224,7 @@ export type GetBookingExperienceQueryVariables = Exact<{
 
 
 export type GetBookingExperienceQuery = { experience: (
-    Pick<Experience, 'privatePrice'>
+    Pick<Experience, 'privatePrice' | 'currency'>
     & ExperienceViewFragment
   ) };
 
@@ -460,6 +460,7 @@ export const GetBookingExperienceDocument = gql`
   experience(id: $id) {
     ...ExperienceView
     privatePrice
+    currency
   }
 }
     ${ExperienceViewFragmentDoc}`;

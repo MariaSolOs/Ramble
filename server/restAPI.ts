@@ -4,14 +4,13 @@ import Stripe from 'stripe';
 import { generateToken } from './utils/jwt';
 import { sendPasswordResetEmail } from './utils/email';
 import { User, Creator } from './mongodb-models';
+import { LEAN_DEFAULTS } from './server-types';
 
 const router = Router();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2020-08-27'
 });
-
-const LEAN_DEFAULTS = { defaults: true } as const;
 
 // Send email to user for resetting their password
 router.post('/password-reset', async (req, res) => {
@@ -37,7 +36,7 @@ router.get('/email/password-reset/:userId', (req, res) => {
 });
 
 // Initialize Stripe onboarding for creators
-router.post('/stripe-onboarding', async (req, res) => {
+router.post('/stripe/onboarding', async (req, res) => {
     const { creatorId } = req.body;
 
     // Get creator data
@@ -64,8 +63,8 @@ router.post('/stripe-onboarding', async (req, res) => {
     // Create account link
     const accountLink = await stripe.accountLinks.create({
         account: accountId,
-        refresh_url: `${process.env.SERVER_URL}/stripe-onboarding/refresh/${creatorId}`,
-        return_url: `${process.env.SERVER_URL}/stripe-onboarding/return/${creatorId}`,
+        refresh_url: `${process.env.SERVER_URL}/stripe/onboarding-refresh/${creatorId}`,
+        return_url: `${process.env.SERVER_URL}/stripe/onboarding-return/${creatorId}`,
         type: 'account_onboarding'
     });
     
@@ -74,14 +73,14 @@ router.post('/stripe-onboarding', async (req, res) => {
 });
 
 // Refresh the Stripe onboarding link
-router.get('/stripe-onboarding/refresh/:creatorId', async (req, res) => {
+router.get('/stripe/onboarding-refresh/:creatorId', async (req, res) => {
     const { creatorId } = req.params;
     const creator = await Creator.findById(creatorId, 'stripe').lean(LEAN_DEFAULTS);
 
     const accountLink = await stripe.accountLinks.create({
         account: creator?.stripe.accountId || '',
-        refresh_url: `${process.env.SERVER_URL}/stripe-onboarding/refresh/${creatorId}`,
-        return_url: `${process.env.SERVER_URL}/stripe-onboarding/return/${creatorId}`,
+        refresh_url: `${process.env.SERVER_URL}/stripe/onboarding-refresh/${creatorId}`,
+        return_url: `${process.env.SERVER_URL}/stripe/onboarding-return/${creatorId}`,
         type: 'account_onboarding'
     });
 
@@ -90,7 +89,7 @@ router.get('/stripe-onboarding/refresh/:creatorId', async (req, res) => {
 }); 
 
 // Handle Stripe onboarding return
-router.get('/stripe-onboarding/return/:creatorId', async (req, res) => {
+router.get('/stripe/onboarding-return/:creatorId', async (req, res) => {
     const { creatorId } = req.params;
 
     // Get creator data

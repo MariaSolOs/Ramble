@@ -31,7 +31,8 @@ const styles = (theme: Theme) => createStyles({
         cursor: 'pointer',
 
         [theme.breakpoints.down('xs')]: {
-            width: 120
+            width: 120,
+            height: 34
         }
     }
 });

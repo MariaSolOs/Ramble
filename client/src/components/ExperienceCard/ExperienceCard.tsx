@@ -50,6 +50,8 @@ const ExperienceCard = (props: Props) => {
                             <img 
                             src={onlineIcon} 
                             alt="Online experience" 
+                            width={20}
+                            height={20}
                             className={classes.onlineImg} />
                             {text.online}
                         </div>}

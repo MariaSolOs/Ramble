@@ -31,12 +31,33 @@ const styles = (theme: Theme) => createStyles({
         width: 70
     },
 
+    priceBreakdown: {
+        margin: '1.5rem 0'
+    },
+
+    priceRow: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
+
+    priceWhiteText: {
+        fontSize: '1rem',
+        margin: 0
+    },
+
+    priceGreyText: {
+        color: '#CBCBCB',
+        fontSize: '0.85rem',
+        margin: 0
+    },
+
     input: {
         marginTop: '1rem',
         padding: 10,
         backgroundColor: '#FFF',
         borderRadius: 8,
         height: 39,
+        width: '100%',
 
         '& ::placeholder': {
             opacity: 1,
@@ -51,6 +72,12 @@ const styles = (theme: Theme) => createStyles({
         '& $input': {
             width: '31%'
         }
+    },
+
+    emailMessage: {
+        marginLeft: 3,
+        fontSize: '0.8rem',
+        color: '#CBCBCB'
     }
 });
 

@@ -1,14 +1,16 @@
 import { Schema, model, Types } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
+import type { Experience } from './experience';
+import type { Booking } from './booking';
 
 export interface Occurrence {
     _id: Types.ObjectId;
-    experience: Types.ObjectId;
+    experience: Types.ObjectId | Experience;
     dateStart: Date;
     dateEnd: Date;
     spotsLeft: number;
     creatorProfit: number; // Only takes into account confirmed bookings
-    bookings: Types.ObjectId[];
+    bookings: (Types.ObjectId | Booking)[];
 }
 
 const occurrenceSchemaFields: Record<keyof Omit<Occurrence, '_id'>, any> = {

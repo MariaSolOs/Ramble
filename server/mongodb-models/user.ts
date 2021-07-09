@@ -1,6 +1,8 @@
 import { Schema, Model, model, Types } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
 import bcrypt from 'bcrypt';
+import type { Experience } from './experience';
+import type { Creator } from './creator';
 
 export interface User {
     _id: Types.ObjectId;
@@ -14,9 +16,9 @@ export interface User {
     passwordHash: string;
     photo?: string;
     city?: string;
-    savedExperiences?: Types.ObjectId[];
-    bookedExperiences?: Types.ObjectId[];
-    creator?: Types.ObjectId;
+    savedExperiences?: (Types.ObjectId | Experience)[];
+    bookedExperiences?: (Types.ObjectId | Experience)[];
+    creator?: (Types.ObjectId | Creator);
     lastLogin: Date;
 }
 

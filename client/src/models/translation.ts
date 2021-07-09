@@ -90,7 +90,7 @@ export type TranslationRecord = {
 
     BookExperience_TimeslotSlide: Record<'title' | 'join' | 'guest' | 'guests' | 'bookingUnavailable' | 'firstBooking', string>;
 
-    BookExperience_BookingTypeSlide: Record<'title' | 'privateBookingTitle' | 'privateBookingSubtitle' | 'publicBookingTitle' | 'publicBookingSubtitle' | 'upTo' | 'person' | 'people' | 'perPerson' | 'join' | 'guest' | 'guests' | 'numberOfGuests', string>;
+    BookExperience_BookingTypeSlide: Record<'title' | 'privateBookingTitle' | 'privateBookingSubtitle' | 'publicBookingTitle' | 'publicBookingTitleOnline' | 'publicBookingSubtitle' | 'upTo' | 'person' | 'people' | 'join' | 'guest' | 'guests' | 'numberOfGuests', string>;
 
     BookExperience_PaymentSlide: Record<'cardNumberPlaceholder' | 'expiryDatePlaceholder' | 'cvcPlaceholder' | 'zipCodePlaceholder' | 'emailPlaceholder' | 'emailMessage' | 'subtotal' | 'total' | 'serviceFee', string>;
 }

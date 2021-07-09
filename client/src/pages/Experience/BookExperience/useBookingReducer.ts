@@ -8,7 +8,7 @@ import type {
     GetOccurrencesQuery as OccurrencesData
 } from 'graphql-api';
 import { Experience } from 'models/experience';
-import type { BookingType } from 'models/experience-occurrence';
+import type { BookingType, Fees } from 'models/experience-occurrence';
 import type { Creator } from 'models/creator';
 
 interface BookingState {
@@ -17,6 +17,7 @@ interface BookingState {
     creator?: Creator;
     occurrences: Map<string, Occurrence[]>;
     canContinue: boolean;
+    loading: boolean;
     form: {
         date?: string;
         timeslot?: Occurrence;
@@ -24,6 +25,7 @@ interface BookingState {
         numGuests: number;
         zipCode: string;
         email: string; // Email address to send the receipt to
+        fees: Fees;
     }
 }
 
@@ -50,7 +52,9 @@ type Action =
 | { type: 'SET_NUM_GUESTS'; numGuests: number; }
 | { type: 'SET_ZIP_CODE'; zipCode: string; }
 | { type: 'SET_EMAIL'; email: string; }
+| { type: 'SET_FEES'; fees: Fees; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
+| { type: 'SET_LOADING'; loading: boolean; }
 | { type: 'GO_BACK'; }
 | { type: 'GO_TO_NEXT_STEP' }
 
@@ -58,10 +62,18 @@ const initialState: BookingState = {
     step: 'date',
     occurrences: new Map(),
     canContinue: false,
+    loading: false,
     form: {
         numGuests: 2,
         zipCode: '',
-        email: ''
+        email: '',
+        fees: {
+            subTotalString: '',
+            serviceFee: 0,
+            withServiceFee: 0,
+            taxGST: 0,
+            taxQST: 0
+        }
     }
 }
 
@@ -146,7 +158,8 @@ export default function useBookingReducer() {
                     ...state,
                     form: {
                         ...state.form,
-                        numGuests: action.numGuests
+                        numGuests: action.numGuests,
+                        bookingType: 'public'
                     }
                 }
             case 'SET_EMAIL':
@@ -165,10 +178,23 @@ export default function useBookingReducer() {
                         zipCode: action.zipCode
                     }
                 }
+            case 'SET_FEES': 
+                return {
+                    ...state,
+                    form: {
+                        ...state.form,
+                        fees: action.fees
+                    }
+                }
             case 'SET_CAN_CONTINUE':
                 return {
                     ...state,
                     canContinue: action.value
+                }
+            case 'SET_LOADING':
+                return {
+                    ...state,
+                    loading: action.loading
                 }
             case 'GO_BACK': 
                 const currentIdx = BOOKING_STEPS.indexOf(state.step);

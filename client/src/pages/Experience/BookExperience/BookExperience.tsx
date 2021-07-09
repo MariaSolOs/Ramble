@@ -4,7 +4,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import useBookingReducer from './useBookingReducer';
 import { useGetBookingExperienceQuery, useGetOccurrencesQuery } from 'graphql-api';
 import { useAppSelector, useAppDispatch } from 'hooks/redux'; 
-import { openSignUpDialog } from 'store/uiSlice';
+import { openSignUpDialog, openErrorDialog } from 'store/uiSlice';
+import { getFeesBreakdown } from 'utils/booking';
 
 import Spinner from 'components/Spinner/Spinner';
 import Layout from './Layout';
@@ -34,7 +35,7 @@ const BookExperience = () => {
         onCompleted: ({ experience }) => {
             dispatch({ type: 'SET_EXPERIENCE', experienceData: experience });
         },
-        onError: (error) => console.error(error)
+        onError: () => handleError("We can't complete your booking right now...")
     });
 
     // Get occurrences
@@ -44,7 +45,8 @@ const BookExperience = () => {
         variables: { experienceId },
         onCompleted: (occurrences) => {
             dispatch({ type: 'SET_OCCURRENCES', occurrences });
-        }
+        },
+        onError: () => handleError("We can't complete your booking right now...")
     });
 
     // Pre-fill the email field with the stored one
@@ -60,12 +62,35 @@ const BookExperience = () => {
         }
     }, [state.step, isLoggedIn, appDispatch, dispatch]);
 
+    // Keep the fees updated
+    useEffect(() => {
+        if (state.experience) {
+            const price = state.form.bookingType === 'public' ?
+                state.experience.pricePerPerson : state.experience.privatePrice!;
+            const fees = getFeesBreakdown(
+                price,
+                state.experience.isZoomExperience,
+                state.form.bookingType!,
+                state.form.numGuests
+            );
+            dispatch({ type: 'SET_FEES', fees });
+        }
+
+    }, [state.experience, state.form.bookingType, state.form.numGuests, dispatch]);
+
+    const handleError = useCallback((message: string) => {
+        appDispatch(openErrorDialog({ message }));
+        history.replace('/');
+    }, [appDispatch, history]);
+
     const handleContinue = useCallback((value: boolean) => {
         dispatch({ type: 'SET_CAN_CONTINUE', value });
     }, [dispatch]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        dispatch({ type: 'SET_LOADING', loading: true });
 
+        dispatch({ type: 'SET_LOADING', loading: false });
     }
 
     const getSlideContent = () => {
@@ -101,6 +126,7 @@ const BookExperience = () => {
                     privatePrice={state.experience!.privatePrice}
                     experienceCapacity={state.experience!.capacity}
                     selectedSlot={state.form.timeslot!}
+                    isOnlineExperience={state.experience?.isZoomExperience!}
                     onBookingTypeChange={bookingType => {
                         dispatch({ type: 'SET_BOOKING_TYPE', bookingType });
                     }}
@@ -116,16 +142,8 @@ const BookExperience = () => {
                     zipCode={state.form.zipCode}
                     selectedDate={state.form.date!}
                     selectedSlot={state.form.timeslot!}
-                    price={
-                        state.form.bookingType === 'public' ? 
-                        state.experience!.pricePerPerson : 
-                        state.experience!.privatePrice!
-                    }
-                    numGuests={
-                        state.form.bookingType === 'public' ? 
-                        state.form.numGuests : undefined
-                    }
-                    isOnlineExperience={state.experience?.isZoomExperience!}
+                    currency={state.experience?.currency!}
+                    fees={state.form.fees!}
                     onEmailChange={email => {
                         dispatch({ type: 'SET_EMAIL', email });
                     }}
@@ -151,12 +169,16 @@ const BookExperience = () => {
         currentStep={state.step}
         nextButtonWidth={isFirstStep ? 330 : isLastStep ? 370 : '100%'}
         canContinue={state.canContinue}
+        bookingPrice={isLastStep ? 
+            state.form.fees.withServiceFee + state.form.fees.taxGST + state.form.fees.taxQST
+        : undefined}
         onGoBack={() => {
             isFirstStep ? history.goBack() : dispatch({ type: 'GO_BACK' });
         }}
         onGoNext={() => {
             isLastStep ? handleSubmit() : dispatch({ type: 'GO_TO_NEXT_STEP' });
         }}>
+            {state.loading && <Spinner />}
             {getSlideContent()}
         </Layout>
     );

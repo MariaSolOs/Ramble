@@ -58,7 +58,7 @@ export interface Experienceable {
     readonly capacity: number;
     readonly pricePerPerson: number;
     readonly privatePrice?: number;
-    readonly currency?: string;
+    readonly currency?: Currency;
     readonly ratingValue?: number;
     readonly numberOfRatings?: number;
     readonly location: string;

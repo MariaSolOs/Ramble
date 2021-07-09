@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
+import type { Creator } from './creator';
 
 export interface Experience {
     _id: Types.ObjectId;
@@ -35,7 +36,7 @@ export interface Experience {
         value: number;
         numRatings: number;
     }
-    creator: Types.ObjectId;
+    creator: Types.ObjectId | Creator;
 }
 
 const experienceSchemaFields: Record<keyof Omit<Experience, '_id'>, any> = {

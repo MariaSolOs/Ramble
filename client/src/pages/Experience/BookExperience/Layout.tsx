@@ -20,6 +20,7 @@ type Props = {
     creator: Creator;
     currentStep: BookingStep;
     nextButtonWidth?: number | string;
+    bookingPrice?: number;
     canContinue: boolean;
     onGoBack: () => void;
     onGoNext: () => void;
@@ -105,9 +106,9 @@ const Layout: React.FC<Props> = (props) => {
                     className={classes.nextButton}
                     disabled={!props.canContinue}
                     onClick={props.onGoNext}>
-                        {/* TODO: Add price when completing payment */}
                         {props.currentStep === 'payment' ?
-                            text.completeBooking : text.next}
+                            `${text.completeBooking} \u2022 $${props.bookingPrice?.toFixed(2)}` 
+                            : text.next}
                     </Button>
                 </div>
             </div>

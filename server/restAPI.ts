@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import Stripe from 'stripe';
+import { Types } from 'mongoose';
 
 import { generateToken } from './utils/jwt';
 import { sendPasswordResetEmail } from './utils/email';
-import { User, Creator } from './mongodb-models';
+import { User, Creator, Experience } from './mongodb-models';
 import { LEAN_DEFAULTS } from './server-types';
+import type { Creator as CreatorType } from './mongodb-models/creator';
 
 const router = Router();
 
@@ -115,9 +117,62 @@ router.get('/stripe/onboarding-return/:creatorId', async (req, res) => {
     }
 
     // Redirect them to the website
-    const token = generateToken(creator.user.toHexString(), '1d');
+    const token = generateToken((creator.user as Types.ObjectId).toHexString(), '1d');
     res.cookie('ramble-server_cookie', token);
     res.redirect(process.env.CLIENT_URL!);
+});
+
+router.post('/stripe/payment-intent', async (req, res) => {
+    const { experienceId, bookingType, numGuests } = req.body;
+
+    // Get the experience information
+    const experience = await Experience.findById(
+        experienceId, 'creator price zoomInfo'
+    ).lean(LEAN_DEFAULTS).populate('creator', 'stripe');
+    if (!experience) {
+        return res.status(500).send({ error: 'Experience not found.' });
+    }
+
+    // Get the booking price
+    const isInPersonExperience = !Boolean(experience.zoomInfo?.PMI);
+    let bookingPrice = 0;
+    if (bookingType === 'public') {
+        bookingPrice = experience.price.perPerson;
+        // For in person experiences, the costs are per guest
+        if (isInPersonExperience) {
+            bookingPrice *= +numGuests;
+        }
+    } else if (bookingType === 'private') {
+        bookingPrice = experience.price.private!;
+    } else {
+        return res.status(400).send({ error: 'Invalid booking type.' });
+    }
+
+    // Compute the taxes
+    const serviceFee = (bookingPrice * 0.0345) + 0.33;
+    const withServiceFee = serviceFee + bookingPrice;
+    const taxGST = 0.05 * withServiceFee;
+    const taxQST = 0.09975 * withServiceFee;
+
+    const rambleGain = bookingPrice * 0.2;
+    // We keep the taxes
+    const application_fee_amount = rambleGain + taxGST + taxQST + serviceFee;
+    const amount = withServiceFee + taxGST + taxQST;
+
+    // Create and send the client secret
+    // Multiply by 100 and round because Stripe wants cents
+    const paymentIntent = await stripe.paymentIntents.create({
+        payment_method_types: ['card'],
+        amount: Math.round(100 * amount),
+        currency: experience.price.currency,
+        application_fee_amount: Math.round(100 * application_fee_amount),
+        capture_method: 'manual',
+        transfer_data: {
+            destination: (experience.creator as CreatorType).stripe.accountId!
+        }
+    });
+
+    return res.status(201).send({ 'clientSecret': paymentIntent.client_secret });
 });
 
 export default router;

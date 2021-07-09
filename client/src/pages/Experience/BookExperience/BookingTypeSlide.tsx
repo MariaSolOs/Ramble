@@ -21,6 +21,7 @@ interface Props extends CompletableSlide {
     privatePrice?: number;
     selectedSlot: Occurrence;
     experienceCapacity: number;
+    isOnlineExperience: boolean;
     onBookingTypeChange: (type: BookingType) => void;
     onNumGuestsChange: (num: number) => void;
 }
@@ -79,12 +80,10 @@ const BookingTypeSlide = (props: Props) => {
             `}
             onClick={() => onBookingTypeChange('public')}>
                 <p className={classes.buttonTitle}>
-                    {text.publicBookingTitle}
+                    {props.isOnlineExperience ? 
+                        text.publicBookingTitleOnline : text.publicBookingTitle}
                     <span className={classes.price}>
-                        ${props.pricePerPerson} 
-                        <span className={classes.perPersonText}>
-                            {text.perPerson}
-                        </span>
+                        ${props.pricePerPerson}
                     </span>
                 </p>
                 <p className={classes.buttonText}>

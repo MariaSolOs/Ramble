@@ -1,9 +1,11 @@
 import { Schema, model, Types } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
+import type { User } from './user';
+import type { Booking } from './booking';
 
 export interface Creator {
     _id: Types.ObjectId;
-    user: Types.ObjectId;
+    user: Types.ObjectId | User;
     verified: boolean; // True if we verified their government ID
     governmentIds: string[];
     bio: string;
@@ -11,7 +13,7 @@ export interface Creator {
         onboarded: boolean; // True if they completed Stripe's onboarding
         accountId?: string;
     }
-    bookingRequests?: Types.ObjectId[];
+    bookingRequests?: (Types.ObjectId | Booking)[];
 }
 
 const creatorSchemaFields: Record<keyof Omit<Creator, '_id'>, any> = {

@@ -16,3 +16,4 @@ yarn-error.log*
 
 /build/
 /server/graphql/intro-schema.json
+/server/scripts.ts

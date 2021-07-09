@@ -65,13 +65,6 @@ const styles = (theme: Theme) => createStyles({
 
     price: { marginLeft: 'auto' },
 
-    perPersonText: {
-        textTransform: 'uppercase',
-        fontSize: '0.8rem',
-        marginLeft: 6,
-        whiteSpace: 'nowrap'
-    },
-
     numGuestsTitle: {
         textTransform: 'uppercase',
         color: '#CBCBCB'

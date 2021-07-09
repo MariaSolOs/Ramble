@@ -380,12 +380,12 @@ const englishTranslation: TranslationRecord = {
         privateBookingTitle: 'Book entire experience',
         privateBookingSubtitle: 'Be the only guest(s) at this experience',
         publicBookingTitle: 'Book per person',
+        publicBookingTitleOnline: 'Book per connection',
         publicBookingSubtitle: 'Join other guests',
         upTo: 'Up to',
         join: 'Join',
         person: 'person',
         people: 'people',
-        perPerson: 'per person',
         guest: 'guest',
         guests: 'guests',
         numberOfGuests: 'Number of guest(s)'

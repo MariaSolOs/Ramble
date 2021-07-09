@@ -12,6 +12,7 @@ const styles = (theme: Theme) => createStyles({
     dateTitle: {
         fontSize: '1.3rem',
         margin: 0,
+        textTransform: 'capitalize',
 
         [theme.breakpoints.down('xs')]: { fontSize: '1.1rem' }
     },

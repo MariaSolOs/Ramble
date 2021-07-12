@@ -401,6 +401,22 @@ const englishTranslation: TranslationRecord = {
         subtotal: 'Subtotal',
         total: 'Total',
         serviceFee: 'Service fee'
+    },
+
+    BookExperience_Submitted: {
+        title: 'Your booking request was sent',
+        subtitle1: "We'll let you know as soon as",
+        subtitle2: 'approves your request',
+        guest: 'guest',
+        guests: 'guests',
+        host: 'Your host',
+        toBringTitle: 'Be sure to bring',
+        meetingSpotTitle: 'Meeting spot',
+        online: 'Online',
+        paymentDetails: 'Payment details',
+        paymentMethod: 'Payment method',
+        total: 'Total',
+        buttonText: 'Got it'
     }
 }
 

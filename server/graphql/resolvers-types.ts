@@ -18,6 +18,19 @@ export type Scalars = {
 export type Booking = {
   __typename?: 'Booking';
   _id: Scalars['ID'];
+  occurrence: Occurrence;
+  bookingType: Reservation;
+  numGuests: Scalars['Int'];
+  client: User;
+};
+
+/** Mutation results */
+export type CreateBookingResult = {
+  __typename?: 'CreateBookingResult';
+  meetingPoint?: Maybe<Scalars['String']>;
+  creatorPhone: Scalars['String'];
+  cardBrand: Scalars['String'];
+  cardLast4: Scalars['String'];
 };
 
 /** Experience creators. */
@@ -79,7 +92,9 @@ export type Mutation = {
   saveExperience: Experience;
   unsaveExperience: Experience;
   /** Experience creation */
-  createExperience?: Maybe<Experience>;
+  createExperience: Experience;
+  /** Booking creation */
+  createBooking: CreateBookingResult;
 };
 
 
@@ -149,6 +164,14 @@ export type MutationCreateExperienceArgs = {
   slots: Array<OccurrenceInput>;
 };
 
+
+export type MutationCreateBookingArgs = {
+  occurrenceId: Scalars['ID'];
+  bookingType: Reservation;
+  numGuests: Scalars['Int'];
+  paymentIntentId: Scalars['ID'];
+};
+
 /**
  * Representation of a single occurrence in time of an
  * experience.
@@ -201,11 +224,17 @@ export type QueryOccurrencesArgs = {
   experienceId: Scalars['ID'];
 };
 
+/** Booking types. */
+export enum Reservation {
+  Public = 'public',
+  Private = 'private'
+}
+
 /** Representation of a creator's Stripe profile. */
 export type StripeInfo = {
   __typename?: 'StripeInfo';
   onboarded?: Maybe<Scalars['Boolean']>;
-  accountId?: Maybe<Scalars['String']>;
+  accountId?: Maybe<Scalars['ID']>;
 };
 
 /** Application's users. */
@@ -306,17 +335,19 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Booking: ResolverTypeWrapper<BookingType>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  Creator: ResolverTypeWrapper<CreatorType>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  CreateBookingResult: ResolverTypeWrapper<CreateBookingResult>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Creator: ResolverTypeWrapper<CreatorType>;
   Experience: ResolverTypeWrapper<ExperienceType>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   ExperienceCategory: ExperienceCategory;
   Mutation: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Occurrence: ResolverTypeWrapper<OccurrenceType>;
   OccurrenceInput: OccurrenceInput;
   Query: ResolverTypeWrapper<{}>;
+  Reservation: Reservation;
   StripeInfo: ResolverTypeWrapper<StripeInfo>;
   User: ResolverTypeWrapper<UserType>;
 }>;
@@ -325,11 +356,12 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Booking: BookingType;
   ID: Scalars['ID'];
-  Creator: CreatorType;
+  Int: Scalars['Int'];
+  CreateBookingResult: CreateBookingResult;
   String: Scalars['String'];
+  Creator: CreatorType;
   Experience: ExperienceType;
   Float: Scalars['Float'];
-  Int: Scalars['Int'];
   Mutation: {};
   Boolean: Scalars['Boolean'];
   Occurrence: OccurrenceType;
@@ -341,6 +373,18 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type BookingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Booking'] = ResolversParentTypes['Booking']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  occurrence?: Resolver<ResolversTypes['Occurrence'], ParentType, ContextType>;
+  bookingType?: Resolver<ResolversTypes['Reservation'], ParentType, ContextType>;
+  numGuests?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  client?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CreateBookingResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateBookingResult'] = ResolversParentTypes['CreateBookingResult']> = ResolversObject<{
+  meetingPoint?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creatorPhone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cardBrand?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cardLast4?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -385,7 +429,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   signUpCreator?: Resolver<ResolversTypes['Creator'], ParentType, ContextType, RequireFields<MutationSignUpCreatorArgs, 'bio' | 'governmentIds'>>;
   saveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationSaveExperienceArgs, 'experienceId'>>;
   unsaveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationUnsaveExperienceArgs, 'experienceId'>>;
-  createExperience?: Resolver<Maybe<ResolversTypes['Experience']>, ParentType, ContextType, RequireFields<MutationCreateExperienceArgs, 'title' | 'description' | 'images' | 'location' | 'categories' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'pricePerPerson' | 'currency' | 'slots'>>;
+  createExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationCreateExperienceArgs, 'title' | 'description' | 'images' | 'location' | 'categories' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'pricePerPerson' | 'currency' | 'slots'>>;
+  createBooking?: Resolver<ResolversTypes['CreateBookingResult'], ParentType, ContextType, RequireFields<MutationCreateBookingArgs, 'occurrenceId' | 'bookingType' | 'numGuests' | 'paymentIntentId'>>;
 }>;
 
 export type OccurrenceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Occurrence'] = ResolversParentTypes['Occurrence']> = ResolversObject<{
@@ -408,7 +453,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type StripeInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['StripeInfo'] = ResolversParentTypes['StripeInfo']> = ResolversObject<{
   onboarded?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  accountId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  accountId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -430,6 +475,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Booking?: BookingResolvers<ContextType>;
+  CreateBookingResult?: CreateBookingResultResolvers<ContextType>;
   Creator?: CreatorResolvers<ContextType>;
   Experience?: ExperienceResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

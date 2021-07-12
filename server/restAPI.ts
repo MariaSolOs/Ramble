@@ -4,14 +4,15 @@ import { Types } from 'mongoose';
 
 import { generateToken } from './utils/jwt';
 import { sendPasswordResetEmail } from './utils/email';
+import { computeBookingFees } from './utils/booking';
 import { User, Creator, Experience } from './mongodb-models';
-import { LEAN_DEFAULTS } from './server-types';
+import { LEAN_DEFAULTS, STRIPE_API_VERSION } from './server-types';
 import type { Creator as CreatorType } from './mongodb-models/creator';
 
 const router = Router();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2020-08-27'
+    apiVersion: STRIPE_API_VERSION
 });
 
 // Send email to user for resetting their password
@@ -122,6 +123,7 @@ router.get('/stripe/onboarding-return/:creatorId', async (req, res) => {
     res.redirect(process.env.CLIENT_URL!);
 });
 
+// Create a payment intent
 router.post('/stripe/payment-intent', async (req, res) => {
     const { experienceId, bookingType, numGuests } = req.body;
 
@@ -135,40 +137,29 @@ router.post('/stripe/payment-intent', async (req, res) => {
 
     // Get the booking price
     const isInPersonExperience = !Boolean(experience.zoomInfo?.PMI);
-    let bookingPrice = 0;
-    if (bookingType === 'public') {
-        bookingPrice = experience.price.perPerson;
-        // For in person experiences, the costs are per guest
-        if (isInPersonExperience) {
-            bookingPrice *= +numGuests;
-        }
-    } else if (bookingType === 'private') {
-        bookingPrice = experience.price.private!;
-    } else {
-        return res.status(400).send({ error: 'Invalid booking type.' });
-    }
-
-    // Compute the taxes
-    const serviceFee = (bookingPrice * 0.0345) + 0.33;
-    const withServiceFee = serviceFee + bookingPrice;
-    const taxGST = 0.05 * withServiceFee;
-    const taxQST = 0.09975 * withServiceFee;
-
-    const rambleGain = bookingPrice * 0.2;
-    // We keep the taxes
-    const application_fee_amount = rambleGain + taxGST + taxQST + serviceFee;
-    const amount = withServiceFee + taxGST + taxQST;
+    const fees = computeBookingFees(
+        isInPersonExperience,
+        bookingType,
+        +numGuests,
+        experience.price.perPerson,
+        experience.price.private
+    );
 
     // Create and send the client secret
-    // Multiply by 100 and round because Stripe wants cents
     const paymentIntent = await stripe.paymentIntents.create({
         payment_method_types: ['card'],
-        amount: Math.round(100 * amount),
+        amount: fees.amount,
         currency: experience.price.currency,
-        application_fee_amount: Math.round(100 * application_fee_amount),
+        application_fee_amount: fees.application_fee_amount,
         capture_method: 'manual',
         transfer_data: {
             destination: (experience.creator as CreatorType).stripe.accountId!
+        },
+        metadata: { // For Phil's accountability
+            subtotal: fees.withServiceFee,
+            serviceFee: fees.serviceFee,
+            taxGST: fees.taxGST,
+            taxQST: fees.taxQST
         }
     });
 

@@ -1,22 +1,31 @@
 import { useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useStripe, useElements, CardNumberElement } from '@stripe/react-stripe-js';
 
 import useBookingReducer from './useBookingReducer';
-import { useGetBookingExperienceQuery, useGetOccurrencesQuery } from 'graphql-api';
+import { 
+    useGetBookingExperienceQuery, 
+    useGetOccurrencesQuery,
+    useCreateBookingMutation
+} from 'graphql-api';
+import type { Reservation } from 'graphql-api';
 import { useAppSelector, useAppDispatch } from 'hooks/redux'; 
 import { openSignUpDialog, openErrorDialog } from 'store/uiSlice';
 import { getFeesBreakdown } from 'utils/booking';
 
 import Spinner from 'components/Spinner/Spinner';
 import Layout from './Layout';
+import Submitted from './Submitted';
 import DateSlide from './DateSlide';
 import TimeslotSlide from './TimeslotSlide';
 import BookingTypeSlide from './BookingTypeSlide';
 import PaymentSlide from './PaymentSlide';
 
 const BookExperience = () => {
-    const appDispatch = useAppDispatch();
+    const stripe = useStripe();
+    const elements = useElements();
     const history = useHistory();
+    const appDispatch = useAppDispatch();
     
     // Fetch the information of the current logged in user
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
@@ -49,6 +58,13 @@ const BookExperience = () => {
         onError: () => handleError("We can't complete your booking right now...")
     });
 
+    const [
+        createBooking,
+        { data: bookingData }
+    ] = useCreateBookingMutation({
+        onError: () => handleError("We couldn't process your booking...")
+    });
+
     // Pre-fill the email field with the stored one
     useEffect(() => {
         dispatch({ type: 'SET_EMAIL', email: userEmail });
@@ -78,7 +94,7 @@ const BookExperience = () => {
 
     }, [state.experience, state.form.bookingType, state.form.numGuests, dispatch]);
 
-    const handleError = useCallback((message: string) => {
+    const handleError = useCallback((message: string = "Something went wrong...") => {
         appDispatch(openErrorDialog({ message }));
         history.replace('/');
     }, [appDispatch, history]);
@@ -88,9 +104,57 @@ const BookExperience = () => {
     }, [dispatch]);
 
     const handleSubmit = async () => {
-        dispatch({ type: 'SET_LOADING', loading: true });
+        // Make sure Stripe is loaded properly
+        if (!stripe || !elements) {
+            return;
+        }
 
-        dispatch({ type: 'SET_LOADING', loading: false });
+        dispatch({ type: 'INIT_SUBMIT' });
+
+        // Get the client ID
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/stripe/payment-intent`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                experienceId,
+                bookingType: state.form.bookingType!,
+                numGuests: state.form.numGuests
+            })
+        }).then(res => res.json());
+
+        // Confirm the payment intent
+        const result = await stripe.confirmCardPayment(response.clientSecret, {
+            receipt_email: state.form.email,
+            payment_method: {
+                card: elements.getElement(CardNumberElement)!,
+                billing_details: {
+                    address: {
+                        postal_code: state.form.zipCode
+                    }
+                }
+            }
+        });
+
+        // Check possible errors
+        if (result.error) {
+            return handleError(result.error.message);
+        } else if (result.paymentIntent.status !== 'requires_capture') {
+            return handleError("Your payment couldn't be processed.");
+        }
+
+        // Create booking
+        createBooking({
+            variables: {
+                occurrenceId: state.form.timeslot!.id!,
+                bookingType: state.form.bookingType! as Reservation,
+                numGuests: state.form.numGuests,
+                paymentIntentId: result.paymentIntent.id
+            }
+        });
     }
 
     const getSlideContent = () => {
@@ -155,6 +219,37 @@ const BookExperience = () => {
         }
     }
 
+    if (bookingData) {
+        const { 
+            meetingPoint, 
+            creatorPhone, 
+            cardBrand, 
+            cardLast4 
+        } = bookingData.createBooking;
+
+        return (
+            <Submitted
+            startDate={state.form.timeslot!.dateStart}
+            endDate={state.form.timeslot!.dateEnd}
+            numGuests={state.form.numGuests}
+            cardBrand={cardBrand}
+            cardLast4={cardLast4}
+            totalPrice={state.form.fees.totalPrice}
+            currency={state.experience!.currency!}
+            experience={{
+                title: state.experience!.title,
+                image: state.experience!.galleryImages[0].original,
+                meetingPoint: meetingPoint || undefined,
+                toBring: state.experience!.toBringItems
+            }}
+            host={{
+                name: state.creator!.name,
+                photo: state.creator!.photo,
+                phoneNumber: creatorPhone
+            }} />
+        );
+    }
+
     if (experienceLoading || occsLoading || !state.experience || !state.creator) {
         return <Spinner />;
     }
@@ -169,9 +264,7 @@ const BookExperience = () => {
         currentStep={state.step}
         nextButtonWidth={isFirstStep ? 330 : isLastStep ? 370 : '100%'}
         canContinue={state.canContinue}
-        bookingPrice={isLastStep ? 
-            state.form.fees.withServiceFee + state.form.fees.taxGST + state.form.fees.taxQST
-        : undefined}
+        bookingPrice={isLastStep ? state.form.fees.totalPrice : undefined}
         onGoBack={() => {
             isFirstStep ? history.goBack() : dispatch({ type: 'GO_BACK' });
         }}

@@ -63,6 +63,10 @@ const styles = (theme: Theme) => createStyles({
         '& ::placeholder': {
             opacity: 1,
             color: '#CBCBCB'
+        },
+
+        '&.Mui-error': {
+            color: '#D8246E'
         }
     },
 
@@ -76,7 +80,7 @@ const styles = (theme: Theme) => createStyles({
     },
 
     emailMessage: {
-        marginLeft: 3,
+        margin: '8px 0 0 3px',
         fontSize: '0.8rem',
         color: '#CBCBCB'
     }
@@ -93,6 +97,10 @@ export const stripeStyles: StripeElementStyle = {
         '::placeholder': {
             color: '#CBCBCB'
         }
+    },
+
+    invalid: {
+        color: '#D8246E'
     }
 }
 

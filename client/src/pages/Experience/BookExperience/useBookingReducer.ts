@@ -54,7 +54,7 @@ type Action =
 | { type: 'SET_EMAIL'; email: string; }
 | { type: 'SET_FEES'; fees: Fees; }
 | { type: 'SET_CAN_CONTINUE'; value: boolean; }
-| { type: 'SET_LOADING'; loading: boolean; }
+| { type: 'INIT_SUBMIT'; }
 | { type: 'GO_BACK'; }
 | { type: 'GO_TO_NEXT_STEP' }
 
@@ -72,7 +72,8 @@ const initialState: BookingState = {
             serviceFee: 0,
             withServiceFee: 0,
             taxGST: 0,
-            taxQST: 0
+            taxQST: 0,
+            totalPrice: 0
         }
     }
 }
@@ -191,10 +192,10 @@ export default function useBookingReducer() {
                     ...state,
                     canContinue: action.value
                 }
-            case 'SET_LOADING':
+            case 'INIT_SUBMIT':
                 return {
                     ...state,
-                    loading: action.loading
+                    loading: true
                 }
             case 'GO_BACK': 
                 const currentIdx = BOOKING_STEPS.indexOf(state.step);

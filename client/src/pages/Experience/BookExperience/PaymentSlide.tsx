@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 
 import { useLanguageContext } from 'context/languageContext';
@@ -26,6 +26,8 @@ interface Props extends CompletableSlide {
     onZipCodeChange: (zipCode: string) => void;
 }
 
+const ZIP_CODE_REGEX = /^[A-Za-z0-9 ]*$/;
+
 const PaymentSlide = (props: Props) => {
     const { appText, language } = useLanguageContext();
     const { BookExperience_PaymentSlide: text } = appText;
@@ -34,6 +36,10 @@ const PaymentSlide = (props: Props) => {
     const [dateTitle, setDateTitle] = useState<DateTime>();
     const [startTime, setStartTime] = useState<string[]>([]);
     const [endTime, setEndTime] = useState<string[]>([]);
+    const [isCardNumberReady, setIsCardNumberReady] = useState(false);
+    const [isCardExpiryReady, setIsCardExpiryReady] = useState(false);
+    const [isCardCvcReady, setIsCardCvcReady] = useState(false);
+    const [isZipCodeValid, setIsZipCodeValid] = useState(true);
 
     useEffect(() => {
         let selectedDate = DateTime.fromISO(props.selectedDate);
@@ -52,7 +58,24 @@ const PaymentSlide = (props: Props) => {
         setEndTime(getTimePieces(props.selectedSlot.dateEnd));
     }, [props.selectedSlot]);
 
-    const totalFees = props.fees.withServiceFee + props.fees.taxGST + props.fees.taxQST;
+    // Can submit when all fields are ready
+    const { onSlideComplete } = props;
+    useEffect(() => {
+        onSlideComplete(
+            isCardNumberReady && 
+            isCardExpiryReady &&
+            isCardCvcReady && 
+            isZipCodeValid &&
+            props.email.trim().length > 0
+        );
+    }, [isCardNumberReady, isCardExpiryReady, isCardCvcReady, 
+        onSlideComplete, isZipCodeValid, props.email]);
+
+    const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const zipCode = e.target.value;
+        setIsZipCodeValid(ZIP_CODE_REGEX.test(zipCode));
+        props.onZipCodeChange(zipCode);
+    }
     
     return (
         <div className={classes.root}>
@@ -93,11 +116,12 @@ const PaymentSlide = (props: Props) => {
                         {text.total} ({props.currency})
                     </p>
                     <p className={classes.priceWhiteText}>
-                        {totalFees.toFixed(2)}
+                        {props.fees.totalPrice.toFixed(2)}
                     </p>
                 </div>
             </div>
             <CardNumberElement 
+            onChange={({ complete }) => setIsCardNumberReady(complete)}
             className={classes.input} 
             options={{
                 style: stripeStyles,
@@ -105,12 +129,14 @@ const PaymentSlide = (props: Props) => {
             }} />
             <div className={classes.cardInfoRow}>
                 <CardExpiryElement
+                onChange={({ complete }) => setIsCardExpiryReady(complete)}
                 className={classes.input}
                 options={{
                     style: stripeStyles,
                     placeholder: text.expiryDatePlaceholder
                 }} />
                 <CardCvcElement
+                onChange={({ complete }) => setIsCardCvcReady(complete)}
                 className={classes.input}
                 options={{
                     style: stripeStyles,
@@ -118,18 +144,20 @@ const PaymentSlide = (props: Props) => {
                 }} />
                 <InputBase
                 required
+                error={!isZipCodeValid}
                 value={props.zipCode}
-                onChange={e => props.onZipCodeChange(e.target.value)}
+                onChange={handleZipCodeChange}
                 className={classes.input}
                 placeholder={text.zipCodePlaceholder} />
             </div>
             <InputBase
             required
+            type="email"
             value={props.email}
             onChange={e => props.onEmailChange(e.target.value)}
             className={classes.input}
             placeholder={text.emailPlaceholder} />
-            <span className={classes.emailMessage}>{text.emailMessage}</span>
+            <p className={classes.emailMessage}>{text.emailMessage}</p>
         </div>
     );
 }

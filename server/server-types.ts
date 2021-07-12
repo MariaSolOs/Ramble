@@ -6,6 +6,9 @@ import {
     creatorReducer, 
 } from './utils/data-reducers';
 
+// Stripe API configuration
+export const STRIPE_API_VERSION = '2020-08-27';
+
 // Configuration for MongoDB lean()
 export const LEAN_DEFAULTS = { defaults: true } as const;
 
@@ -14,6 +17,8 @@ export type Context = {
     userId: string;
     tokenExpiry: string;
 }
+
+export type Reservation = 'public' | 'private';
 
 // Mappers
 export type ExperienceType = ReturnType<typeof experienceReducer>;

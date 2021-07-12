@@ -1,15 +1,11 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, ApolloError } from 'apollo-server-express';
 import { Types } from 'mongoose';
-import type { FilterQuery } from 'mongoose';
+import type { FilterQuery, Document } from 'mongoose';
+import Stripe from 'stripe';
 
 import { generateToken } from '../utils/jwt';
-import { 
-    Experience, 
-    Occurrence,
-    Booking,
-    User,
-    Creator
-} from '../mongodb-models';
+import { computeBookingFees } from '../utils/booking';
+import { sendBookingNotificationEmail } from '../utils/email';
 import { 
     experienceReducer,
     bookingReducer,
@@ -17,8 +13,22 @@ import {
     creatorReducer, 
     occurrenceReducer
 } from '../utils/data-reducers';
+import { 
+    Experience, 
+    Occurrence,
+    Booking,
+    User,
+    Creator
+} from '../mongodb-models';
+import type { Experience as ExperienceType } from '../mongodb-models/experience';
+import type { User as UserType } from '../mongodb-models/user';
+import type { Creator as CreatorType } from '../mongodb-models/creator';
 import type { Resolvers } from './resolvers-types';
-import { LEAN_DEFAULTS } from '../server-types';
+import { LEAN_DEFAULTS, STRIPE_API_VERSION } from '../server-types';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: STRIPE_API_VERSION
+});
 
 export const resolvers: Resolvers = {
     Experience: {
@@ -249,6 +259,92 @@ export const resolvers: Resolvers = {
             });
 
             return experienceReducer(experience);
+        },
+
+        createBooking: async (_, { occurrenceId, bookingType, numGuests, paymentIntentId }, { userId }) => {
+            if (!userId) {
+                throw new AuthenticationError("User isn't logged in.");
+            }
+
+            // Find the experience and the occurrence to book
+            const occurrence = await Occurrence.findById(
+                occurrenceId
+            ).populate({
+                path: 'experience',
+                select: '_id creator price title location',
+                populate: {
+                    path: 'creator',
+                    select: 'user bookingRequests',
+                    populate: {
+                        path: 'user',
+                        select: '_id email phoneNumber'
+                    }
+                }
+            });
+            if (!occurrence) {
+                throw new ApolloError('Occurrence not found.');
+            }
+
+            const experience = occurrence.experience as ExperienceType;
+            const creator = experience.creator as CreatorType & Document;
+
+            // Create booking
+            const { creatorProfit } = computeBookingFees(
+                Boolean(experience.location.meetPoint),
+                bookingType,
+                numGuests, 
+                experience.price.perPerson,
+                experience.price.private
+            );
+
+            const booking = await Booking.create({
+                occurrence: occurrence._id,
+                bookingType,
+                numGuests,
+                client: userId,
+                stripe: {
+                    paymentIntentId,
+                    paymentCaptured: false,
+                    creatorProfit
+                }
+            });
+
+            // Add booking to occurrence and update capacity
+            occurrence.spotsLeft = bookingType === 'private' ? 
+                0 : occurrence.spotsLeft - numGuests;
+            occurrence.bookings.push(booking._id);
+
+            // Add booking to creator's requests
+            creator.bookingRequests?.push(booking._id);
+
+            // Get card info to display in the booking submitted page
+            const { payment_method } = await stripe.paymentIntents.retrieve(paymentIntentId, {
+                expand: ['payment_method']
+            });
+
+            // Add experience to user's booked experiences
+            const client = await User.findByIdAndUpdate(userId, {
+                $addToSet: { bookedExperiences: experience._id }
+            }, { lean: true });
+
+            // Save all changes
+            await occurrence.save();
+            await creator.save();
+
+            // Send email notification to creator
+            sendBookingNotificationEmail(
+                client?.fstName || '',
+                experience.title,
+                `${process.env.CLIENT_URL!}/email/creator-dashboard/${userId}`,
+                (creator.user as UserType).email.address
+            );
+
+            return {
+                creatorPhone: (creator.user as UserType).phoneNumber!,
+                meetingPoint: experience.location.meetPoint,
+                cardBrand: (payment_method as Stripe.PaymentMethod).card?.brand || '',
+                cardLast4: (payment_method as Stripe.PaymentMethod).card?.last4 || ''
+            }
         }
     }
 }

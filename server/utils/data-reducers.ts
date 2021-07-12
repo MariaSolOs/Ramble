@@ -43,7 +43,10 @@ export const occurrenceReducer = (occ: Occurrence | null) => ({
 
 export const bookingReducer = (booking: Booking | null) => ({
     _id: booking?._id || '',
-    occurrence: booking?.occurrence || ''
+    occurrence: booking?.occurrence || '',
+    bookingType: booking?.bookingType || 'public',
+    numGuests: booking?.numGuests || 0,
+    client: booking?.client || ''
 });
 
 export const userReducer = (user: User | null) => ({

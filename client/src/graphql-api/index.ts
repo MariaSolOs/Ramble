@@ -18,6 +18,18 @@ export type Scalars = {
 /** Bookings associated to an occurrence. */
 export type Booking = {
   _id: Scalars['ID'];
+  occurrence: Occurrence;
+  bookingType: Reservation;
+  numGuests: Scalars['Int'];
+  client: User;
+};
+
+/** Mutation results */
+export type CreateBookingResult = {
+  meetingPoint?: Maybe<Scalars['String']>;
+  creatorPhone: Scalars['String'];
+  cardBrand: Scalars['String'];
+  cardLast4: Scalars['String'];
 };
 
 /** Experience creators. */
@@ -76,7 +88,9 @@ export type Mutation = {
   saveExperience: Experience;
   unsaveExperience: Experience;
   /** Experience creation */
-  createExperience?: Maybe<Experience>;
+  createExperience: Experience;
+  /** Booking creation */
+  createBooking: CreateBookingResult;
 };
 
 
@@ -146,6 +160,14 @@ export type MutationCreateExperienceArgs = {
   slots: Array<OccurrenceInput>;
 };
 
+
+export type MutationCreateBookingArgs = {
+  occurrenceId: Scalars['ID'];
+  bookingType: Reservation;
+  numGuests: Scalars['Int'];
+  paymentIntentId: Scalars['ID'];
+};
+
 /**
  * Representation of a single occurrence in time of an
  * experience.
@@ -196,10 +218,16 @@ export type QueryOccurrencesArgs = {
   experienceId: Scalars['ID'];
 };
 
+/** Booking types. */
+export enum Reservation {
+  Public = 'public',
+  Private = 'private'
+}
+
 /** Representation of a creator's Stripe profile. */
 export type StripeInfo = {
   onboarded?: Maybe<Scalars['Boolean']>;
-  accountId?: Maybe<Scalars['String']>;
+  accountId?: Maybe<Scalars['ID']>;
 };
 
 /** Application's users. */
@@ -239,6 +267,16 @@ export type GetCoreProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCoreProfileQuery = { me: CoreProfileFragment };
 
+export type CreateBookingMutationVariables = Exact<{
+  occurrenceId: Scalars['ID'];
+  bookingType: Reservation;
+  numGuests: Scalars['Int'];
+  paymentIntentId: Scalars['ID'];
+}>;
+
+
+export type CreateBookingMutation = { createBooking: Pick<CreateBookingResult, 'meetingPoint' | 'creatorPhone' | 'cardBrand' | 'cardLast4'> };
+
 export type CreateExperienceMutationVariables = Exact<{
   title: Scalars['String'];
   description: Scalars['String'];
@@ -263,7 +301,7 @@ export type CreateExperienceMutationVariables = Exact<{
 }>;
 
 
-export type CreateExperienceMutation = { createExperience?: Maybe<Pick<Experience, '_id' | 'title'>> };
+export type CreateExperienceMutation = { createExperience: Pick<Experience, '_id' | 'title'> };
 
 export type GetCreationProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -526,6 +564,50 @@ export function useGetCoreProfileLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetCoreProfileQueryHookResult = ReturnType<typeof useGetCoreProfileQuery>;
 export type GetCoreProfileLazyQueryHookResult = ReturnType<typeof useGetCoreProfileLazyQuery>;
 export type GetCoreProfileQueryResult = Apollo.QueryResult<GetCoreProfileQuery, GetCoreProfileQueryVariables>;
+export const CreateBookingDocument = gql`
+    mutation createBooking($occurrenceId: ID!, $bookingType: Reservation!, $numGuests: Int!, $paymentIntentId: ID!) {
+  createBooking(
+    occurrenceId: $occurrenceId
+    bookingType: $bookingType
+    numGuests: $numGuests
+    paymentIntentId: $paymentIntentId
+  ) {
+    meetingPoint
+    creatorPhone
+    cardBrand
+    cardLast4
+  }
+}
+    `;
+export type CreateBookingMutationFn = Apollo.MutationFunction<CreateBookingMutation, CreateBookingMutationVariables>;
+
+/**
+ * __useCreateBookingMutation__
+ *
+ * To run a mutation, you first call `useCreateBookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBookingMutation, { data, loading, error }] = useCreateBookingMutation({
+ *   variables: {
+ *      occurrenceId: // value for 'occurrenceId'
+ *      bookingType: // value for 'bookingType'
+ *      numGuests: // value for 'numGuests'
+ *      paymentIntentId: // value for 'paymentIntentId'
+ *   },
+ * });
+ */
+export function useCreateBookingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateBookingMutation, CreateBookingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateBookingMutation, CreateBookingMutationVariables>(CreateBookingDocument, options);
+      }
+export type CreateBookingMutationHookResult = ReturnType<typeof useCreateBookingMutation>;
+export type CreateBookingMutationResult = Apollo.MutationResult<CreateBookingMutation>;
+export type CreateBookingMutationOptions = Apollo.BaseMutationOptions<CreateBookingMutation, CreateBookingMutationVariables>;
 export const CreateExperienceDocument = gql`
     mutation createExperience($title: String!, $description: String!, $images: [String!]!, $location: String!, $meetingPoint: String, $latitude: Float, $longitude: Float, $categories: [ExperienceCategory!]!, $ageRestriction: Int, $duration: Float!, $languages: [String!]!, $includedItems: [String!]!, $toBringItems: [String!]!, $capacity: Int!, $zoomPMI: String, $zoomPassword: String, $pricePerPerson: Int!, $privatePrice: Int, $currency: String!, $slots: [OccurrenceInput!]!) {
   createExperience(

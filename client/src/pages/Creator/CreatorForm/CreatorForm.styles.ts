@@ -31,7 +31,7 @@ const styles = (theme: Theme) => createStyles({
     },
 
     headerGradient: {
-        backgroundColor: '#f6d327',
+        backgroundColor: '#F6D327',
         backgroundImage: 'linear-gradient(315deg, #f6d327 0%, #de4daa 74%)',
         padding: 5,
         marginRight: 16,

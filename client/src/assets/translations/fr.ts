@@ -401,6 +401,22 @@ const frenchTranslation: TranslationRecord = {
         subtotal: 'Sous-total',
         total: 'Total',
         serviceFee: 'Frais de service'
+    },
+
+    BookExperience_Submitted: {
+        title: 'Votre demande de réservation a été envoyée',
+        subtitle1: 'Nous vous avertirons dès que',
+        subtitle2: 'aura accepté votre demande',
+        guest: 'invité',
+        guests: 'invités',
+        host: 'Votre hôte',
+        toBringTitle: 'Quoi emporter',
+        meetingSpotTitle: 'Point de rencontre',
+        online: 'En ligne',
+        paymentDetails: 'Détails de paiement',
+        paymentMethod: 'Mode de paiement',
+        total: 'Total',
+        buttonText: 'Parfait'
     }
 }
 

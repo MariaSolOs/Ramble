@@ -99,7 +99,17 @@ export const typeDefs = gql`
             privatePrice: Int
             currency: String!
             slots: [OccurrenceInput!]!
-        ): Experience
+        ): Experience!
+
+        """
+        Booking creation
+        """
+        createBooking(
+            occurrenceId: ID!
+            bookingType: Reservation!
+            numGuests: Int!
+            paymentIntentId: ID!
+        ): CreateBookingResult!
     }
 
     """
@@ -108,6 +118,35 @@ export const typeDefs = gql`
     input OccurrenceInput {
         start: String!
         end: String!
+    }
+
+    """
+    Mutation results
+    """
+    type CreateBookingResult {
+        meetingPoint: String
+        creatorPhone: String!
+        cardBrand: String!
+        cardLast4: String!
+    }
+
+    """
+    Ramble's experience categories.
+    """
+    enum ExperienceCategory {
+        taste
+        create
+        relax
+        learn
+        move
+    }
+
+    """
+    Booking types.
+    """
+    enum Reservation {
+        public
+        private
     }
 
     """
@@ -139,17 +178,6 @@ export const typeDefs = gql`
     }
 
     """
-    Ramble's experience categories.
-    """
-    enum ExperienceCategory {
-        taste
-        create
-        relax
-        learn
-        move
-    }
-
-    """
     Representation of a single occurrence in time of an
     experience.
     """
@@ -168,6 +196,10 @@ export const typeDefs = gql`
     """
     type Booking {
         _id: ID!
+        occurrence: Occurrence!
+        bookingType: Reservation!
+        numGuests: Int!
+        client: User!
     }
 
     """
@@ -203,6 +235,6 @@ export const typeDefs = gql`
     """
     type StripeInfo {
         onboarded: Boolean
-        accountId: String
+        accountId: ID
     }
 `;

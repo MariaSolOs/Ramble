@@ -10,9 +10,10 @@ const useStyles = makeStyles(styles);
 
 const Scroll: React.FC<CustomScrollProps> = (props) => {
     const classes = useStyles();
+    const { className, ...otherProps } = props;
 
     return (
-        <CustomScroll className={classes.root} { ...props }>
+        <CustomScroll className={`${classes.root} ${className}`} { ...otherProps }>
             {props.children}
         </CustomScroll>
     );

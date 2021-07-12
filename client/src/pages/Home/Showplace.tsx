@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { useLanguageContext } from 'context/languageContext'; 
 
@@ -31,7 +32,7 @@ const Gallery = () => {
                 <div className={classes.imagesContainer}>
                     {PARTAKE_IMAGES.map(imgUrl => 
                         <img 
-                        key={imgUrl}
+                        key={uuid()}
                         src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image} />
@@ -46,7 +47,7 @@ const Gallery = () => {
                 <div className={classes.imagesContainer}>
                     {ADVENTURE_IMAGES.map(imgUrl => 
                         <img
-                        key={imgUrl}
+                        key={uuid()}
                         src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image} />

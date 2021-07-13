@@ -78,7 +78,7 @@ export type TranslationRecord = {
 
     BuilderSlides_Pricing: Record<'title' | 'subtitle1' | 'subtitle2' | 'tip1' | 'tip2' | 'tip3' | 'pricePerPerson' | 'currency' | 'revenue' | 'guest' | 'guests' | 'privatePriceDescription' | 'privatePrice', string>;
 
-    BuilderSlides_Availabilities: Record<'title' | 'subtitle' | 'tip1' | 'tip2', string>;
+    BuilderSlides_Availabilities: Record<'title' | 'subtitle' | 'tip1' | 'tip2' | 'timezoneMessage', string>;
 
     BuilderSlides_Review: Record<'title', string>;
 
@@ -86,7 +86,7 @@ export type TranslationRecord = {
 
     BookExperience_Layout: Record<'dateAndTime' | 'completeBooking' | 'payment' | 'next' | 'confirmPayment', string>;
 
-    BookExperience_DateSlide: Record<'title', string>;
+    BookExperience_DateSlide: Record<'title' | 'timezoneMessage', string>;
 
     BookExperience_TimeslotSlide: Record<'title' | 'join' | 'guest' | 'guests' | 'bookingUnavailable' | 'firstBooking', string>;
 
@@ -95,4 +95,6 @@ export type TranslationRecord = {
     BookExperience_PaymentSlide: Record<'cardNumberPlaceholder' | 'expiryDatePlaceholder' | 'cvcPlaceholder' | 'zipCodePlaceholder' | 'emailPlaceholder' | 'emailMessage' | 'subtotal' | 'total' | 'serviceFee', string>;
 
     BookExperience_Submitted: Record<'title' | 'subtitle1' | 'subtitle2' | 'guest' | 'guests' | 'host' | 'toBringTitle' | 'meetingSpotTitle' | 'online' | 'paymentDetails' | 'paymentMethod' | 'total' | 'buttonText', string>;
+
+    CreatorDashboard_Layout: Record<'dashboardTitle' | 'bookingRequests' | 'calendar' | 'createdExperiences', string>;
 }

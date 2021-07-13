@@ -28,7 +28,7 @@ const DateSlide = (props: Props) => {
     useEffect(() => {
         onSlideComplete(Boolean(selectedDate));
     }, [onSlideComplete, selectedDate]);
-
+    
     return (
         <>
             <h3 className={classes.title}>{text.title}</h3>
@@ -68,8 +68,11 @@ const DateSlide = (props: Props) => {
                 dayHeaderFormat={{
                     weekday: 'narrow'
                 }}
-                validRange={{ start: new Date()}} 
+                validRange={{ start: new Date() }} 
                 fixedWeekCount />
+                <p className={classes.timezoneMessage}>
+                    {text.timezoneMessage}
+                </p>
             </div>
         </>
     );

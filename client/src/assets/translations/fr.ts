@@ -341,7 +341,8 @@ const frenchTranslation: TranslationRecord = {
         title: 'Disponibilités',
         subtitle: 'Choisissez les dates et les plages horaires pour lesquels les invités peuvent réserver votre expérience.',
         tip1: "Tenez compte de votre horaire hebdomadaire. Définissez des disponibilités réalistes pendant lesquelles vous êtes sûr d'être libre.",
-        tip2: "Dans le tableau de bord, vous pourrez ajouter des plages horaires pour une certaine date ou les supprimer si aucune réservation n'a encore été effectuée."
+        tip2: "Dans le tableau de bord, vous pourrez ajouter des plages horaires pour une certaine date ou les supprimer si aucune réservation n'a encore été effectuée.",
+        timezoneMessage: "L'heure affichée correspond à l'heure de Montréal (heure normale de l'Est)."
     },
 
     BuilderSlides_Review: {
@@ -363,7 +364,8 @@ const frenchTranslation: TranslationRecord = {
     },
 
     BookExperience_DateSlide: {
-        title: 'Veuillez choisir une date'
+        title: 'Veuillez choisir une date',
+        timezoneMessage: "L'heure affichée correspond à l'heure de Montréal (heure normale de l'Est)."
     },
 
     BookExperience_TimeslotSlide: {
@@ -417,6 +419,13 @@ const frenchTranslation: TranslationRecord = {
         paymentMethod: 'Mode de paiement',
         total: 'Total',
         buttonText: 'Parfait'
+    },
+
+    CreatorDashboard_Layout: {
+        dashboardTitle: 'Mon tableau de bord',
+        bookingRequests: 'Réservations',
+        createdExperiences: 'Mes expériences',
+        calendar: 'Calendrier'
     }
 }
 

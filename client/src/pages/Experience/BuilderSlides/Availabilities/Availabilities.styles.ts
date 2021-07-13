@@ -33,6 +33,8 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
+    tip: { fontSize: '0.95rem' },
+
     calendar: {
         '& .fc.fc-media-screen': {
             width: 420,

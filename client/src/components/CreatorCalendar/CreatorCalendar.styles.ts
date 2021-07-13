@@ -1,8 +1,6 @@
 import { createStyles } from '@material-ui/core/styles';
 import type { Theme } from '@material-ui/core/styles';
 
-import type { StyleProps } from './CreatorCalendar';
-
 const styles = (theme: Theme) => createStyles({
     calendar: {
         '& .fc .fc-daygrid-day-frame': {
@@ -19,7 +17,7 @@ const styles = (theme: Theme) => createStyles({
         },
 
         '& .fc .fc-timegrid-slot': {
-            height: (props: StyleProps) => `${373 / props.numSlots}px`
+            height: 30
         },
 
         '& .fc .fc-timegrid-slot-lane': { 

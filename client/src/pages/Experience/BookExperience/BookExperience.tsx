@@ -219,6 +219,7 @@ const BookExperience = () => {
         }
     }
 
+    // Once the booking is created, show the summary page
     if (bookingData) {
         const { 
             meetingPoint, 

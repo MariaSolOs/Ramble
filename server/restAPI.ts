@@ -38,6 +38,13 @@ router.get('/email/password-reset/:userId', (req, res) => {
     res.redirect(process.env.CLIENT_URL!);
 });
 
+// Redirects creators to their dashboard to accept bookings
+router.get('/email/creator-requests/:userId', (req, res) => {
+    const token = generateToken(req.params.userId, '1d');
+    res.cookie('ramble-reset_token', token);
+    res.redirect(`${process.env.CLIENT_URL!}/creator/dashboard/booking-requests`);
+});
+
 // Initialize Stripe onboarding for creators
 router.post('/stripe/onboarding', async (req, res) => {
     const { creatorId } = req.body;

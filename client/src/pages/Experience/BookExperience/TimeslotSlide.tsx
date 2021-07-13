@@ -35,12 +35,14 @@ type TimeslotProps = {
 const Timeslot = (props: TimeslotProps) => {
     const { BookExperience_TimeslotSlide: text } = useLanguageContext().appText;
     const classes = useStyles();
-
+    
+    const timeDiff = props.timeslot.dateStart.diffNow().as('hours');
     const [startTime, startMeridiem] = getTimePieces(props.timeslot.dateStart);
     const [endTime, endMeridiem] = getTimePieces(props.timeslot.dateEnd);
     const currentGuests = props.experienceCapacity - props.timeslot.spotsLeft; 
     const isOccupied = currentGuests > 0;
-    const isDisabled = currentGuests === props.experienceCapacity;
+    // The timeslot is also disabled if it's happening in an hour
+    const isDisabled = currentGuests === props.experienceCapacity || timeDiff <= 1;
 
     return (
         <button 
@@ -98,7 +100,7 @@ const TimeslotSlide = (props: Props) => {
         setDateTitle(selectedDate);
     }, [props.selectedDate, language]);
 
-    const { onSlideComplete, timeslot, allSlots, onTimeslotChange } = props;
+    const { onSlideComplete, timeslot, allSlots } = props;
     useEffect(() => {
         onSlideComplete(Boolean(timeslot));
     }, [onSlideComplete, timeslot]);
@@ -108,10 +110,13 @@ const TimeslotSlide = (props: Props) => {
         if (allSlots.length === 1) {
             const slot = allSlots[0];
             if (slot.spotsLeft !== 0) {
-                onTimeslotChange(slot);
+                props.onTimeslotChange(slot);
             }
         }
-    }, [allSlots, onTimeslotChange]);
+        /* We don't need to include onTimeslotChange since
+        it should never change. */
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [allSlots]);
 
     return (
         <>
@@ -130,7 +135,7 @@ const TimeslotSlide = (props: Props) => {
                     experienceCapacity={props.experienceCapacity}
                     isSelected={slot === timeslot}
                     onClick={() => {
-                        onTimeslotChange(slot);
+                        props.onTimeslotChange(slot);
                     }} />
                 )}
             </div>

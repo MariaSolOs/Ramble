@@ -341,7 +341,8 @@ const englishTranslation: TranslationRecord = {
         title: 'Availabilities',
         subtitle: 'Pick the days and time slots for which guests can book your experience.',
         tip1: 'Consider your weekly schedule. Set realistic availabilities during which you are sure to be free.',
-        tip2: "In your creator dashboard, you'll be able to add time slots for a certain date, or remove them if no bookings have been made yet."
+        tip2: "In your creator dashboard, you'll be able to add time slots for a certain date, or remove them if no bookings have been made yet.",
+        timezoneMessage: "The reference time zone is Eastern Standard Time (EST)."
     },
 
     BuilderSlides_Review: {
@@ -363,7 +364,8 @@ const englishTranslation: TranslationRecord = {
     },
 
     BookExperience_DateSlide: {
-        title: 'Please select a date'
+        title: 'Please select a date',
+        timezoneMessage: "The reference time zone is Eastern Standard Time (EST)."
     },
 
     BookExperience_TimeslotSlide: {
@@ -417,6 +419,13 @@ const englishTranslation: TranslationRecord = {
         paymentMethod: 'Payment method',
         total: 'Total',
         buttonText: 'Got it'
+    },
+
+    CreatorDashboard_Layout: {
+        dashboardTitle: 'My dashboard',
+        bookingRequests: 'Booking requests',
+        calendar: 'Calendar',
+        createdExperiences: 'My experiences'
     }
 }
 

@@ -23,7 +23,7 @@ interface Props extends CompletableSlide {
 const Availabilities = (props: Props) => {
     const { BuilderSlides_Availabilities: text } = useLanguageContext().appText;
     const classes = useStyles();
-    
+
     // Creators must commit to host at least once
     const { onSlideComplete, slots } = props;
     useEffect(() => {
@@ -46,8 +46,9 @@ const Availabilities = (props: Props) => {
             <div className={classes.instructions}>
                 <Title>{text.title}</Title>
                 <Subtitle className={classes.subtitle}>{text.subtitle}</Subtitle>
-                <Tip>{text.tip1}</Tip>
-                <Tip>{text.tip2}</Tip>
+                <Tip className={classes.tip}>{text.tip1}</Tip>
+                <Tip className={classes.tip}>{text.tip2}</Tip>
+                <Tip className={classes.tip}>{text.timezoneMessage}</Tip>
             </div>
             <div>
                 <CreatorCalendar
@@ -58,7 +59,9 @@ const Availabilities = (props: Props) => {
                 extraOptions={{
                     events: slots,
                     height: 500,
-                    longPressDelay: 300
+                    longPressDelay: 10,
+                    dayMaxEvents: 2,
+                    moreLinkClick: () => 'day'
                 }} />
             </div>
         </div>

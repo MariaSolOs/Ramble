@@ -20,7 +20,7 @@
     </mj-head>
 
     <mj-body background-color="#151515">
-
+    
         <mj-include path="./partials/header.mjml"/> 
 
         <!-- Title -->
@@ -44,7 +44,7 @@
                 font-size="18px"
                 letter-spacing="-0.8px">
                     {{clientName}} just booked your experience {{experienceName}}. Log in 
-                    to your creator dashboard to check their booking request.
+                    to your creator dashboard to accept their booking request.
                 </mj-text>
             </mj-column>
         </mj-section>

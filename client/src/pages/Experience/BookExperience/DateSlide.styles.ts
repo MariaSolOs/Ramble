@@ -61,7 +61,7 @@ const styles = (theme: Theme) => createStyles({
             color: '#CDCDCD'
         },
 
-        '& .fc .fc-daygrid-day.fc-day-today': {
+        '& .fc .fc-daygrid-day.fc-day-today:not($selectedDate)': {
             backgroundColor: 'transparent'
         },
 
@@ -118,9 +118,21 @@ const styles = (theme: Theme) => createStyles({
     },
 
     selectedDate: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFF !important',
         color: '#2A2A2A',
         borderRadius: '50%'
+    },
+
+    timezoneMessage: {
+        margin: '8px auto',
+        width: 330,
+        textAlign: 'center',
+        fontWeight: theme.typography.fontWeightRegular,
+        fontSize: '0.8rem',
+
+        [theme.breakpoints.down('xs')]: { 
+            maxWidth: '100%'
+        }
     }
 });
 

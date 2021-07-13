@@ -17,7 +17,6 @@ const useStyles = makeStyles(styles);
 
 // Creators start hosting at 8am, and end at midnight
 const START_TIME = 8;
-const END_TIME = 24;
 
 /**
  * @param time - Number of hours
@@ -28,19 +27,6 @@ const getFormattedTime = (time: number) => {
     const halfHour = time - Math.floor(time);
 
     return `${hours.padStart(2, '0')}:${halfHour === 0.5 ? '30' : '00'}`;
-}
-
-/**
- * @param duration - The experience's duration
- * @returns - The latest possible slot time, and the number of slots
- */
-const getSlotMaxTime = (duration: number) => {
-    let start = START_TIME, end = START_TIME, i = 0;
-    for (; 
-         start + duration < END_TIME; 
-         start += duration, end = start + duration, i += 1
-    ) {}
-    return { maxTime: getFormattedTime(end), numSlots: i }
 }
 
 /**
@@ -69,14 +55,10 @@ type Props = {
     extraOptions?: CalendarOptions;
 }
 
-export type StyleProps = {
-    numSlots: number;
-}
-
 const CreatorCalendar = (props: Props) => {
-    const { CreatorCalendar: text } = useLanguageContext().appText;
-    const { maxTime, numSlots } = getSlotMaxTime(props.slotDuration);
-    const classes = useStyles({ numSlots });
+    const { appText, language } = useLanguageContext();
+    const { CreatorCalendar: text } = appText;
+    const classes = useStyles();
 
     const handleSelect = (info: DateSelectArg) => {
         if (info.allDay) {
@@ -105,6 +87,7 @@ const CreatorCalendar = (props: Props) => {
             ]}
             // Use Montreal's timezone
             timeZone="America/Toronto"
+            locale={language}
             initialView="dayGridMonth"
             selectable
             eventClick={handleUnselect}
@@ -130,13 +113,12 @@ const CreatorCalendar = (props: Props) => {
                 month: text.month,
                 day: text.day
             }}
-            validRange={{ start: new Date()}} 
+            validRange={{ start: new Date() }} 
             fixedWeekCount
             allDaySlot={false}
-            slotDuration={getFormattedTime(props.slotDuration)}
+            slotDuration="00:30"
             // Begin hosting at 8am
             slotMinTime={getFormattedTime(START_TIME)}
-            slotMaxTime={maxTime}
             { ...props.extraOptions } />
         </div>
     );

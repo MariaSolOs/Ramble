@@ -26,7 +26,9 @@ const styles = (theme: Theme) => createStyles({
         alignItems: 'center',
         height: 50,
         backgroundColor: '#1C1C1C',
-        zIndex: 5
+        zIndex: 5,
+
+        [theme.breakpoints.down('xs')]: { height: 60 }
     },
 
     footerPriceInfo: {

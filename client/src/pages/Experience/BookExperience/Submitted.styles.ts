@@ -37,7 +37,8 @@ const styles = (theme: Theme) => createStyles({
     },
 
     capitalized: {
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+        display: 'block'
     },
 
     header: {

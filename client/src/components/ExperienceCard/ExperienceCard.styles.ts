@@ -39,7 +39,7 @@ const styles = (theme: Theme) => createStyles({
         position: 'absolute',
         top: 10, 
         left: 10,
-        width: 62,
+        width: 65,
         color: '#2D2E2E',
         backgroundColor: 'rgba(256, 256, 256, 0.56)',
         borderRadius: 5,

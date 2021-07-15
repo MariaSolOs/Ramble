@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { DateTime } from 'luxon';
 import { v4 as uuid } from 'uuid';
 
@@ -88,18 +88,6 @@ const TimeslotSlide = (props: Props) => {
     const { BookExperience_TimeslotSlide: text } = appText;
     const classes = useStyles();
 
-    const [dateTitle, setDateTitle] = useState<DateTime>();
-    useEffect(() => {
-        let selectedDate = DateTime.fromISO(props.selectedDate);
-
-        // When in French mode, translate the title
-        if (language === 'fr') {
-            selectedDate = selectedDate.setLocale('fr');
-        }
-
-        setDateTitle(selectedDate);
-    }, [props.selectedDate, language]);
-
     const { onSlideComplete, timeslot, allSlots } = props;
     useEffect(() => {
         onSlideComplete(Boolean(timeslot));
@@ -118,15 +106,17 @@ const TimeslotSlide = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allSlots]);
 
+    const selectedDate = DateTime.fromISO(props.selectedDate).setLocale(language);
+
     return (
         <>
             <h3 className={classes.title}>{text.title}</h3>
-            <h4 className={classes.dateTitle}>
-                {dateTitle?.toFormat('EEEE, MMMM d')}
+            <time className={classes.dateTitle}>
+                {selectedDate.toFormat('EEEE, MMMM d')}
                 <span className={classes.yearTitle}>
-                    {dateTitle?.toFormat('y')}
+                    {selectedDate.toFormat('y')}
                 </span>
-            </h4>
+            </time>
             <div className={classes.slots}>
                 {allSlots.map(slot => 
                     <Timeslot

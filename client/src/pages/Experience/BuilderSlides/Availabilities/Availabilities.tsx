@@ -59,7 +59,7 @@ const Availabilities = (props: Props) => {
                 extraOptions={{
                     events: slots,
                     height: 500,
-                    longPressDelay: 10,
+                    longPressDelay: 50,
                     dayMaxEvents: 2,
                     moreLinkClick: () => 'day'
                 }} />

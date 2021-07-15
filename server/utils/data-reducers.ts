@@ -46,7 +46,10 @@ export const bookingReducer = (booking: Booking | null) => ({
     occurrence: booking?.occurrence || '',
     bookingType: booking?.bookingType || 'public',
     numGuests: booking?.numGuests || 0,
-    client: booking?.client || ''
+    client: booking?.client || '',
+    creatorProfit: booking?.stripe.creatorProfit || 0,
+    createdAt: booking?.createdAt.toISOString() || '',
+    paymentCaptured: booking?.stripe.paymentCaptured || false
 });
 
 export const userReducer = (user: User | null) => ({
@@ -73,5 +76,6 @@ export const creatorReducer = (creator: Creator | null) => ({
     stripeProfile: {
         onboarded: creator?.stripe ? creator.stripe.onboarded : false,
         accountId: creator?.stripe ? creator.stripe.accountId : ''
-    }
+    },
+    bookingRequests: creator?.bookingRequests || []
 });

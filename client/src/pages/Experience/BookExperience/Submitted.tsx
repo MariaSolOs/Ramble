@@ -53,16 +53,17 @@ const Submitted = (props: Props) => {
     const isOnlineExperience = !Boolean(props.experience.meetingPoint);
     const [startTime, startMeridiem] = getTimePieces(props.startDate);
     const [endTime, endMeridiem] = getTimePieces(props.endDate);
+    const occurrenceDate = props.startDate.toFormat('EEEE, MMMM d');
 
     const bookingSummary = (
         <>
             <h2 className={classes.whiteText}>{props.experience.title}</h2>
-            <p className={`${classes.greyText} ${classes.capitalized}`}>
-                {props.startDate.toFormat('EEEE, MMMM d')}
-            </p>
-            <p className={classes.greyText}>
+            <time className={`${classes.greyText} ${classes.capitalized}`}>
+                {occurrenceDate}
+            </time>
+            <time className={classes.greyText}>
                 {`${startTime} ${startMeridiem} - ${endTime} ${endMeridiem}`}
-            </p>
+            </time>
             <p className={classes.greyText}>
                 <FontAwesomeIcon icon={faUsers} className={classes.icon} />
                 {props.numGuests} {props.numGuests > 1 ? text.guests : text.guest}
@@ -96,10 +97,10 @@ const Submitted = (props: Props) => {
                     <FontAwesomeIcon icon={faLaptop} className={classes.icon} />
                     {text.online}
                 </> : 
-                <>
+                <address>
                     <FontAwesomeIcon icon={faMapMarkerAlt} className={classes.icon} />
                     {props.experience.meetingPoint}
-                </>}
+                </address>}
             </p>
             <h4 className={classes.sectionTitle}>{text.paymentDetails}</h4>
             <p className={`${classes.greyText} ${classes.allCaps}`}>

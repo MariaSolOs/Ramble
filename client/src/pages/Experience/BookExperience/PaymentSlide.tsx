@@ -33,24 +33,12 @@ const PaymentSlide = (props: Props) => {
     const { BookExperience_PaymentSlide: text } = appText;
     const classes = useStyles();
 
-    const [dateTitle, setDateTitle] = useState<DateTime>();
     const [startTime, setStartTime] = useState<string[]>([]);
     const [endTime, setEndTime] = useState<string[]>([]);
     const [isCardNumberReady, setIsCardNumberReady] = useState(false);
     const [isCardExpiryReady, setIsCardExpiryReady] = useState(false);
     const [isCardCvcReady, setIsCardCvcReady] = useState(false);
     const [isZipCodeValid, setIsZipCodeValid] = useState(true);
-
-    useEffect(() => {
-        let selectedDate = DateTime.fromISO(props.selectedDate);
-
-        // When in French mode, translate the title
-        if (language === 'fr') {
-            selectedDate = selectedDate.setLocale('fr');
-        }
-
-        setDateTitle(selectedDate);
-    }, [props.selectedDate, language]);
 
     // For formatting the timeslot nicely
     useEffect(() => {
@@ -76,15 +64,15 @@ const PaymentSlide = (props: Props) => {
         setIsZipCodeValid(ZIP_CODE_REGEX.test(zipCode));
         props.onZipCodeChange(zipCode);
     }
+
+    const selectedDate = DateTime.fromISO(props.selectedDate).setLocale(language).toFormat('EEEE, MMMM d');
     
     return (
         <div className={classes.root}>
-            <h3 className={classes.dateTitle}>
-                {dateTitle?.toFormat('EEEE, MMMM d')}
-            </h3>
-            <h3 className={classes.timeslotTitle}>
+            <time className={classes.dateTitle}>{selectedDate}</time>
+            <time className={classes.timeslotTitle}>
                 {`${startTime[0]} ${startTime[1]} - ${endTime[0]} ${endTime[1]}`}
-            </h3>
+            </time>
             <div className={classes.divisor} />
             <div className={classes.priceBreakdown}>
                 <div className={classes.priceRow}>

@@ -13,6 +13,7 @@ const styles = (theme: Theme) => createStyles({
         fontSize: '1.3rem',
         margin: 0,
         textTransform: 'capitalize',
+        display: 'block',
 
         [theme.breakpoints.down('xs')]: { fontSize: '1.1rem' }
     },

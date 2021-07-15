@@ -200,6 +200,9 @@ export const typeDefs = gql`
         bookingType: Reservation!
         numGuests: Int!
         client: User!
+        creatorProfit: Int!
+        createdAt: String!
+        paymentCaptured: Boolean!
     }
 
     """
@@ -228,6 +231,7 @@ export const typeDefs = gql`
         user: User!
         bio: String!
         stripeProfile: StripeInfo!
+        bookingRequests: [Booking!]!
     }
 
     """

@@ -11,6 +11,7 @@ import path from 'path';
 import restRoutes from './restAPI';
 import type { RequestHandler } from 'express';
 
+// TODO: Add bin scripts
 const app = express();
 
 app.use(cors({

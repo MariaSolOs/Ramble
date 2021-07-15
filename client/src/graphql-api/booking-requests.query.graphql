@@ -1,0 +1,31 @@
+query getBookingRequests {
+    me {
+        creator {
+            bookingRequests {
+                _id
+                numGuests
+                bookingType
+                createdAt
+                creatorProfit
+                client {
+                    ...UserAvatar
+                    city
+                }
+                occurrence {
+                    dateStart
+                    dateEnd
+                    creatorProfit
+                    experience {
+                        images
+                        title
+                        capacity
+                    }
+                    bookings {
+                        numGuests
+                        paymentCaptured
+                    }
+                }
+            }
+        }
+    }
+}

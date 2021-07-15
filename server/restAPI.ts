@@ -41,7 +41,7 @@ router.get('/email/password-reset/:userId', (req, res) => {
 // Redirects creators to their dashboard to accept bookings
 router.get('/email/creator-requests/:userId', (req, res) => {
     const token = generateToken(req.params.userId, '1d');
-    res.cookie('ramble-reset_token', token);
+    res.cookie('ramble-server_cookie', token);
     res.redirect(`${process.env.CLIENT_URL!}/creator/dashboard/booking-requests`);
 });
 

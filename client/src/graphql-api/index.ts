@@ -22,6 +22,9 @@ export type Booking = {
   bookingType: Reservation;
   numGuests: Scalars['Int'];
   client: User;
+  creatorProfit: Scalars['Int'];
+  createdAt: Scalars['String'];
+  paymentCaptured: Scalars['Boolean'];
 };
 
 /** Mutation results */
@@ -38,6 +41,7 @@ export type Creator = {
   user: User;
   bio: Scalars['String'];
   stripeProfile: StripeInfo;
+  bookingRequests: Array<Booking>;
 };
 
 /** Experiences */
@@ -255,6 +259,20 @@ export type GetBookingExperienceQuery = { experience: (
     Pick<Experience, 'privatePrice' | 'currency'>
     & ExperienceViewFragment
   ) };
+
+export type GetBookingRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBookingRequestsQuery = { me: { creator?: Maybe<{ bookingRequests: Array<(
+        Pick<Booking, '_id' | 'numGuests' | 'bookingType' | 'createdAt' | 'creatorProfit'>
+        & { client: (
+          Pick<User, 'city'>
+          & UserAvatarFragment
+        ), occurrence: (
+          Pick<Occurrence, 'dateStart' | 'dateEnd' | 'creatorProfit'>
+          & { experience: Pick<Experience, 'images' | 'title' | 'capacity'>, bookings: Array<Pick<Booking, 'numGuests' | 'paymentCaptured'>> }
+        ) }
+      )> }> } };
 
 export type CoreProfileFragment = (
   Pick<User, '_id' | 'token' | 'email'>
@@ -530,6 +548,66 @@ export function useGetBookingExperienceLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetBookingExperienceQueryHookResult = ReturnType<typeof useGetBookingExperienceQuery>;
 export type GetBookingExperienceLazyQueryHookResult = ReturnType<typeof useGetBookingExperienceLazyQuery>;
 export type GetBookingExperienceQueryResult = Apollo.QueryResult<GetBookingExperienceQuery, GetBookingExperienceQueryVariables>;
+export const GetBookingRequestsDocument = gql`
+    query getBookingRequests {
+  me {
+    creator {
+      bookingRequests {
+        _id
+        numGuests
+        bookingType
+        createdAt
+        creatorProfit
+        client {
+          ...UserAvatar
+          city
+        }
+        occurrence {
+          dateStart
+          dateEnd
+          creatorProfit
+          experience {
+            images
+            title
+            capacity
+          }
+          bookings {
+            numGuests
+            paymentCaptured
+          }
+        }
+      }
+    }
+  }
+}
+    ${UserAvatarFragmentDoc}`;
+
+/**
+ * __useGetBookingRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetBookingRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBookingRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBookingRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBookingRequestsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetBookingRequestsQuery, GetBookingRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetBookingRequestsQuery, GetBookingRequestsQueryVariables>(GetBookingRequestsDocument, options);
+      }
+export function useGetBookingRequestsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBookingRequestsQuery, GetBookingRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetBookingRequestsQuery, GetBookingRequestsQueryVariables>(GetBookingRequestsDocument, options);
+        }
+export type GetBookingRequestsQueryHookResult = ReturnType<typeof useGetBookingRequestsQuery>;
+export type GetBookingRequestsLazyQueryHookResult = ReturnType<typeof useGetBookingRequestsLazyQuery>;
+export type GetBookingRequestsQueryResult = Apollo.QueryResult<GetBookingRequestsQuery, GetBookingRequestsQueryVariables>;
 export const GetCoreProfileDocument = gql`
     query getCoreProfile {
   me {

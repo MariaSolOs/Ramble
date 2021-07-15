@@ -43,6 +43,11 @@ export const resolvers: Resolvers = {
         }
     },
 
+    Booking: {
+        client: ({ client }) => User.findById(client).lean(LEAN_DEFAULTS).then(userReducer),
+        occurrence: ({ occurrence }) => Occurrence.findById(occurrence).lean(LEAN_DEFAULTS).then(occurrenceReducer)
+    },
+
     User: {
         creator: ({ creator }) => Creator.findById(creator).lean(LEAN_DEFAULTS).then(creatorReducer),
         savedExperiences: async user => {
@@ -56,7 +61,11 @@ export const resolvers: Resolvers = {
     },
 
     Creator: {
-        user: ({ user }) => User.findById(user).lean(LEAN_DEFAULTS).then(userReducer)
+        user: ({ user }) => User.findById(user).lean(LEAN_DEFAULTS).then(userReducer),
+        bookingRequests: async creator => {
+            const bookings = await Booking.find({ _id: { $in: creator.bookingRequests }}).lean(LEAN_DEFAULTS);
+            return bookings.map(bookingReducer);
+        }
     },
 
     Query: {

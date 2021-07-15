@@ -426,6 +426,17 @@ const frenchTranslation: TranslationRecord = {
         bookingRequests: 'Réservations',
         createdExperiences: 'Mes expériences',
         calendar: 'Calendrier'
+    },
+
+    BookingCard: {
+        fromTitle: 'Demande de réservation de',
+        guest: 'invité',
+        guests: 'invités',
+        currentlyFor: 'Actuellement pour le',
+        accept: 'Accepter',
+        decline: 'Refuser',
+        currentPayment: 'Revenu actuel',
+        privateBooking: 'Réservation privée'
     }
 }
 

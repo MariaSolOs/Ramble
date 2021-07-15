@@ -14,10 +14,12 @@ export interface Booking {
         paymentIntentId: string;
         paymentCaptured: boolean; // True after the creator approves it
         creatorProfit: number; // Note that this will be in cents
-    }
+    };
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-const bookingSchemaFields: Record<keyof Omit<Booking, '_id'>, any> = {
+const bookingSchemaFields: Record<keyof Omit<Booking, '_id' | 'createdAt' | 'updatedAt'>, any> = {
     occurrence: {
         type: Schema.Types.ObjectId,
         ref: 'Occurrence',
@@ -59,7 +61,9 @@ const bookingSchemaFields: Record<keyof Omit<Booking, '_id'>, any> = {
     }
 }
 
-const bookingSchema = new Schema<Booking>(bookingSchemaFields);
+const bookingSchema = new Schema<Booking>(bookingSchemaFields, {
+    timestamps: true
+});
 bookingSchema.plugin(mongooseLeanDefaults);
 
 export default model<Booking>('Booking', bookingSchema);

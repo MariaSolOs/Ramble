@@ -97,4 +97,6 @@ export type TranslationRecord = {
     BookExperience_Submitted: Record<'title' | 'subtitle1' | 'subtitle2' | 'guest' | 'guests' | 'host' | 'toBringTitle' | 'meetingSpotTitle' | 'online' | 'paymentDetails' | 'paymentMethod' | 'total' | 'buttonText', string>;
 
     CreatorDashboard_Layout: Record<'dashboardTitle' | 'bookingRequests' | 'calendar' | 'createdExperiences', string>;
+
+    BookingCard: Record<'fromTitle' | 'guest' | 'guests' | 'currentlyFor' | 'currentPayment' | 'accept' | 'decline' | 'privateBooking', string>;
 }

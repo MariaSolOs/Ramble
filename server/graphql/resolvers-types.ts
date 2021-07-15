@@ -22,6 +22,9 @@ export type Booking = {
   bookingType: Reservation;
   numGuests: Scalars['Int'];
   client: User;
+  creatorProfit: Scalars['Int'];
+  createdAt: Scalars['String'];
+  paymentCaptured: Scalars['Boolean'];
 };
 
 /** Mutation results */
@@ -40,6 +43,7 @@ export type Creator = {
   user: User;
   bio: Scalars['String'];
   stripeProfile: StripeInfo;
+  bookingRequests: Array<Booking>;
 };
 
 /** Experiences */
@@ -336,14 +340,14 @@ export type ResolversTypes = ResolversObject<{
   Booking: ResolverTypeWrapper<BookingType>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  CreateBookingResult: ResolverTypeWrapper<CreateBookingResult>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateBookingResult: ResolverTypeWrapper<CreateBookingResult>;
   Creator: ResolverTypeWrapper<CreatorType>;
   Experience: ResolverTypeWrapper<ExperienceType>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ExperienceCategory: ExperienceCategory;
   Mutation: ResolverTypeWrapper<{}>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Occurrence: ResolverTypeWrapper<OccurrenceType>;
   OccurrenceInput: OccurrenceInput;
   Query: ResolverTypeWrapper<{}>;
@@ -357,13 +361,13 @@ export type ResolversParentTypes = ResolversObject<{
   Booking: BookingType;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
-  CreateBookingResult: CreateBookingResult;
   String: Scalars['String'];
+  Boolean: Scalars['Boolean'];
+  CreateBookingResult: CreateBookingResult;
   Creator: CreatorType;
   Experience: ExperienceType;
   Float: Scalars['Float'];
   Mutation: {};
-  Boolean: Scalars['Boolean'];
   Occurrence: OccurrenceType;
   OccurrenceInput: OccurrenceInput;
   Query: {};
@@ -377,6 +381,9 @@ export type BookingResolvers<ContextType = Context, ParentType extends Resolvers
   bookingType?: Resolver<ResolversTypes['Reservation'], ParentType, ContextType>;
   numGuests?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   client?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  creatorProfit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paymentCaptured?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -393,6 +400,7 @@ export type CreatorResolvers<ContextType = Context, ParentType extends Resolvers
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   stripeProfile?: Resolver<ResolversTypes['StripeInfo'], ParentType, ContextType>;
+  bookingRequests?: Resolver<Array<ResolversTypes['Booking']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

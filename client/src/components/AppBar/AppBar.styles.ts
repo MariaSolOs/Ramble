@@ -24,7 +24,10 @@ const styles = (theme: Theme) => createStyles({
         transition: 'opacity 600ms'
     },
 
-    link: { textDecoration: 'none' },
+    link: { 
+        textDecoration: 'none',
+        '&:focus-visible': { outline: 'none' }
+    },
 
     brand: {
         width: 150,

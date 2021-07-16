@@ -98,5 +98,7 @@ export type TranslationRecord = {
 
     CreatorDashboard_Layout: Record<'dashboardTitle' | 'bookingRequests' | 'calendar' | 'createdExperiences', string>;
 
+    BookingRequests: Record<'decisionError' | 'bookingAcceptedMessage' | 'bookingRejectedMessage', string>;
+
     BookingCard: Record<'fromTitle' | 'guest' | 'guests' | 'currentlyFor' | 'currentPayment' | 'accept' | 'decline' | 'privateBooking', string>;
 }

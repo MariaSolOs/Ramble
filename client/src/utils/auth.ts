@@ -1,4 +1,11 @@
 /**
+ * @returns The token stored in persistent storage.
+ */
+export const getStoredToken = () => (
+    localStorage.getItem('ramble-token') || sessionStorage.getItem('ramble-token') || ''
+);
+
+/**
  * Based on if the user wants to be remembered, store new token.
  * 
  * @param token - JWT encrypted token

@@ -35,7 +35,7 @@ const ForgotPasswordDialog = (props: Props) => {
 
         setLoading(true);
 
-        fetch(`${process.env.REACT_APP_SERVER_URI}/password-reset`, {
+        fetch(`${process.env.REACT_APP_SERVER_URI}/email/password-reset`, {
             method: 'POST',
             mode: 'cors',
             headers: {

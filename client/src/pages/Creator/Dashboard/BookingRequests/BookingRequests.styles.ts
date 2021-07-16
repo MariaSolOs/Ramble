@@ -6,11 +6,16 @@ const styles = (theme: Theme) => createStyles({
         display: 'flex',
         marginTop: '2rem',
         height: 'calc(100% - 2rem)',
-        flexWrap: 'wrap'
+        overflowX: 'scroll',
+        
+        [theme.breakpoints.down('sm')]: {
+            flexWrap: 'wrap'
+        }
     },
 
     bookingCard: {
         width: 380,
+        minWidth: 380,
         height: '100%',
         margin: '0 20px',
 

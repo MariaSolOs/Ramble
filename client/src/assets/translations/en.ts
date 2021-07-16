@@ -428,6 +428,12 @@ const englishTranslation: TranslationRecord = {
         createdExperiences: 'My experiences'
     },
 
+    BookingRequests: {
+        decisionError: "We couldn't process your decision...",
+        bookingAcceptedMessage: 'The booking was accepted.',
+        bookingRejectedMessage: 'The booking was canceled.'
+    },
+
     BookingCard: {
         fromTitle: 'Booking request from',
         guest: 'guest',

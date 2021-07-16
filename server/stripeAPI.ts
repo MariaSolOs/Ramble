@@ -2,10 +2,9 @@ import { Router } from 'express';
 import Stripe from 'stripe';
 import { Types } from 'mongoose';
 
-import { generateToken } from './utils/jwt';
-import { sendPasswordResetEmail } from './utils/email';
+import { generateToken, verifyToken } from './utils/jwt';
 import { computeBookingFees } from './utils/booking';
-import { User, Creator, Experience } from './mongodb-models';
+import { Booking, User, Creator, Experience } from './mongodb-models';
 import { LEAN_DEFAULTS, STRIPE_API_VERSION } from './server-types';
 import type { Creator as CreatorType } from './mongodb-models/creator';
 
@@ -15,44 +14,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: STRIPE_API_VERSION
 });
 
-// Send email to user for resetting their password
-router.post('/password-reset', async (req, res) => {
-    const user = await User.findOne({ 
-        'email.address': req.body.email 
-    }, '_id').lean(LEAN_DEFAULTS);
-
-    if (!user) {
-        return res.status(404).send({
-            message: "There's no account associated to that email." 
-        });
-    }
-    
-    await sendPasswordResetEmail(user._id.toHexString(), req.body.email);
-    return res.status(201).send({ message: 'Reset email sent' });
-});
-
-// Manages password-reset email link
-router.get('/email/password-reset/:userId', (req, res) => {
-    const token = generateToken(req.params.userId, '1d');
-    res.cookie('ramble-reset_token', token);
-    res.redirect(process.env.CLIENT_URL!);
-});
-
-// Redirects creators to their dashboard to accept bookings
-router.get('/email/creator-requests/:userId', (req, res) => {
-    const token = generateToken(req.params.userId, '1d');
-    res.cookie('ramble-server_cookie', token);
-    res.redirect(`${process.env.CLIENT_URL!}/creator/dashboard/booking-requests`);
-});
-
 // Initialize Stripe onboarding for creators
-router.post('/stripe/onboarding', async (req, res) => {
+router.post('/onboarding', async (req, res) => {
     const { creatorId } = req.body;
 
     // Get creator data
     const creator = await Creator.findById(creatorId, 'user stripe');
     if (!creator) {
-        return res.status(500).send({
+        return res.status(422).send({
             message: "Creator account not found." 
         });
     }
@@ -83,7 +52,7 @@ router.post('/stripe/onboarding', async (req, res) => {
 });
 
 // Refresh the Stripe onboarding link
-router.get('/stripe/onboarding-refresh/:creatorId', async (req, res) => {
+router.get('/onboarding-refresh/:creatorId', async (req, res) => {
     const { creatorId } = req.params;
     const creator = await Creator.findById(creatorId, 'stripe').lean(LEAN_DEFAULTS);
 
@@ -99,13 +68,13 @@ router.get('/stripe/onboarding-refresh/:creatorId', async (req, res) => {
 }); 
 
 // Handle Stripe onboarding return
-router.get('/stripe/onboarding-return/:creatorId', async (req, res) => {
+router.get('/onboarding-return/:creatorId', async (req, res) => {
     const { creatorId } = req.params;
 
     // Get creator data
     const creator = await Creator.findById(creatorId, 'user stripe');
     if (!creator) {
-        return res.status(500).send({
+        return res.status(422).send({
             message: "Creator account not found." 
         });
     }
@@ -131,7 +100,7 @@ router.get('/stripe/onboarding-return/:creatorId', async (req, res) => {
 });
 
 // Create a payment intent
-router.post('/stripe/payment-intent', async (req, res) => {
+router.post('/payment-intent', async (req, res) => {
     const { experienceId, bookingType, numGuests } = req.body;
 
     // Get the experience information
@@ -139,7 +108,7 @@ router.post('/stripe/payment-intent', async (req, res) => {
         experienceId, 'creator price zoomInfo'
     ).lean(LEAN_DEFAULTS).populate('creator', 'stripe');
     if (!experience) {
-        return res.status(500).send({ error: 'Experience not found.' });
+        return res.status(422).send({ error: 'Experience not found.' });
     }
 
     // Get the booking price
@@ -171,6 +140,41 @@ router.post('/stripe/payment-intent', async (req, res) => {
     });
 
     return res.status(201).send({ 'clientSecret': paymentIntent.client_secret });
+});
+
+// Capture/cancel a payment intent
+router.post('/payment-intent/:action', async (req, res) => {
+    try {
+        const { action } = req.params;
+        const { bookingId, token } = req.body;
+
+        const { userId } = verifyToken(token);
+        const user = await User.findById(userId, 'creator').lean(LEAN_DEFAULTS);
+        const booking = await Booking.findById(bookingId, 'stripe').lean(LEAN_DEFAULTS);
+
+        if (!booking || !user) {
+            return res.status(422).send({ message: 'Invalid input.' });
+        }
+
+        // Remove request from creator's list
+        await Creator.findByIdAndUpdate(user.creator, { 
+            $pull: { bookingRequests: Types.ObjectId(bookingId) } 
+        });
+
+        // Capture/cancel the intent
+        const intentId = booking.stripe.paymentIntentId;
+        if (action === 'capture') {
+            await stripe.paymentIntents.capture(intentId);
+        } else if (action === 'cancel') {
+            await stripe.paymentIntents.cancel(intentId);
+        } else {
+            return res.status(400).send({ error: 'Invalid action.' });
+        }
+
+        return res.status(200).send({ message: 'Payment intent processed.' });
+    } catch (err) {
+        return res.status(500).send({ error: err.message });
+    }
 });
 
 export default router;

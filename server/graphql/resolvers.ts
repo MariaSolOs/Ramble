@@ -63,7 +63,10 @@ export const resolvers: Resolvers = {
     Creator: {
         user: ({ user }) => User.findById(user).lean(LEAN_DEFAULTS).then(userReducer),
         bookingRequests: async creator => {
-            const bookings = await Booking.find({ _id: { $in: creator.bookingRequests }}).lean(LEAN_DEFAULTS);
+            const bookings = await Booking.find({ 
+                _id: { $in: creator.bookingRequests }
+            }).sort('-createdAt').lean(LEAN_DEFAULTS);
+            // Sort bookings by their creation date (most recent first)
             return bookings.map(bookingReducer);
         }
     },

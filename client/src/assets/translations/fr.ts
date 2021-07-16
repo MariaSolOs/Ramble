@@ -81,7 +81,7 @@ const frenchTranslation: TranslationRecord = {
         personButtonLabel: 'Personne',
         peopleButtonLabel: 'Personnes',
         search: 'Explorer',
-        titlePlaceholder: 'Découvrer'
+        titlePlaceholder: 'Rechercher'
     },
 
     ExperienceCard: {
@@ -426,6 +426,12 @@ const frenchTranslation: TranslationRecord = {
         bookingRequests: 'Réservations',
         createdExperiences: 'Mes expériences',
         calendar: 'Calendrier'
+    },
+
+    BookingRequests: {
+        decisionError: "Nous n'avons pas pu traiter votre décision...",
+        bookingAcceptedMessage: 'La réservation a été acceptée.',
+        bookingRejectedMessage: 'La réservation a été annulée.'
     },
 
     BookingCard: {

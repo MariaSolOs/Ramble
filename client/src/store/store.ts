@@ -8,7 +8,7 @@ const store = configureStore({
         ui: uiReducer,
         user: userReducer
     },
-    devTools: process.env.NODE_ENV !== 'production'
+    devTools: process.env.NODE_ENV === 'development'
 });
 
 export type RootState = ReturnType<typeof store.getState>;

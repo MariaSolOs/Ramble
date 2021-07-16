@@ -8,10 +8,13 @@ import logger from './utils/logger';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import restRoutes from './restAPI';
+import emailRoutes from './emailsAPI';
+import stripeRoutes from './stripeAPI';
 import type { RequestHandler } from 'express';
 
-// TODO: Add bin scripts
+// TODO: Make sure the works are printed in Heroku
+import './agenda-worker';
+
 const app = express();
 
 app.use(cors({
@@ -21,7 +24,8 @@ app.use(cors({
 app.use(express.json() as RequestHandler);
 app.use(express.urlencoded({ extended: true }) as RequestHandler);
 app.use(express.static(path.join(__dirname, '../client', 'build')));
-app.use('/', restRoutes);
+app.use('/email', emailRoutes);
+app.use('/stripe', stripeRoutes);
 
 const server = new ApolloServer({
     context: ({ req }) => {

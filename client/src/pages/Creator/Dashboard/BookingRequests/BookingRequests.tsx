@@ -1,9 +1,10 @@
-import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useState, useCallback } from 'react';
 
 import { useGetBookingRequestsQuery } from 'graphql-api';
+import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
+import { openErrorDialog, openSnackbar } from 'store/uiSlice';
+import { getStoredToken } from 'utils/auth';
 
 import Spinner from 'components/Spinner/Spinner';
 import BookingCard from 'components/BookingCard/BookingCard';
@@ -13,34 +14,54 @@ import styles from './BookingRequests.styles';
 const useStyles = makeStyles(styles);
 
 const BookingRequests = () => {
-    const history = useHistory();
+    const { BookingRequests: text } = useLanguageContext().appText;
     const dispatch = useAppDispatch();
     const classes = useStyles();
 
-    const { loading, data } = useGetBookingRequestsQuery({
+    const [processing, setProcessing] = useState(false);
+
+    const { loading, data, refetch } = useGetBookingRequestsQuery({
         onError: () => handleError("We couldn't get your bookings...")
     });
 
-    const handleError = (message: string) => {
+    const handleError = useCallback((message: string) => {
         dispatch(openErrorDialog({ message }));
-        history.replace('/');
-    }
+    }, [dispatch]);
 
-    const handleAccept = useCallback((bookingId: string) => {
-        console.log(bookingId);
-    }, []);
-    
-    const handleDecline = useCallback((bookingId: string) => {
-        console.log(bookingId);
-    }, []);
+    const handleDecision = useCallback(async (action: 'capture' | 'cancel', bookingId: string) => {
+        setProcessing(true);
+ 
+        const res = await fetch(`${process.env.REACT_APP_SERVER_URI}/stripe/payment-intent/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                bookingId,
+                token: getStoredToken()
+            })
+        });
+
+        if (res.ok) {
+            const message = action === 'capture' ? 
+                text.bookingAcceptedMessage : text.bookingRejectedMessage;
+            dispatch(openSnackbar({ message }));
+            refetch();
+        } else {
+            handleError(text.decisionError);
+        }
+
+        setProcessing(false);
+    }, [handleError, refetch, dispatch, text]);
 
     if (loading || !data) {
         return <Spinner />;
     }
 
-    // TODO: Sort requests
     return (
         <div className={classes.root}>
+            {processing && <Spinner />}
             {data.me.creator!.bookingRequests.map(booking => {
                 // Compute the number of guests in confirmed bookings
                 const guests = booking.occurrence.bookings.filter(
@@ -70,8 +91,8 @@ const BookingRequests = () => {
                         photo: booking.client.photo || undefined,
                         city: booking.client.city || undefined
                     }}
-                    onAccept={() => handleAccept(booking._id)}
-                    onDecline={() => handleDecline(booking._id)}
+                    onAccept={() => handleDecision('capture', booking._id)}
+                    onDecline={() => handleDecision('cancel', booking._id)}
                     containerClass={classes.bookingCard} />
                 );
             })}

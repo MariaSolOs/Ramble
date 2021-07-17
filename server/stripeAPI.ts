@@ -1,9 +1,13 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import Stripe from 'stripe';
 import { Types } from 'mongoose';
 
 import { generateToken, verifyToken } from './utils/jwt';
 import { computeBookingFees } from './utils/booking';
+import { 
+    handleSuccessfulPaymentIntent, 
+    handleCanceledPaymentIntent 
+} from './utils/stripe-webhook-handlers';
 import { Booking, User, Creator, Experience } from './mongodb-models';
 import { LEAN_DEFAULTS, STRIPE_API_VERSION } from './server-types';
 import type { Creator as CreatorType } from './mongodb-models/creator';
@@ -177,24 +181,34 @@ router.post('/payment-intent/:action', async (req, res) => {
     }
 });
 
-const ENDPOINT_SECRET = 'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx';
 // Stripe webhook
-router.post('/webhook', (req, res) => {
+router.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
     const signature = req.headers['stripe-signature']!;
     let event: Stripe.Event;
 
+    // Construct the event
     try {
-        event = stripe.webhooks.constructEvent(req.body, signature, ENDPOINT_SECRET);
+        event = stripe.webhooks.constructEvent(
+            req.body, 
+            signature, 
+            process.env.STRIPE_WEBHOOK_SECRET!
+        );
     } catch (err) {
         return res.status(400).send({ error: err.message });
     }
 
+    // Based on its type, do what we need to do
     switch (event.type) {
-        case 'payment_intent.succeeded':
-            // break;
-        case 'payment_intent.canceled':
-            console.log(event)
+        case 'payment_intent.succeeded': {
+            const payload = event.data.object as Stripe.PaymentIntent;
+            handleSuccessfulPaymentIntent(payload);
             break;
+        }
+        case 'payment_intent.canceled': {
+            const payload = event.data.object as Stripe.PaymentIntent;
+            handleCanceledPaymentIntent(payload);
+            break;
+        }
         default:
             console.log(`[Stripe webhook] Unhandled event type ${event.type}`);
     }

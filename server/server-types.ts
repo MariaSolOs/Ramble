@@ -20,6 +20,8 @@ export type Context = {
 
 export type Reservation = 'public' | 'private';
 
+export type Currency = 'CAD' | 'USD';
+
 // Mappers
 export type ExperienceType = ReturnType<typeof experienceReducer>;
 

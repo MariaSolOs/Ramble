@@ -18,7 +18,14 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true
 }));
-app.use(express.json() as RequestHandler);
+// Use JSON parser for all non-webhook routes
+app.use((req, res, next) => {
+    if (req.originalUrl.startsWith('/stripe/webhook')) {
+        next();
+    } else {
+        express.json()(req, res, next);
+    }
+});
 app.use(express.urlencoded({ extended: true }) as RequestHandler);
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 app.use('/email', emailRoutes);

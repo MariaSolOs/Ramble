@@ -1,6 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
 import type { Creator } from './creator';
+import type { Currency } from '../server-types';
 
 export interface Experience {
     _id: Types.ObjectId;
@@ -30,7 +31,7 @@ export interface Experience {
     price: {
         perPerson: number;
         private?: number;
-        currency: 'CAD' | 'USD';
+        currency: Currency;
     }
     rating: {
         value: number;

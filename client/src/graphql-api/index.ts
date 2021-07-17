@@ -326,13 +326,11 @@ export type GetCreationProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCreationProfileQuery = { me: (
     { creator?: Maybe<(
-      StripeProfileFragment
-      & CreatorBioFragment
+      Pick<Creator, '_id' | 'bio'>
+      & { stripeProfile: Pick<StripeInfo, 'onboarded'> }
     )> }
     & UserAvatarFragment
   ) };
-
-export type CreatorBioFragment = Pick<Creator, '_id' | 'bio'>;
 
 export type GetCreatorFormFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -347,8 +345,8 @@ export type CardContentFragment = Pick<Experience, '_id' | 'title' | 'images' | 
 export type ExperienceViewFragment = (
   Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'zoomPMI' | 'pricePerPerson'>
   & { creator: (
-    { user: UserAvatarFragment }
-    & CreatorBioFragment
+    Pick<Creator, 'bio'>
+    & { user: UserAvatarFragment }
   ) }
 );
 
@@ -413,8 +411,6 @@ export type SignUpMutationVariables = Exact<{
 
 export type SignUpMutation = { signUpUser: CoreProfileFragment };
 
-export type StripeProfileFragment = { stripeProfile: Pick<StripeInfo, 'accountId' | 'onboarded'> };
-
 export type UnsaveExperienceMutationVariables = Exact<{
   experienceId: Scalars['String'];
 }>;
@@ -437,6 +433,24 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { editUser: CoreProfileFragment };
 
 export type UserAvatarFragment = Pick<User, 'photo' | 'firstName'>;
+
+export type GetUserExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserExperiencesQuery = { me: (
+    Pick<User, '_id' | 'city'>
+    & { savedExperiences: Array<CardContentFragment>, bookedExperiences: Array<CardContentFragment> }
+    & UserAvatarFragment
+  ) };
+
+export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserProfileQuery = { me: (
+    Pick<User, '_id' | 'lastName' | 'city' | 'email' | 'phoneNumber' | 'birthday'>
+    & { creator?: Maybe<Pick<Creator, 'bio'>> }
+    & UserAvatarFragment
+  ) };
 
 export const UserAvatarFragmentDoc = gql`
     fragment UserAvatar on User {
@@ -470,12 +484,6 @@ export const CardContentFragmentDoc = gql`
   zoomPMI
 }
     `;
-export const CreatorBioFragmentDoc = gql`
-    fragment CreatorBio on Creator {
-  _id
-  bio
-}
-    `;
 export const ExperienceViewFragmentDoc = gql`
     fragment ExperienceView on Experience {
   _id
@@ -495,22 +503,13 @@ export const ExperienceViewFragmentDoc = gql`
   zoomPMI
   pricePerPerson
   creator {
-    ...CreatorBio
+    bio
     user {
       ...UserAvatar
     }
   }
 }
-    ${CreatorBioFragmentDoc}
-${UserAvatarFragmentDoc}`;
-export const StripeProfileFragmentDoc = gql`
-    fragment StripeProfile on Creator {
-  stripeProfile {
-    accountId
-    onboarded
-  }
-}
-    `;
+    ${UserAvatarFragmentDoc}`;
 export const GetBookingExperienceDocument = gql`
     query getBookingExperience($id: ID!) {
   experience(id: $id) {
@@ -765,14 +764,15 @@ export const GetCreationProfileDocument = gql`
   me {
     ...UserAvatar
     creator {
-      ...StripeProfile
-      ...CreatorBio
+      _id
+      bio
+      stripeProfile {
+        onboarded
+      }
     }
   }
 }
-    ${UserAvatarFragmentDoc}
-${StripeProfileFragmentDoc}
-${CreatorBioFragmentDoc}`;
+    ${UserAvatarFragmentDoc}`;
 
 /**
  * __useGetCreationProfileQuery__
@@ -1204,3 +1204,89 @@ export function useUpdateProfileMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const GetUserExperiencesDocument = gql`
+    query getUserExperiences {
+  me {
+    _id
+    city
+    savedExperiences {
+      ...CardContent
+    }
+    bookedExperiences {
+      ...CardContent
+    }
+    ...UserAvatar
+  }
+}
+    ${CardContentFragmentDoc}
+${UserAvatarFragmentDoc}`;
+
+/**
+ * __useGetUserExperiencesQuery__
+ *
+ * To run a query within a React component, call `useGetUserExperiencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserExperiencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserExperiencesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserExperiencesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserExperiencesQuery, GetUserExperiencesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetUserExperiencesQuery, GetUserExperiencesQueryVariables>(GetUserExperiencesDocument, options);
+      }
+export function useGetUserExperiencesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserExperiencesQuery, GetUserExperiencesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetUserExperiencesQuery, GetUserExperiencesQueryVariables>(GetUserExperiencesDocument, options);
+        }
+export type GetUserExperiencesQueryHookResult = ReturnType<typeof useGetUserExperiencesQuery>;
+export type GetUserExperiencesLazyQueryHookResult = ReturnType<typeof useGetUserExperiencesLazyQuery>;
+export type GetUserExperiencesQueryResult = Apollo.QueryResult<GetUserExperiencesQuery, GetUserExperiencesQueryVariables>;
+export const GetUserProfileDocument = gql`
+    query getUserProfile {
+  me {
+    _id
+    lastName
+    city
+    email
+    phoneNumber
+    birthday
+    creator {
+      bio
+    }
+    ...UserAvatar
+  }
+}
+    ${UserAvatarFragmentDoc}`;
+
+/**
+ * __useGetUserProfileQuery__
+ *
+ * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserProfileQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+      }
+export function useGetUserProfileLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+        }
+export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;

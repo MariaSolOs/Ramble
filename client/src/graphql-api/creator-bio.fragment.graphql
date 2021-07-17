@@ -1,4 +1,0 @@
-fragment CreatorBio on Creator {
-    _id
-    bio
-}

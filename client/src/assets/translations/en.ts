@@ -443,6 +443,11 @@ const englishTranslation: TranslationRecord = {
         decline: 'Decline',
         currentPayment: 'Current payment',
         privateBooking: 'Private booking'
+    },
+
+    UserProfile_Layout: {
+        experiences: 'Experiences',
+        personalInformation: 'Personal information'
     }
 }
 

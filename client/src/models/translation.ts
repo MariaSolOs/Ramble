@@ -101,4 +101,6 @@ export type TranslationRecord = {
     BookingRequests: Record<'decisionError' | 'bookingAcceptedMessage' | 'bookingRejectedMessage', string>;
 
     BookingCard: Record<'fromTitle' | 'guest' | 'guests' | 'currentlyFor' | 'currentPayment' | 'accept' | 'decline' | 'privateBooking', string>;
+
+    UserProfile_Layout: Record<'experiences' | 'personalInformation', string>;
 }

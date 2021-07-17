@@ -2,8 +2,11 @@ query getCreationProfile {
     me {
         ...UserAvatar
         creator {
-            ...StripeProfile
-            ...CreatorBio
+            _id
+            bio
+            stripeProfile {
+                onboarded
+            }
         }
     }
 }

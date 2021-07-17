@@ -55,9 +55,7 @@ const SignUpDialog = () => {
         },
         onError: ({ graphQLErrors }) => {
             const message = graphQLErrors[0].message || "We couldn't sign you in.";
-            dispatch(openErrorDialog({
-                message: message
-            }));
+            dispatch(openErrorDialog({ message }));
             handleClose();
         }
     });

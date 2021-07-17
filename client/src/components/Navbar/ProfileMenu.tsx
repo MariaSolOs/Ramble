@@ -82,7 +82,7 @@ const ProfileMenu = (props: Props) => {
                 <MenuItem
                 component={NavLink}
                 onClick={closeMenu}
-                to="/"
+                to="/profile/experiences"
                 className={classes.link}>
                     {text.profile}
                 </MenuItem>

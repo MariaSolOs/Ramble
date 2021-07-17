@@ -96,7 +96,7 @@ const ViewExperience = () => {
             }
             onShareClick={() => setOpenShareDialog(true)}
             containerClass={classes.experienceContainer} />
-            <div className={classes.footer}>
+            <footer className={classes.footer}>
                 <p className={classes.footerPriceInfo}>
                     <span className={classes.footerPrice}>
                         ${experience.pricePerPerson}
@@ -112,7 +112,7 @@ const ViewExperience = () => {
                 }}>
                     {text.bookExperience}
                 </GradientButton>
-            </div>
+            </footer>
         </>
     );
 }

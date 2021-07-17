@@ -12,6 +12,7 @@ import emailRoutes from './emailsAPI';
 import stripeRoutes from './stripeAPI';
 import type { RequestHandler } from 'express';
 
+// TODO: Make sure bin jobs run in Heroku
 const app = express();
 
 app.use(cors({

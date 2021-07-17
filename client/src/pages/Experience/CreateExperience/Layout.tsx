@@ -93,7 +93,7 @@ const Layout: React.FC<Props> = (props) => {
                         <ul className={classes.navbar}>{navbar}</ul>}
                     <div className={classes.pageContent}>{props.children}</div>
                 </div>
-                <div className={classes.footer}>
+                <footer className={classes.footer}>
                     <LinearProgress 
                     value={progressValue} 
                     variant="determinate" 
@@ -122,7 +122,7 @@ const Layout: React.FC<Props> = (props) => {
                             {props.currentStep === 'review' ? text.submit : text.next}
                         </GradientButton>
                     </div>
-                </div>
+                </footer>
             </div>
         </Div100vh>
     );

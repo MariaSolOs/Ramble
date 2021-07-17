@@ -443,6 +443,11 @@ const frenchTranslation: TranslationRecord = {
         decline: 'Refuser',
         currentPayment: 'Revenu actuel',
         privateBooking: 'Réservation privée'
+    },
+
+    UserProfile_Layout: {
+        experiences: 'Expériences',
+        personalInformation: 'Informations personnelles '
     }
 }
 

@@ -253,7 +253,7 @@ const CreatorForm = () => {
                     </div>
                 </div>
             </div>
-            <div className={classes.footer}>
+            <footer className={classes.footer}>
                 <Button 
                 type="submit" 
                 variant="creator" 
@@ -267,7 +267,7 @@ const CreatorForm = () => {
                 }>
                     {text.done}
                 </Button>
-            </div>
+            </footer>
         </form>
     );
 }

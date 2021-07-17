@@ -16,7 +16,7 @@ fragment ExperienceView on Experience {
     zoomPMI
     pricePerPerson
     creator {
-        ...CreatorBio
+        bio
         user {
             ...UserAvatar
         }

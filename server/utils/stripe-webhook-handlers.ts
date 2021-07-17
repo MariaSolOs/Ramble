@@ -37,7 +37,7 @@ export const handleSuccessfulPaymentIntent = async (paymentIntent: Stripe.Paymen
     }).populate([
         {
             path: 'occurrence',
-            select: 'experience creatorProfit',
+            select: 'experience creatorProfit dateStart dateEnd',
             populate: {
                 path: 'experience',
                 select: 'creator title price toBring location zoomInfo',
@@ -83,7 +83,7 @@ export const handleSuccessfulPaymentIntent = async (paymentIntent: Stripe.Paymen
     const isOnlineExperience = Boolean(experience.zoomInfo?.PMI);
     sendBookingConfirmation({
         price: (paymentIntent.amount / 100).toFixed(2),
-        currency: paymentIntent.currency as Currency,
+        currency: paymentIntent.currency.toUpperCase() as Currency,
         bookingDate: booking.createdAt.toLocaleDateString('en-CA', EMAIL_DATE_FORMAT),
         occurrenceDate: occurrence.dateStart.toLocaleDateString('en-CA', EMAIL_DATE_FORMAT),
         timeslot: `${timeStart} - ${timeEnd}`,

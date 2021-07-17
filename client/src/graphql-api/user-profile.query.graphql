@@ -1,0 +1,14 @@
+query getUserProfile {
+    me {
+        _id
+        lastName
+        city
+        email
+        phoneNumber
+        birthday
+        creator {
+            bio
+        }
+        ...UserAvatar
+    }
+}

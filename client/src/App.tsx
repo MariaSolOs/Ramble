@@ -21,7 +21,9 @@ import Spinner from 'components/Spinner/Spinner';
 
 const ExperienceRouter = React.lazy(() => import('pages/Experience/Router'));
 const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
+const ProfileRouter = React.lazy(() => import('pages/UserProfile/Router'));
 
+// TODO: Add page guards
 const App = () => {
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const dispatch = useAppDispatch();
@@ -82,6 +84,7 @@ const App = () => {
                     <Switch>
                         <Route path="/experience" component={ExperienceRouter} />
                         <Route path="/creator" component={CreatorRouter} />
+                        <Route path="/profile" component={ProfileRouter} />
                         <Route path="/" component={Home} />
                     </Switch>
                 </React.Suspense>

@@ -177,4 +177,29 @@ router.post('/payment-intent/:action', async (req, res) => {
     }
 });
 
+const ENDPOINT_SECRET = 'whsec_gRQ8130PrfZSaGEp9BPXgTXzjBwoeLOx';
+// Stripe webhook
+router.post('/webhook', (req, res) => {
+    const signature = req.headers['stripe-signature']!;
+    let event: Stripe.Event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, signature, ENDPOINT_SECRET);
+    } catch (err) {
+        return res.status(400).send({ error: err.message });
+    }
+
+    switch (event.type) {
+        case 'payment_intent.succeeded':
+            // break;
+        case 'payment_intent.canceled':
+            console.log(event)
+            break;
+        default:
+            console.log(`[Stripe webhook] Unhandled event type ${event.type}`);
+    }
+
+    res.status(201).json({ received: true });
+});
+
 export default router;

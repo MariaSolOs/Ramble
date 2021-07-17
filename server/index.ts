@@ -12,9 +12,6 @@ import emailRoutes from './emailsAPI';
 import stripeRoutes from './stripeAPI';
 import type { RequestHandler } from 'express';
 
-// TODO: Make sure the works are printed in Heroku
-import './agenda-worker';
-
 const app = express();
 
 app.use(cors({

@@ -23,9 +23,6 @@ const ExperienceRouter = React.lazy(() => import('pages/Experience/Router'));
 const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
 
 const App = () => {
-    //TODO: Delete this
-    console.log("ENV", process.env.NODE_ENV);
-    
     const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
     const dispatch = useAppDispatch();
     const [rememberUser, setRememberUser] = useState(false);

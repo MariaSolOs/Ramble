@@ -11,7 +11,7 @@ const express = require('express'),
      { handleError } = require('./helpers/errorHandler');
 
 // Run maintenance script
-// maintenance();
+maintenance();
 
 // Setting environment variables
 const PORT = process.env.PORT || 5000;
@@ -94,9 +94,9 @@ const emailRoutes = require('./routes/email');
 app.use('/api/email', emailRoutes);
 
 // Error management
-app.use((err, req, res, _) => {
-    handleError(err, req, res);
-});
+// app.use((err, req, res, _) => {
+//     handleError(err, req, res);
+// });
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

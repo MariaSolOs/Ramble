@@ -1,15 +1,20 @@
 const Experience = require('./models/experience');
+const User = require('./models/user');
 
 const maintenance = async () => {
-    // const exps = await Experience.find({}, 'location');
-    // exps.forEach(async exp => {
-        // exp.set('location.region', undefined);
-        // await exp.save()
-    // });
-    // for (const exp of exps) {
-    //     console.log(exp)
-    // }
-    // Experience.collection.update({'location.city': {$exists: true}}, {$unset: {'location.city': 1}}, {multi:true});
+    const users = await User.find({}, 'bookedExperiences');
+
+    for (const user of users) {
+        const exps = [];
+        for (const exp of user.bookedExperiences) {
+            if (Experience.exists(exp)) {
+                exps.push(exp);
+            }
+        }
+        user.bookedExperiences = exps;
+        await user.save();
+    }
+    console.log('DONE');
 }
 
 module.exports = maintenance;

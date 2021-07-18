@@ -20,10 +20,11 @@ const styles = (theme: Theme) => createStyles({
         margin: '0 20px',
 
         [theme.breakpoints.down('sm')]: {
-            width: '90%',
+            width: '100%',
             margin: '0 auto 40px',
             height: 440,
-            maxWidth: 420
+            maxWidth: 420,
+            minWidth: 0
         }
     }
 });

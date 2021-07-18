@@ -103,4 +103,8 @@ export type TranslationRecord = {
     BookingCard: Record<'fromTitle' | 'guest' | 'guests' | 'currentlyFor' | 'currentPayment' | 'accept' | 'decline' | 'privateBooking', string>;
 
     UserProfile_Layout: Record<'experiences' | 'personalInformation', string>;
+
+    UserProfile_Experiences: Record<'booked' | 'saved', string>;
+
+    UserProfile_PersonalInformation: Record<'name' | 'firstNamePlaceholder' | 'lastNamePlaceholder' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou', string>;
 }

@@ -4,8 +4,6 @@ import type { Booking } from '../mongodb-models/booking';
 import type { User } from '../mongodb-models/user';
 import type { Creator } from '../mongodb-models/creator';
 
-// Note that the _id field is set by the GraphQL resolvers when using lean()
-
 export const experienceReducer = (exp: Experience | null) => ({
     _id: exp?._id || '',
     title: exp?.title || '',

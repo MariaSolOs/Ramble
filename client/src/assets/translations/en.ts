@@ -447,7 +447,23 @@ const englishTranslation: TranslationRecord = {
 
     UserProfile_Layout: {
         experiences: 'Experiences',
-        personalInformation: 'My profile'
+        personalInformation: 'Personal infos'
+    },
+
+    UserProfile_Experiences: {
+        booked: 'Booked',
+        saved: 'Saved'
+    },
+
+    UserProfile_PersonalInformation: {
+        name: 'Name',
+        firstNamePlaceholder: 'First name',
+        lastNamePlaceholder: 'Last name',
+        liveIn: 'I live in',
+        email: 'Email',
+        phoneNumber: 'Phone number',
+        birthday: 'Birthday',
+        aboutYou: 'About you'
     }
 }
 

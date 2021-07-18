@@ -80,7 +80,9 @@ const BookExperience = () => {
 
     // Keep the fees updated
     useEffect(() => {
-        if (state.experience) {
+        if (state.experience &&
+            state.form.bookingType &&
+            state.form.numGuests) {
             const price = state.form.bookingType === 'public' ?
                 state.experience.pricePerPerson : state.experience.privatePrice!;
             const fees = getFeesBreakdown(

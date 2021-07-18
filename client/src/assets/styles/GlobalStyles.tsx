@@ -1,8 +1,8 @@
 import React from 'react';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-const theme = createMuiTheme({
+const theme = createTheme({
     overrides: {
         MuiCssBaseline: {
             '@global': {

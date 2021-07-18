@@ -69,7 +69,7 @@ const SignUpDialog = () => {
             newValue = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
 
-        setValues({ ...values, [field]: newValue });
+        setValues(values => ({ ...values, [field]: newValue }));
     }
 
     const handleSubmit = (event: React.FormEvent) => {

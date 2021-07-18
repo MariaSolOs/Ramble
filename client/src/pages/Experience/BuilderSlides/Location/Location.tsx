@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
 import type { CompletableSlide } from 'models/prop-interfaces';
@@ -6,7 +6,6 @@ import type { CompletableSlide } from 'models/prop-interfaces';
 import InputBase from '@material-ui/core/InputBase';
 import Tooltip from '@material-ui/core/Tooltip';
 import Autocomplete from 'components/Autocomplete/Autocomplete';
-import TextField from 'components/TextField/TextField';
 import Title from 'components/ExperienceBuilderTitle/ExperienceBuilderTitle';
 import Subtitle from 'components/ExperienceBuilderSubtitle/ExperienceBuilderSubtitle';
 import Tip from 'components/Tip/Tip';
@@ -37,6 +36,9 @@ const Location = (props: Props) => {
     const { BuilderSlides_Location: text } = useLanguageContext().appText;
     const classes = useStyles();
 
+    const [addresses, setAddresses] = useState<string[]>([]);
+    const [addressQuery, setAddressQuery] = useState('');
+
     const { 
         isOnlineExperience,
         onSlideComplete,
@@ -64,6 +66,7 @@ const Location = (props: Props) => {
     useEffect(() => {
         if (!isOnlineExperience && location && meetingPoint) {
             let mounted = true;
+
             const query = `${location}, ${meetingPoint}`;
     
             fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${query}&limit=1&apiKey=${process.env.REACT_APP_HERE_API_KEY}`)
@@ -81,9 +84,32 @@ const Location = (props: Props) => {
     
             return () => { mounted = false; }
         }
-        // We can assume the set coordinates never changes
+        // We can assume the setCoordinates callback never changes
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOnlineExperience, location, meetingPoint]);
+
+    // Update the address autocomplete
+    useEffect(() => {
+        if (!isOnlineExperience && location && addressQuery) {
+            let mounted = true;
+
+            const query = `${location}, ${addressQuery}`;
+    
+            fetch(`https://autocomplete.search.hereapi.com/v1/autocomplete?q=${query}&limit=4&apiKey=${process.env.REACT_APP_HERE_API_KEY}`)
+            .then(res => {
+                if (mounted && res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(res => {
+                if (res) {
+                    setAddresses(res.items.map((item: any) => item.address.label));
+                }
+            });
+    
+            return () => { mounted = false; }
+        }
+    }, [isOnlineExperience, location, addressQuery]);
 
     // Depending on the experience type, fill Zoom info or meeting point info
     return (
@@ -91,7 +117,7 @@ const Location = (props: Props) => {
             <Title>{text.locationTitle}</Title>
             <Subtitle className={classes.subtitle}>{text.cityQuestion}</Subtitle>
             <Autocomplete 
-            className={classes.locationAutocomplete}
+            className={classes.autocomplete}
             paperclass={classes.autocompletePaper}
             options={props.storedLocations}
             value={location}
@@ -157,11 +183,17 @@ const Location = (props: Props) => {
                         {text.meetingPointQuestion}
                     </Subtitle>
                     <Tip className={classes.tip}>{text.accessTip}</Tip>
-                    <TextField
-                    fullWidth
-                    required
+                    <Autocomplete
                     value={meetingPoint}
-                    onChange={e => props.onMeetingPointChange(e.target.value)} />
+                    className={classes.autocomplete}
+                    paperclass={classes.autocompletePaper}
+                    options={addresses}
+                    onInputChange={(_, value, __) => setAddressQuery(value)}
+                    onChange={(_, value, reason) => {
+                        if (reason === 'select-option') {
+                            props.onMeetingPointChange(value);
+                        }
+                    }}  />
                     <p className={classes.sharedInfoRemark}>{text.sharedInfoRemark}</p>
                 </div>}
         </>

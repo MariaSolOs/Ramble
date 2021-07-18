@@ -55,10 +55,10 @@ const ResetPasswordDialog = () => {
         // Clear the error
         setPasswordMismatch(false);
 
-        setValues({ 
+        setValues(values => ({ 
             ...values,  
             [event.target.name]: event.target.value
-        });
+        }));
     }
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -92,12 +92,7 @@ const ResetPasswordDialog = () => {
     });
 
     return (
-        <Dialog 
-        open={open} 
-        disableBackdropClick
-        onClose={handleClose} 
-        maxWidth="xs" 
-        classes={{ paper: classes.paper }}>
+        <Dialog open={open} maxWidth="xs" classes={{ paper: classes.paper }}>
             <DialogContent className={classes.content}>
                 <form onSubmit={handleSubmit}>
                     <FormControl className={classes.formControl} fullWidth>

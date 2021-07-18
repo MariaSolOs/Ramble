@@ -27,11 +27,6 @@
             .footer div {
                 filter: brightness(60%);
             }
-            @media all and (max-width: 400px) {
-                .thumbnails td {
-                    display: none !important;
-                }
-            }
         </mj-style>
     </mj-head>
 
@@ -98,9 +93,9 @@
         </mj-section>   
 
         <!-- Titles -->
-        <mj-wrapper padding="0 15px">
+        <mj-wrapper padding="0 10px">
             <mj-section
-            padding="40px 20px 0">
+            padding="40px 0 0">
                 <mj-column>
                     <mj-text
                     padding="0 0 20px"
@@ -118,7 +113,7 @@
 
             <!-- Occurrence details -->
             <mj-section
-            padding="30px 15px 0">
+            padding="30px 0 0">
                 <mj-column>
                     <mj-text
                     padding="0 0 8px"
@@ -144,7 +139,7 @@
                 </mj-column>
             </mj-section>
             <mj-section
-            padding="5px 15px 30px">
+            padding="5px 0 30px">
                 <mj-group>
                     <mj-column
                     padding="0"
@@ -173,13 +168,13 @@
                 <mj-column>
                     <mj-text
                     mj-class="grey-title"
-                    padding-left="20px">
+                    padding-left="0">
                         Your host
                     </mj-text>
                 </mj-column>
             </mj-section>
             <mj-section
-            padding="0 0 10px 15px">
+            padding="0 0 10px 10px">
                 <mj-group>
                     <mj-column
                     width="10%">
@@ -226,13 +221,13 @@
                     <mj-column>
                         <mj-text
                         mj-class="grey-title"
-                        padding-left="20px">
+                        padding-left="0px">
                             Be sure to bring
                         </mj-text>
                         {{#each toBringItems}}
                             <mj-text
                             mj-class="grey-title"
-                            padding="2px 25px"
+                            padding="2px 5px"
                             font-size="18px">
                                 &bull; {{this}}
                             </mj-text>
@@ -244,7 +239,7 @@
             <!-- Meeting spot -->
             {{#if meetPoint}}
                 <mj-section
-                padding="20px 20px 10px">
+                padding="20px 0 10px">
                     <mj-column>
                         <mj-text
                         mj-class="grey-title"
@@ -257,7 +252,7 @@
                 padding="0">
                     <mj-group>
                         <mj-column
-                        padding="0 0 0 25px"
+                        padding="0 0 0 5px"
                         width="50px">
                             <mj-image 
                             src="https://res.cloudinary.com/dxod7etqu/image/upload/c_scale,w_40/v1597860653/Ramble/Emails/map-marker-icon.png" 
@@ -284,7 +279,8 @@
                 padding-bottom="0">
                     <mj-column>
                         <mj-text
-                        mj-class="grey-title">
+                        mj-class="grey-title"
+                        padding-left="0">
                             ZOOM invitation link
                         </mj-text>
                     </mj-column>
@@ -305,7 +301,8 @@
                 padding-top="0">
                     <mj-column>
                         <mj-text
-                        mj-class="grey-title">
+                        mj-class="grey-title"
+                        padding-left="0">
                             ZOOM password
                         </mj-text>
                     </mj-column>

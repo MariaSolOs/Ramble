@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { LinkProps } from 'react-router-dom';
 
 import { useLanguageContext } from 'context/languageContext';
 import type { ExperienceCard as CardType } from 'models/experience';
@@ -17,9 +16,8 @@ const useStyles = makeStyles(styles);
 
 type Props = {
     experience: CardType;
-    isSaved: boolean | undefined;
-    onHeartClick: React.MouseEventHandler;
-    linkProps: LinkProps;
+    isSaved?: boolean;
+    onHeartClick?: React.MouseEventHandler;
     containerClass?: string;
 }
 export type StyleProps = {
@@ -37,14 +35,18 @@ const ExperienceCard = (props: Props) => {
 
     return (
         <div className={`${classes.root} ${props.containerClass}`}>
-            {props.isSaved !== undefined &&
+            {props.onHeartClick &&
                 <Fab 
                 className={classes.heartFab} 
                 disableRipple 
                 onClick={props.onHeartClick}>
                     <FontAwesomeIcon icon={faHeart} />
                 </Fab>}
-                <Link { ...props.linkProps } className={classes.link}>
+                <Link 
+                to={`/experience/view/${props.experience._id}`}
+                target="_blank"
+                rel="noopener noreferrer" 
+                className={classes.link}>
                     {props.experience.isZoomExperience && 
                         <div className={classes.online}>
                             <img 

@@ -4,7 +4,7 @@ import type { Theme } from '@material-ui/core/styles';
 const styles = (theme: Theme) => createStyles({
     root: {
         width: '80vw',
-        margin: '90px auto 0',
+        margin: '90px auto 30px',
 
         [theme.breakpoints.down('xs')]: {
             width: '95vw',
@@ -48,7 +48,10 @@ const styles = (theme: Theme) => createStyles({
         fontWeight: theme.typography.fontWeightRegular
     },
 
-    nav: { marginTop: 30 },
+    nav: { 
+        marginTop: 30,
+        [theme.breakpoints.down('xs')]: { marginRight: 20 }
+    },
 
     navLink: {
         textDecoration: 'none',
@@ -93,7 +96,9 @@ const styles = (theme: Theme) => createStyles({
         cursor: 'pointer',
         position: 'absolute',
         top: 0,
-        right: -10
+        right: -10,
+
+        [theme.breakpoints.down('xs')]: { fontSize: '1.2rem' }
     }
 });
 

@@ -4,7 +4,7 @@ import type { Theme } from '@material-ui/core/styles';
 const styles = (theme: Theme) => createStyles({
     subtitle: { margin: '8px 0' },
     
-    locationAutocomplete: {
+    autocomplete: {
         marginTop: '1rem',
         '& .MuiInputBase-root': { borderRadius: 4 }
     },

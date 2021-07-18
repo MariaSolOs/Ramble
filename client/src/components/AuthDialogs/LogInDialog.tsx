@@ -70,10 +70,10 @@ const LogInDialog = () => {
         const newValue = fieldName === FormField.RememberUser ? 
             event.target.checked : event.target.value;
 
-        setValues({
+        setValues(values => ({
             ...values,
             [fieldName]: newValue
-        });
+        }));
     }
 
     const handleClose = () => {

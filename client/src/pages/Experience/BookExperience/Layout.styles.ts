@@ -22,13 +22,23 @@ const styles = (theme: Theme) => createStyles({
     header: {
         display: 'flex',
         alignItems: 'flex-end',
-        marginBottom: 30
+        marginBottom: 30,
+
+        [theme.breakpoints.down('xs')]: { 
+            alignItems: 'center',
+            marginBottom: 20
+        }
     },
 
     goBackButton: {
         fontSize: '2.6rem',
         marginBottom: -4,
-        cursor: 'pointer'
+        cursor: 'pointer',
+
+        [theme.breakpoints.down('xs')]: { 
+            fontSize: '2.1rem',
+            marginBottom: 0
+        }
     },
 
     stepTitle: {

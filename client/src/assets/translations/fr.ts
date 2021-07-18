@@ -447,7 +447,23 @@ const frenchTranslation: TranslationRecord = {
 
     UserProfile_Layout: {
         experiences: 'Expériences',
-        personalInformation: 'Mes infos'
+        personalInformation: 'Infos personnelles'
+    },
+
+    UserProfile_Experiences: {
+        booked: 'Réservées',
+        saved: 'Enregistrées'
+    },
+
+    UserProfile_PersonalInformation: {
+        name: 'Nom',
+        firstNamePlaceholder: 'Prénom',
+        lastNamePlaceholder: 'Nom de famille',
+        liveIn: "J'habite à",
+        email: 'Courriel',
+        phoneNumber: 'Numéro de téléphone',
+        birthday: 'Anniversaire',
+        aboutYou: 'À propos de vous'
     }
 }
 

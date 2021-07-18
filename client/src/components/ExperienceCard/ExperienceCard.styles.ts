@@ -16,9 +16,7 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
-    link: {
-        textDecoration: 'none'
-    },
+    link: { textDecoration: 'none' },
 
     image: {
         objectFit: 'cover',
@@ -32,14 +30,17 @@ const styles = (theme: Theme) => createStyles({
         color: '#ECEBE5',
         height: '40%',
         marginTop: -5,
-        padding: '5px 10px 10px'
+        padding: '5px 10px 10px',
+
+        [theme.breakpoints.down('xs')]: { padding: '5px 10px' }
     },
 
     online: {
         position: 'absolute',
         top: 10, 
         left: 10,
-        width: 65,
+        minWidth: 60,
+        whiteSpace: 'nowrap',
         color: '#2D2E2E',
         backgroundColor: 'rgba(256, 256, 256, 0.56)',
         borderRadius: 5,
@@ -59,13 +60,17 @@ const styles = (theme: Theme) => createStyles({
         fontSize: '0.9rem',
         margin: 0,
         textAlign: 'left',
-        overflowWrap: 'break-word'
+        overflowWrap: 'break-word',
+
+        [theme.breakpoints.down('xs')]: { fontSize: '0.8rem' }
     },
 
     location: {
         margin: 0,
         fontSize: '0.8rem',
-        fontWeight: theme.typography.fontWeightRegular
+        fontWeight: theme.typography.fontWeightRegular,
+
+        [theme.breakpoints.down('xs')]: { fontSize: '0.75rem' }
     },
 
     rating: {
@@ -86,7 +91,10 @@ const styles = (theme: Theme) => createStyles({
             props.hasRatingInfo ? '-8px 0 0' : 0,
         textAlign: 'end',
 
-        [theme.breakpoints.down(380)]: { fontSize: '0.55rem' }
+        [theme.breakpoints.down(380)]: { 
+            fontSize: '0.55rem',
+            marginTop: props => props.hasRatingInfo ? 'auto' : 0
+        }
     },
 
     price: {

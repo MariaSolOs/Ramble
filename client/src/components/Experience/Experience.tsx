@@ -207,7 +207,7 @@ const Experience = (props: Props) => {
                             mapStyle="mapbox://styles/mapbox/dark-v9"
                             width="100%"
                             height={300}
-                            zoom={11}
+                            zoom={13}
                             latitude={experience.latitude}
                             longitude={experience.longitude}>
                                 <Marker 

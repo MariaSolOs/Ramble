@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 
-import { useSaveExperienceMutation, useUnsaveExperienceMutation } from 'graphql-api';
+import { 
+    useSaveExperienceMutation, 
+    useUnsaveExperienceMutation
+} from 'graphql-api';
 import { useAppDispatch } from 'hooks/redux';
 import { saveExperience, unsaveExperience } from 'store/userSlice';
 
 /**
- * @returns Function that saves/unsaves an experience from the user's 
+ * @returns Hook that saves/unsaves an experience from the user's 
  * list of saved experiences.
  */
 export default function useHeartClick() {

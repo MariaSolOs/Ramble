@@ -7,6 +7,7 @@ query getUserProfile {
         phoneNumber
         birthday
         creator {
+            _id
             bio
         }
         ...UserAvatar

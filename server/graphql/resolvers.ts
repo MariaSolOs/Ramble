@@ -272,6 +272,17 @@ export const resolvers: Resolvers = {
                 }
             });
 
+            // Create the occurrences
+            for (const slot of args.slots) {
+                await Occurrence.create({
+                    experience: experience._id,
+                    dateStart: new Date(slot.start),
+                    dateEnd: new Date(slot.end),
+                    spotsLeft: experience.capacity,
+                    creatorProfit: 0
+                });
+            }
+
             return experienceReducer(experience);
         },
 

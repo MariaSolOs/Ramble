@@ -88,12 +88,9 @@ const Home = () => {
                             experience={exp}
                             containerClass={classes.experienceCard}
                             isSaved={isLoggedIn ? isSaved : undefined}
-                            onHeartClick={() => handleHeartClick(isSaved, exp._id)}
-                            linkProps={{
-                                to: `/experience/view/${exp._id}`,
-                                target: '_blank',
-                                rel: 'noopener noreferrer'
-                            }} />
+                            onHeartClick={isLoggedIn ? 
+                                () => handleHeartClick(isSaved, exp._id) : undefined
+                            } />
                         )}
                     )}
                 </div>

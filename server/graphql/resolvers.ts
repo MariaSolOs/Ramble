@@ -260,9 +260,11 @@ export const resolvers: Resolvers = {
                 location: {
                     displayLocation: args.location,
                     ...!isOnlineExperience && {
-                        meetingPoint: args.meetingPoint,
-                        latitude: args.latitude,
-                        longitude: args.longitude
+                        meetPoint: args.meetingPoint,
+                        coordinates: {
+                            lat: args.latitude,
+                            long: args.longitude
+                        }
                     }
                 },
                 ...args.ageRestriction && {

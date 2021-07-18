@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 require('../build/dotenv.config');
 require('../build/mongoDB.config');
 
@@ -45,5 +43,6 @@ const occurrenceCleanup = async () => {
     }
     process.exit();
 }
+
 occurrenceCleanup();
 

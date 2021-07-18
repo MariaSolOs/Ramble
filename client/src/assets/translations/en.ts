@@ -447,7 +447,7 @@ const englishTranslation: TranslationRecord = {
 
     UserProfile_Layout: {
         experiences: 'Experiences',
-        personalInformation: 'Personal information'
+        personalInformation: 'My profile'
     }
 }
 

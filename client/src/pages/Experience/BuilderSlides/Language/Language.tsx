@@ -28,7 +28,7 @@ const Language = (props: Props) => {
     const handleChange = (_: React.ChangeEvent<{}>, value: string[], reason: AutocompleteChangeReason) => {
         // Make sure user selects 3 languages max
         if ((reason === 'select-option' && value.length <= MAX_LANGUAGES) ||
-             reason === 'remove-option') {
+             reason === 'remove-option' || reason === 'clear') {
             props.onLanguagesChange(value);
         }
     }

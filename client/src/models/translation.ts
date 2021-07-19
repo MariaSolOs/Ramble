@@ -106,5 +106,5 @@ export type TranslationRecord = {
 
     UserProfile_Experiences: Record<'booked' | 'saved', string>;
 
-    UserProfile_PersonalInformation: Record<'name' | 'firstNamePlaceholder' | 'lastNamePlaceholder' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou', string>;
+    UserProfile_PersonalInformation: Record<'name' | 'firstNamePlaceholder' | 'lastNamePlaceholder' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou' | 'submitButton', string>;
 }

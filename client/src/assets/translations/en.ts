@@ -463,7 +463,8 @@ const englishTranslation: TranslationRecord = {
         email: 'Email',
         phoneNumber: 'Phone number',
         birthday: 'Birthday',
-        aboutYou: 'About you'
+        aboutYou: 'About you',
+        submitButton: 'Save changes'
     }
 }
 

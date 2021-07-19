@@ -270,7 +270,7 @@ export type GetBookingRequestsQuery = { me: { creator?: Maybe<{ bookingRequests:
           & UserAvatarFragment
         ), occurrence: (
           Pick<Occurrence, 'dateStart' | 'dateEnd' | 'creatorProfit'>
-          & { experience: Pick<Experience, 'images' | 'title' | 'capacity'>, bookings: Array<Pick<Booking, 'numGuests' | 'paymentCaptured'>> }
+          & { experience: Pick<Experience, '_id' | 'images' | 'title' | 'capacity'>, bookings: Array<Pick<Booking, 'numGuests' | 'paymentCaptured'>> }
         ) }
       )> }> } };
 
@@ -448,7 +448,7 @@ export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetUserProfileQuery = { me: (
     Pick<User, '_id' | 'lastName' | 'city' | 'email' | 'phoneNumber' | 'birthday'>
-    & { creator?: Maybe<Pick<Creator, 'bio'>> }
+    & { creator?: Maybe<Pick<Creator, '_id' | 'bio'>> }
     & UserAvatarFragment
   ) };
 
@@ -566,6 +566,7 @@ export const GetBookingRequestsDocument = gql`
           dateEnd
           creatorProfit
           experience {
+            _id
             images
             title
             capacity
@@ -1257,6 +1258,7 @@ export const GetUserProfileDocument = gql`
     phoneNumber
     birthday
     creator {
+      _id
       bio
     }
     ...UserAvatar

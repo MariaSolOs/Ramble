@@ -7,6 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from 'components/TextField/TextField';
 import Spinner from 'components/Spinner/Spinner';
+import Button from 'components/GradientButton/GradientButton';
 import Layout from '../Layout';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,9 +54,7 @@ const PersonalInformation = () => {
         }));
     }
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-
+    const handleSubmit = () => {
         // If the user uploaded a new photo, upload to Cloudinary
         if (photo) {
 
@@ -76,9 +75,12 @@ const PersonalInformation = () => {
         }
     });
 
+    
     if (!data || loading) {
         return <Spinner />;
     }
+    
+    const isCreator = Boolean(data.me.creator);
 
     return (
         <Layout
@@ -86,16 +88,15 @@ const PersonalInformation = () => {
         onPhotoChange={setPhoto}
         photo={data.me.photo || undefined}
         city={data.me.city || undefined}>
-            <form className={classes.form} onSubmit={handleSubmit}>
+            <form className={classes.form}>
                 <FormControl className={classes.formControl}>
-                    <FormLabel 
-                    className={classes.label} 
-                    htmlFor={FormField.FirstName}>
+                    <FormLabel className={classes.label} htmlFor={FormField.FirstName}>
                         {text.name}
                     </FormLabel>
                     <TextField
                     id={FormField.FirstName}
                     name={FormField.FirstName}
+                    required
                     value={values.firstName}
                     onChange={handleFormChange} />
                 </FormControl>
@@ -103,6 +104,7 @@ const PersonalInformation = () => {
                     <TextField
                     id={FormField.LastName}
                     name={FormField.LastName}
+                    required
                     value={values.lastName}
                     onChange={handleFormChange} />
                 </FormControl>
@@ -116,7 +118,66 @@ const PersonalInformation = () => {
                     value={values.city}
                     onChange={handleFormChange} />
                 </FormControl>
+                <FormControl className={classes.formControl}>
+                    <FormLabel className={classes.label} htmlFor={FormField.Email}>
+                        {text.email}
+                    </FormLabel>
+                    <TextField
+                    id={FormField.Email}
+                    name={FormField.Email}
+                    required
+                    type="email"
+                    value={values.email}
+                    onChange={handleFormChange} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <FormLabel className={classes.label} htmlFor={FormField.PhoneNumber}>
+                        {text.phoneNumber}
+                    </FormLabel>
+                    <TextField
+                    id={FormField.PhoneNumber}
+                    name={FormField.PhoneNumber}
+                    required={isCreator}
+                    type="tel"
+                    placeholder="(123) 456-7890"
+                    value={values.phoneNumber}
+                    onChange={handleFormChange} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <FormLabel className={classes.label} htmlFor={FormField.Birthday}>
+                        {text.birthday}
+                    </FormLabel>
+                    <TextField
+                    id={FormField.Birthday}
+                    name={FormField.Birthday}
+                    type="date"
+                    value={values.birthday}
+                    onChange={handleFormChange} />
+                </FormControl>
+                {isCreator && 
+                    <FormControl className={classes.formControl}>
+                        <FormLabel className={classes.label} htmlFor={FormField.CreatorBio}>
+                            {text.aboutYou}
+                        </FormLabel>
+                        <TextField
+                        id={FormField.CreatorBio}
+                        name={FormField.CreatorBio}
+                        multiline
+                        rows={4}
+                        maxRows={4}
+                        required
+                        value={values.creatorBio}
+                        onChange={handleFormChange} />
+                    </FormControl>}
             </form>
+            <footer className={classes.footer}>
+                <Button 
+                variant="experience"
+                onClick={handleSubmit}
+                className={classes.submitButton}>
+                    {text.submitButton}
+                </Button>
+            </footer>
         </Layout>
     );
 }

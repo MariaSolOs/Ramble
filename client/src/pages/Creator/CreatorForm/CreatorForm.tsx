@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+
 import {
     useGetCreatorFormFieldsQuery,
     useUpdateProfileMutation,
     useSignUpCreatorMutation
 } from 'graphql-api';
-
 import { useLanguageContext } from 'context/languageContext';
 import { useAppDispatch } from 'hooks/redux';
 import { openErrorDialog } from 'store/uiSlice';
@@ -178,8 +178,8 @@ const CreatorForm = () => {
                     <Tip className={classes.tip}>{text.aboutYouTip}</Tip>
                     <TextField
                     multiline 
-                    rows={4} 
-                    rowsMax={4}
+                    rows={4}
+                    maxRows={4}
                     required
                     className={classes.aboutYouTextField}
                     value={bio}

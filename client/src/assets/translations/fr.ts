@@ -463,7 +463,8 @@ const frenchTranslation: TranslationRecord = {
         email: 'Courriel',
         phoneNumber: 'Numéro de téléphone',
         birthday: 'Anniversaire',
-        aboutYou: 'À propos de vous'
+        aboutYou: 'À propos de vous',
+        submitButton: 'Enregistrer'
     }
 }
 

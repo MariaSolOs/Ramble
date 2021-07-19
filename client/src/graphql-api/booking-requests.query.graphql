@@ -16,6 +16,7 @@ query getBookingRequests {
                     dateEnd
                     creatorProfit
                     experience {
+                        _id
                         images
                         title
                         capacity

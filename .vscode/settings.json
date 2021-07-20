@@ -1,0 +1,9 @@
+{
+    "css.completion.completePropertyWithSemicolon": false,
+    "css.lint.duplicateProperties": "warning",
+    "less.completion.completePropertyWithSemicolon": false,
+    "scss.completion.completePropertyWithSemicolon": false,
+    "color-highlight.languages": [
+        "typescript"
+    ]
+}

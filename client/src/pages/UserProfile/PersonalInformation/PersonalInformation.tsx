@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-import { useGetUserProfileQuery } from 'graphql-api';
+import { useGetUserProfileQuery, useUpdateProfileMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from 'components/TextField/TextField';
 import Spinner from 'components/Spinner/Spinner';
 import Button from 'components/GradientButton/GradientButton';
@@ -36,6 +37,9 @@ const initialForm: Form = {
     creatorBio: ''
 }
 
+const VALID_PHONE_NUMBER_REG = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
+const MAX_BIO_LENGTH = 500;
+
 const PersonalInformation = () => {
     const { UserProfile_PersonalInformation: text } = useLanguageContext().appText;
     const classes = useStyles();
@@ -43,24 +47,10 @@ const PersonalInformation = () => {
     // Form management
     const [values, setValues] = useState(initialForm);
     const [photo, setPhoto] = useState<File>();
+    const [phoneError, setPhoneError] = useState(false);
+    const [updatingProfile, setUpdatingProfile] = useState(false);
 
-    const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = event.target.name;
-        const newValue = event.target.value;
-
-        setValues(values => ({
-            ...values,
-            [fieldName]: newValue
-        }));
-    }
-
-    const handleSubmit = () => {
-        // If the user uploaded a new photo, upload to Cloudinary
-        if (photo) {
-
-        }
-    }
-
+    // Fill the form with the existing data
     const { data, loading } = useGetUserProfileQuery({
         onCompleted: ({ me }) => {
             setValues({
@@ -75,6 +65,58 @@ const PersonalInformation = () => {
         }
     });
 
+    const [updateProfile] = useUpdateProfileMutation({
+        refetchQueries: ['getUserProfile', 'getCoreProfile'],
+        onCompleted: () => setUpdatingProfile(false)
+    });
+
+    const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fieldName = event.target.name;
+        const newValue = event.target.value;
+
+        // Make sure bio isn't too long
+        if (fieldName === FormField.CreatorBio && newValue.length > MAX_BIO_LENGTH) {
+            return;
+        }
+
+        setValues(values => ({ ...values, [fieldName]: newValue }));
+    }
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+
+        setUpdatingProfile(true);
+
+        // Check if phone number is valid
+        if (!VALID_PHONE_NUMBER_REG.test(values.phoneNumber)) {
+            setPhoneError(true);
+            setUpdatingProfile(false);
+            return;
+        }
+
+        // If the user uploaded a new photo, upload to Cloudinary
+        let photoUrl = '';
+        if (photo) {
+            const photoData = new FormData();
+            photoData.append('file', photo);
+            photoData.append('upload_preset', 'RAMBLE-users');
+
+            const { secure_url } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
+                method: 'POST',
+                body: photoData
+            }).then(res => res.json());
+            photoUrl = secure_url;
+        }
+
+        const { creatorBio, ...userValues } = values;
+        updateProfile({ 
+            variables: { 
+                ...userValues, 
+                ...photoUrl && { photo: photoUrl  },
+                ...isCreator && { creatorBio: values.creatorBio }
+            }
+        });
+    }
     
     if (!data || loading) {
         return <Spinner />;
@@ -88,7 +130,8 @@ const PersonalInformation = () => {
         onPhotoChange={setPhoto}
         photo={data.me.photo || undefined}
         city={data.me.city || undefined}>
-            <form className={classes.form}>
+            {updatingProfile && <Spinner />}
+            <form className={classes.form} onSubmit={handleSubmit}>
                 <FormControl className={classes.formControl}>
                     <FormLabel className={classes.label} htmlFor={FormField.FirstName}>
                         {text.name}
@@ -140,6 +183,7 @@ const PersonalInformation = () => {
                     required={isCreator}
                     type="tel"
                     placeholder="(123) 456-7890"
+                    helperText={phoneError && text.phoneError}
                     value={values.phoneNumber}
                     onChange={handleFormChange} />
                 </FormControl>
@@ -155,7 +199,7 @@ const PersonalInformation = () => {
                     onChange={handleFormChange} />
                 </FormControl>
                 {isCreator && 
-                    <FormControl className={classes.formControl}>
+                    <FormControl className={`${classes.formControl} ${classes.creatorBio}`}>
                         <FormLabel className={classes.label} htmlFor={FormField.CreatorBio}>
                             {text.aboutYou}
                         </FormLabel>
@@ -167,17 +211,24 @@ const PersonalInformation = () => {
                         maxRows={4}
                         required
                         value={values.creatorBio}
-                        onChange={handleFormChange} />
+                        onChange={handleFormChange}
+                        inputprops={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    {MAX_BIO_LENGTH - values.creatorBio.length}
+                                </InputAdornment>
+                            )
+                        }} />
                     </FormControl>}
+                <footer className={classes.footer}>
+                    <Button 
+                    variant="experience"
+                    type="submit"
+                    className={classes.submitButton}>
+                        {text.submitButton}
+                    </Button>
+                </footer>
             </form>
-            <footer className={classes.footer}>
-                <Button 
-                variant="experience"
-                onClick={handleSubmit}
-                className={classes.submitButton}>
-                    {text.submitButton}
-                </Button>
-            </footer>
         </Layout>
     );
 }

@@ -10,9 +10,7 @@ import cors from 'cors';
 import path from 'path';
 import emailRoutes from './emailsAPI';
 import stripeRoutes from './stripeAPI';
-import type { RequestHandler } from 'express';
 
-// TODO: Make sure bin jobs run in Heroku
 const app = express();
 
 app.use(cors({
@@ -27,7 +25,7 @@ app.use((req, res, next) => {
         express.json()(req, res, next);
     }
 });
-app.use(express.urlencoded({ extended: true }) as RequestHandler);
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 app.use('/email', emailRoutes);
 app.use('/stripe', stripeRoutes);

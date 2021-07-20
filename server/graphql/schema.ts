@@ -58,7 +58,8 @@ export const typeDefs = gql`
             password: String,
             photo: String,
             phoneNumber: String,
-            city: String
+            city: String,
+            creatorBio: String
         ): User!
 
         """
@@ -150,7 +151,7 @@ export const typeDefs = gql`
     }
 
     """
-    Experiences
+    Experience
     """
     type Experience {
         _id: ID!

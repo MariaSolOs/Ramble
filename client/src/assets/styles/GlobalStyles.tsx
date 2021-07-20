@@ -27,10 +27,10 @@ const theme = createTheme({
     }
 });
 
-const GlobalStyles: React.FC = ({ children }) => (
+const GlobalStyles: React.FC = (props) => (
     <ThemeProvider theme={theme}>
         <CssBaseline />
-        { children }
+        {props.children}
     </ThemeProvider>
 );
 

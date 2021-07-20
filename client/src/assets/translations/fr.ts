@@ -464,7 +464,8 @@ const frenchTranslation: TranslationRecord = {
         phoneNumber: 'Numéro de téléphone',
         birthday: 'Anniversaire',
         aboutYou: 'À propos de vous',
-        submitButton: 'Enregistrer'
+        submitButton: 'Enregistrer',
+        phoneError: 'Veuillez indiquer un numéro de téléphone valable'
     }
 }
 

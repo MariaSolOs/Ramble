@@ -5,6 +5,7 @@ import Stripe from 'stripe';
 
 import { generateToken } from '../utils/jwt';
 import { computeBookingFees } from '../utils/booking';
+import { deleteUserPicture } from '../utils/cloudinary';
 import { sendBookingNotificationEmail } from '../utils/email';
 import { 
     experienceReducer,
@@ -159,20 +160,50 @@ export const resolvers: Resolvers = {
             return user;
         },
 
-        editUser: async (_, args, { userId }) => {
+        editUser: async (_, args, { userId, tokenExpiry }) => {
             if (!userId) {
                 throw new AuthenticationError("User isn't logged in.");
             }
 
             const user = await User.findById(userId);
 
-            for (const [field, value] of Object.entries(args)) {
+            if (!user) {
+                throw new ApolloError('User not found.');
+            }
+
+            // Delete old pictures from Cloudinary
+            if (args.photo && user.photo) {
+                deleteUserPicture(user.photo);
+            }
+
+            // The creator bio is updated in the creator object
+            if (args.creatorBio) {
+                await Creator.findByIdAndUpdate(user.creator, {
+                    bio: args.creatorBio
+                });
+            }
+
+            // Set the fields to update
+            const newFields: Partial<Record<keyof UserType, string | { address: string }>> = {
+                ...args.firstName && { fstName: args.firstName },
+                ...args.lastName && { lstName: args.lastName },
+                ...(typeof args.birthday === 'string') && { birthday: args.birthday },
+                ...args.email && { email: { address: args.email } },
+                ...args.password && { passwordHash: User.generatePasswordHash(args.password) },
+                ...args.photo && { photo: args.photo },
+                ...(typeof args.phoneNumber === 'string') && { phoneNumber: args.phoneNumber },
+                ...(typeof args.city === 'string') && { city: args.city }
+            }
+
+            for (const [field, value] of Object.entries(newFields)) {
                 (user as any)[field] = value;
             }
             
-            await user?.save();
+            await user.save();
 
-            return userReducer(user);
+            const updatedUser = userReducer(user);
+            updatedUser.token = generateToken(userId, tokenExpiry);
+            return updatedUser;
         },
 
         signUpCreator: async (_, { bio, governmentIds }, { userId }) => {

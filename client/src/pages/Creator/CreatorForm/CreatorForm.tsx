@@ -92,7 +92,6 @@ const CreatorForm = () => {
             const photoData = new FormData();
             photoData.append('file', profilePic!);
             photoData.append('upload_preset', 'RAMBLE-users');
-            photoData.append('public_id', data.me._id);
 
             const { secure_url } = await fetch(process.env.REACT_APP_CLOUDINARY_API_URI!, {
                 method: 'POST',

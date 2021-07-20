@@ -464,7 +464,8 @@ const englishTranslation: TranslationRecord = {
         phoneNumber: 'Phone number',
         birthday: 'Birthday',
         aboutYou: 'About you',
-        submitButton: 'Save changes'
+        submitButton: 'Save changes',
+        phoneError: 'Please provide a valid phone number'
     }
 }
 

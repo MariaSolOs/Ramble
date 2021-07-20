@@ -122,6 +122,7 @@ export type MutationEditUserArgs = {
   photo?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
+  creatorBio?: Maybe<Scalars['String']>;
 };
 
 
@@ -427,6 +428,7 @@ export type UpdateProfileMutationVariables = Exact<{
   photo?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
+  creatorBio?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1157,7 +1159,7 @@ export type UnsaveExperienceMutationHookResult = ReturnType<typeof useUnsaveExpe
 export type UnsaveExperienceMutationResult = Apollo.MutationResult<UnsaveExperienceMutation>;
 export type UnsaveExperienceMutationOptions = Apollo.BaseMutationOptions<UnsaveExperienceMutation, UnsaveExperienceMutationVariables>;
 export const UpdateProfileDocument = gql`
-    mutation updateProfile($firstName: String, $lastName: String, $birthday: String, $email: String, $password: String, $photo: String, $phoneNumber: String, $city: String) {
+    mutation updateProfile($firstName: String, $lastName: String, $birthday: String, $email: String, $password: String, $photo: String, $phoneNumber: String, $city: String, $creatorBio: String) {
   editUser(
     firstName: $firstName
     lastName: $lastName
@@ -1167,6 +1169,7 @@ export const UpdateProfileDocument = gql`
     photo: $photo
     phoneNumber: $phoneNumber
     city: $city
+    creatorBio: $creatorBio
   ) {
     ...CoreProfile
   }
@@ -1195,6 +1198,7 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutat
  *      photo: // value for 'photo'
  *      phoneNumber: // value for 'phoneNumber'
  *      city: // value for 'city'
+ *      creatorBio: // value for 'creatorBio'
  *   },
  * });
  */

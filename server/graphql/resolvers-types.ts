@@ -126,6 +126,7 @@ export type MutationEditUserArgs = {
   photo?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
+  creatorBio?: Maybe<Scalars['String']>;
 };
 
 

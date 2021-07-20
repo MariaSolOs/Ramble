@@ -6,7 +6,8 @@ mutation updateProfile(
     $password: String,
     $photo: String,
     $phoneNumber: String,
-    $city: String
+    $city: String,
+    $creatorBio: String
 ) {
     editUser(
         firstName: $firstName,
@@ -16,7 +17,8 @@ mutation updateProfile(
         password: $password,
         photo: $photo,
         phoneNumber: $phoneNumber,
-        city: $city
+        city: $city,
+        creatorBio: $creatorBio
     ) {
         ...CoreProfile
     }

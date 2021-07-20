@@ -27,15 +27,8 @@ const styles = (theme: Theme) => createStyles({
         
         '&:first-child': { marginRight: '5%' },
         '&:nth-child(2)': { margin: '21px 0 0 0' },
-        '&:last-child': { 
-            width: '85%',
-            margin: '0 0 1rem' 
-        },
 
-        [theme.breakpoints.down('sm')]: { 
-            width: '45%',
-            '&:last-child': { width: '95%' }
-        },
+        [theme.breakpoints.down('sm')]: { width: '45%' },
         [theme.breakpoints.down('xs')]: {
             width: '100%',
             margin: '0 0 1rem',
@@ -46,9 +39,24 @@ const styles = (theme: Theme) => createStyles({
             '&:nth-child(2)': { 
                 width: '48%', 
                 margin: '18px 0 0 0' 
-            },
-            '&:last-child': { width: '100%' }
+            }
         }
+    },
+
+    creatorBio: {
+        width: '85%',
+        margin: '0 0 1rem',
+
+        '& .MuiInputAdornment-positionEnd': {
+            margin: 0,
+            position: 'absolute',
+            bottom: 20, 
+            right: 20,
+            fontSize: '0.8rem'
+        },
+
+        [theme.breakpoints.down('sm')]: { width: '95%' },
+        [theme.breakpoints.down('xs')]: { width: '100%' }
     },
 
     footer: {

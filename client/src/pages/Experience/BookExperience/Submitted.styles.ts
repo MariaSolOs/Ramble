@@ -78,6 +78,8 @@ const styles = (theme: Theme) => createStyles({
         width: 'auto',
         borderRadius: '2rem',
         marginLeft: 18,
+        maxWidth: '45%',
+        objectFit: 'cover',
 
         [theme.breakpoints.down('sm')]: {
             height: 300,

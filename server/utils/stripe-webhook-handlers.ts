@@ -2,11 +2,11 @@ import Stripe from 'stripe';
 import type { Document } from 'mongoose';
 
 import { sendBookingConfirmation } from './email';
-import { Booking } from '../mongoDB-models';
-import type { Occurrence as OccurrenceType } from '../mongoDB-models/occurrence';
-import type { Experience as ExperienceType } from '../mongoDB-models/experience';
-import type { Creator as CreatorType } from '../mongoDB-models/creator';
-import type { User as UserType } from '../mongoDB-models/user';
+import { Booking } from '../mongodb-models';
+import type { Occurrence as OccurrenceType } from '../mongodb-models/occurrence';
+import type { Experience as ExperienceType } from '../mongodb-models/experience';
+import type { Creator as CreatorType } from '../mongodb-models/creator';
+import type { User as UserType } from '../mongodb-models/user';
 import type { Currency } from '../server-types';
 
 const EMAIL_DATE_FORMAT: Intl.DateTimeFormatOptions = {

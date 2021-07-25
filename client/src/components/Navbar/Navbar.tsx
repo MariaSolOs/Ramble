@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useLanguageContext } from 'context/languageContext';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { openSignUpDialog, openLogInDialog } from 'store/uiSlice';
-import { logout } from 'store/userSlice';
 
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,11 +21,13 @@ const Navbar = () => {
     const { Navbar: text } = useLanguageContext().appText;
 
     const { 
-        isLoggedIn, 
-        isCreator,
+        userId, 
+        creatorId,
         firstName, 
         photo 
     } = useAppSelector(state => state.user);
+    const isLoggedIn = Boolean(userId);
+    const isCreator = Boolean(creatorId);
 
     const dispatch = useAppDispatch();
 
@@ -47,8 +48,7 @@ const Navbar = () => {
         userName={firstName}
         userPicture={photo}
         onClose={closeMenu}
-        isCreator={isCreator}
-        onLogout={() => dispatch(logout())} />
+        isCreator={isCreator} />
     );
 
     return (

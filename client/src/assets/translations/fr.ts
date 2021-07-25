@@ -342,17 +342,14 @@ const frenchTranslation: TranslationRecord = {
         subtitle: 'Choisissez les dates et les plages horaires pour lesquels les invités peuvent réserver votre expérience.',
         tip1: "Tenez compte de votre horaire hebdomadaire. Définissez des disponibilités réalistes pendant lesquelles vous êtes sûr d'être libre.",
         tip2: "Dans le tableau de bord, vous pourrez ajouter des plages horaires pour une certaine date ou les supprimer si aucune réservation n'a encore été effectuée.",
-        timezoneMessage: "L'heure affichée correspond à l'heure de Montréal (heure normale de l'Est)."
+        timezoneMessage: "L'heure affichée correspond à l'heure de Montréal (heure normale de l'Est).",
+        today: "Aujourd'hui",
+        month: 'Mois',
+        day: 'Jour'
     },
 
     BuilderSlides_Review: {
         title: 'Reviser & Soumettre'
-    },
-
-    CreatorCalendar: {
-        today: "Aujourd'hui",
-        month: 'Mois',
-        day: 'Jour'
     },
 
     BookExperience_Layout: {
@@ -456,9 +453,8 @@ const frenchTranslation: TranslationRecord = {
     },
 
     UserProfile_PersonalInformation: {
-        name: 'Nom',
-        firstNamePlaceholder: 'Prénom',
-        lastNamePlaceholder: 'Nom de famille',
+        firstName: 'Prénom',
+        lastName: 'Nom de famille',
         liveIn: "J'habite à",
         email: 'Courriel',
         phoneNumber: 'Numéro de téléphone',
@@ -466,6 +462,15 @@ const frenchTranslation: TranslationRecord = {
         aboutYou: 'À propos de vous',
         submitButton: 'Enregistrer',
         phoneError: 'Veuillez indiquer un numéro de téléphone valable'
+    },
+
+    CreatorCalendar: {
+        timezoneMessage: "L'heure affichée correspond à l'heure de Montréal (heure normale de l'Est).",
+        formTitle: 'Ajouter des disponibilités',
+        formDescription: "Choisissez la date et l'heure à ajouter",
+        dateAndTimeLabel: 'Date et heure',
+        experienceLabel: 'Expérience',
+        addSlot: 'Ajouter'
     }
 }
 

@@ -24,8 +24,9 @@ const CreatorRouter = React.lazy(() => import('pages/Creator/Router'));
 const ProfileRouter = React.lazy(() => import('pages/UserProfile/Router'));
 
 // TODO: Add page guards
+// TODO: Use better HTML tags (main, header, etc)
 const App = () => {
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
     const dispatch = useAppDispatch();
     const [rememberUser, setRememberUser] = useState(false);
 

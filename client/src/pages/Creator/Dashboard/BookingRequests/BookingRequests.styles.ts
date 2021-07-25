@@ -9,7 +9,8 @@ const styles = (theme: Theme) => createStyles({
         overflowX: 'scroll',
         
         [theme.breakpoints.down('sm')]: {
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            height: '100%'
         }
     },
 

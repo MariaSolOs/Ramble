@@ -46,7 +46,7 @@ export type Creator = {
   bookingRequests: Array<Booking>;
 };
 
-/** Experiences */
+/** Experience */
 export type Experience = {
   __typename?: 'Experience';
   _id: Scalars['ID'];
@@ -204,12 +204,12 @@ export type Query = {
   me: User;
   /**
    * Experiences filtered by location and with capacity >= to
-   * the indicated capacity.
+   * the indicated capacity, or those created by the specified creator.
    */
   experiences: Array<Experience>;
   /** Get experience by its ID. */
   experience: Experience;
-  /** Get the occurences of the indicated experience. */
+  /** Get the occurrences of the indicated experiences. */
   occurrences: Array<Occurrence>;
 };
 
@@ -217,6 +217,7 @@ export type Query = {
 export type QueryExperiencesArgs = {
   location?: Maybe<Scalars['String']>;
   capacity?: Maybe<Scalars['Int']>;
+  creatorId?: Maybe<Scalars['ID']>;
 };
 
 
@@ -226,7 +227,7 @@ export type QueryExperienceArgs = {
 
 
 export type QueryOccurrencesArgs = {
-  experienceId: Scalars['ID'];
+  experienceIds: Array<Scalars['ID']>;
 };
 
 /** Booking types. */
@@ -462,7 +463,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   experiences?: Resolver<Array<ResolversTypes['Experience']>, ParentType, ContextType, RequireFields<QueryExperiencesArgs, never>>;
   experience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<QueryExperienceArgs, 'id'>>;
-  occurrences?: Resolver<Array<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<QueryOccurrencesArgs, 'experienceId'>>;
+  occurrences?: Resolver<Array<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<QueryOccurrencesArgs, 'experienceIds'>>;
 }>;
 
 export type StripeInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['StripeInfo'] = ResolversParentTypes['StripeInfo']> = ResolversObject<{

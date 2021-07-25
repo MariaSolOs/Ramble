@@ -7,8 +7,8 @@ type SetProfilePayload = CoreProfileFragment;
 type EditSavedExperiencesPayload = { experienceId: string; }
 
 interface UserState {
-    isLoggedIn: boolean;
-    isCreator: boolean;
+    userId: string;
+    creatorId: string;
     firstName: string;
     email: string,
     photo: string;
@@ -16,8 +16,8 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    isLoggedIn: false,
-    isCreator: false,
+    userId: '',
+    creatorId: '',
     firstName: '',
     email: '',
     photo: '',
@@ -29,8 +29,8 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setProfile: (state, { payload }: PayloadAction<SetProfilePayload>) => {
-            state.isLoggedIn = true;
-            state.isCreator = Boolean(payload.creator?._id);
+            state.userId = payload._id;
+            state.creatorId = payload.creator?._id || '';
             state.firstName = payload.firstName;
             state.email = payload.email;
             state.photo = payload.photo || '';

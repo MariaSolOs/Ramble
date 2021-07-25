@@ -9,11 +9,12 @@ export const typeDefs = gql`
 
         """
         Experiences filtered by location and with capacity >= to 
-        the indicated capacity.
+        the indicated capacity, or those created by the specified creator.
         """
         experiences(
             location: String
             capacity: Int
+            creatorId: ID
         ): [Experience!]!
 
         """
@@ -22,9 +23,9 @@ export const typeDefs = gql`
         experience(id: ID!): Experience!
 
         """
-        Get the occurences of the indicated experience.
+        Get the occurrences of the indicated experiences.
         """
-        occurrences(experienceId: ID!): [Occurrence!]!
+        occurrences(experienceIds: [ID!]!): [Occurrence!]!
     }
 
     type Mutation {

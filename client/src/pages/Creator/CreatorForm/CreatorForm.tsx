@@ -177,7 +177,7 @@ const CreatorForm = () => {
                     <Tip className={classes.tip}>{text.aboutYouTip}</Tip>
                     <TextField
                     multiline 
-                    rows={4}
+                    minRows={4}
                     maxRows={4}
                     required
                     className={classes.aboutYouTextField}

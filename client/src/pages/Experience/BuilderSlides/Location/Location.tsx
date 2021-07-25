@@ -107,7 +107,7 @@ const Location = (props: Props) => {
                     className={classes.zoomTextfield}
                     endAdornment={
                         <Tooltip
-                        enterTouchDelay={300}
+                        enterTouchDelay={50}
                         title={
                             <span>
                                 {text.zoomPMIHelp}{' '}
@@ -120,7 +120,6 @@ const Location = (props: Props) => {
                                 </a>.
                             </span>
                         }
-                        classes={{ tooltip: classes.zoomTooltip }}
                         interactive
                         placement="top">
                             <HelpIcon />
@@ -133,6 +132,7 @@ const Location = (props: Props) => {
                     className={classes.zoomTextfield}
                     endAdornment={
                         <Tooltip
+                        enterTouchDelay={50}
                         title={
                             <span>
                                 {text.zoomPasswordHelp}{' '}
@@ -145,7 +145,6 @@ const Location = (props: Props) => {
                                 </a>.
                             </span>
                         }
-                        classes={{ tooltip: classes.zoomTooltip }}
                         interactive
                         placement="top">
                             <HelpIcon />

@@ -52,7 +52,7 @@ export const bookingReducer = (booking: Booking | null) => ({
 
 export const userReducer = (user: User | null) => ({
     _id: user?._id || '',
-    token: '', // The token is generated with JWT
+    token: '', // The token is generated with JWT in the reducers
     firstName: user?.fstName || '',
     lastName: user?.lstName || '',
     birthday: user?.birthday || null,

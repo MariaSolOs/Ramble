@@ -27,8 +27,8 @@ const BecomeACreator = () => {
     const classes = useStyles();
 
     const dispatch = useAppDispatch();
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
-    const isCreator = useAppSelector(state => state.user.isCreator);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
+    const isCreator = useAppSelector(state => Boolean(state.user.creatorId));
 
     const [creatorSlide, setCreatorSlide] = useState(0);
     const creator = creatorBios[creatorSlide];

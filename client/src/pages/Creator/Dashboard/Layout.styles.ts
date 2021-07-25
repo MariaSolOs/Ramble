@@ -7,13 +7,13 @@ const styles = (theme: Theme) => createStyles({
         height: 'calc(85vh - 90px)',
 
         [theme.breakpoints.down('xs')]: { 
-            margin: '80px 2.5vw 0',
-            height: 'auto'
+            margin: '80px 2.5vw 0'
         }
     },
 
     dashboardTitle: {
         fontSize: '1.3rem',
+        margin: '0 0 10px',
 
         [theme.breakpoints.down('xs')]: { fontSize: '1.1rem' }
     },

@@ -55,11 +55,6 @@ const styles = (theme: Theme) => createStyles({
         '& .MuiSvgIcon-root': { fill: '#929293' }
     },
 
-    zoomTooltip: {
-        letterSpacing: '-0.02rem',
-        color: '#FFF'
-    },
-
     tooltipLink: {
         fontWeight: 'bold',
         color: '#FFF'

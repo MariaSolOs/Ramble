@@ -45,11 +45,11 @@ const Layout: React.FC<Props> = (props) => {
                 </div>
             </header>
             <nav className={classes.nav}>
-                <NavLink to="/profile/experiences" className={classes.navLink}>
-                    {text.experiences}
-                </NavLink>
                 <NavLink to="/profile/personal-information" className={classes.navLink}>
                     {text.personalInformation}
+                </NavLink>
+                <NavLink to="/profile/experiences" className={classes.navLink}>
+                    {text.experiences}
                 </NavLink>
             </nav>
             {props.children}

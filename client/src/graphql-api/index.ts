@@ -44,7 +44,7 @@ export type Creator = {
   bookingRequests: Array<Booking>;
 };
 
-/** Experiences */
+/** Experience */
 export type Experience = {
   _id: Scalars['ID'];
   title: Scalars['String'];
@@ -198,12 +198,12 @@ export type Query = {
   me: User;
   /**
    * Experiences filtered by location and with capacity >= to
-   * the indicated capacity.
+   * the indicated capacity, or those created by the specified creator.
    */
   experiences: Array<Experience>;
   /** Get experience by its ID. */
   experience: Experience;
-  /** Get the occurences of the indicated experience. */
+  /** Get the occurrences of the indicated experiences. */
   occurrences: Array<Occurrence>;
 };
 
@@ -211,6 +211,7 @@ export type Query = {
 export type QueryExperiencesArgs = {
   location?: Maybe<Scalars['String']>;
   capacity?: Maybe<Scalars['Int']>;
+  creatorId?: Maybe<Scalars['ID']>;
 };
 
 
@@ -220,7 +221,7 @@ export type QueryExperienceArgs = {
 
 
 export type QueryOccurrencesArgs = {
-  experienceId: Scalars['ID'];
+  experienceIds: Array<Scalars['ID']>;
 };
 
 /** Booking types. */
@@ -359,8 +360,9 @@ export type GetExperienceQueryVariables = Exact<{
 export type GetExperienceQuery = { experience: ExperienceViewFragment };
 
 export type GetExperiencesQueryVariables = Exact<{
-  location: Scalars['String'];
+  location?: Maybe<Scalars['String']>;
   capacity?: Maybe<Scalars['Int']>;
+  creatorId?: Maybe<Scalars['ID']>;
 }>;
 
 
@@ -381,7 +383,7 @@ export type LogInMutationVariables = Exact<{
 export type LogInMutation = { logInUser: CoreProfileFragment };
 
 export type GetOccurrencesQueryVariables = Exact<{
-  experienceId: Scalars['ID'];
+  experienceIds: Array<Scalars['ID']> | Scalars['ID'];
 }>;
 
 
@@ -875,8 +877,8 @@ export type GetExperienceQueryHookResult = ReturnType<typeof useGetExperienceQue
 export type GetExperienceLazyQueryHookResult = ReturnType<typeof useGetExperienceLazyQuery>;
 export type GetExperienceQueryResult = Apollo.QueryResult<GetExperienceQuery, GetExperienceQueryVariables>;
 export const GetExperiencesDocument = gql`
-    query getExperiences($location: String!, $capacity: Int) {
-  experiences(location: $location, capacity: $capacity) {
+    query getExperiences($location: String, $capacity: Int, $creatorId: ID) {
+  experiences(location: $location, capacity: $capacity, creatorId: $creatorId) {
     ...CardContent
   }
 }
@@ -896,10 +898,11 @@ export const GetExperiencesDocument = gql`
  *   variables: {
  *      location: // value for 'location'
  *      capacity: // value for 'capacity'
+ *      creatorId: // value for 'creatorId'
  *   },
  * });
  */
-export function useGetExperiencesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetExperiencesQuery, GetExperiencesQueryVariables>) {
+export function useGetExperiencesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetExperiencesQuery, GetExperiencesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return ApolloReactHooks.useQuery<GetExperiencesQuery, GetExperiencesQueryVariables>(GetExperiencesDocument, options);
       }
@@ -980,8 +983,8 @@ export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
 export type LogInMutationResult = Apollo.MutationResult<LogInMutation>;
 export type LogInMutationOptions = Apollo.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
 export const GetOccurrencesDocument = gql`
-    query getOccurrences($experienceId: ID!) {
-  occurrences(experienceId: $experienceId) {
+    query getOccurrences($experienceIds: [ID!]!) {
+  occurrences(experienceIds: $experienceIds) {
     _id
     dateStart
     dateEnd
@@ -1002,7 +1005,7 @@ export const GetOccurrencesDocument = gql`
  * @example
  * const { data, loading, error } = useGetOccurrencesQuery({
  *   variables: {
- *      experienceId: // value for 'experienceId'
+ *      experienceIds: // value for 'experienceIds'
  *   },
  * });
  */

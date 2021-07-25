@@ -25,8 +25,7 @@ const styles = (theme: Theme) => createStyles({
         width: '40%',
         marginRight: '60%',
         
-        '&:first-child': { marginRight: '5%' },
-        '&:nth-child(2)': { margin: '21px 0 0 0' },
+        '&:first-child, &:nth-child(2)': { marginRight: '5%' },
 
         [theme.breakpoints.down('sm')]: { width: '45%' },
         [theme.breakpoints.down('xs')]: {
@@ -36,10 +35,7 @@ const styles = (theme: Theme) => createStyles({
                 width: '48%', 
                 marginRight: '4%' 
             },
-            '&:nth-child(2)': { 
-                width: '48%', 
-                margin: '18px 0 0 0' 
-            }
+            '&:nth-child(2)': { width: '48%' }
         }
     },
 

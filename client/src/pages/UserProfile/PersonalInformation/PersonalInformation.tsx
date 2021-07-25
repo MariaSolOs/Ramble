@@ -134,7 +134,7 @@ const PersonalInformation = () => {
             <form className={classes.form} onSubmit={handleSubmit}>
                 <FormControl className={classes.formControl}>
                     <FormLabel className={classes.label} htmlFor={FormField.FirstName}>
-                        {text.name}
+                        {text.firstName}
                     </FormLabel>
                     <TextField
                     id={FormField.FirstName}
@@ -144,6 +144,9 @@ const PersonalInformation = () => {
                     onChange={handleFormChange} />
                 </FormControl>
                 <FormControl className={classes.formControl}>
+                    <FormLabel className={classes.label} htmlFor={FormField.LastName}>
+                        {text.lastName}
+                    </FormLabel>
                     <TextField
                     id={FormField.LastName}
                     name={FormField.LastName}
@@ -207,7 +210,7 @@ const PersonalInformation = () => {
                         id={FormField.CreatorBio}
                         name={FormField.CreatorBio}
                         multiline
-                        rows={4}
+                        minRows={4}
                         maxRows={4}
                         required
                         value={values.creatorBio}

@@ -85,9 +85,13 @@ export const resolvers: Resolvers = {
             return userInfo;
         },
     
-        experiences: async (_, { location, capacity }) => {
+        experiences: async (_, { location, capacity, creatorId }) => {
             // Only approved experiences are made public
             const filter: FilterQuery<typeof Experience> = { status: 'approved' }
+
+            if (creatorId) {
+                filter.creator = creatorId;
+            }
     
             if (location) {
                 if (location === 'Online') {
@@ -108,14 +112,14 @@ export const resolvers: Resolvers = {
     
         experience: (_, { id }) => Experience.findById(id).lean(LEAN_DEFAULTS).then(experienceReducer),
     
-        occurrences: async (_, { experienceId }) => {
+        occurrences: async (_, { experienceIds }) => {
             const occs = await Occurrence.find({
-                experience: Types.ObjectId(experienceId),
+                experience: { $in: experienceIds },
                 dateStart: {
                     $gte: new Date(new Date().setUTCHours(0, 0, 0))
                 }
             }).lean(LEAN_DEFAULTS);
-    
+
             return occs.map(occurrenceReducer);
         }
     },

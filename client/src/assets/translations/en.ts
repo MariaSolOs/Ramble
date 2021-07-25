@@ -342,17 +342,14 @@ const englishTranslation: TranslationRecord = {
         subtitle: 'Pick the days and time slots for which guests can book your experience.',
         tip1: 'Consider your weekly schedule. Set realistic availabilities during which you are sure to be free.',
         tip2: "In your creator dashboard, you'll be able to add time slots for a certain date, or remove them if no bookings have been made yet.",
-        timezoneMessage: "The reference time zone is Eastern Standard Time (EST)."
+        timezoneMessage: 'The reference time zone is Eastern Standard Time (EST).',
+        today: 'Today',
+        month: 'Month',
+        day: 'Day'
     },
 
     BuilderSlides_Review: {
         title: 'Review & Submit'
-    },
-
-    CreatorCalendar: {
-        today: 'Today',
-        month: 'Month',
-        day: 'Day'
     },
 
     BookExperience_Layout: {
@@ -456,9 +453,8 @@ const englishTranslation: TranslationRecord = {
     },
 
     UserProfile_PersonalInformation: {
-        name: 'Name',
-        firstNamePlaceholder: 'First name',
-        lastNamePlaceholder: 'Last name',
+        firstName: 'First name',
+        lastName: 'Last name',
         liveIn: 'I live in',
         email: 'Email',
         phoneNumber: 'Phone number',
@@ -466,6 +462,15 @@ const englishTranslation: TranslationRecord = {
         aboutYou: 'About you',
         submitButton: 'Save changes',
         phoneError: 'Please provide a valid phone number'
+    },
+
+    CreatorCalendar: {
+        timezoneMessage: 'The reference time zone is Eastern Standard Time (EST).',
+        formTitle: 'Add availabilities',
+        formDescription: 'Pick the date & time to add availabilities',
+        dateAndTimeLabel: 'Date and time',
+        experienceLabel: 'Experience',
+        addSlot: 'Add'
     }
 }
 

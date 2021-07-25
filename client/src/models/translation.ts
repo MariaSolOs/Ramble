@@ -78,11 +78,9 @@ export type TranslationRecord = {
 
     BuilderSlides_Pricing: Record<'title' | 'subtitle1' | 'subtitle2' | 'tip1' | 'tip2' | 'tip3' | 'pricePerPerson' | 'currency' | 'revenue' | 'guest' | 'guests' | 'privatePriceDescription' | 'privatePrice', string>;
 
-    BuilderSlides_Availabilities: Record<'title' | 'subtitle' | 'tip1' | 'tip2' | 'timezoneMessage', string>;
+    BuilderSlides_Availabilities: Record<'title' | 'subtitle' | 'tip1' | 'tip2' | 'timezoneMessage' | 'today' | 'month' | 'day', string>;
 
     BuilderSlides_Review: Record<'title', string>;
-
-    CreatorCalendar: Record<'today' | 'month' | 'day', string>;
 
     BookExperience_Layout: Record<'dateAndTime' | 'completeBooking' | 'payment' | 'next' | 'confirmPayment', string>;
 
@@ -106,5 +104,7 @@ export type TranslationRecord = {
 
     UserProfile_Experiences: Record<'booked' | 'saved', string>;
 
-    UserProfile_PersonalInformation: Record<'name' | 'firstNamePlaceholder' | 'lastNamePlaceholder' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou' | 'submitButton' | 'phoneError', string>;
+    UserProfile_PersonalInformation: Record<'firstName' | 'lastName' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou' | 'submitButton' | 'phoneError', string>;
+
+    CreatorCalendar: Record<'timezoneMessage' | 'formTitle' | 'formDescription' | 'dateAndTimeLabel' | 'experienceLabel' | 'addSlot', string>;
 }

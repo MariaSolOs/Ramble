@@ -24,7 +24,6 @@ const Snackbar = () => {
         classes={{ anchorOriginTopRight: classes.position }}
         open={Boolean(message)}
         onClose={() => dispatch(closeSnackbar())}
-        autoHideDuration={4000}
         message={message} />
     );
 }

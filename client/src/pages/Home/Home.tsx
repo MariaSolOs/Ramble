@@ -34,6 +34,7 @@ const Home = () => {
             location: 'Montréal, Canada', capacity: 2
         },
         onCompleted: ({ experiences }) => {
+            // TODO: Optimize this by getting featured experiences
             // Get the 4 experiences with the highest ratings
             const bestExperiences = experiences.slice().sort((e1, e2) => 
                 e1.ratingValue - e2.ratingValue
@@ -43,7 +44,7 @@ const Home = () => {
         }
     });
 
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
     const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
     const handleHeartClick = useHeartClick();
 

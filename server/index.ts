@@ -1,5 +1,5 @@
 import './dotenv.config';
-import './mongoDB.config';
+import './mongodb.config';
 import { ApolloServer } from 'apollo-server-express';
 import { typeDefs } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
@@ -41,7 +41,10 @@ const server = new ApolloServer({
     resolvers
 });
 
-server.applyMiddleware({ app, path: '/graphql' });
+(async () => {
+    await server.start();
+    server.applyMiddleware({ app, path: '/graphql' });
+})();
 
 app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname, '../client', 'build', 'index.html'));

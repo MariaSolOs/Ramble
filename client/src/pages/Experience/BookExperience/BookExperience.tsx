@@ -28,7 +28,7 @@ const BookExperience = () => {
     const appDispatch = useAppDispatch();
     
     // Fetch the information of the current logged in user
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
     const userEmail = useAppSelector(state => state.user.email);
 
     const [state, dispatch] = useBookingReducer();
@@ -51,7 +51,7 @@ const BookExperience = () => {
     const {
         loading: occsLoading
     } = useGetOccurrencesQuery({
-        variables: { experienceId },
+        variables: { experienceIds: [experienceId] },
         onCompleted: (occurrences) => {
             dispatch({ type: 'SET_OCCURRENCES', occurrences });
         },

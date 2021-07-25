@@ -28,7 +28,7 @@ const ViewExperience = () => {
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
     
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
     const isExpSaved = useAppSelector(state => 
         state.user.savedExperiences.includes(experienceId)
     );

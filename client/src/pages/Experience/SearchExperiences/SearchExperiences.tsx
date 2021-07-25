@@ -106,7 +106,7 @@ const SearchExperiences = () => {
         }, 3000);
     }
 
-    const isLoggedIn = useAppSelector(state => state.user.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
     const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
     const handleHeartClick = useHeartClick();
 

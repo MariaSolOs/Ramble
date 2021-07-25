@@ -48,7 +48,8 @@ const styles = (theme: Theme) => createStyles({
         alignItems: 'center',
         fontSize: '0.45rem',
         textTransform: 'uppercase',
-        letterSpacing: 0
+        letterSpacing: 0,
+        padding: '0 3px'
     },
 
     onlineImg: {

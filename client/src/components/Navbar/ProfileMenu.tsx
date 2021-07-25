@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client'
 
 import { useLanguageContext } from 'context/languageContext';
+import { useAppDispatch } from 'hooks/redux';
+import { logout as reduxLogout } from 'store/userSlice';
 import { removeTokens } from 'utils/auth';
 
 import Menu from '@material-ui/core/Menu';
@@ -17,7 +20,6 @@ type Props = {
     userPicture: string;
     isCreator: boolean;
     onClose: () => void;
-    onLogout: () => void;
 }
 
 export type StyleProps = {
@@ -25,11 +27,13 @@ export type StyleProps = {
 }
 
 const ProfileMenu = (props: Props) => {
+    const { ProfileMenu: text } = useLanguageContext().appText;
     const classes = useStyles({
         isCreator: props.isCreator
     });
 
-    const { ProfileMenu: text } = useLanguageContext().appText;
+    const dispatch = useAppDispatch();
+    const client = useApolloClient();
 
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
@@ -43,7 +47,8 @@ const ProfileMenu = (props: Props) => {
     const logout = () => {
         removeTokens();
         closeMenu();
-        props.onLogout();
+        client.clearStore();
+        dispatch(reduxLogout());
     }
 
     // Close menu when window resizes
@@ -82,7 +87,7 @@ const ProfileMenu = (props: Props) => {
                 <MenuItem
                 component={NavLink}
                 onClick={closeMenu}
-                to="/profile/experiences"
+                to="/profile/personal-information"
                 className={classes.link}>
                     {text.profile}
                 </MenuItem>

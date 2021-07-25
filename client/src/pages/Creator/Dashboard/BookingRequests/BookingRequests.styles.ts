@@ -4,13 +4,13 @@ import type { Theme } from '@material-ui/core/styles';
 const styles = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
-        marginTop: '2rem',
-        height: 'calc(100% - 2rem)',
+        margin: '2rem 0 1rem',
+        height: 'calc(100% - 73px - 3rem)',
         overflowX: 'scroll',
         
         [theme.breakpoints.down('sm')]: {
             flexWrap: 'wrap',
-            height: '100%'
+            height: 'auto'
         }
     },
 
@@ -24,7 +24,7 @@ const styles = (theme: Theme) => createStyles({
             width: '100%',
             margin: '0 auto 40px',
             height: 440,
-            maxWidth: 420,
+            maxWidth: 410,
             minWidth: 0
         }
     }

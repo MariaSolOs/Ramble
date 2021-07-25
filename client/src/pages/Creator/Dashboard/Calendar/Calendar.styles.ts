@@ -3,14 +3,15 @@ import type { Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        height: '100%',
+        height: 'calc(100% - 73px - 1rem)',
         width: '100%',
         display: 'flex',
-        margin: '0 auto',
+        margin: '0 auto 1rem',
         maxWidth: 1300,
 
         [theme.breakpoints.down('sm')]: {
-            flexDirection: 'column'
+            flexDirection: 'column',
+            height: 'calc(100% - 67px - 1rem)'
         }
     },
 
@@ -109,7 +110,9 @@ const styles = (theme: Theme) => createStyles({
 
         [theme.breakpoints.down('sm')]: {
             height: '70vh',
-            padding: '1rem'
+            maxHeight: 500,
+            padding: '1rem',
+            borderRadius: '10px 10px 0 0',
         }
     },
 
@@ -122,12 +125,16 @@ const styles = (theme: Theme) => createStyles({
 
     formTitle: {
         margin: 0,
-        fontSize: '1.1rem'
+        fontSize: '1.1rem',
+
+        [theme.breakpoints.down('sm')]: { fontSize: '1.2rem' }
     },
 
     formDescription: { 
         margin: 0,
-        fontSize: '0.85rem' 
+        fontSize: '0.85rem',
+
+        [theme.breakpoints.down('sm')]: { fontSize: '1rem' }
     },
 
     formControl: {
@@ -144,7 +151,9 @@ const styles = (theme: Theme) => createStyles({
         fontWeight: theme.typography.fontWeightBold,
         color: '#ACACAC !important',
         fontSize: '0.9rem',
-        display: 'inline-block'
+        display: 'inline-block',
+
+        [theme.breakpoints.down('sm')]: { fontSize: '1rem' }
     },
 
     formInput: {
@@ -266,7 +275,10 @@ const styles = (theme: Theme) => createStyles({
     addSlotButton: {
         width: '100%',
         borderRadius: 6,
-        margin: 'auto 0 0'
+        margin: 'auto 0 0',
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 0'
+        }
     }
 });
 

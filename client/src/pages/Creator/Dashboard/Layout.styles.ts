@@ -3,11 +3,12 @@ import type { Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        margin: '90px 24px 0',
-        height: 'calc(85vh - 90px)',
+        padding: '90px 24px 0',
+        boxSizing: 'border-box',
+        height: '100%',
 
         [theme.breakpoints.down('xs')]: { 
-            margin: '80px 2.5vw 0'
+            padding: '75px 2.5vw 10px'
         }
     },
 

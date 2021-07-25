@@ -1,8 +1,8 @@
-import type { Experience } from '../mongodb-models/experience';
-import type { Occurrence } from '../mongodb-models/occurrence';
-import type { Booking } from '../mongodb-models/booking';
-import type { User } from '../mongodb-models/user';
-import type { Creator } from '../mongodb-models/creator';
+import type { Experience } from '../mongoDB-models/experience';
+import type { Occurrence } from '../mongoDB-models/occurrence';
+import type { Booking } from '../mongoDB-models/booking';
+import type { User } from '../mongoDB-models/user';
+import type { Creator } from '../mongoDB-models/creator';
 
 export const experienceReducer = (exp: Experience | null) => ({
     _id: exp?._id || '',

@@ -8,9 +8,9 @@ import {
     handleSuccessfulPaymentIntent, 
     handleCanceledPaymentIntent 
 } from './utils/stripe-webhook-handlers';
-import { Booking, User, Creator, Experience } from './mongodb-models';
+import { Booking, User, Creator, Experience } from './mongoDB-models';
 import { LEAN_DEFAULTS, STRIPE_API_VERSION } from './server-types';
-import type { Creator as CreatorType } from './mongodb-models/creator';
+import type { Creator as CreatorType } from './mongoDB-models/creator';
 
 const router = Router();
 

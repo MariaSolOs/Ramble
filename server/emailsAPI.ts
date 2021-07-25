@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { generateToken } from './utils/jwt';
 import { sendPasswordResetEmail } from './utils/email';
-import { User } from './mongodb-models';
+import { User } from './mongoDB-models';
 import { LEAN_DEFAULTS } from './server-types';
 
 const router = Router();

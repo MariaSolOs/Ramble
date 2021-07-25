@@ -209,7 +209,7 @@ export type Query = {
   experiences: Array<Experience>;
   /** Get experience by its ID. */
   experience: Experience;
-  /** Get the occurrences of the indicated experiences. */
+  /** Get the occurrences of the indicated experience. */
   occurrences: Array<Occurrence>;
 };
 
@@ -227,7 +227,7 @@ export type QueryExperienceArgs = {
 
 
 export type QueryOccurrencesArgs = {
-  experienceIds: Array<Scalars['ID']>;
+  experienceId: Scalars['ID'];
 };
 
 /** Booking types. */
@@ -463,7 +463,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   experiences?: Resolver<Array<ResolversTypes['Experience']>, ParentType, ContextType, RequireFields<QueryExperiencesArgs, never>>;
   experience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<QueryExperienceArgs, 'id'>>;
-  occurrences?: Resolver<Array<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<QueryOccurrencesArgs, 'experienceIds'>>;
+  occurrences?: Resolver<Array<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<QueryOccurrencesArgs, 'experienceId'>>;
 }>;
 
 export type StripeInfoResolvers<ContextType = Context, ParentType extends ResolversParentTypes['StripeInfo'] = ResolversParentTypes['StripeInfo']> = ResolversObject<{

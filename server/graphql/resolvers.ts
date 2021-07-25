@@ -20,10 +20,10 @@ import {
     Booking,
     User,
     Creator
-} from '../mongodb-models';
-import type { Experience as ExperienceType } from '../mongodb-models/experience';
-import type { User as UserType } from '../mongodb-models/user';
-import type { Creator as CreatorType } from '../mongodb-models/creator';
+} from '../mongoDB-models';
+import type { Experience as ExperienceType } from '../mongoDB-models/experience';
+import type { User as UserType } from '../mongoDB-models/user';
+import type { Creator as CreatorType } from '../mongoDB-models/creator';
 import type { Resolvers } from './resolvers-types';
 import { LEAN_DEFAULTS, STRIPE_API_VERSION } from '../server-types';
 
@@ -112,9 +112,9 @@ export const resolvers: Resolvers = {
     
         experience: (_, { id }) => Experience.findById(id).lean(LEAN_DEFAULTS).then(experienceReducer),
     
-        occurrences: async (_, { experienceIds }) => {
+        occurrences: async (_, { experienceId }) => {
             const occs = await Occurrence.find({
-                experience: { $in: experienceIds },
+                experience: experienceId,
                 dateStart: {
                     $gte: new Date(new Date().setUTCHours(0, 0, 0))
                 }

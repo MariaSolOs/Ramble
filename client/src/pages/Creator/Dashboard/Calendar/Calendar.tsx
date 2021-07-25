@@ -47,6 +47,7 @@ const Calendar = () => {
     const [expToAdd, setExpToAdd] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [experienceOptions, setExperienceOptions] = useState<ExperienceOption[]>([]);
+    // const [occurrences, setOccurrences] = useState([]);
 
     const collapseDrawer = () => { setOpenForm(false); }
 

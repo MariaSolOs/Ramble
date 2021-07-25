@@ -51,7 +51,7 @@ const BookExperience = () => {
     const {
         loading: occsLoading
     } = useGetOccurrencesQuery({
-        variables: { experienceIds: [experienceId] },
+        variables: { experienceId },
         onCompleted: (occurrences) => {
             dispatch({ type: 'SET_OCCURRENCES', occurrences });
         },

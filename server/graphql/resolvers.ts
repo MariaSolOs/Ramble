@@ -112,9 +112,9 @@ export const resolvers: Resolvers = {
     
         experience: (_, { id }) => Experience.findById(id).lean(LEAN_DEFAULTS).then(experienceReducer),
     
-        occurrences: async (_, { experienceId }) => {
+        occurrences: async (_, { experienceIds }) => {
             const occs = await Occurrence.find({
-                experience: experienceId,
+                experience: { $in: experienceIds },
                 dateStart: {
                     $gte: new Date(new Date().setUTCHours(0, 0, 0))
                 }

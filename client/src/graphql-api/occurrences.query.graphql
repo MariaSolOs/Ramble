@@ -1,5 +1,5 @@
-query getOccurrences($experienceId: ID!) {
-    occurrences(experienceId: $experienceId) {
+query getOccurrences($experienceIds: [ID!]!) {
+    occurrences(experienceIds: $experienceIds) {
         _id
         dateStart
         dateEnd

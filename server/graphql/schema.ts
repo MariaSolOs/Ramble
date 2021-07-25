@@ -23,9 +23,9 @@ export const typeDefs = gql`
         experience(id: ID!): Experience!
 
         """
-        Get the occurrences of the indicated experience.
+        Get the occurrences of the indicated experiences.
         """
-        occurrences(experienceId: ID!): [Occurrence!]!
+        occurrences(experienceIds: [ID!]!): [Occurrence!]!
     }
 
     type Mutation {

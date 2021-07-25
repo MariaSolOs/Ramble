@@ -203,7 +203,7 @@ export type Query = {
   experiences: Array<Experience>;
   /** Get experience by its ID. */
   experience: Experience;
-  /** Get the occurrences of the indicated experience. */
+  /** Get the occurrences of the indicated experiences. */
   occurrences: Array<Occurrence>;
 };
 
@@ -221,7 +221,7 @@ export type QueryExperienceArgs = {
 
 
 export type QueryOccurrencesArgs = {
-  experienceId: Scalars['ID'];
+  experienceIds: Array<Scalars['ID']>;
 };
 
 /** Booking types. */
@@ -383,7 +383,7 @@ export type LogInMutationVariables = Exact<{
 export type LogInMutation = { logInUser: CoreProfileFragment };
 
 export type GetOccurrencesQueryVariables = Exact<{
-  experienceId: Scalars['ID'];
+  experienceIds: Array<Scalars['ID']> | Scalars['ID'];
 }>;
 
 
@@ -983,8 +983,8 @@ export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
 export type LogInMutationResult = Apollo.MutationResult<LogInMutation>;
 export type LogInMutationOptions = Apollo.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
 export const GetOccurrencesDocument = gql`
-    query getOccurrences($experienceId: ID!) {
-  occurrences(experienceId: $experienceId) {
+    query getOccurrences($experienceIds: [ID!]!) {
+  occurrences(experienceIds: $experienceIds) {
     _id
     dateStart
     dateEnd
@@ -1005,7 +1005,7 @@ export const GetOccurrencesDocument = gql`
  * @example
  * const { data, loading, error } = useGetOccurrencesQuery({
  *   variables: {
- *      experienceId: // value for 'experienceId'
+ *      experienceIds: // value for 'experienceIds'
  *   },
  * });
  */

@@ -1,14 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
 
 import { useGetExperiencesQuery, useGetLocationsQuery } from 'graphql-api';
+import { useUiContext } from 'context/uiContext';
 import useSearchReducer from './searchReducer';
 import useTokenStorage from 'hooks/useTokenStorage';
 import useHeartClick from 'hooks/useHeartClick';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
 import { Experience } from 'models/experience';
 import type { SearchState } from './searchReducer';
+import { userProfileVar, savedExperiencesVar } from 'store/user-cache';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Searchbar from './Searchbar';
@@ -22,9 +23,9 @@ const useStyles = makeStyles(styles);
 const SearchExperiences = () => {
     const classes = useStyles();
 
+    const { uiDispatch } = useUiContext();
     const history = useHistory();
     const location = useLocation();
-    const dispatch = useAppDispatch();
 
     // Retrieve experiences from URL
     const query = new URLSearchParams(location.search);
@@ -98,16 +99,17 @@ const SearchExperiences = () => {
 
     // When experiences cannot be loaded, show message and go to the homepage
     if (experiencesError) {
-        dispatch(openErrorDialog({
+        uiDispatch({
+            type: 'OPEN_ERROR_DIALOG',
             message: 'We cannot find your experiences right now...'
-        }));
+        })
         setTimeout(() => {
             history.replace('/');
         }, 3000);
     }
 
-    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
-    const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+    const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
+    const savedExperiencesIds = useReactiveVar(savedExperiencesVar);
     const handleHeartClick = useHeartClick();
 
     // Save the auth state when opening new tabs

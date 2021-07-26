@@ -1,5 +1,4 @@
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { closeSnackbar } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
 
 import MUISnackbar from '@material-ui/core/Snackbar';
 
@@ -9,8 +8,9 @@ const useStyles = makeStyles(styles);
 
 const Snackbar = () => {
     const classes = useStyles();
-    const message = useAppSelector(state => state.ui.snackbarMessage);
-    const dispatch = useAppDispatch();
+    
+    const { uiState, uiDispatch } = useUiContext();
+    const { snackbarMessage } = uiState;
 
     return (
         <MUISnackbar
@@ -22,9 +22,9 @@ const Snackbar = () => {
             classes: { root: classes.root }
         }}
         classes={{ anchorOriginTopRight: classes.position }}
-        open={Boolean(message)}
-        onClose={() => dispatch(closeSnackbar())}
-        message={message} />
+        open={Boolean(snackbarMessage)}
+        onClose={() => uiDispatch({ type: 'CLOSE_SNACKBAR' })}
+        message={snackbarMessage} />
     );
 }
 

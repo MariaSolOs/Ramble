@@ -2,8 +2,7 @@ import { useState, useCallback } from 'react';
 
 import { useGetBookingRequestsQuery } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog, openSnackbar } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
 import { getStoredToken } from 'utils/auth';
 
 import Spinner from 'components/Spinner/Spinner';
@@ -15,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 const BookingRequests = () => {
     const { BookingRequests: text } = useLanguageContext().appText;
-    const dispatch = useAppDispatch();
+    const { uiDispatch } = useUiContext();
     const classes = useStyles();
 
     const [processing, setProcessing] = useState(false);
@@ -25,8 +24,8 @@ const BookingRequests = () => {
     });
 
     const handleError = useCallback((message: string) => {
-        dispatch(openErrorDialog({ message }));
-    }, [dispatch]);
+        uiDispatch({ type: 'OPEN_ERROR_DIALOG', message });
+    }, [uiDispatch]);
 
     const handleDecision = useCallback(async (action: 'capture' | 'cancel', bookingId: string) => {
         setProcessing(true);
@@ -46,14 +45,14 @@ const BookingRequests = () => {
         if (res.ok) {
             const message = action === 'capture' ? 
                 text.bookingAcceptedMessage : text.bookingRejectedMessage;
-            dispatch(openSnackbar({ message }));
+            uiDispatch({ type: 'OPEN_SNACKBAR', message });
             refetch();
         } else {
             handleError(text.decisionError);
         }
 
         setProcessing(false);
-    }, [handleError, refetch, dispatch, text]);
+    }, [handleError, refetch, uiDispatch, text]);
 
     if (loading || !data) {
         return <Spinner />;

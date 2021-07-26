@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
 
 import { updateToken } from 'utils/auth';
 import { useGetExperienceQuery, useGetCoreProfileLazyQuery } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import useHeartClick from 'hooks/useHeartClick';
-import { setProfile } from 'store/userSlice';
 import { Experience as ExperienceType } from 'models/experience';
 import type { Creator } from 'models/creator';
+import { 
+    userProfileVar, 
+    savedExperiencesVar, 
+    setUserInfo 
+} from 'store/user-cache';
 
 import Experience from 'components/Experience/Experience';
 import ShareExperienceDialog from 'components/ShareExperienceDialog/ShareExperienceDialog';
@@ -21,19 +25,14 @@ const useStyles = makeStyles(styles);
 
 const ViewExperience = () => {
     const { ViewExperience: text } = useLanguageContext().appText;
-    const dispatch = useAppDispatch();
     const handleHeartClick = useHeartClick();
     const history = useHistory();
+    const classes = useStyles();
     
     // Retrieve experience ID from URL
     const { experienceId } = useParams<{ experienceId: string; }>();
-    
-    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
-    const isExpSaved = useAppSelector(state => 
-        state.user.savedExperiences.includes(experienceId)
-    );
-
-    const classes = useStyles();
+    const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
+    const isExpSaved = useReactiveVar(savedExperiencesVar).includes(experienceId);
 
     // Fetch and initialize experience and creator
     const [experience, setExperience] = useState<ExperienceType>();
@@ -47,7 +46,7 @@ const ViewExperience = () => {
                 didn't choose the "remember me option", so save
                 token in session storage. */
             updateToken(me.token!, false);
-            dispatch(setProfile(me));
+            setUserInfo(me);
         }
     });
 

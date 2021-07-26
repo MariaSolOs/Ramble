@@ -3,8 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client'
 
 import { useLanguageContext } from 'context/languageContext';
-import { useAppDispatch } from 'hooks/redux';
-import { logout as reduxLogout } from 'store/userSlice';
+import { logout as cacheLogout } from 'store/user-cache';
 import { removeTokens } from 'utils/auth';
 
 import Menu from '@material-ui/core/Menu';
@@ -32,7 +31,6 @@ const ProfileMenu = (props: Props) => {
         isCreator: props.isCreator
     });
 
-    const dispatch = useAppDispatch();
     const client = useApolloClient();
 
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -48,7 +46,7 @@ const ProfileMenu = (props: Props) => {
         removeTokens();
         closeMenu();
         client.clearStore();
-        dispatch(reduxLogout());
+        cacheLogout();
     }
 
     // Close menu when window resizes

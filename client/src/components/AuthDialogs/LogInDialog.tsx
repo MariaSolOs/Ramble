@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { updateToken } from 'utils/auth';
 import { useLogInMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { closeLogInDialog, openErrorDialog } from 'store/uiSlice';
-import { setProfile } from 'store/userSlice';
+import { useUiContext } from 'context/uiContext';
+import { setUserInfo } from 'store/user-cache';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -41,22 +40,21 @@ const initialForm: Form = {
 
 const LogInDialog = () => {
     const { LogInDialog: text } = useLanguageContext().appText;
+    const { uiState, uiDispatch } = useUiContext();
+    const { showLogInDialog: open } = uiState;
     const classes = useStyles();
-
-    const dispatch = useAppDispatch();
-    const open = useAppSelector(state => state.ui.showLogInDialog);
-
+    
     const [logIn] = useLogInMutation({
         onCompleted: ({ logInUser }) => {
             if (logInUser) {
                 updateToken(logInUser.token!, values.rememberUser);
-                dispatch(setProfile(logInUser));
+                setUserInfo(logInUser);
             }
             handleClose();
         },
         onError: ({ graphQLErrors }) => {
             const message = graphQLErrors[0].message || "We couldn't log you in.";
-            dispatch(openErrorDialog({ message }));
+            uiDispatch({ type: 'OPEN_ERROR_DIALOG', message });
             handleClose(); 
         }
     });
@@ -78,7 +76,7 @@ const LogInDialog = () => {
 
     const handleClose = () => {
         setValues(initialForm);
-        dispatch(closeLogInDialog());
+        uiDispatch({ type: 'CLOSE_LOG_IN_DIALOG' });
     }
 
     const handleSubmit = (event: React.FormEvent) => {

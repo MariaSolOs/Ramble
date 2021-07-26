@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
-import store from 'store/store';
 import apolloClient from 'store/gqlClient';
 
 import App from 'App';
@@ -19,15 +17,13 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY!);
 
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <ApolloProvider client={apolloClient}>
-                <Elements stripe={stripePromise}>
-                    <BrowserRouter>
-                        <App />
-                    </BrowserRouter>
-                </Elements>
-            </ApolloProvider>
-        </Provider>
+        <ApolloProvider client={apolloClient}>
+            <Elements stripe={stripePromise}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </Elements>
+        </ApolloProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useStripe, useElements, CardNumberElement } from '@stripe/react-stripe-js';
+import { useReactiveVar } from '@apollo/client';
 
 import useBookingReducer from './useBookingReducer';
 import { 
@@ -9,9 +10,9 @@ import {
     useCreateBookingMutation
 } from 'graphql-api';
 import type { Reservation } from 'graphql-api';
-import { useAppSelector, useAppDispatch } from 'hooks/redux'; 
-import { openSignUpDialog, openErrorDialog } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
 import { getFeesBreakdown } from 'utils/booking';
+import { userProfileVar } from 'store/user-cache';
 
 import Spinner from 'components/Spinner/Spinner';
 import Layout from './Layout';
@@ -25,11 +26,11 @@ const BookExperience = () => {
     const stripe = useStripe();
     const elements = useElements();
     const history = useHistory();
-    const appDispatch = useAppDispatch();
+    const { uiDispatch } = useUiContext();
     
     // Fetch the information of the current logged in user
-    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
-    const userEmail = useAppSelector(state => state.user.email);
+    const { userId, email: userEmail } = useReactiveVar(userProfileVar);
+    const isLoggedIn = Boolean(userId);
 
     const [state, dispatch] = useBookingReducer();
 
@@ -73,10 +74,10 @@ const BookExperience = () => {
     // If the user isn't logged in, prompt sign up before payment
     useEffect(() => {
         if (state.step === 'payment' && !isLoggedIn) {
-            appDispatch(openSignUpDialog());
+            uiDispatch({ type: 'OPEN_SIGN_UP_DIALOG' });
             dispatch({ type: 'GO_BACK' });
         }
-    }, [state.step, isLoggedIn, appDispatch, dispatch]);
+    }, [state.step, isLoggedIn, uiDispatch, dispatch]);
 
     // Keep the fees updated
     useEffect(() => {
@@ -97,9 +98,9 @@ const BookExperience = () => {
     }, [state.experience, state.form.bookingType, state.form.numGuests, dispatch]);
 
     const handleError = useCallback((message: string = "Something went wrong...") => {
-        appDispatch(openErrorDialog({ message }));
+        uiDispatch({ type: 'OPEN_ERROR_DIALOG', message });
         history.replace('/');
-    }, [appDispatch, history]);
+    }, [uiDispatch, history]);
 
     const handleContinue = useCallback((value: boolean) => {
         dispatch({ type: 'SET_CAN_CONTINUE', value });

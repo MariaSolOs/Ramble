@@ -25,7 +25,7 @@ const LanguageContext = createContext<LanguageContextType>({
 
 export const useLanguageContext = () => useContext(LanguageContext);
 
-const LanguageProvider: React.FC = ({ children }) => {
+const LanguageProvider: React.FC = (props) => {
     const defaultLanguage = (localStorage.getItem('ramble-userLang') || 'en') as Language;
 
     const [language, setLanguage] = useState<Language>(defaultLanguage);
@@ -42,7 +42,7 @@ const LanguageProvider: React.FC = ({ children }) => {
             appText: dictionaries[language],
             setLanguage: handleLanguageChange
         }}>
-            {children}
+            {props.children}
         </LanguageContext.Provider>
     );    
 }

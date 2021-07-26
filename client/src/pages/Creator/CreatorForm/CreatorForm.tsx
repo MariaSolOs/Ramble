@@ -6,9 +6,8 @@ import {
     useSignUpCreatorMutation
 } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
-import { setProfile } from 'store/userSlice';
+import { useUiContext } from 'context/uiContext';
+import { setUserInfo } from 'store/user-cache';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
@@ -28,8 +27,8 @@ const MAX_BIO_LENGTH = 500;
 
 const CreatorForm = () => {
     const { CreatorForm: text } = useLanguageContext().appText;
+    const { uiDispatch } = useUiContext();
     const classes = useStyles();
-    const dispatch = useAppDispatch();
 
     const [profilePic, setProfilePic] = useState<File>();
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -55,11 +54,14 @@ const CreatorForm = () => {
             if (editUser) {
                 /* Because creators have a different UI, we need
                    to update their profile on Redux */
-                dispatch(setProfile(editUser));
+                setUserInfo(editUser);
             }
         },
         onError: () => {
-            dispatch(openErrorDialog({ message: "We couldn't update your profile..." }));
+            uiDispatch({
+                type: 'OPEN_ERROR_DIALOG',
+                message: "We couldn't update your profile..."
+            });
         }
     });
 
@@ -68,7 +70,10 @@ const CreatorForm = () => {
         { data: creatorData, loading: creatorLoading }
     ] = useSignUpCreatorMutation({
         onError: () => {
-            dispatch(openErrorDialog({ message: "We couldn't create your creator profile..." }));
+            uiDispatch({
+                type: 'OPEN_ERROR_DIALOG',
+                message: "We couldn't create your creator profile..."
+            });
         }
     });
 

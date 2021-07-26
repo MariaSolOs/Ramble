@@ -1,6 +1,5 @@
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { closeErrorDialog } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
 
 import { Dialog } from '@material-ui/core';
 import errorImg from 'assets/images/error-dialog-image.png';
@@ -13,21 +12,21 @@ const ErrorDialog = () => {
     const { ErrorDialog: text } = useLanguageContext().appText;
     const classes = useStyles();
 
-    const message = useAppSelector(state => state.ui.errorMessage);
-    const dispatch = useAppDispatch();
+    const { uiState, uiDispatch } = useUiContext();
+    const { errorMessage } = uiState;
 
     return (
         <Dialog 
         maxWidth="sm" 
         classes={{ paper: classes.paper }}
-        open={Boolean(message)}
-        onClose={() => dispatch(closeErrorDialog())}>
+        open={Boolean(errorMessage)}
+        onClose={() => uiDispatch({ type: 'CLOSE_ERROR_DIALOG' })}>
             <div className={classes.header}>
                 <img src={errorImg} alt="An error occurred" className={classes.image} />
                 <h4 className={classes.title}>{text.title}</h4>
             </div>
             <p className={classes.message}>
-                {message}
+                {errorMessage}
             </p>
         </Dialog>
     );

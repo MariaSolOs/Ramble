@@ -10,7 +10,8 @@ const styles = (theme: Theme) => createStyles({
         
         [theme.breakpoints.down('sm')]: {
             flexWrap: 'wrap',
-            height: 'auto'
+            height: 'auto',
+            margin: '1rem 0 0'
         }
     },
 
@@ -23,9 +24,9 @@ const styles = (theme: Theme) => createStyles({
         [theme.breakpoints.down('sm')]: {
             width: '100%',
             margin: '0 auto 40px',
-            height: 440,
             maxWidth: 410,
-            minWidth: 0
+            minWidth: 0,
+            maxHeight: 450
         }
     }
 });

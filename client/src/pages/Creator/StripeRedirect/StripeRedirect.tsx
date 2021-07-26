@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
 import { useLanguageContext } from 'context/languageContext';
-import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStripe } from '@fortawesome/free-brands-svg-icons/faStripe';
@@ -18,9 +17,10 @@ type Props = {
 
 const StripeRedirect = (props: Props) => {
     const { StripeRedirect: text } = useLanguageContext().appText;
+    const { uiDispatch } = useUiContext();
     const classes = useStyles();
+    
     const [loading, setLoading] = useState(false);
-    const dispatch = useAppDispatch();
 
     const handleStripeRedirect = () => {
         setLoading(true);
@@ -41,7 +41,10 @@ const StripeRedirect = (props: Props) => {
             window.location.href = res.redirectUrl;
         })
         .catch(() => {
-            dispatch(openErrorDialog({ message: "We couldn't submit your form..." }));
+            uiDispatch({
+                type: 'OPEN_ERROR_DIALOG',
+                message: "We couldn't submit your form..."
+            });
         });
     }
 

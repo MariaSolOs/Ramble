@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+import { useReactiveVar } from '@apollo/client';
 
 import { useGetExperiencesQuery } from 'graphql-api';
 import useTokenStorage from 'hooks/useTokenStorage';
-import { useAppSelector } from 'hooks/redux';
 import useHeartClick from 'hooks/useHeartClick';
 import { useLanguageContext } from 'context/languageContext';
+import { userProfileVar, savedExperiencesVar } from 'store/user-cache';
 
 import Showplace from './Showplace';
 import Footer from 'components/Footer/Footer';
@@ -44,8 +45,8 @@ const Home = () => {
         }
     });
 
-    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
-    const savedExperiencesIds = useAppSelector(state => state.user.savedExperiences);
+    const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
+    const savedExperiencesIds = savedExperiencesVar();
     const handleHeartClick = useHeartClick();
 
     // Save the auth state when opening new tabs

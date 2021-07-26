@@ -4,29 +4,22 @@ import {
     useSaveExperienceMutation, 
     useUnsaveExperienceMutation
 } from 'graphql-api';
-import { useAppDispatch } from 'hooks/redux';
-import { saveExperience, unsaveExperience } from 'store/userSlice';
+import { saveExperience, unsaveExperience } from 'store/user-cache';
 
 /**
  * @returns Hook that saves/unsaves an experience from the user's 
  * list of saved experiences.
  */
 export default function useHeartClick() {
-    const dispatch = useAppDispatch();
-
     const [saveExp] = useSaveExperienceMutation({
         onCompleted: ({ saveExperience: data }) => {
-            dispatch(saveExperience({
-                experienceId: data._id
-            }));
+            saveExperience(data._id);
         }
     });
 
     const [unsaveExp] = useUnsaveExperienceMutation({
         onCompleted: ({ unsaveExperience: data }) => {
-            dispatch(unsaveExperience({
-                experienceId: data._id
-            }));
+            unsaveExperience(data._id);
         }
     });
     

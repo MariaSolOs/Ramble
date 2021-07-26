@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { updateToken } from 'utils/auth';
 import { useSignUpMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { closeSignUpDialog, openLogInDialog, openErrorDialog } from 'store/uiSlice';
-import { setProfile } from 'store/userSlice';
+import { useUiContext } from 'context/uiContext';
+import { setUserInfo } from 'store/user-cache';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -38,11 +37,12 @@ const initialForm: Form = {
 }
 
 const SignUpDialog = () => {
-    const dispatch = useAppDispatch();
     const { SignUpDialog: text } = useLanguageContext().appText;
     const classes = useStyles();
-
-    const open = useAppSelector(state => state.ui.showSignUpDialog);
+    
+    // const dispatch = useAppDispatch();
+    const { uiState, uiDispatch } = useUiContext();
+    const { showSignUpDialog: open } = uiState;
 
     const [values, setValues] = useState(initialForm);
     const [passwordError, setPasswordError] = useState(false);
@@ -50,12 +50,12 @@ const SignUpDialog = () => {
     const [signUp] = useSignUpMutation({
         onCompleted: ({ signUpUser }) => {
             updateToken(signUpUser.token!, false);
-            dispatch(setProfile(signUpUser));
+            setUserInfo(signUpUser);
             handleClose();
         },
         onError: ({ graphQLErrors }) => {
             const message = graphQLErrors[0].message || "We couldn't sign you in.";
-            dispatch(openErrorDialog({ message }));
+            uiDispatch({ type: 'OPEN_ERROR_DIALOG', message });
             handleClose();
         }
     });
@@ -93,7 +93,7 @@ const SignUpDialog = () => {
     const handleClose = () => {
         setValues(initialForm);
         setPasswordError(false);
-        dispatch(closeSignUpDialog());
+        uiDispatch({ type: 'CLOSE_SIGN_UP_DIALOG' });
     }
 
     return (
@@ -180,7 +180,7 @@ const SignUpDialog = () => {
                         className={classes.switchDialogsLink} 
                         onClick={() => {
                             handleClose();
-                            dispatch(openLogInDialog());
+                            uiDispatch({ type: 'OPEN_LOG_IN_DIALOG' });
                         }}>
                             {text.logIn}
                         </span>

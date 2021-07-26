@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
 
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { openSignUpDialog } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
+import { userProfileVar } from 'store/user-cache';
 
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -26,9 +27,10 @@ const BecomeACreator = () => {
     const history = useHistory();
     const classes = useStyles();
 
-    const dispatch = useAppDispatch();
-    const isLoggedIn = useAppSelector(state => Boolean(state.user.userId));
-    const isCreator = useAppSelector(state => Boolean(state.user.creatorId));
+    const { uiDispatch } = useUiContext();
+    const { userId, creatorId } = useReactiveVar(userProfileVar);
+    const isLoggedIn = Boolean(userId);
+    const isCreator = Boolean(creatorId);
 
     const [creatorSlide, setCreatorSlide] = useState(0);
     const creator = creatorBios[creatorSlide];
@@ -36,7 +38,7 @@ const BecomeACreator = () => {
     const handleGetStartedClick = () => {
         isLoggedIn ? 
             isCreator ? history.push('experience/new/setting') : history.push('/creator/join')
-                : dispatch(openSignUpDialog());
+                : uiDispatch({ type: 'OPEN_SIGN_UP_DIALOG' });
     }
 
     return (

@@ -15,11 +15,15 @@ import {
     useGetCreationProfileQuery 
 } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
+import { useUiContext } from 'context/uiContext';
 import useLanguages from 'hooks/useLanguages';
-import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
 import useCreationReducer from './useCreationReducer';
-import type { StringField, BooleanField, NumberField, ArrayField } from './useCreationReducer';
+import type { 
+    StringField, 
+    BooleanField, 
+    NumberField, 
+    ArrayField 
+} from './useCreationReducer';
 
 import Div100vh from 'react-div-100vh';
 import { CSSTransition } from 'react-transition-group';
@@ -41,7 +45,7 @@ const CreateExperience = () => {
     const history = useHistory();
     const location = useLocation();
     const { path } = useRouteMatch();
-    const appDispatch = useAppDispatch();
+    const { uiDispatch } = useUiContext();
 
     const [animationIn, setAnimationIn] = useState(false);
     const [animationDone, setAnimationDone] = useState(false);
@@ -66,9 +70,10 @@ const CreateExperience = () => {
      }, []);
 
     const handleError = () => {
-        appDispatch(openErrorDialog({
+        uiDispatch({
+            type: 'OPEN_ERROR_DIALOG',
             message: 'Something went wrong...'
-        }));
+        })
         setTimeout(() => {
             history.replace('/');
         }, 4000);

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useReactiveVar } from '@apollo/client';
 
 import { useLanguageContext } from 'context/languageContext';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { openSignUpDialog, openLogInDialog } from 'store/uiSlice';
+import { useUiContext } from 'context/uiContext';
+import { userProfileVar } from 'store/user-cache';
 
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,19 +20,17 @@ const useStyles = makeStyles(styles);
 
 const Navbar = () => {
     const { Navbar: text } = useLanguageContext().appText;
+    const classes = useStyles();
+    const { uiDispatch } = useUiContext();
 
     const { 
-        userId, 
+        userId,
         creatorId,
-        firstName, 
-        photo 
-    } = useAppSelector(state => state.user);
+        firstName,
+        photo
+    } = useReactiveVar(userProfileVar);
     const isLoggedIn = Boolean(userId);
     const isCreator = Boolean(creatorId);
-
-    const dispatch = useAppDispatch();
-
-    const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = useState<Element | null>(null);
     const closeMenu = () => { setAnchorEl(null); }
@@ -92,7 +91,7 @@ const Navbar = () => {
                             key={0}
                             component="button"
                             onClick={() => {
-                                dispatch(openSignUpDialog());
+                                uiDispatch({ type: 'OPEN_SIGN_UP_DIALOG' });
                                 closeMenu();
                             }}>
                                 {text.signUp}
@@ -101,7 +100,7 @@ const Navbar = () => {
                             key={1}
                             component="button"
                             onClick={() => {
-                                dispatch(openLogInDialog());
+                                uiDispatch({ type: 'OPEN_LOG_IN_DIALOG' });
                                 closeMenu();
                             }}>
                                 {text.logIn}
@@ -118,12 +117,12 @@ const Navbar = () => {
                         profileMenu : 
                         <>
                             <button
-                            onClick={() => dispatch(openSignUpDialog())}
+                            onClick={() => uiDispatch({ type: 'OPEN_SIGN_UP_DIALOG' })}
                             className={`${classes.dialogToggler} ${classes.navLink}`}>
                                 {text.signUp}
                             </button>
                             <button
-                            onClick={() => dispatch(openLogInDialog())}
+                            onClick={() => uiDispatch({ type: 'OPEN_LOG_IN_DIALOG' })}
                             className={`${classes.dialogToggler} ${classes.navLink}`}>
                                 {text.logIn}
                             </button>

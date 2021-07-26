@@ -5,10 +5,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { DateTime } from 'luxon';
 import LuxonUtils from '@date-io/luxon';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useReactiveVar } from '@apollo/client';
 
 import { useGetExperiencesQuery } from 'graphql-api';
-import { useAppSelector } from 'hooks/redux';
 import { useLanguageContext } from 'context/languageContext';
+import { userProfileVar } from 'store/user-cache';
 
 import { 
     MuiPickersUtilsProvider,  
@@ -40,7 +41,7 @@ const Calendar = () => {
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const creatorId = useAppSelector(state => state.user.creatorId);
+    const { creatorId } = useReactiveVar(userProfileVar);
 
     // Start adding from the start of the next hour
     const [dateToAdd, setDateToAdd] = useState(DateTime.now().plus({ hour: 1 }).startOf('hour'));

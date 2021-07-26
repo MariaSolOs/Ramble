@@ -4,9 +4,8 @@ import Cookies from 'js-cookie';
 import { updateToken } from 'utils/auth';
 import { useUpdateProfileMutation } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import { useAppDispatch } from 'hooks/redux';
-import { openErrorDialog } from 'store/uiSlice';
-import { setProfile } from 'store/userSlice';
+import { useUiContext } from 'context/uiContext';
+import { setUserInfo } from 'store/user-cache';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -26,12 +25,11 @@ enum FormField {
 type Form = Record<FormField, string>;
 
 const ResetPasswordDialog = () => {
-    const classes = useStyles();
-
     const { ResetPasswordDialog: text } = useLanguageContext().appText;
-
-    const dispatch = useAppDispatch();
-
+    // const dispatch = useAppDispatch();
+    const { uiDispatch } = useUiContext();
+    const classes = useStyles();
+    
     // Check if the cookie for resetting the password was set
     useEffect(() => {
         if (Cookies.get('ramble-reset_token')) {
@@ -80,14 +78,15 @@ const ResetPasswordDialog = () => {
     const [resetPassword] = useUpdateProfileMutation({
         onCompleted: ({ editUser }) => {
             updateToken(editUser.token!, false);
-            dispatch(setProfile(editUser));
+            setUserInfo(editUser);
             handleClose();
         },
         onError: () => {
             handleClose();
-            dispatch(openErrorDialog({
+            uiDispatch({ 
+                type: 'OPEN_ERROR_DIALOG',  
                 message: "We couldn't reset your password..."
-            }));
+            });
         }
     });
 

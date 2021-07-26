@@ -42,7 +42,11 @@ const styles = (theme: Theme) => createStyles({
         borderRadius: '1.2rem',
         padding: 15,
         height: 'calc(100% - 68px - 1rem)',
-        position: 'relative'
+        position: 'relative',
+
+        [theme.breakpoints.down(380)]: {
+            height: 'auto'
+        }
     },
 
     clientInfo: {
@@ -125,7 +129,11 @@ const styles = (theme: Theme) => createStyles({
     actions: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '2.5rem'
+        marginTop: '2.5rem',
+
+        [theme.breakpoints.down(380)]: {
+            marginTop: 10
+        }
     },
 
     button: {

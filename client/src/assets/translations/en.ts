@@ -55,8 +55,7 @@ const englishTranslation: TranslationRecord = {
         logIn: 'Log in',
         email: 'Email',
         password: 'Password',
-        forgotPassword: 'I forgot my password',
-        rememberMe: 'Remember me'
+        forgotPassword: 'I forgot my password'
     },
 
     ForgotPasswordDialog: {
@@ -470,7 +469,9 @@ const englishTranslation: TranslationRecord = {
         formDescription: 'Pick the date & time to add availabilities',
         dateAndTimeLabel: 'Date and time',
         experienceLabel: 'Experience',
-        addSlot: 'Add'
+        addSlot: 'Add',
+        today: 'Today',
+        busySlotMessage: 'You have already set availabilities for this timeslot'
     }
 }
 

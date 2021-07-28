@@ -2,22 +2,18 @@ import jwt from 'jsonwebtoken';
 
 import type { Context } from '../server-types';
 
+const EXPIRE_TIME = '30d';
 const ISSUER = 'rambleAPI';
 
 /**
  * Generates a JSON web token for communicating with the client.
  * 
  * @param userId - Mongo ID of the user
- * @param expireTime - The expiration time of the token
  * @returns The generated token
  */
-export const generateToken = (userId: string, expireTime: string = '1d') => (
-    jwt.sign({ 
-        userId,
-        tokenExpiry: expireTime 
-    }, 
-    process.env.JWT_SECRET!, {
-        expiresIn: expireTime,
+export const generateToken = (userId: string) => (
+    jwt.sign({ userId }, process.env.JWT_SECRET!, {
+        expiresIn: EXPIRE_TIME,
         issuer: ISSUER
     })
 );
@@ -32,9 +28,6 @@ export const verifyToken = (token: string): Context => {
             issuer: ISSUER 
         }) as Context; 
     } catch (err) {
-        return {
-            userId: '',
-            tokenExpiry: ''
-        }
+        return { userId: '' }
     }
 }

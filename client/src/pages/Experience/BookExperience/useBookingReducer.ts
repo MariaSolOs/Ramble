@@ -120,7 +120,9 @@ export default function useBookingReducer() {
 
                 // Sort the occurrences chronologically 
                 for (const [, occList] of occurrences) {
-                    occList.sort();
+                    occList.sort((occ1, occ2) => 
+                        +occ1.dateStart - +occ2.dateStart
+                    );
                 }
 
                 return {

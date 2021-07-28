@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useReactiveVar } from '@apollo/client';
 
-import { updateToken } from 'utils/auth';
+import { updateToken, getStoredToken } from 'utils/auth';
 import { useGetCoreProfileLazyQuery } from 'graphql-api';
 import LanguageProvider from 'context/languageContext';
 import UiProvider from 'context/uiContext';
@@ -28,11 +28,9 @@ const ProfileRouter = React.lazy(() => import('pages/UserProfile/Router'));
 const App = () => {
     const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
 
-    const [rememberUser, setRememberUser] = useState(false);
-
     const [fetchProfile] = useGetCoreProfileLazyQuery({
         onCompleted: ({ me }) => {
-            updateToken(me.token!, rememberUser);
+            updateToken(me.token!);
             setUserInfo(me);
         }
     });
@@ -40,11 +38,7 @@ const App = () => {
     // Try to log in back the user when the page refreshes
     useEffect(() => {
         if (!isLoggedIn) {
-            const persistentToken = localStorage.getItem('ramble-token');
-            const sessionToken = sessionStorage.getItem('ramble-token');
-            
-            if (persistentToken || sessionToken) {
-                setRememberUser(Boolean(persistentToken));
+            if (getStoredToken()) {
                 fetchProfile();
             }
         }
@@ -56,8 +50,7 @@ const App = () => {
 
         if (serverCookie) {
             Cookies.remove('ramble-server_cookie');
-            sessionStorage.setItem('ramble-token', serverCookie);
-            setRememberUser(false);
+            updateToken(serverCookie);
             fetchProfile();
         }
     }, [fetchProfile]);

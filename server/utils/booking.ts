@@ -1,3 +1,4 @@
+import { Occurrence } from '../mongodb-models';
 import type { Reservation } from '../server-types';
 
 /**
@@ -51,4 +52,28 @@ export const computeBookingFees = (
         application_fee_amount: Math.round(100 * application_fee_amount),
         amount: Math.round(100 * amount)
     }
+}
+
+/**
+ * Creates a new experience occurrence.
+ * 
+ * @param experienceId - The experience's ID
+ * @param dateStart - The start date of the occurrence
+ * @param dateEnd - The end date of the occurrence
+ */
+export const createOccurrence = async (
+    experienceId: string,
+    experienceCapacity: number,
+    dateStart: string, 
+    dateEnd: string
+) => {
+    const occurrence = await Occurrence.create({
+        experience: experienceId,
+        dateStart: new Date(dateStart),
+        dateEnd: new Date(dateEnd),
+        spotsLeft: experienceCapacity,
+        creatorProfit: 0
+    });
+
+    return occurrence;
 }

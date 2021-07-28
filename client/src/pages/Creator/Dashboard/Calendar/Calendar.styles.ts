@@ -62,8 +62,7 @@ const styles = (theme: Theme) => createStyles({
         },
 
         '& .fc .fc-daygrid-day-frame, & .fc .fc-highlight': {
-            backgroundColor: '#323232',
-            cursor: 'pointer'
+            backgroundColor: '#323232'
         },
 
         '& .fc .fc-col-header-cell': {
@@ -84,6 +83,13 @@ const styles = (theme: Theme) => createStyles({
         }
     },
 
+    slotBullet: {
+        borderRadius: '50%',
+        width: 8,
+        height: 8,
+        marginRight: 4
+    },
+
     infosContainer: {
         width: '38%',
         marginLeft: '2%',
@@ -94,7 +100,34 @@ const styles = (theme: Theme) => createStyles({
         backgroundColor: '#404040',
         marginTop: 44.406,
         height: 'calc(62% - 44.406px)',
-        borderRadius: 10
+        borderRadius: 10,
+        overflowY: 'scroll',
+        
+        '& $sectionTitle': { padding: 8 }
+    },
+
+    slotContainer: {
+        position: 'relative',
+        padding: '5px 8px 1rem',
+        transition: 'background-color 300ms ease-in-out',
+
+        '&:hover': { backgroundColor: '#4B4B4B' }
+    },
+
+    slotTitle: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        margin: '10px 0 0',
+
+        '& $slotBullet': {
+            width: 12,
+            height: 12
+        }
+    },
+
+    slotTime: {
+        margin: 0,
+        fontSize: '0.85rem'
     },
 
     form: {
@@ -123,14 +156,14 @@ const styles = (theme: Theme) => createStyles({
         fontSize: '1.1rem'
     },
 
-    formTitle: {
+    sectionTitle: {
         margin: 0,
         fontSize: '1.1rem',
 
         [theme.breakpoints.down('sm')]: { fontSize: '1.2rem' }
     },
 
-    formDescription: { 
+    sectionSubtitle: { 
         margin: 0,
         fontSize: '0.85rem',
 
@@ -157,6 +190,8 @@ const styles = (theme: Theme) => createStyles({
     },
 
     formInput: {
+        width: 180,
+
         '&:focus-visible': { outline: 'none' },
         
         '& .MuiInputBase-input': {
@@ -219,8 +254,11 @@ const styles = (theme: Theme) => createStyles({
 
         '& .MuiPickersToolbar-toolbar': {
             backgroundColor: '#ECEBE5',
-            '& h4, h6, h3': {
-                color: '#2B2B2B  !important' 
+            '& h4, .MuiTypography-subtitle1, h3 ': {
+                color: '#2B2B2B '
+            },
+            '& .MuiTypography-subtitle1:not(.MuiPickersToolbarText-toolbarBtnSelected)': {
+                opacity: 0.5
             }
         },
 
@@ -234,7 +272,6 @@ const styles = (theme: Theme) => createStyles({
     },
 
     experienceSelect: {
-        minWidth: 162,
         borderBottom: '1px solid #FFF'
     },
 
@@ -248,6 +285,8 @@ const styles = (theme: Theme) => createStyles({
         '& .MuiMenuItem-root': {
             lineHeight: 1.1,
             fontSize: '0.8rem',
+            transition: 'color 300ms ease-in-out',
+            '&:hover': { color: '#FFF' },
 
             [theme.breakpoints.down('xs')]: { minHeight: 0 }
         }
@@ -276,6 +315,8 @@ const styles = (theme: Theme) => createStyles({
         width: '100%',
         borderRadius: 6,
         margin: 'auto 0 0',
+        '&:disabled': { filter: 'brightness(70%)' },
+
         [theme.breakpoints.down('sm')]: {
             padding: '10px 0'
         }

@@ -35,7 +35,10 @@ const styles = (theme: Theme) => createStyles({
                 width: '48%', 
                 marginRight: '4%' 
             },
-            '&:nth-child(2)': { width: '48%' }
+            '&:nth-child(2)': { 
+                width: '48%',
+                marginRight: 0
+            }
         }
     },
 

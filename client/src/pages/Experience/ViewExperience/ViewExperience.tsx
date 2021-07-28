@@ -1,18 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
-import { updateToken } from 'utils/auth';
-import { useGetExperienceQuery, useGetCoreProfileLazyQuery } from 'graphql-api';
+import { useGetExperienceQuery } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import useHeartClick from 'hooks/useHeartClick';
 import { Experience as ExperienceType } from 'models/experience';
 import type { Creator } from 'models/creator';
-import { 
-    userProfileVar, 
-    savedExperiencesVar, 
-    setUserInfo 
-} from 'store/user-cache';
+import { userProfileVar, savedExperiencesVar } from 'store/user-cache';
 
 import Experience from 'components/Experience/Experience';
 import ShareExperienceDialog from 'components/ShareExperienceDialog/ShareExperienceDialog';
@@ -39,17 +34,6 @@ const ViewExperience = () => {
     const [creator, setCreator] = useState<Creator>();
     const [openShareDialog, setOpenShareDialog] = useState(false);
 
-    // For logging the user back 
-    const [fetchProfile] = useGetCoreProfileLazyQuery({
-        onCompleted: ({ me }) => {
-            /* If we reach this point, the user for sure 
-                didn't choose the "remember me option", so save
-                token in session storage. */
-            updateToken(me.token!, false);
-            setUserInfo(me);
-        }
-    });
-
     const { loading } = useGetExperienceQuery({
         variables: { id: experienceId },
         onCompleted: ({ experience }) => {
@@ -63,17 +47,6 @@ const ViewExperience = () => {
         },
         onError: (error) => console.error(error)
     });
-
-    /* If applicable, remove the temporary token and authenticate the user
-       in the new tab. */
-    useEffect(() => {
-        const tempToken = localStorage.getItem('ramble-redirect_page_token');
-
-        if (tempToken) {
-            sessionStorage.setItem('ramble-token', tempToken);
-            fetchProfile();
-        }
-    }, [fetchProfile]);
 
     if (loading || !experience) {
         return <Spinner />

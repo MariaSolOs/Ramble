@@ -97,19 +97,6 @@ const styles = (theme: Theme) => createStyles({
         margin: '0 3px 15px',
         letterSpacing: '-0.05rem',
         fontSize: '0.8rem'
-    },
-
-    rememberUserContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        margin: '-10px 3px 5px'
-    },
-
-    rememberUserText: {
-        color: '#ECEBE5',
-        margin: 0,
-        letterSpacing: '-0.05rem',
-        fontSize: '0.8rem'
     }
 });
 

@@ -4,7 +4,10 @@ import {
     useSaveExperienceMutation, 
     useUnsaveExperienceMutation
 } from 'graphql-api';
-import { saveExperience, unsaveExperience } from 'store/user-cache';
+import { 
+    saveExperience as saveExperienceInCache, 
+    unsaveExperience as unsaveExperienceInCache 
+} from 'store/user-cache';
 
 /**
  * @returns Hook that saves/unsaves an experience from the user's 
@@ -13,13 +16,13 @@ import { saveExperience, unsaveExperience } from 'store/user-cache';
 export default function useHeartClick() {
     const [saveExp] = useSaveExperienceMutation({
         onCompleted: ({ saveExperience: data }) => {
-            saveExperience(data._id);
+            saveExperienceInCache(data._id);
         }
     });
 
     const [unsaveExp] = useUnsaveExperienceMutation({
         onCompleted: ({ unsaveExperience: data }) => {
-            unsaveExperience(data._id);
+            unsaveExperienceInCache(data._id);
         }
     });
     

@@ -26,7 +26,6 @@ type Form = Record<FormField, string>;
 
 const ResetPasswordDialog = () => {
     const { ResetPasswordDialog: text } = useLanguageContext().appText;
-    // const dispatch = useAppDispatch();
     const { uiDispatch } = useUiContext();
     const classes = useStyles();
     
@@ -70,14 +69,13 @@ const ResetPasswordDialog = () => {
 
         // Set the token for the server to authenticate request
         const cookieToken = Cookies.get('ramble-reset_token')!;
-        sessionStorage.setItem('ramble-token', cookieToken);
+        updateToken(cookieToken);
 
         resetPassword({ variables: { password: values.password1 } });
     }
 
     const [resetPassword] = useUpdateProfileMutation({
         onCompleted: ({ editUser }) => {
-            updateToken(editUser.token!, false);
             setUserInfo(editUser);
             handleClose();
         },

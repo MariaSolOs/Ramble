@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 import { useReactiveVar } from '@apollo/client';
 
 import { useGetExperiencesQuery } from 'graphql-api';
-import useTokenStorage from 'hooks/useTokenStorage';
 import useHeartClick from 'hooks/useHeartClick';
 import { useLanguageContext } from 'context/languageContext';
 import { userProfileVar, savedExperiencesVar } from 'store/user-cache';
@@ -48,9 +47,6 @@ const Home = () => {
     const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
     const savedExperiencesIds = savedExperiencesVar();
     const handleHeartClick = useHeartClick();
-
-    // Save the auth state when opening new tabs
-    useTokenStorage(isLoggedIn);
 
     return (
         <div className={classes.slide}>

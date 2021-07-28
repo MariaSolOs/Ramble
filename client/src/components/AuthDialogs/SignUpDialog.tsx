@@ -49,7 +49,7 @@ const SignUpDialog = () => {
 
     const [signUp] = useSignUpMutation({
         onCompleted: ({ signUpUser }) => {
-            updateToken(signUpUser.token!, false);
+            updateToken(signUpUser.token!);
             setUserInfo(signUpUser);
             handleClose();
         },

@@ -25,14 +25,14 @@ router.post('/password-reset', async (req, res) => {
 
 // Manages password-reset email link
 router.get('/password-reset/:userId', (req, res) => {
-    const token = generateToken(req.params.userId, '1d');
+    const token = generateToken(req.params.userId);
     res.cookie('ramble-reset_token', token);
     res.redirect(process.env.CLIENT_URL!);
 });
 
 // Redirects creators to their dashboard to accept bookings
 router.get('/creator-requests/:userId', (req, res) => {
-    const token = generateToken(req.params.userId, '1d');
+    const token = generateToken(req.params.userId);
     res.cookie('ramble-server_cookie', token);
     res.redirect(`${process.env.CLIENT_URL!}/creator/dashboard/booking-requests`);
 });

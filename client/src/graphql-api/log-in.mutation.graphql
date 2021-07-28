@@ -1,5 +1,5 @@
-mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
-    logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
+mutation logIn($email: String!, $password: String!) {
+    logInUser(email: $email, password: $password) {
         ...CoreProfile
     }
 }

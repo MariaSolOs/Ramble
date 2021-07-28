@@ -4,7 +4,7 @@ import type { FilterQuery, Document } from 'mongoose';
 import Stripe from 'stripe';
 
 import { generateToken } from '../utils/jwt';
-import { computeBookingFees } from '../utils/booking';
+import { computeBookingFees, createOccurrence } from '../utils/booking';
 import { deleteUserPicture } from '../utils/cloudinary';
 import { sendBookingNotificationEmail } from '../utils/email';
 import { 
@@ -73,14 +73,14 @@ export const resolvers: Resolvers = {
     },
 
     Query: {
-        me: async (_, __, { userId, tokenExpiry }) => {
+        me: async (_, __, { userId }) => {
             if (!userId) {
                 throw new AuthenticationError('Invalid user ID');
             }
     
             const user = await User.findById(userId).lean(LEAN_DEFAULTS);
             const userInfo = userReducer(user);
-            userInfo.token = generateToken(userId, tokenExpiry);
+            userInfo.token = generateToken(userId);
             
             return userInfo;
         },
@@ -139,12 +139,12 @@ export const resolvers: Resolvers = {
                 lastLogin: new Date()
             });
             const newUser = userReducer(createdUser);
-            newUser.token = generateToken(newUser._id.toString(), '1d');
+            newUser.token = generateToken(newUser._id.toString());
 
             return newUser;
         },
 
-        logInUser: async (_, { email, password, rememberUser }) => {
+        logInUser: async (_, { email, password }) => {
             const loggedInUser = await User.findOneAndUpdate({
                 'email.address': email
             }, { lastLogin: new Date() });
@@ -157,14 +157,13 @@ export const resolvers: Resolvers = {
                 throw new AuthenticationError('Invalid password.');
             }
 
-            const expireTime = rememberUser ? '30d' : '1d';
             const user = userReducer(loggedInUser);
-            user.token = generateToken(user._id.toString(), expireTime);
+            user.token = generateToken(user._id.toString());
 
             return user;
         },
 
-        editUser: async (_, args, { userId, tokenExpiry }) => {
+        editUser: async (_, args, { userId }) => {
             if (!userId) {
                 throw new AuthenticationError("User isn't logged in.");
             }
@@ -206,7 +205,7 @@ export const resolvers: Resolvers = {
             await user.save();
 
             const updatedUser = userReducer(user);
-            updatedUser.token = generateToken(userId, tokenExpiry);
+            updatedUser.token = generateToken(userId);
             return updatedUser;
         },
 
@@ -309,13 +308,12 @@ export const resolvers: Resolvers = {
 
             // Create the occurrences
             for (const slot of args.slots) {
-                await Occurrence.create({
-                    experience: experience._id,
-                    dateStart: new Date(slot.start),
-                    dateEnd: new Date(slot.end),
-                    spotsLeft: experience.capacity,
-                    creatorProfit: 0
-                });
+                await createOccurrence(
+                    experience._id,
+                    experience.capacity,
+                    slot.start,
+                    slot.end
+                );
             }
 
             return experienceReducer(experience);
@@ -405,6 +403,17 @@ export const resolvers: Resolvers = {
                 cardBrand: (payment_method as Stripe.PaymentMethod).card?.brand || '',
                 cardLast4: (payment_method as Stripe.PaymentMethod).card?.last4 || ''
             }
+        },
+
+        createOccurrence: async (_, { experienceId, experienceCapacity, dates }) => {
+            const occurrence = await createOccurrence(
+                experienceId,
+                experienceCapacity,
+                dates.start,
+                dates.end
+            );
+
+            return occurrenceReducer(occurrence);
         }
     }
 }

@@ -18,7 +18,7 @@ export type TranslationRecord = {
 
     SignUpDialog: Record<'signUp' | 'logIn' | 'firstName' | 'lastName' | 'email' | 'password' | 'confirmPassword' | 'alreadyHaveAccount' | 'continue' | 'passwordMismatch', string>;
 
-    LogInDialog: Record<'logIn' | 'email' | 'password' | 'forgotPassword' | 'rememberMe', string>;
+    LogInDialog: Record<'logIn' | 'email' | 'password' | 'forgotPassword', string>;
 
     ForgotPasswordDialog: Record<'enterEmailTitle'| 'sendLinkMessage' | 'resetPassword' | 'emailSent', string>;
 
@@ -106,5 +106,5 @@ export type TranslationRecord = {
 
     UserProfile_PersonalInformation: Record<'firstName' | 'lastName' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou' | 'submitButton' | 'phoneError', string>;
 
-    CreatorCalendar: Record<'timezoneMessage' | 'formTitle' | 'formDescription' | 'dateAndTimeLabel' | 'experienceLabel' | 'addSlot', string>;
+    CreatorCalendar: Record<'timezoneMessage' | 'formTitle' | 'formDescription' | 'dateAndTimeLabel' | 'experienceLabel' | 'addSlot' | 'today' | 'busySlotMessage', string>;
 }

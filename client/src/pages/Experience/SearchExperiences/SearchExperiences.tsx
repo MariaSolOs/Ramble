@@ -5,7 +5,6 @@ import { useReactiveVar } from '@apollo/client';
 import { useGetExperiencesQuery, useGetLocationsQuery } from 'graphql-api';
 import { useUiContext } from 'context/uiContext';
 import useSearchReducer from './searchReducer';
-import useTokenStorage from 'hooks/useTokenStorage';
 import useHeartClick from 'hooks/useHeartClick';
 import { Experience } from 'models/experience';
 import type { SearchState } from './searchReducer';
@@ -111,9 +110,6 @@ const SearchExperiences = () => {
     const isLoggedIn = Boolean(useReactiveVar(userProfileVar).userId);
     const savedExperiencesIds = useReactiveVar(savedExperiencesVar);
     const handleHeartClick = useHeartClick();
-
-    // Save the auth state when opening new tabs
-    useTokenStorage(isLoggedIn);
 
     return (
         <div className={classes.root}>

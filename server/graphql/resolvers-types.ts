@@ -14,7 +14,7 @@ export type Scalars = {
   Float: number;
 };
 
-/** Bookings associated to an occurrence. */
+/** Bookings associated to an occurrence */
 export type Booking = {
   __typename?: 'Booking';
   _id: Scalars['ID'];
@@ -36,7 +36,7 @@ export type CreateBookingResult = {
   cardLast4: Scalars['String'];
 };
 
-/** Experience creators. */
+/** Experience creators */
 export type Creator = {
   __typename?: 'Creator';
   _id: Scalars['ID'];
@@ -73,7 +73,7 @@ export type Experience = {
   creator: Creator;
 };
 
-/** Ramble's experience categories. */
+/** Ramble's experience categories */
 export enum ExperienceCategory {
   Taste = 'taste',
   Create = 'create',
@@ -84,21 +84,23 @@ export enum ExperienceCategory {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** User sign up */
+  /** User sign up. */
   signUpUser: User;
-  /** User log in */
+  /** User log in. */
   logInUser: User;
-  /** Profile editing */
+  /** Profile editing. */
   editUser: User;
-  /** Creator onboarding  */
+  /** Creator onboarding. */
   signUpCreator: Creator;
-  /** For users to save/unsave an experience */
+  /** For users to save/unsave an experience. */
   saveExperience: Experience;
   unsaveExperience: Experience;
-  /** Experience creation */
+  /** Experience creation. */
   createExperience: Experience;
-  /** Booking creation */
+  /** Booking creation. */
   createBooking: CreateBookingResult;
+  /** Creates a new occurrence for the indicated experience. */
+  createOccurrence?: Maybe<Occurrence>;
 };
 
 
@@ -113,7 +115,6 @@ export type MutationSignUpUserArgs = {
 export type MutationLogInUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-  rememberUser: Scalars['Boolean'];
 };
 
 
@@ -177,9 +178,16 @@ export type MutationCreateBookingArgs = {
   paymentIntentId: Scalars['ID'];
 };
 
+
+export type MutationCreateOccurrenceArgs = {
+  experienceId: Scalars['ID'];
+  experienceCapacity: Scalars['Int'];
+  dates: OccurrenceInput;
+};
+
 /**
  * Representation of a single occurrence in time of an
- * experience.
+ * experience
  */
 export type Occurrence = {
   __typename?: 'Occurrence';
@@ -230,20 +238,20 @@ export type QueryOccurrencesArgs = {
   experienceIds: Array<Scalars['ID']>;
 };
 
-/** Booking types. */
+/** Booking types */
 export enum Reservation {
   Public = 'public',
   Private = 'private'
 }
 
-/** Representation of a creator's Stripe profile. */
+/** Representation of a creator's Stripe profile */
 export type StripeInfo = {
   __typename?: 'StripeInfo';
   onboarded?: Maybe<Scalars['Boolean']>;
   accountId?: Maybe<Scalars['ID']>;
 };
 
-/** Application's users. */
+/** Application's users */
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
@@ -439,13 +447,14 @@ export type ExperienceResolvers<ContextType = Context, ParentType extends Resolv
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   signUpUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpUserArgs, 'email' | 'password' | 'firstName' | 'lastName'>>;
-  logInUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationLogInUserArgs, 'email' | 'password' | 'rememberUser'>>;
+  logInUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationLogInUserArgs, 'email' | 'password'>>;
   editUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationEditUserArgs, never>>;
   signUpCreator?: Resolver<ResolversTypes['Creator'], ParentType, ContextType, RequireFields<MutationSignUpCreatorArgs, 'bio' | 'governmentIds'>>;
   saveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationSaveExperienceArgs, 'experienceId'>>;
   unsaveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationUnsaveExperienceArgs, 'experienceId'>>;
   createExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationCreateExperienceArgs, 'title' | 'description' | 'images' | 'location' | 'categories' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'pricePerPerson' | 'currency' | 'slots'>>;
   createBooking?: Resolver<ResolversTypes['CreateBookingResult'], ParentType, ContextType, RequireFields<MutationCreateBookingArgs, 'occurrenceId' | 'bookingType' | 'numGuests' | 'paymentIntentId'>>;
+  createOccurrence?: Resolver<Maybe<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<MutationCreateOccurrenceArgs, 'experienceId' | 'experienceCapacity' | 'dates'>>;
 }>;
 
 export type OccurrenceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Occurrence'] = ResolversParentTypes['Occurrence']> = ResolversObject<{

@@ -12,7 +12,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from 'components/TextField/TextField';
-import Checkbox from 'components/Checkbox/Checkbox';
 import GradientButton from 'components/GradientButton/GradientButton';
 import ForgotPasswordDialog from 'components/ForgotPasswordDialog/ForgotPasswordDialog';
 
@@ -22,20 +21,7 @@ const useStyles = makeStyles(styles);
 
 enum FormField {
     Email = 'email',
-    Password = 'password',
-    RememberUser = 'rememberUser'
-}
-
-type Form = {
-    email: string;
-    password: string;
-    rememberUser: boolean;
-}
-
-const initialForm: Form = {
-    email: '',
-    password: '',
-    rememberUser: false
+    Password = 'password'
 }
 
 const LogInDialog = () => {
@@ -47,7 +33,7 @@ const LogInDialog = () => {
     const [logIn] = useLogInMutation({
         onCompleted: ({ logInUser }) => {
             if (logInUser) {
-                updateToken(logInUser.token!, values.rememberUser);
+                updateToken(logInUser.token!);
                 setUserInfo(logInUser);
             }
             handleClose();
@@ -60,29 +46,20 @@ const LogInDialog = () => {
     });
 
     // Form management
-    const [values, setValues] = useState(initialForm);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showForgotPwdDialog, setShowForgotPwdDialog] = useState(false);
 
-    const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = event.target.name;
-        const newValue = fieldName === FormField.RememberUser ? 
-            event.target.checked : event.target.value;
-
-        setValues(values => ({
-            ...values,
-            [fieldName]: newValue
-        }));
-    }
-
     const handleClose = () => {
-        setValues(initialForm);
+        setEmail('');
+        setPassword('');
         uiDispatch({ type: 'CLOSE_LOG_IN_DIALOG' });
     }
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        logIn({ variables: values });
+        logIn({ variables: { email, password } });
     }
 
     if (showForgotPwdDialog) {
@@ -107,13 +84,12 @@ const LogInDialog = () => {
                         </FormLabel>
                         <TextField
                         id={FormField.Email}
-                        name={FormField.Email}
                         type="email"
                         required
                         className={classes.textField}
                         fullWidth
-                        value={values.email}
-                        onChange={handleFormChange} />
+                        value={email}
+                        onChange={e => setEmail(e.target.value)} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <FormLabel className={classes.formLabel} htmlFor={FormField.Password}>
@@ -121,23 +97,13 @@ const LogInDialog = () => {
                         </FormLabel>
                         <TextField
                         id={FormField.Password}
-                        name={FormField.Password}
                         type="password"
                         required
                         className={classes.textField}
                         fullWidth
-                        value={values.password}
-                        onChange={handleFormChange} />
+                        value={password}
+                        onChange={e => setPassword(e.target.value)} />
                     </FormControl>
-                    <div className={classes.rememberUserContainer}>
-                        <p className={classes.rememberUserText}>
-                            {text.rememberMe}
-                        </p>
-                        <Checkbox 
-                        checked={values.rememberUser} 
-                        name={FormField.RememberUser}
-                        onChange={handleFormChange} />
-                    </div>
                     <p 
                     className={classes.forgotPasswordLink}
                     onClick={() => {

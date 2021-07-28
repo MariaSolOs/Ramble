@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 import { useGetUserExperiencesLazyQuery } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
-import useTokenStorage from 'hooks/useTokenStorage';
 import { Experience } from 'models/experience';
 
 import Spinner from 'components/Spinner/Spinner';
@@ -17,12 +16,11 @@ const Experiences = () => {
     const { UserProfile_Experiences: text } = useLanguageContext().appText;
     const classes = useStyles();
 
-    // For not getting logged out when clicking on the cards
-    useTokenStorage(true);
-
     const [getExperiences, { data, loading }] = useGetUserExperiencesLazyQuery({
         fetchPolicy: 'network-only' // Make sure we get updated data
     });
+
+    // Fixes weird "no state updates when unmounted" error
     useEffect(() => {
         getExperiences();
     }, [getExperiences]);

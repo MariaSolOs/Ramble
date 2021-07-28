@@ -15,7 +15,6 @@ export const LEAN_DEFAULTS = { defaults: true } as const;
 // GraphQL context
 export type Context = {
     userId: string;
-    tokenExpiry: string;
 }
 
 export type Reservation = 'public' | 'private';

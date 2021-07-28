@@ -98,7 +98,7 @@ router.get('/onboarding-return/:creatorId', async (req, res) => {
     }
 
     // Redirect them to the website
-    const token = generateToken((creator.user as Types.ObjectId).toHexString(), '1d');
+    const token = generateToken((creator.user as Types.ObjectId).toHexString());
     res.cookie('ramble-server_cookie', token);
     res.redirect(process.env.CLIENT_URL!);
 });

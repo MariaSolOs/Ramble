@@ -55,8 +55,7 @@ const frenchTranslation: TranslationRecord = {
         logIn: 'Connexion',
         email: 'Courriel',
         password: 'Mot de passe',
-        forgotPassword: 'Mot de passe oublié',
-        rememberMe: 'Se souvenir de moi'
+        forgotPassword: 'Mot de passe oublié'
     },
 
     ForgotPasswordDialog: {
@@ -470,7 +469,9 @@ const frenchTranslation: TranslationRecord = {
         formDescription: "Choisissez la date et l'heure à ajouter",
         dateAndTimeLabel: 'Date et heure',
         experienceLabel: 'Expérience',
-        addSlot: 'Ajouter'
+        addSlot: 'Ajouter',
+        today: "Aujourd'hui",
+        busySlotMessage: 'Vous avez déjà des disponibilités pour cette plage horaire'
     }
 }
 

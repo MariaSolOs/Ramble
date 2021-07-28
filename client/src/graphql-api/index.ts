@@ -15,7 +15,7 @@ export type Scalars = {
   Float: number;
 };
 
-/** Bookings associated to an occurrence. */
+/** Bookings associated to an occurrence */
 export type Booking = {
   _id: Scalars['ID'];
   occurrence: Occurrence;
@@ -35,7 +35,7 @@ export type CreateBookingResult = {
   cardLast4: Scalars['String'];
 };
 
-/** Experience creators. */
+/** Experience creators */
 export type Creator = {
   _id: Scalars['ID'];
   user: User;
@@ -70,7 +70,7 @@ export type Experience = {
   creator: Creator;
 };
 
-/** Ramble's experience categories. */
+/** Ramble's experience categories */
 export enum ExperienceCategory {
   Taste = 'taste',
   Create = 'create',
@@ -80,21 +80,23 @@ export enum ExperienceCategory {
 }
 
 export type Mutation = {
-  /** User sign up */
+  /** User sign up. */
   signUpUser: User;
-  /** User log in */
+  /** User log in. */
   logInUser: User;
-  /** Profile editing */
+  /** Profile editing. */
   editUser: User;
-  /** Creator onboarding  */
+  /** Creator onboarding. */
   signUpCreator: Creator;
-  /** For users to save/unsave an experience */
+  /** For users to save/unsave an experience. */
   saveExperience: Experience;
   unsaveExperience: Experience;
-  /** Experience creation */
+  /** Experience creation. */
   createExperience: Experience;
-  /** Booking creation */
+  /** Booking creation. */
   createBooking: CreateBookingResult;
+  /** Creates a new occurrence for the indicated experience. */
+  createOccurrence?: Maybe<Occurrence>;
 };
 
 
@@ -109,7 +111,6 @@ export type MutationSignUpUserArgs = {
 export type MutationLogInUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-  rememberUser: Scalars['Boolean'];
 };
 
 
@@ -173,9 +174,16 @@ export type MutationCreateBookingArgs = {
   paymentIntentId: Scalars['ID'];
 };
 
+
+export type MutationCreateOccurrenceArgs = {
+  experienceId: Scalars['ID'];
+  experienceCapacity: Scalars['Int'];
+  dates: OccurrenceInput;
+};
+
 /**
  * Representation of a single occurrence in time of an
- * experience.
+ * experience
  */
 export type Occurrence = {
   _id: Scalars['ID'];
@@ -224,19 +232,19 @@ export type QueryOccurrencesArgs = {
   experienceIds: Array<Scalars['ID']>;
 };
 
-/** Booking types. */
+/** Booking types */
 export enum Reservation {
   Public = 'public',
   Private = 'private'
 }
 
-/** Representation of a creator's Stripe profile. */
+/** Representation of a creator's Stripe profile */
 export type StripeInfo = {
   onboarded?: Maybe<Scalars['Boolean']>;
   accountId?: Maybe<Scalars['ID']>;
 };
 
-/** Application's users. */
+/** Application's users */
 export type User = {
   _id: Scalars['ID'];
   token?: Maybe<Scalars['String']>;
@@ -275,6 +283,11 @@ export type GetBookingRequestsQuery = { me: { creator?: Maybe<{ bookingRequests:
           & { experience: Pick<Experience, '_id' | 'images' | 'title' | 'capacity'>, bookings: Array<Pick<Booking, 'numGuests' | 'paymentCaptured'>> }
         ) }
       )> }> } };
+
+export type CalendarOccurrenceFragment = (
+  Pick<Occurrence, '_id' | 'dateStart' | 'dateEnd'>
+  & { experience: Pick<Experience, '_id' | 'title'> }
+);
 
 export type CoreProfileFragment = (
   Pick<User, '_id' | 'token' | 'email'>
@@ -322,6 +335,15 @@ export type CreateExperienceMutationVariables = Exact<{
 
 
 export type CreateExperienceMutation = { createExperience: Pick<Experience, '_id' | 'title'> };
+
+export type CreateOccurrenceMutationVariables = Exact<{
+  experienceId: Scalars['ID'];
+  experienceCapacity: Scalars['Int'];
+  dates: OccurrenceInput;
+}>;
+
+
+export type CreateOccurrenceMutation = { createOccurrence?: Maybe<CalendarOccurrenceFragment> };
 
 export type GetCreationProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -376,7 +398,6 @@ export type GetLocationsQuery = { experiences: Array<Pick<Experience, 'location'
 export type LogInMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
-  rememberUser: Scalars['Boolean'];
 }>;
 
 
@@ -413,6 +434,26 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { signUpUser: CoreProfileFragment };
+
+export type GetSlotableExperiencesQueryVariables = Exact<{
+  creatorId: Scalars['ID'];
+}>;
+
+
+export type GetSlotableExperiencesQuery = { experiences: Array<Pick<Experience, '_id' | 'title' | 'duration' | 'capacity'>> };
+
+export type GetSlotableOccurrencesQueryVariables = Exact<{
+  experienceIds: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type GetSlotableOccurrencesQuery = { occurrences: Array<(
+    { bookings: Array<(
+      Pick<Booking, '_id' | 'numGuests' | 'bookingType'>
+      & { client: Pick<User, 'firstName' | 'photo'> }
+    )> }
+    & CalendarOccurrenceFragment
+  )> };
 
 export type UnsaveExperienceMutationVariables = Exact<{
   experienceId: Scalars['String'];
@@ -456,6 +497,17 @@ export type GetUserProfileQuery = { me: (
     & UserAvatarFragment
   ) };
 
+export const CalendarOccurrenceFragmentDoc = gql`
+    fragment CalendarOccurrence on Occurrence {
+  _id
+  dateStart
+  dateEnd
+  experience {
+    _id
+    title
+  }
+}
+    `;
 export const UserAvatarFragmentDoc = gql`
     fragment UserAvatar on User {
   photo
@@ -764,6 +816,45 @@ export function useCreateExperienceMutation(baseOptions?: ApolloReactHooks.Mutat
 export type CreateExperienceMutationHookResult = ReturnType<typeof useCreateExperienceMutation>;
 export type CreateExperienceMutationResult = Apollo.MutationResult<CreateExperienceMutation>;
 export type CreateExperienceMutationOptions = Apollo.BaseMutationOptions<CreateExperienceMutation, CreateExperienceMutationVariables>;
+export const CreateOccurrenceDocument = gql`
+    mutation createOccurrence($experienceId: ID!, $experienceCapacity: Int!, $dates: OccurrenceInput!) {
+  createOccurrence(
+    experienceId: $experienceId
+    experienceCapacity: $experienceCapacity
+    dates: $dates
+  ) {
+    ...CalendarOccurrence
+  }
+}
+    ${CalendarOccurrenceFragmentDoc}`;
+export type CreateOccurrenceMutationFn = Apollo.MutationFunction<CreateOccurrenceMutation, CreateOccurrenceMutationVariables>;
+
+/**
+ * __useCreateOccurrenceMutation__
+ *
+ * To run a mutation, you first call `useCreateOccurrenceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOccurrenceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOccurrenceMutation, { data, loading, error }] = useCreateOccurrenceMutation({
+ *   variables: {
+ *      experienceId: // value for 'experienceId'
+ *      experienceCapacity: // value for 'experienceCapacity'
+ *      dates: // value for 'dates'
+ *   },
+ * });
+ */
+export function useCreateOccurrenceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateOccurrenceMutation, CreateOccurrenceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateOccurrenceMutation, CreateOccurrenceMutationVariables>(CreateOccurrenceDocument, options);
+      }
+export type CreateOccurrenceMutationHookResult = ReturnType<typeof useCreateOccurrenceMutation>;
+export type CreateOccurrenceMutationResult = Apollo.MutationResult<CreateOccurrenceMutation>;
+export type CreateOccurrenceMutationOptions = Apollo.BaseMutationOptions<CreateOccurrenceMutation, CreateOccurrenceMutationVariables>;
 export const GetCreationProfileDocument = gql`
     query getCreationProfile {
   me {
@@ -948,8 +1039,8 @@ export type GetLocationsQueryHookResult = ReturnType<typeof useGetLocationsQuery
 export type GetLocationsLazyQueryHookResult = ReturnType<typeof useGetLocationsLazyQuery>;
 export type GetLocationsQueryResult = Apollo.QueryResult<GetLocationsQuery, GetLocationsQueryVariables>;
 export const LogInDocument = gql`
-    mutation logIn($email: String!, $password: String!, $rememberUser: Boolean!) {
-  logInUser(email: $email, password: $password, rememberUser: $rememberUser) {
+    mutation logIn($email: String!, $password: String!) {
+  logInUser(email: $email, password: $password) {
     ...CoreProfile
   }
 }
@@ -971,7 +1062,6 @@ export type LogInMutationFn = Apollo.MutationFunction<LogInMutation, LogInMutati
  *   variables: {
  *      email: // value for 'email'
  *      password: // value for 'password'
- *      rememberUser: // value for 'rememberUser'
  *   },
  * });
  */
@@ -1128,6 +1218,88 @@ export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOpt
 export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
 export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
 export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
+export const GetSlotableExperiencesDocument = gql`
+    query getSlotableExperiences($creatorId: ID!) {
+  experiences(creatorId: $creatorId) {
+    _id
+    title
+    duration
+    capacity
+  }
+}
+    `;
+
+/**
+ * __useGetSlotableExperiencesQuery__
+ *
+ * To run a query within a React component, call `useGetSlotableExperiencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSlotableExperiencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSlotableExperiencesQuery({
+ *   variables: {
+ *      creatorId: // value for 'creatorId'
+ *   },
+ * });
+ */
+export function useGetSlotableExperiencesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetSlotableExperiencesQuery, GetSlotableExperiencesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetSlotableExperiencesQuery, GetSlotableExperiencesQueryVariables>(GetSlotableExperiencesDocument, options);
+      }
+export function useGetSlotableExperiencesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSlotableExperiencesQuery, GetSlotableExperiencesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetSlotableExperiencesQuery, GetSlotableExperiencesQueryVariables>(GetSlotableExperiencesDocument, options);
+        }
+export type GetSlotableExperiencesQueryHookResult = ReturnType<typeof useGetSlotableExperiencesQuery>;
+export type GetSlotableExperiencesLazyQueryHookResult = ReturnType<typeof useGetSlotableExperiencesLazyQuery>;
+export type GetSlotableExperiencesQueryResult = Apollo.QueryResult<GetSlotableExperiencesQuery, GetSlotableExperiencesQueryVariables>;
+export const GetSlotableOccurrencesDocument = gql`
+    query getSlotableOccurrences($experienceIds: [ID!]!) {
+  occurrences(experienceIds: $experienceIds) {
+    ...CalendarOccurrence
+    bookings {
+      _id
+      numGuests
+      bookingType
+      client {
+        firstName
+        photo
+      }
+    }
+  }
+}
+    ${CalendarOccurrenceFragmentDoc}`;
+
+/**
+ * __useGetSlotableOccurrencesQuery__
+ *
+ * To run a query within a React component, call `useGetSlotableOccurrencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSlotableOccurrencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSlotableOccurrencesQuery({
+ *   variables: {
+ *      experienceIds: // value for 'experienceIds'
+ *   },
+ * });
+ */
+export function useGetSlotableOccurrencesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetSlotableOccurrencesQuery, GetSlotableOccurrencesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetSlotableOccurrencesQuery, GetSlotableOccurrencesQueryVariables>(GetSlotableOccurrencesDocument, options);
+      }
+export function useGetSlotableOccurrencesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSlotableOccurrencesQuery, GetSlotableOccurrencesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetSlotableOccurrencesQuery, GetSlotableOccurrencesQueryVariables>(GetSlotableOccurrencesDocument, options);
+        }
+export type GetSlotableOccurrencesQueryHookResult = ReturnType<typeof useGetSlotableOccurrencesQuery>;
+export type GetSlotableOccurrencesLazyQueryHookResult = ReturnType<typeof useGetSlotableOccurrencesLazyQuery>;
+export type GetSlotableOccurrencesQueryResult = Apollo.QueryResult<GetSlotableOccurrencesQuery, GetSlotableOccurrencesQueryVariables>;
 export const UnsaveExperienceDocument = gql`
     mutation unsaveExperience($experienceId: String!) {
   unsaveExperience(experienceId: $experienceId) {

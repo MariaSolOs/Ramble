@@ -30,7 +30,7 @@ export const typeDefs = gql`
 
     type Mutation {
         """
-        User sign up
+        User sign up.
         """
         signUpUser(
             email: String!, 
@@ -40,16 +40,15 @@ export const typeDefs = gql`
         ): User!
 
         """
-        User log in
+        User log in.
         """
         logInUser(
             email: String!, 
-            password: String!, 
-            rememberUser: Boolean!
+            password: String!
         ): User!
 
         """
-        Profile editing
+        Profile editing.
         """
         editUser(
             firstName: String, 
@@ -64,7 +63,7 @@ export const typeDefs = gql`
         ): User!
 
         """
-        Creator onboarding 
+        Creator onboarding.
         """
         signUpCreator(
             bio: String!,
@@ -72,13 +71,13 @@ export const typeDefs = gql`
         ): Creator!
 
         """
-        For users to save/unsave an experience
+        For users to save/unsave an experience.
         """
         saveExperience(experienceId: String!): Experience!
         unsaveExperience(experienceId: String!): Experience!
         
         """
-        Experience creation
+        Experience creation.
         """
         createExperience(
             title: String!
@@ -104,7 +103,7 @@ export const typeDefs = gql`
         ): Experience!
 
         """
-        Booking creation
+        Booking creation.
         """
         createBooking(
             occurrenceId: ID!
@@ -112,6 +111,15 @@ export const typeDefs = gql`
             numGuests: Int!
             paymentIntentId: ID!
         ): CreateBookingResult!
+
+        """
+        Creates a new occurrence for the indicated experience.
+        """
+        createOccurrence(
+            experienceId: ID!
+            experienceCapacity: Int!
+            dates: OccurrenceInput!
+        ): Occurrence
     }
 
     """
@@ -133,7 +141,7 @@ export const typeDefs = gql`
     }
 
     """
-    Ramble's experience categories.
+    Ramble's experience categories
     """
     enum ExperienceCategory {
         taste
@@ -144,7 +152,7 @@ export const typeDefs = gql`
     }
 
     """
-    Booking types.
+    Booking types
     """
     enum Reservation {
         public
@@ -181,7 +189,7 @@ export const typeDefs = gql`
 
     """
     Representation of a single occurrence in time of an
-    experience.
+    experience
     """
     type Occurrence {
         _id: ID!
@@ -194,7 +202,7 @@ export const typeDefs = gql`
     }
 
     """
-    Bookings associated to an occurrence.
+    Bookings associated to an occurrence
     """
     type Booking {
         _id: ID!
@@ -208,7 +216,7 @@ export const typeDefs = gql`
     }
 
     """
-    Application's users.
+    Application's users
     """
     type User {
         _id: ID!
@@ -226,7 +234,7 @@ export const typeDefs = gql`
     }
 
     """
-    Experience creators.
+    Experience creators
     """
     type Creator {
         _id: ID!
@@ -237,7 +245,7 @@ export const typeDefs = gql`
     }
 
     """
-    Representation of a creator's Stripe profile.
+    Representation of a creator's Stripe profile
     """
     type StripeInfo {
         onboarded: Boolean

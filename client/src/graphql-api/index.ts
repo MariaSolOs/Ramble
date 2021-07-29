@@ -96,7 +96,9 @@ export type Mutation = {
   /** Booking creation. */
   createBooking: CreateBookingResult;
   /** Creates a new occurrence for the indicated experience. */
-  createOccurrence?: Maybe<Occurrence>;
+  createOccurrence: Occurrence;
+  /** Deletes an occurrence. */
+  deleteOccurrence: Occurrence;
 };
 
 
@@ -179,6 +181,11 @@ export type MutationCreateOccurrenceArgs = {
   experienceId: Scalars['ID'];
   experienceCapacity: Scalars['Int'];
   dates: OccurrenceInput;
+};
+
+
+export type MutationDeleteOccurrenceArgs = {
+  occurrenceId: Scalars['ID'];
 };
 
 /**
@@ -343,7 +350,7 @@ export type CreateOccurrenceMutationVariables = Exact<{
 }>;
 
 
-export type CreateOccurrenceMutation = { createOccurrence?: Maybe<CalendarOccurrenceFragment> };
+export type CreateOccurrenceMutation = { createOccurrence: CalendarOccurrenceFragment };
 
 export type GetCreationProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -363,6 +370,13 @@ export type GetCreatorFormFieldsQuery = { me: (
     Pick<User, '_id' | 'phoneNumber'>
     & UserAvatarFragment
   ) };
+
+export type DeleteOccurrenceMutationVariables = Exact<{
+  occurrenceId: Scalars['ID'];
+}>;
+
+
+export type DeleteOccurrenceMutation = { deleteOccurrence: Pick<Occurrence, 'dateStart' | '_id'> };
 
 export type CardContentFragment = Pick<Experience, '_id' | 'title' | 'images' | 'pricePerPerson' | 'ratingValue' | 'numberOfRatings' | 'location' | 'zoomPMI'>;
 
@@ -932,6 +946,40 @@ export function useGetCreatorFormFieldsLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetCreatorFormFieldsQueryHookResult = ReturnType<typeof useGetCreatorFormFieldsQuery>;
 export type GetCreatorFormFieldsLazyQueryHookResult = ReturnType<typeof useGetCreatorFormFieldsLazyQuery>;
 export type GetCreatorFormFieldsQueryResult = Apollo.QueryResult<GetCreatorFormFieldsQuery, GetCreatorFormFieldsQueryVariables>;
+export const DeleteOccurrenceDocument = gql`
+    mutation deleteOccurrence($occurrenceId: ID!) {
+  deleteOccurrence(occurrenceId: $occurrenceId) {
+    dateStart
+    _id
+  }
+}
+    `;
+export type DeleteOccurrenceMutationFn = Apollo.MutationFunction<DeleteOccurrenceMutation, DeleteOccurrenceMutationVariables>;
+
+/**
+ * __useDeleteOccurrenceMutation__
+ *
+ * To run a mutation, you first call `useDeleteOccurrenceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOccurrenceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOccurrenceMutation, { data, loading, error }] = useDeleteOccurrenceMutation({
+ *   variables: {
+ *      occurrenceId: // value for 'occurrenceId'
+ *   },
+ * });
+ */
+export function useDeleteOccurrenceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteOccurrenceMutation, DeleteOccurrenceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DeleteOccurrenceMutation, DeleteOccurrenceMutationVariables>(DeleteOccurrenceDocument, options);
+      }
+export type DeleteOccurrenceMutationHookResult = ReturnType<typeof useDeleteOccurrenceMutation>;
+export type DeleteOccurrenceMutationResult = Apollo.MutationResult<DeleteOccurrenceMutation>;
+export type DeleteOccurrenceMutationOptions = Apollo.BaseMutationOptions<DeleteOccurrenceMutation, DeleteOccurrenceMutationVariables>;
 export const GetExperienceDocument = gql`
     query getExperience($id: ID!) {
   experience(id: $id) {

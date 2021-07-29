@@ -10,7 +10,8 @@ import { useReactiveVar } from '@apollo/client';
 import { 
     useGetSlotableExperiencesQuery,
     useGetSlotableOccurrencesLazyQuery,
-    useCreateOccurrenceMutation
+    useCreateOccurrenceMutation,
+    useDeleteOccurrenceMutation
 } from 'graphql-api';
 import { useLanguageContext } from 'context/languageContext';
 import { useUiContext } from 'context/uiContext';
@@ -25,9 +26,13 @@ import Select from '@material-ui/core/Select';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
-import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
-import Button from 'components/GradientButton/GradientButton';
+import Dialog from '@material-ui/core/Dialog';
 import Drawer from '@material-ui/core/Drawer';
+import InfoRoundedIcon from '@material-ui/icons/InfoRounded';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCrown } from '@fortawesome/free-solid-svg-icons/faCrown';
+import Button from 'components/GradientButton/GradientButton';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './Calendar.styles';
@@ -85,9 +90,21 @@ const Calendar = () => {
         }
     });
 
+    const [deleteOccurrence] = useDeleteOccurrenceMutation({
+        // Once deleted from the database, update calendar
+        onCompleted: ({ deleteOccurrence }) => {
+            dispatch({
+                type: 'DELETE_OCCURRENCE',
+                keyDate: deleteOccurrence.dateStart,
+                id: deleteOccurrence._id
+            });
+        }
+    })
+
     const handleAddSlot = (event: React.FormEvent) => {
         event.preventDefault();
         collapseDrawer();
+        dispatch({ type: 'SET_IS_ADDING_SLOT', value: true });
 
         // Check if the new slot overlaps with existing ones
         for (const event of calendarEvents) {
@@ -97,6 +114,7 @@ const Calendar = () => {
                     type: 'OPEN_SNACKBAR',
                     message: text.busySlotMessage
                 });
+                dispatch({ type: 'SET_IS_ADDING_SLOT', value: false });
                 return;
             }
         }
@@ -129,36 +147,65 @@ const Calendar = () => {
         <div className={classes.dayDetails}>
             <h3 className={classes.sectionTitle}>
                 {dayDetailTitle}
+                {isMobile &&
+                    <button
+                    className={classes.closeDialogButton}
+                    onClick={() => dispatch({ type: 'CLOSE_DETAILS_DIALOG' })}>
+                        {text.closeDialog}
+                    </button>}
             </h3>
-            {state.occurrences.get(state.detailedDay.toISODate())?.map(slot =>
-                <div key={slot.id} className={classes.slotContainer}>
-                    <p className={classes.slotTime}>
-                        {`${slot.dateStart.toLocaleString(DateTime.TIME_SIMPLE)} - ${
-                            slot.dateEnd.toLocaleString(DateTime.TIME_SIMPLE)
-                        }`}
-                    </p>
+            {state.occurrences.get(state.detailedDay.toISODate())?.map(slot => {
+                const hasBookings = slot.numGuests > 0;
+                const dateStart = slot.dateStart.toLocaleString(DateTime.TIME_SIMPLE);
+                const dateEnd = slot.dateEnd.toLocaleString(DateTime.TIME_SIMPLE);
+
+                return (
+                    <div key={slot.id} className={classes.slotContainer}>
+                    <p className={classes.slotInfo}>{`${dateStart} - ${dateEnd}`}</p>
                     <h3 className={classes.slotTitle}> 
                         <span 
                         className={classes.slotBullet}
-                        style={{
-                            backgroundColor: BULLET_COLORS.get(slot.groupId!)
-                        }} /> 
+                        style={{ backgroundColor: BULLET_COLORS.get(slot.groupId!) }} /> 
                         {slot.title}
                     </h3>
-                    <p>{slot.numGuests}</p>
-                    <ul>
-                        {slot.bookings.map(booking =>
-                            <li key={booking._id}>
-                                <Avatar src={booking.clientPhoto}>
-                                    {booking.clientName.charAt(0)}
-                                </Avatar>
-                                {`${booking.clientName} (${booking.numGuests})`}
-                            </li>
-                        )}
-                    </ul>
+                    {hasBookings &&
+                        <>
+                        <p className={classes.slotInfo}>
+                            {`${slot.numGuests} ${
+                            hasBookings ? text.guests : text.guest}`}
+                        </p>
+                        <ul className={classes.clientList}>
+                            {slot.bookings.map(booking =>
+                                <li key={booking._id} className={classes.clientItem}>
+                                    {booking.bookingType === 'private' &&
+                                        <div className={classes.privateBooking}>
+                                            <FontAwesomeIcon 
+                                            icon={faCrown}
+                                            className={classes.privateIcon} />
+                                            {text.private}
+                                        </div>}
+                                    <Avatar 
+                                    src={booking.clientPhoto} 
+                                    className={classes.clientAvatar}>
+                                        {booking.clientName.charAt(0)}
+                                    </Avatar>
+                                    {`${booking.clientName} (${booking.numGuests})`}
+                                </li>
+                            )}
+                        </ul>
+                        </>}
+                    {(!hasBookings || slot.bookings[0].bookingType === 'public') &&
+                    <HighlightOffIcon 
+                    onClick={() => {
+                        deleteOccurrence({ variables: { occurrenceId: slot.id! }});
+                    }}
+                    className={`
+                        ${classes.deleteSlotButton}
+                        ${hasBookings && classes.disabledDelete}
+                    `} />}
                 </div>
-            )}
-        </div>
+            )})}
+        </div>          
     );
 
     const addSlotForm = (
@@ -221,7 +268,10 @@ const Calendar = () => {
             <Button
             type="submit"
             variant="creator"
-            disabled={state.addForm.experienceOptions.length === 0}
+            disabled={
+                state.addForm.experienceOptions.length === 0 ||
+                state.isAddingSlot
+            }
             className={classes.addSlotButton}>
                 {text.addSlot}
             </Button>
@@ -257,7 +307,8 @@ const Calendar = () => {
                     eventClick={({ event }) => {
                         dispatch({
                             type: 'SET_DETAILED_DATE',
-                            date: DateTime.fromISO(event.startStr)
+                            date: DateTime.fromISO(event.startStr),
+                            isMobile
                         });
                     }}
                     height="100%"
@@ -265,7 +316,8 @@ const Calendar = () => {
                     select={({ startStr }) => {
                         dispatch({
                             type: 'SET_DETAILED_DATE',
-                            date: DateTime.fromISO(startStr)
+                            date: DateTime.fromISO(startStr),
+                            isMobile
                         });
                     }}
                     headerToolbar={{
@@ -275,11 +327,28 @@ const Calendar = () => {
                     }}
                     validRange={{ start: firstDayOfMonth }} 
                     fixedWeekCount
-                    // moreLinkClick={() => 'day'}
-                    dayMaxEvents={3} />
+                    moreLinkClick={({ date }) => {
+                        dispatch({
+                            type: 'SET_DETAILED_DATE',
+                            date: DateTime.fromJSDate(date),
+                            isMobile
+                        });
+                        return 'month';
+                    }}
+                    dayMaxEvents={isMobile ? 2 : 3} />
                 </div>
                 {isMobile ?
                     <>
+                        <Dialog 
+                        open={state.isDetailsDialogOpen}
+                        fullWidth
+                        maxWidth="xs"
+                        className={classes.detailsDialog}
+                        onClose={() => {
+                            dispatch({ type: 'CLOSE_DETAILS_DIALOG' })
+                        }}>
+                            {dayDetails}
+                        </Dialog>
                         <button 
                         className={classes.openFormButton}
                         onClick={() => {

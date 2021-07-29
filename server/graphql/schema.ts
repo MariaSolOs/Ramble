@@ -119,7 +119,12 @@ export const typeDefs = gql`
             experienceId: ID!
             experienceCapacity: Int!
             dates: OccurrenceInput!
-        ): Occurrence
+        ): Occurrence!
+
+        """
+        Deletes an occurrence.
+        """
+        deleteOccurrence(occurrenceId: ID!): Occurrence!
     }
 
     """

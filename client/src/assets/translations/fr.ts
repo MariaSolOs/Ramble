@@ -470,8 +470,12 @@ const frenchTranslation: TranslationRecord = {
         dateAndTimeLabel: 'Date et heure',
         experienceLabel: 'Expérience',
         addSlot: 'Ajouter',
+        busySlotMessage: 'Vous avez déjà des disponibilités pour cette plage horaire',
         today: "Aujourd'hui",
-        busySlotMessage: 'Vous avez déjà des disponibilités pour cette plage horaire'
+        guest: 'Invité',
+        guests: 'Invités',
+        closeDialog: 'Fermer',
+        private: 'Privée'
     }
 }
 

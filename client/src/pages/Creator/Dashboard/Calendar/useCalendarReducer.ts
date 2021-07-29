@@ -27,6 +27,7 @@ type Occurrence = EventInput & {
         clientName: string; 
         clientPhoto?: string; 
         numGuests: number;
+        bookingType: BookingType;
     }[];
 }
 
@@ -47,19 +48,24 @@ interface CalendarState {
         endDate: DateTime;
         experienceOptions: ExperienceOption[];
     }
-    isDrawerOpen: boolean;
     detailedDay: DateTime;
     occurrences: Map<string, Occurrence[]>;
+    isAddingSlot: boolean;
+    isDrawerOpen: boolean;
+    isDetailsDialogOpen: boolean;
 }
 
 type Action = 
 | { type: 'TOGGLE_DRAWER'; open: boolean; }
+| { type: 'CLOSE_DETAILS_DIALOG'; }
 | { type: 'SET_EXPERIENCE_OPTIONS'; options: ExperienceOption[]; }
 | { type: 'SET_OCCURRENCES'; occurrences: OccurrencesData; } 
 | { type: 'ADD_OCCURRENCE'; occurrence: OccurrenceData; }
+| { type: 'DELETE_OCCURRENCE'; keyDate: string; id: string; }
 | { type: 'SET_ADD_DATE'; startDate: DateTime; }
 | { type: 'SET_ADD_EXPERIENCE'; id: string; }
-| { type: 'SET_DETAILED_DATE'; date: DateTime; }
+| { type: 'SET_DETAILED_DATE'; date: DateTime; isMobile: boolean; }
+| { type: 'SET_IS_ADDING_SLOT'; value: boolean; }
 
 const initialState: CalendarState = {
     addForm: {
@@ -68,9 +74,11 @@ const initialState: CalendarState = {
         endDate: DateTime.now().plus({ hours: 2 }).startOf('hour'),
         experienceOptions: []
     },
-    isDrawerOpen: false,
     detailedDay: DateTime.now(),
-    occurrences: new Map()
+    occurrences: new Map(),
+    isAddingSlot: false,
+    isDrawerOpen: false,
+    isDetailsDialogOpen: false
 }
 
 // For the calendar bullets
@@ -122,7 +130,8 @@ const createCalendarOccurrence = (occ: ServerOccurrence) => {
             _id: booking._id,
             clientName: booking.client.firstName,
             clientPhoto: booking.client.photo || undefined,
-            numGuests: booking.numGuests
+            numGuests: booking.numGuests,
+            bookingType: booking.bookingType
         })) : []
     }
     return created;
@@ -139,6 +148,11 @@ export default function useCalendarReducer() {
                 return {
                     ...state,
                     isDrawerOpen: action.open
+                }
+            case 'CLOSE_DETAILS_DIALOG':
+                return {
+                    ...state,
+                    isDetailsDialogOpen: false
                 }
             case 'SET_EXPERIENCE_OPTIONS':
                 // Set the colors
@@ -181,7 +195,7 @@ export default function useCalendarReducer() {
             }
             case 'ADD_OCCURRENCE': {
                 // Create occurrence object
-                const occurrence = action.occurrence.createOccurrence!;
+                const occurrence = action.occurrence.createOccurrence;
                 const occ = createCalendarOccurrence(occurrence);
                 
                 // Modify current occurrences
@@ -197,9 +211,26 @@ export default function useCalendarReducer() {
 
                 return {
                     ...state,
-                    occurrences
+                    occurrences,
+                    isAddingSlot: false
                 }
             }
+            case 'DELETE_OCCURRENCE':
+                const keyDate = DateTime.fromISO(action.keyDate, TIMEZONE_CONFIG).toISODate();
+                    
+                // Modify current occurrences
+                const occurrences = state.occurrences;
+                let sameDateOccurrences = occurrences.has(keyDate) ? 
+                    occurrences.get(keyDate)! : [];
+                sameDateOccurrences = sameDateOccurrences.filter(({ id }) =>
+                    id !== action.id
+                );
+                occurrences.set(keyDate, sameDateOccurrences);
+
+                return {
+                    ...state,
+                    occurrences
+                }
             case 'SET_ADD_DATE':
                 const duration = state.addForm.experience?.duration || 1;
                 return {
@@ -230,7 +261,13 @@ export default function useCalendarReducer() {
             case 'SET_DETAILED_DATE':
                 return {
                     ...state,
-                    detailedDay: action.date
+                    detailedDay: action.date,
+                    isDetailsDialogOpen: action.isMobile
+                }
+            case 'SET_IS_ADDING_SLOT':
+                return {
+                    ...state,
+                    isAddingSlot: action.value
                 }
             default: return state;
         }

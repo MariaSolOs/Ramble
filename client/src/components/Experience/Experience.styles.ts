@@ -86,7 +86,7 @@ export const desktopStyles = (theme: Theme) => createStyles({
 
     body: {
         marginTop: 20,
-        width: 'calc(100% - 480px - 12vw)',
+        width: 'calc(100% - 480px)',
         overflowY: 'scroll',
         paddingBottom: 70,
         [theme.breakpoints.down('md')]: { width: 'calc(100% - 520px)' },

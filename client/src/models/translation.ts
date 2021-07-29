@@ -106,5 +106,5 @@ export type TranslationRecord = {
 
     UserProfile_PersonalInformation: Record<'firstName' | 'lastName' | 'liveIn' | 'email' | 'phoneNumber' | 'birthday' | 'aboutYou' | 'submitButton' | 'phoneError', string>;
 
-    CreatorCalendar: Record<'timezoneMessage' | 'formTitle' | 'formDescription' | 'dateAndTimeLabel' | 'experienceLabel' | 'addSlot' | 'today' | 'busySlotMessage', string>;
+    CreatorCalendar: Record<'timezoneMessage' | 'formTitle' | 'formDescription' | 'dateAndTimeLabel' | 'experienceLabel' | 'addSlot' | 'today' | 'busySlotMessage' | 'guest' | 'guests' | 'closeDialog' | 'private', string>;
 }

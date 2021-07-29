@@ -470,8 +470,12 @@ const englishTranslation: TranslationRecord = {
         dateAndTimeLabel: 'Date and time',
         experienceLabel: 'Experience',
         addSlot: 'Add',
+        busySlotMessage: 'You have already set availabilities for this timeslot',
         today: 'Today',
-        busySlotMessage: 'You have already set availabilities for this timeslot'
+        guest: 'Guest',
+        guests: 'Guests',
+        closeDialog: 'Close',
+        private: 'Private'
     }
 }
 

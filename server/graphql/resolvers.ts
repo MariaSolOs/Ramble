@@ -412,7 +412,14 @@ export const resolvers: Resolvers = {
                 dates.start,
                 dates.end
             );
+            return occurrenceReducer(occurrence);
+        },
 
+        deleteOccurrence: async (_, { occurrenceId }) => {
+            const occurrence = await Occurrence.findOneAndDelete({
+                _id: occurrenceId,
+                bookings: { $size: 0 }
+            });
             return occurrenceReducer(occurrence);
         }
     }

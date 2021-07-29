@@ -6,6 +6,7 @@ const styles = (theme: Theme) => createStyles({
         height: 'calc(100vh - 100px)',
         marginTop: 100,
         width: '100vw',
+        padding: '0 6vw',
         backgroundColor: '#000',
         display: 'flex',
 

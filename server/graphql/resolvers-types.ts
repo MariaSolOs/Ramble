@@ -100,7 +100,9 @@ export type Mutation = {
   /** Booking creation. */
   createBooking: CreateBookingResult;
   /** Creates a new occurrence for the indicated experience. */
-  createOccurrence?: Maybe<Occurrence>;
+  createOccurrence: Occurrence;
+  /** Deletes an occurrence. */
+  deleteOccurrence: Occurrence;
 };
 
 
@@ -183,6 +185,11 @@ export type MutationCreateOccurrenceArgs = {
   experienceId: Scalars['ID'];
   experienceCapacity: Scalars['Int'];
   dates: OccurrenceInput;
+};
+
+
+export type MutationDeleteOccurrenceArgs = {
+  occurrenceId: Scalars['ID'];
 };
 
 /**
@@ -454,7 +461,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   unsaveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationUnsaveExperienceArgs, 'experienceId'>>;
   createExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationCreateExperienceArgs, 'title' | 'description' | 'images' | 'location' | 'categories' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'pricePerPerson' | 'currency' | 'slots'>>;
   createBooking?: Resolver<ResolversTypes['CreateBookingResult'], ParentType, ContextType, RequireFields<MutationCreateBookingArgs, 'occurrenceId' | 'bookingType' | 'numGuests' | 'paymentIntentId'>>;
-  createOccurrence?: Resolver<Maybe<ResolversTypes['Occurrence']>, ParentType, ContextType, RequireFields<MutationCreateOccurrenceArgs, 'experienceId' | 'experienceCapacity' | 'dates'>>;
+  createOccurrence?: Resolver<ResolversTypes['Occurrence'], ParentType, ContextType, RequireFields<MutationCreateOccurrenceArgs, 'experienceId' | 'experienceCapacity' | 'dates'>>;
+  deleteOccurrence?: Resolver<ResolversTypes['Occurrence'], ParentType, ContextType, RequireFields<MutationDeleteOccurrenceArgs, 'occurrenceId'>>;
 }>;
 
 export type OccurrenceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Occurrence'] = ResolversParentTypes['Occurrence']> = ResolversObject<{

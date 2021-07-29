@@ -220,7 +220,8 @@ const CreateExperience = () => {
                     handleSubmit : () => dispatch({ type: 'GO_TO_NEXT_STEP' })
             }>
                 {state.loading && <Spinner />}
-                <Prompt message={({ pathname }) => {
+                <Prompt 
+                message={({ pathname }) => {
                     return pathname.includes('/experience/new') ? 
                         true : text.leavePageAlert;
                 }} />

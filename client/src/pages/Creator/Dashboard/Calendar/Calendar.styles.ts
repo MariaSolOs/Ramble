@@ -80,13 +80,25 @@ const styles = (theme: Theme) => createStyles({
 
         '& .fc td, & .fc th, & .fc .fc-scrollgrid-liquid': {
             borderColor: '#404040'
-        }
+        },
+
+        '& .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events': {
+            overflowX: 'hidden'
+        },
+
+        '& .fc .fc-daygrid-dot-event': { 
+            padding: 0,
+            [theme.breakpoints.down('xs')]: { fontSize: '0.75rem' }
+        },
+
+        '& .fc .fc-daygrid-day-bottom': { whiteSpace: 'nowrap' }
     },
 
     slotBullet: {
         borderRadius: '50%',
         width: 8,
         height: 8,
+        minWidth: 8,
         marginRight: 4
     },
 
@@ -97,19 +109,29 @@ const styles = (theme: Theme) => createStyles({
     },
 
     dayDetails: {
-        backgroundColor: '#404040',
+        backgroundColor: '#323232',
         marginTop: 44.406,
         height: 'calc(62% - 44.406px)',
         borderRadius: 10,
         overflowY: 'scroll',
         
-        '& $sectionTitle': { padding: 8 }
-    },
+        '& $sectionTitle': { 
+            padding: 8,
+            zIndex: 5,
+            backgroundColor: '#323232',
+            position: 'sticky',
+            top: 0,
+            display: 'flex',
 
+            [theme.breakpoints.down('xs')]: { fontSize: '1rem' }
+        }
+    },
+    
     slotContainer: {
         position: 'relative',
         padding: '5px 8px 1rem',
         transition: 'background-color 300ms ease-in-out',
+        borderBottom: 'solid 0.5px #404040',
 
         '&:hover': { backgroundColor: '#4B4B4B' }
     },
@@ -118,16 +140,79 @@ const styles = (theme: Theme) => createStyles({
         display: 'inline-flex',
         alignItems: 'center',
         margin: '10px 0 0',
+        [theme.breakpoints.down('xs')]: { fontSize: '0.9rem' },
 
         '& $slotBullet': {
-            width: 12,
-            height: 12
+            width: 15,
+            height: 15,
+            marginRight: 5
         }
     },
 
-    slotTime: {
-        margin: 0,
-        fontSize: '0.85rem'
+    slotInfo: {
+        margin: '0 0 0 20px',
+        fontSize: '0.85rem',
+        '&:first-child': { margin: 0 },
+
+        [theme.breakpoints.down('xs')]: { fontSize: '0.8rem' }
+    },
+
+    clientList: {
+        listStyle: 'none',
+        paddingLeft: 20,
+        margin: '8px 0 0',
+    },
+
+    clientItem: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: 5
+    },
+
+    clientAvatar: {
+        width: 25,
+        height: 25,
+        marginRight: 5
+    },
+
+    privateBooking: {
+        position: 'absolute',
+        top: '1rem',
+        right: '1rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: '0.8rem'
+    },
+
+    privateIcon: { fontSize: '1rem' },
+
+    detailsDialog: {
+        '& .MuiPaper-root': {
+            backgroundColor: 'transparent',
+            color: 'inherit'
+        }
+    },
+
+    closeDialogButton: {
+        background: 'none',
+        margin: '0 0 0 auto',
+        color: '#ECEBE5',
+        border: 'none',
+        letterSpacing: '-0.04rem'
+    },
+
+    deleteSlotButton: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: 4,
+        right: 4,
+        fontSize: '1rem'
+    },
+
+    disabledDelete: {
+        opacity: 0.5,
+        cursor: 'not-allowed'
     },
 
     form: {
@@ -213,9 +298,7 @@ const styles = (theme: Theme) => createStyles({
             color: '#ECEBE5',
         },
 
-        '& .MuiPickersCalendarHeader-dayLabel': {
-            color: '#ECEBE5',
-        },
+        '& .MuiPickersCalendarHeader-dayLabel': { color: '#ECEBE5' },
 
         '& .MuiDialogActions-root': {
             backgroundColor: 'rgba(30, 30, 30, 0.95)',
@@ -254,9 +337,7 @@ const styles = (theme: Theme) => createStyles({
 
         '& .MuiPickersToolbar-toolbar': {
             backgroundColor: '#ECEBE5',
-            '& h4, .MuiTypography-subtitle1, h3 ': {
-                color: '#2B2B2B '
-            },
+            '& h4, .MuiTypography-subtitle1, h3 ': { color: '#2B2B2B ' },
             '& .MuiTypography-subtitle1:not(.MuiPickersToolbarText-toolbarBtnSelected)': {
                 opacity: 0.5
             }
@@ -266,14 +347,10 @@ const styles = (theme: Theme) => createStyles({
             backgroundColor: '#000'
         },
 
-        '& .MuiPickersClockPointer-thumb': {
-            border: '14px solid #000'
-        }
+        '& .MuiPickersClockPointer-thumb': { border: '14px solid #000' }
     },
 
-    experienceSelect: {
-        borderBottom: '1px solid #FFF'
-    },
+    experienceSelect: { borderBottom: '1px solid #FFF' },
 
     experienceMenu: {
         '& .MuiPaper-root': {
@@ -317,9 +394,7 @@ const styles = (theme: Theme) => createStyles({
         margin: 'auto 0 0',
         '&:disabled': { filter: 'brightness(70%)' },
 
-        [theme.breakpoints.down('sm')]: {
-            padding: '10px 0'
-        }
+        [theme.breakpoints.down('sm')]: { padding: '10px 0' }
     }
 });
 

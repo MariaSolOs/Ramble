@@ -8,7 +8,6 @@ import sgMail from '@sendgrid/mail';
 import type { Currency } from '../server-types';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
-// TODO: Translate emails
 
 type ConfirmationEmailInfo = {
     price: string;

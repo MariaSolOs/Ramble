@@ -162,6 +162,7 @@
                         src="https://res.cloudinary.com/dxod7etqu/image/upload/c_scale,w_40/v1597854853/Ramble/Emails/users-icon.png" 
                         alt="Guests"
                         width="25px"
+                        height="25px"
                         padding="0"/>
                     </mj-column>
                     <mj-column>
@@ -251,7 +252,7 @@
             {{/if}}
 
             <!-- Meeting spot -->
-            {{#if meetPoint}}
+            {{#if meetingPoint}}
                 <mj-section
                 padding="20px 0 10px">
                     <mj-column>
@@ -280,7 +281,7 @@
                             mj-class="grey-title"
                             font-size="16px"
                             padding="5px 10px">
-                                {{meetPoint}}
+                                {{meetingPoint}}
                             </mj-text>
                         </mj-column>
                     </mj-group>
@@ -477,7 +478,7 @@
             {{/if}}
 
             <!-- Meeting spot -->
-            {{#if meetPoint}}
+            {{#if meetingPoint}}
                 <mj-section
                 padding="20px 0 10px">
                     <mj-column>
@@ -506,7 +507,7 @@
                             mj-class="grey-title"
                             font-size="16px"
                             padding="5px 10px">
-                                {{meetPoint}}
+                                {{meetingPoint}}
                             </mj-text>
                         </mj-column>
                     </mj-group>

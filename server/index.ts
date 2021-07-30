@@ -11,6 +11,8 @@ import path from 'path';
 import emailRoutes from './emailsAPI';
 import stripeRoutes from './stripeAPI';
 
+// Make sure bin scripts run in Heroku
+
 const app = express();
 
 app.use(cors({

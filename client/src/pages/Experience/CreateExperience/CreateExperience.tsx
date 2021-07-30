@@ -8,6 +8,7 @@ import {
     Prompt 
 } from 'react-router-dom';
 import type { EventInput } from '@fullcalendar/react';
+import { DateTime } from 'luxon';
 
 import { 
     useGetLocationsQuery, 
@@ -24,6 +25,7 @@ import type {
     NumberField, 
     ArrayField 
 } from './useCreationReducer';
+import { TIMEZONE_CONFIG } from 'models/experience-occurrence';
 
 import Div100vh from 'react-div-100vh';
 import { CSSTransition } from 'react-transition-group';
@@ -182,8 +184,8 @@ const CreateExperience = () => {
                     state.form.privatePrice : undefined,
                 currency: state.form.currency,
                 slots: state.form.slots!.map(({ startStr, endStr }) => ({
-                    start: startStr,
-                    end: endStr
+                    start: DateTime.fromISO(startStr, TIMEZONE_CONFIG).toISO(),
+                    end: DateTime.fromISO(endStr, TIMEZONE_CONFIG).toISO()
                 }))
             }
         });

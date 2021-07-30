@@ -1,7 +1,6 @@
 import { useReducer, useCallback } from 'react';
 import type { EventInput } from '@fullcalendar/react';
 import { DateTime } from 'luxon';
-import type { DateTimeOptions } from 'luxon';
 
 import type { 
     ExperienceViewFragment as ExperienceData,
@@ -10,6 +9,7 @@ import type {
 import { Experience } from 'models/experience';
 import type { BookingType, Fees } from 'models/experience-occurrence';
 import type { Creator } from 'models/creator';
+import { TIMEZONE_CONFIG } from 'models/experience-occurrence';
 
 interface BookingState {
     step: BookingStep;
@@ -76,10 +76,6 @@ const initialState: BookingState = {
             totalPrice: 0
         }
     }
-}
-
-const TIMEZONE_CONFIG: DateTimeOptions = {
-    zone: 'America/Toronto'
 }
 
 export default function useBookingReducer() {

@@ -1,6 +1,5 @@
 import { useReducer, useCallback } from 'react';
 import { DateTime } from 'luxon';
-import type { DateTimeOptions } from 'luxon';
 import type { EventInput } from '@fullcalendar/react';
 
 import type { 
@@ -9,6 +8,7 @@ import type {
     CalendarOccurrenceFragment as OccurrenceQuery
 } from 'graphql-api';
 import type { BookingType } from 'models/experience-occurrence';
+import { TIMEZONE_CONFIG } from 'models/experience-occurrence';
 
 type ExperienceOption = {
     _id: string;
@@ -135,10 +135,6 @@ const createCalendarOccurrence = (occ: ServerOccurrence) => {
         })) : []
     }
     return created;
-}
-
-const TIMEZONE_CONFIG: DateTimeOptions = {
-    zone: 'America/Toronto'
 }
 
 export default function useCalendarReducer() {

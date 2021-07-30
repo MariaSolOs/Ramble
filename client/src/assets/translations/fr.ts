@@ -2,7 +2,7 @@ import type { TranslationRecord } from 'models/translation';
 
 const frenchTranslation: TranslationRecord = {
     Home: {
-        experienceTitle: "vivez Montréal", 
+        experienceTitle: "vivez montréal", 
         discoverTitle: 'Découvrez des expériences uniques à Montréal',
         seeAllButton: 'Tout voir',
         partakeTitle: 'Vivez des moments inoubliables',

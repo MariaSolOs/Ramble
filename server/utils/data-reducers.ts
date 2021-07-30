@@ -55,7 +55,7 @@ export const userReducer = (user: User | null) => ({
     token: '', // The token is generated with JWT in the reducers
     firstName: user?.fstName || '',
     lastName: user?.lstName || '',
-    birthday: user?.birthday || null,
+    birthday: user?.birthday?.toISOString().split('T')[0] || null,
     email: user?.email.address || '',
     phoneNumber: user?.phoneNumber || null,
     photo: user?.photo || null,

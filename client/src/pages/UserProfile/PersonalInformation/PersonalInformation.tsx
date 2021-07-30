@@ -122,7 +122,7 @@ const PersonalInformation = () => {
         return <Spinner />;
     }
     
-    const isCreator = Boolean(data.me.creator);
+    const isCreator = Boolean(data.me.creator?._id);
 
     return (
         <Layout

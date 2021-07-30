@@ -187,10 +187,10 @@ export const resolvers: Resolvers = {
             }
 
             // Set the fields to update
-            const newFields: Partial<Record<keyof UserType, string | { address: string }>> = {
+            const newFields: Partial<Record<keyof UserType, string | { address: string } | Date>> = {
                 ...args.firstName && { fstName: args.firstName },
                 ...args.lastName && { lstName: args.lastName },
-                ...(typeof args.birthday === 'string') && { birthday: args.birthday },
+                ...(typeof args.birthday === 'string') && { birthday: new Date(args.birthday) },
                 ...args.email && { email: { address: args.email } },
                 ...args.password && { passwordHash: User.generatePasswordHash(args.password) },
                 ...args.photo && { photo: args.photo },

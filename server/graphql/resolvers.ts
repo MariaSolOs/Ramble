@@ -126,7 +126,7 @@ export const resolvers: Resolvers = {
 
     Mutation: {
         signUpUser: async (_, { email, password, firstName, lastName }) => {
-            const emailExists = await User.exists({ 'email.address': email });
+            const emailExists = await User.exists({ emailAddress: email });
             if (emailExists) {
                 throw new AuthenticationError('Email already in use.');
             }
@@ -146,7 +146,7 @@ export const resolvers: Resolvers = {
 
         logInUser: async (_, { email, password }) => {
             const loggedInUser = await User.findOneAndUpdate({
-                'email.address': email
+                emailAddress: email
             }, { lastLogin: new Date() });
 
             if (!loggedInUser) {
@@ -187,11 +187,11 @@ export const resolvers: Resolvers = {
             }
 
             // Set the fields to update
-            const newFields: Partial<Record<keyof UserType, string | { address: string } | Date>> = {
+            const newFields: Partial<Record<keyof UserType, string | Date>> = {
                 ...args.firstName && { fstName: args.firstName },
                 ...args.lastName && { lstName: args.lastName },
                 ...(typeof args.birthday === 'string') && { birthday: new Date(args.birthday) },
-                ...args.email && { email: { address: args.email } },
+                ...args.email && { emailAddress: args.email },
                 ...args.password && { passwordHash: User.generatePasswordHash(args.password) },
                 ...args.photo && { photo: args.photo },
                 ...(typeof args.phoneNumber === 'string') && { phoneNumber: args.phoneNumber },
@@ -394,7 +394,7 @@ export const resolvers: Resolvers = {
                 client?.fstName || '',
                 experience.title,
                 `${process.env.CLIENT_URL!}/email/creator-requests/${userId}`,
-                (creator.user as UserType).email.address
+                (creator.user as UserType).emailAddress
             );
 
             return {

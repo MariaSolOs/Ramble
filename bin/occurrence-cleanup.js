@@ -1,5 +1,5 @@
 require('../build/dotenv.config');
-require('../build/mongoDB.config');
+require('../build/mongodb.config');
 
 const {
     Occurrence,

@@ -56,7 +56,7 @@ export const userReducer = (user: User | null) => ({
     firstName: user?.fstName || '',
     lastName: user?.lstName || '',
     birthday: user?.birthday?.toISOString().split('T')[0] || null,
-    email: user?.email.address || '',
+    email: user?.emailAddress || '',
     phoneNumber: user?.phoneNumber || null,
     photo: user?.photo || null,
     city: user?.city || null,

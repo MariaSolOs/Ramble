@@ -12,6 +12,7 @@ export interface User {
     email: {
         address: string;
     }
+    emailAddress: string;
     phoneNumber?: string;
     passwordHash: string;
     photo?: string;
@@ -48,6 +49,11 @@ const userSchemaFields: Record<keyof Omit<User, '_id'>, any> = {
             type: String,
             default: ''
         }
+    },
+
+    emailAddress: {
+        type: String,
+        required: true
     },
 
     phoneNumber: {
@@ -100,7 +106,5 @@ userSchema.static('generatePasswordHash', function generatePasswordHash(password
 });
 
 export default model<User, UserModel>('User', userSchema);
-
-// TODO: Remove unused fields and rename fields      
 
 //TODO: Write script to delete idle users

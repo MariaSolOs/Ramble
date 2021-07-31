@@ -97,7 +97,7 @@ export const handleSuccessfulPaymentIntent = async (paymentIntent: Stripe.Paymen
         meetingPoint: isOnlineExperience ? undefined : experience.location.meetPoint!,
         zoomPMI: isOnlineExperience ? experience.zoomInfo!.PMI : undefined,
         zoomPassword: isOnlineExperience ? experience.zoomInfo!.password : undefined
-    }, client.email.address);
+    }, client.emailAddress);
 
     // Save all changes
     await booking.save();

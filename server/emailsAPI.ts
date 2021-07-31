@@ -10,7 +10,7 @@ const router = Router();
 // Send email to user for resetting their password
 router.post('/password-reset', async (req, res) => {
     const user = await User.findOne({ 
-        'email.address': req.body.email 
+        emailAddress: req.body.email 
     }, '_id').lean(LEAN_DEFAULTS);
 
     if (!user) {

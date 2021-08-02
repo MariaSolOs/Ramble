@@ -40,7 +40,6 @@ const SignUpDialog = () => {
     const { SignUpDialog: text } = useLanguageContext().appText;
     const classes = useStyles();
     
-    // const dispatch = useAppDispatch();
     const { uiState, uiDispatch } = useUiContext();
     const { showSignUpDialog: open } = uiState;
 

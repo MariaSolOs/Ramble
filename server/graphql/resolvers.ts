@@ -134,7 +134,7 @@ export const resolvers: Resolvers = {
             const createdUser = await User.create({
                 fstName: firstName,
                 lstName: lastName,
-                email: { address: email },
+                emailAddress: email,
                 passwordHash: User.generatePasswordHash(password),
                 lastLogin: new Date()
             });

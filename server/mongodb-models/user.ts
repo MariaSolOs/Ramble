@@ -9,9 +9,6 @@ export interface User {
     fstName: string;
     lstName: string;
     birthday?: Date;
-    email: {
-        address: string;
-    }
     emailAddress: string;
     phoneNumber?: string;
     passwordHash: string;
@@ -43,13 +40,6 @@ const userSchemaFields: Record<keyof Omit<User, '_id'>, any> = {
     },
 
     birthday: Date,
-
-    email: {
-        address: {
-            type: String,
-            default: ''
-        }
-    },
 
     emailAddress: {
         type: String,

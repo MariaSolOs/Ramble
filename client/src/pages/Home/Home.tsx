@@ -20,7 +20,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Home.styles';
 const useStyles = makeStyles(styles);
 
-const GRID_IMAGE_BASE_URL = `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1592259933/Ramble/Homepage/creatorGrid`;
+
+const GRID_IMAGES = [
+    `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628201003/Ramble/Homepage/homeGrid1.jpg`,
+    `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200960/Ramble/Homepage/homeGrid2.jpg`,
+    `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200812/Ramble/Homepage/homeGrid3.jpg`,
+    `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628201061/Ramble/Homepage/homeGrid4.jpg`,
+    `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200898/Ramble/Homepage/homeGrid5.jpg`
+];
 
 const Home = () => {
     const { Home: text } = useLanguageContext().appText;
@@ -53,10 +60,10 @@ const Home = () => {
             {loading && <Spinner />}
             <div className={classes.gridContainer}>
                 <div className={classes.grid}>
-                    {new Array(5).fill(0).map((_, index) => (
+                    {GRID_IMAGES.map((url, index) => (
                         <figure key={uuid()} className={`${classes.gridItem} grid-item-${index + 1}`}>
                             <img
-                            src={`${GRID_IMAGE_BASE_URL}${index + 1}.jpg`}
+                            src={url}
                             alt={`Experience grid: Item ${index}`}
                             className={classes.gridImg} />
                         </figure>

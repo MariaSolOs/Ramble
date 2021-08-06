@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 
 import { getStoredToken } from 'utils/auth';
 import { userProfileVar, savedExperiencesVar } from './user-cache';
-
+ 
 const httpLink = createHttpLink({
     uri: `${process.env.REACT_APP_SERVER_URI}/graphql`
 });

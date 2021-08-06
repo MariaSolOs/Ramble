@@ -58,7 +58,7 @@ const BecomeACreator = () => {
                 <img 
                 className={classes.landingImg}
                 alt="Cooking with Sidney"
-                src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_600,w_500/v1622837493/Ramble/Homepage/landing.jpg`} />
+                src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_600,w_500/v1622837493/Ramble/Homepage/sidneyCamera.jpg`} />
             </div>
             <div className={classes.creatorSlide}>
                 <h1 className={classes.title}>

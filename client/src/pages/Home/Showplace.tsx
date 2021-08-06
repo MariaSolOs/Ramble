@@ -8,15 +8,15 @@ import styles from './Showplace.styles';
 const useStyles = makeStyles(styles);
 
 const PARTAKE_IMAGES = [
-    'holding_camera.jpg',
-    'bar-whitedrinks.jpg',
-    'camera_on_legs.jpg'
+    'v1628286593/Ramble/Homepage/partake1.jpg',
+    'v1628286600/Ramble/Homepage/partake2.jpg',
+    'v1628286600/Ramble/Homepage/partake3.jpg',
 ] as const;
 
 const ADVENTURE_IMAGES = [
-    'street_shoots.jpg',
-    'cooking_online.jpg',
-    'cocktail_workshop.jpg'
+    'v1628286916/Ramble/Homepage/adventure1.jpg',
+    'v1628286916/Ramble/Homepage/adventure2.jpg',
+    'v1628286916/Ramble/Homepage/adventure3.jpg'
 ] as const;
 
 const Gallery = () => {
@@ -33,7 +33,7 @@ const Gallery = () => {
                     {PARTAKE_IMAGES.map(imgUrl => 
                         <img 
                         key={uuid()}
-                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
+                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_600,w_500/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image} />
                     )}
@@ -48,7 +48,7 @@ const Gallery = () => {
                     {ADVENTURE_IMAGES.map(imgUrl => 
                         <img
                         key={uuid()}
-                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_500,w_400/v1/Ramble/Homepage/${imgUrl}`}
+                        src={`${process.env.REACT_APP_CLOUDINARY_BASE_URI}c_fill,h_600,w_500/${imgUrl}`}
                         alt="Experience preview"
                         className={classes.image} />
                     )}

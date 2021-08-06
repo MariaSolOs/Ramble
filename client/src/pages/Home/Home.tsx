@@ -20,7 +20,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Home.styles';
 const useStyles = makeStyles(styles);
 
-
 const GRID_IMAGES = [
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628201003/Ramble/Homepage/homeGrid1.jpg`,
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200960/Ramble/Homepage/homeGrid2.jpg`,

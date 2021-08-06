@@ -53,7 +53,7 @@ export const handleSuccessfulPaymentIntent = async (paymentIntent: Stripe.Paymen
         },
         {
             path: 'client',
-            select: 'email'
+            select: 'emailAddress'
         }
     ]);
 

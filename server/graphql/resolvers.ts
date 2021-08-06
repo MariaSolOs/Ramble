@@ -335,7 +335,7 @@ export const resolvers: Resolvers = {
                     select: 'user bookingRequests',
                     populate: {
                         path: 'user',
-                        select: '_id email phoneNumber'
+                        select: '_id emailAddress phoneNumber'
                     }
                 }
             });

@@ -345,6 +345,7 @@ export const resolvers: Resolvers = {
 
             const experience = occurrence.experience as ExperienceType;
             const creator = experience.creator as CreatorType & Document;
+            const creatorUser = creator.user as UserType;
 
             // Create booking
             const { creatorProfit } = computeBookingFees(
@@ -393,12 +394,12 @@ export const resolvers: Resolvers = {
             sendBookingNotificationEmail(
                 client?.fstName || '',
                 experience.title,
-                `${process.env.CLIENT_URL!}/email/creator-requests/${userId}`,
-                (creator.user as UserType).emailAddress
+                `${process.env.CLIENT_URL!}/email/creator-requests/${creatorUser._id}`,
+                creatorUser.emailAddress
             );
 
             return {
-                creatorPhone: (creator.user as UserType).phoneNumber!,
+                creatorPhone: creatorUser.phoneNumber!,
                 meetingPoint: experience.location.meetPoint,
                 cardBrand: (payment_method as Stripe.PaymentMethod).card?.brand || '',
                 cardLast4: (payment_method as Stripe.PaymentMethod).card?.last4 || ''

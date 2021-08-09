@@ -176,7 +176,7 @@ router.post('/payment-intent/:action', async (req, res) => {
         }
 
         return res.status(200).send({ message: 'Payment intent processed.' });
-    } catch (err) {
+    } catch (err: any) {
         return res.status(500).send({ error: err.message });
     }
 });
@@ -193,7 +193,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), (req, res) =>
             signature, 
             process.env.STRIPE_WEBHOOK_SECRET!
         );
-    } catch (err) {
+    } catch (err: any) {
         return res.status(400).send({ error: err.message });
     }
 

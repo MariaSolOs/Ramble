@@ -44,7 +44,7 @@ const CreatorForm = () => {
                 setPhoneNumber(me.phoneNumber);
             }
         }
-    })
+    });
 
     const [
         editUser,

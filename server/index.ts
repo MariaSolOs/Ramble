@@ -11,9 +11,6 @@ import path from 'path';
 import emailRoutes from './emailsAPI';
 import stripeRoutes from './stripeAPI';
 
-import script from './scripts';
-script();
-
 const app = express();
 
 app.use(cors({

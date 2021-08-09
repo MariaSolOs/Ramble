@@ -26,6 +26,13 @@ const GRID_IMAGES = [
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200812/Ramble/Homepage/homeGrid3.jpg`,
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628201061/Ramble/Homepage/homeGrid4.jpg`,
     `${process.env.REACT_APP_CLOUDINARY_BASE_URI}dpr_auto,q_auto/v1628200898/Ramble/Homepage/homeGrid5.jpg`
+] as const;
+
+const FEATURED_EXPERIENCES_IDS = [
+    '610acbb332b5150004b20c9f',
+    '60c50206daa7aa0017ca9c61', 
+    '6069e90709d1ae00172f4ea4',
+    '610c38c8e608d800042db49a'
 ];
 
 const Home = () => {
@@ -36,15 +43,11 @@ const Home = () => {
     const [experiences, setExperiences] = useState<ExperienceCardType[]>([]);
 
     const { loading } = useGetExperiencesQuery({
-        variables: { 
-            location: 'Montréal, Canada', capacity: 2
-        },
         onCompleted: ({ experiences }) => {
-            // TODO: Optimize this by getting featured experiences
             // Get the 4 experiences with the highest ratings
-            const bestExperiences = experiences.slice().sort((e1, e2) => 
-                e1.ratingValue - e2.ratingValue
-            ).splice(0, 4);
+            const bestExperiences = experiences.slice().filter(({ _id }) => 
+                FEATURED_EXPERIENCES_IDS.includes(_id)
+            );  
     
             setExperiences(bestExperiences.map(Experience.getCardInfo));
         }

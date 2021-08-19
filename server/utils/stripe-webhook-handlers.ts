@@ -40,7 +40,7 @@ export const handleSuccessfulPaymentIntent = async (paymentIntent: Stripe.Paymen
             select: 'experience creatorProfit dateStart dateEnd',
             populate: {
                 path: 'experience',
-                select: 'creator title price toBring location zoomInfo',
+                select: 'creator title toBring location zoomInfo',
                 populate: {
                     path: 'creator',
                     select: 'user',

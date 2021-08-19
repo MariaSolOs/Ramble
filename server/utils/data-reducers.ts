@@ -69,7 +69,6 @@ export const creatorReducer = (creator: Creator | null) => ({
     _id: creator?._id || '',
     bio: creator?.bio || '',
     user: creator?.user || '',
-    verified: creator?.verified || false,
     governmentIds: creator?.governmentIds || [],
     stripeProfile: {
         onboarded: creator?.stripe ? creator.stripe.onboarded : false,

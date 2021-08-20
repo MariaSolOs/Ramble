@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { useLogInMutation } from 'graphql-api';
+import { initCache } from 'apollo-cache';
+import useSnackbarContext from 'context/snackbarContext';
 
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,13 +16,28 @@ import styles from './LogInForm.styles';
 const useStyles = makeStyles(styles);
 
 const LogInForm = () => {
+    const { showSnackbar } = useSnackbarContext();
     const classes = useStyles();
 
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
+    const history = useHistory();
+    const [logIn] = useLogInMutation({
+        onCompleted: ({ logIn }) => {
+            initCache(logIn.token);
+            history.push('/approve');
+        },
+        onError: ({ graphQLErrors }) => {
+            const message = graphQLErrors[0].message || "We can't log you in...";
+            showSnackbar(message);
+        }
+    });
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+
+        logIn({ variables: { userName, password }});
     }
 
     return (

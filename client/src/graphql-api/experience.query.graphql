@@ -1,0 +1,32 @@
+query getExperience($id: ID!) {
+    experience(id: $id) {
+        _id
+        title
+        description
+        images
+        location
+        latitude
+        longitude
+        categories
+        ageRestriction
+        duration
+        languages
+        includedItems
+        toBringItems
+        capacity
+        isOnlineExperience
+        pricePerPerson
+        privatePrice
+        creator {
+            bio
+            governmentIds
+            user {
+                _id
+                firstName
+                lastName
+                photo
+                email
+            }
+        }
+    }
+}

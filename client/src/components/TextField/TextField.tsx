@@ -1,16 +1,17 @@
-import MUITextField from '@material-ui/core/TextField';
 import type { OutlinedTextFieldProps } from '@material-ui/core/TextField';
 import type { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
+
+import MUITextField from '@material-ui/core/TextField';
 
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './TextField.styles';
 const useStyles = makeStyles(styles);
 
-interface Props extends Omit<OutlinedTextFieldProps, 'variant'> {
+interface TextFieldProps extends Omit<OutlinedTextFieldProps, 'variant'> {
     inputprops?: Partial<OutlinedInputProps>;
 }
 
-const TextField = (props: Props) => {
+const TextField = (props: TextFieldProps) => {
     const classes = useStyles();
 
     return (

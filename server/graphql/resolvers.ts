@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, ApolloError } from 'apollo-server-express';
 
 import { 
     creatorReducer,
@@ -30,11 +30,23 @@ export const resolvers: Resolvers = {
     },
 
     Query: {
-        unapprovedExperiences: async () => {
-            const exps = await Experience.find({ status: 'approved' });
+        unapprovedExperiences: async (_, __, { adminId }) => {
+            if (!adminId) {
+                throw new AuthenticationError('Admin not logged in.');
+            }
+
+            const exps = await Experience.find({ status: 'pending' });
             return exps.map(experienceReducer);
         },
-        experience: (_, { id }) => Experience.findById(id).lean(LEAN_DEFAULTS).then(experienceReducer)
+
+        experience: async (_, { id }, { adminId }) => {
+            if (!adminId) {
+                throw new AuthenticationError('Admin not logged in.');
+            }
+
+            const exp = await Experience.findById(id).lean(LEAN_DEFAULTS);
+            return experienceReducer(exp);
+        }
     },
 
     Mutation: {
@@ -42,17 +54,37 @@ export const resolvers: Resolvers = {
             const loggedInAdmin = await Admin.findOne({ userName }).lean(LEAN_DEFAULTS);
             
             if (!loggedInAdmin) {
-                throw new AuthenticationError('Admin account not found');
+                throw new AuthenticationError('Admin account not found.');
             }
 
             if (!Admin.isValidPassword(password, loggedInAdmin.passwordHash)) {
-                throw new AuthenticationError('Invalid credentials');
+                throw new AuthenticationError('Invalid credentials.');
             }
 
             const admin = adminReducer(loggedInAdmin);
             admin.token = generateToken(admin._id.toString());
             
             return admin;
+        },
+
+        approveExperience: async (_, { id, decision }, { adminId }) => {
+            if (!adminId) {
+                throw new AuthenticationError('Admin not logged in.');
+            }
+
+            const experience = await Experience.findById(id);
+            if (!experience) {
+                throw new ApolloError('Experience not found.');
+            }
+
+            if (decision === 'approved' || decision === 'rejected') {
+                experience.status = decision;
+                await experience.save();
+            } else {
+                throw new ApolloError('Invalid decision status.');
+            }
+
+            return experienceReducer(experience);
         }
     }
 }

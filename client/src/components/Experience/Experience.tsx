@@ -45,8 +45,7 @@ const Experience = (props: ExperienceProps) => {
     }));
 
     return (
-        <div>
-        {/* <div className={`${props.containerClass}`}> */}
+        <div className={classes.container}>
             <Carousel
             additionalClass={classes.carousel}
             items={galleryImages}
@@ -71,9 +70,7 @@ const Experience = (props: ExperienceProps) => {
                     </div>
                 </div>
                 <div className={classes.categories}>
-                    {experience.categories!.map(categ =>
-                        <p key={uuid()}>{categ}</p>
-                    )}
+                    {experience.categories.join(' - ')}
                 </div>
                 <div className={classes.quickInfos}>
                     <div className={classes.quickInfoColumn}>
@@ -167,6 +164,20 @@ const Experience = (props: ExperienceProps) => {
                             the admin mode. 
                         </p>
                     </>}
+                <h3 className={classes.sectionLabel}>Price</h3>
+                <ul className={classes.itemList}>
+                    <li>Public: {experience.pricePerPerson} {experience.currency}</li>
+                    <li>Private: {experience.privatePrice || 'N/A'}</li>
+                </ul>
+                <h3 className={classes.sectionLabel}>Creator IDs</h3>
+                <img 
+                width="400px"
+                src={experience.creator.governmentIds[0]}
+                alt={experience.creator.user.firstName} />
+                <img 
+                width="400px"
+                src={experience.creator.governmentIds[1]}
+                alt={experience.creator.user.firstName} />
             </div>
         </div>
     );

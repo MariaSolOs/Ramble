@@ -18,11 +18,9 @@ const userSchemaFields = {
         default: ''
     },
     birthday: Date,
-    email: {
-        address: {
-            type: String,
-            default: ''
-        }
+    emailAddress: {
+        type: String,
+        required: true
     },
     phoneNumber: {
         type: String,

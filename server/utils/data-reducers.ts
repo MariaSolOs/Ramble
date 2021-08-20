@@ -38,7 +38,7 @@ export const userReducer = (user: User | null) => ({
     _id: user?._id || '',
     firstName: user?.fstName || '',
     lastName: user?.lstName || '',
-    email: user?.email.address || '',
+    email: user?.emailAddress || '',
     phoneNumber: user?.phoneNumber || null,
     photo: user?.photo || null,
     city: user?.city || null,

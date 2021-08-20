@@ -67,12 +67,20 @@ export enum ExperienceCategory {
 export type Mutation = {
   /** Admin authentication */
   logIn: Admin;
+  /** Decide/reject experience */
+  approveExperience: Experience;
 };
 
 
 export type MutationLogInArgs = {
   userName: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationApproveExperienceArgs = {
+  id: Scalars['ID'];
+  decision: Scalars['String'];
 };
 
 export type Query = {
@@ -99,16 +107,24 @@ export type User = {
   creator?: Maybe<Creator>;
 };
 
+export type DecideExperienceMutationVariables = Exact<{
+  expId: Scalars['ID'];
+  decision: Scalars['String'];
+}>;
+
+
+export type DecideExperienceMutation = { approveExperience: Pick<Experience, '_id'> };
+
 export type GetExperienceQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
 export type GetExperienceQuery = { experience: (
-    Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'isOnlineExperience' | 'pricePerPerson' | 'privatePrice'>
+    Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'isOnlineExperience' | 'pricePerPerson' | 'privatePrice' | 'currency'>
     & { creator: (
       Pick<Creator, 'bio' | 'governmentIds'>
-      & { user: Pick<User, '_id' | 'firstName' | 'lastName' | 'photo' | 'email'> }
+      & { user: Pick<User, '_id' | 'firstName' | 'photo' | 'email'> }
     ) }
   ) };
 
@@ -126,6 +142,40 @@ export type GetPendingExperiencesQueryVariables = Exact<{ [key: string]: never; 
 export type GetPendingExperiencesQuery = { unapprovedExperiences: Array<Pick<Experience, '_id' | 'title' | 'images'>> };
 
 
+export const DecideExperienceDocument = gql`
+    mutation decideExperience($expId: ID!, $decision: String!) {
+  approveExperience(id: $expId, decision: $decision) {
+    _id
+  }
+}
+    `;
+export type DecideExperienceMutationFn = Apollo.MutationFunction<DecideExperienceMutation, DecideExperienceMutationVariables>;
+
+/**
+ * __useDecideExperienceMutation__
+ *
+ * To run a mutation, you first call `useDecideExperienceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDecideExperienceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [decideExperienceMutation, { data, loading, error }] = useDecideExperienceMutation({
+ *   variables: {
+ *      expId: // value for 'expId'
+ *      decision: // value for 'decision'
+ *   },
+ * });
+ */
+export function useDecideExperienceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DecideExperienceMutation, DecideExperienceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DecideExperienceMutation, DecideExperienceMutationVariables>(DecideExperienceDocument, options);
+      }
+export type DecideExperienceMutationHookResult = ReturnType<typeof useDecideExperienceMutation>;
+export type DecideExperienceMutationResult = Apollo.MutationResult<DecideExperienceMutation>;
+export type DecideExperienceMutationOptions = Apollo.BaseMutationOptions<DecideExperienceMutation, DecideExperienceMutationVariables>;
 export const GetExperienceDocument = gql`
     query getExperience($id: ID!) {
   experience(id: $id) {
@@ -146,13 +196,13 @@ export const GetExperienceDocument = gql`
     isOnlineExperience
     pricePerPerson
     privatePrice
+    currency
     creator {
       bio
       governmentIds
       user {
         _id
         firstName
-        lastName
         photo
         email
       }

@@ -17,7 +17,7 @@ const ApprovalGallery = () => {
 
     const { data, loading } = useGetPendingExperiencesQuery();
 
-    if (!data || loading) {
+    if (loading) {
         return <Spinner />;
     }
 
@@ -25,7 +25,7 @@ const ApprovalGallery = () => {
         <div className={classes.root}>
             <h1>Unapproved Experiences</h1>
             <div className={classes.cards}>
-                {data.unapprovedExperiences.map(exp =>
+                {data?.unapprovedExperiences.map(exp =>
                     <Card 
                     key={exp._id} 
                     className={classes.card} 

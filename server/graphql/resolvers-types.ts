@@ -70,12 +70,20 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Admin authentication */
   logIn: Admin;
+  /** Decide/reject experience */
+  approveExperience: Experience;
 };
 
 
 export type MutationLogInArgs = {
   userName: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationApproveExperienceArgs = {
+  id: Scalars['ID'];
+  decision: Scalars['String'];
 };
 
 export type Query = {
@@ -259,6 +267,7 @@ export type ExperienceResolvers<ContextType = Context, ParentType extends Resolv
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   logIn?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationLogInArgs, 'userName' | 'password'>>;
+  approveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationApproveExperienceArgs, 'id' | 'decision'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{

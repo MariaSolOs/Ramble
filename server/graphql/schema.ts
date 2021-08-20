@@ -89,5 +89,10 @@ export const typeDefs = gql`
         Admin authentication
         """
         logIn(userName: String!, password: String!): Admin!
+
+        """
+        Decide/reject experience
+        """
+        approveExperience(id: ID!, decision: String!): Experience!
     }
 `;

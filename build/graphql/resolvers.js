@@ -26,24 +26,50 @@ exports.resolvers = {
         user: ({ user }) => mongodb_models_1.User.findById(user).lean(server_types_1.LEAN_DEFAULTS).then(data_reducers_1.userReducer)
     },
     Query: {
-        unapprovedExperiences: () => __awaiter(void 0, void 0, void 0, function* () {
-            const exps = yield mongodb_models_1.Experience.find({ status: 'approved' });
+        unapprovedExperiences: (_, __, { adminId }) => __awaiter(void 0, void 0, void 0, function* () {
+            if (!adminId) {
+                throw new apollo_server_express_1.AuthenticationError('Admin not logged in.');
+            }
+            const exps = yield mongodb_models_1.Experience.find({ status: 'pending' });
             return exps.map(data_reducers_1.experienceReducer);
         }),
-        experience: (_, { id }) => mongodb_models_1.Experience.findById(id).lean(server_types_1.LEAN_DEFAULTS).then(data_reducers_1.experienceReducer)
+        experience: (_, { id }, { adminId }) => __awaiter(void 0, void 0, void 0, function* () {
+            if (!adminId) {
+                throw new apollo_server_express_1.AuthenticationError('Admin not logged in.');
+            }
+            const exp = yield mongodb_models_1.Experience.findById(id).lean(server_types_1.LEAN_DEFAULTS);
+            return data_reducers_1.experienceReducer(exp);
+        })
     },
     Mutation: {
         logIn: (_, { userName, password }) => __awaiter(void 0, void 0, void 0, function* () {
             const loggedInAdmin = yield mongodb_models_1.Admin.findOne({ userName }).lean(server_types_1.LEAN_DEFAULTS);
             if (!loggedInAdmin) {
-                throw new apollo_server_express_1.AuthenticationError('Admin account not found');
+                throw new apollo_server_express_1.AuthenticationError('Admin account not found.');
             }
             if (!mongodb_models_1.Admin.isValidPassword(password, loggedInAdmin.passwordHash)) {
-                throw new apollo_server_express_1.AuthenticationError('Invalid credentials');
+                throw new apollo_server_express_1.AuthenticationError('Invalid credentials.');
             }
             const admin = data_reducers_1.adminReducer(loggedInAdmin);
             admin.token = jwt_1.generateToken(admin._id.toString());
             return admin;
+        }),
+        approveExperience: (_, { id, decision }, { adminId }) => __awaiter(void 0, void 0, void 0, function* () {
+            if (!adminId) {
+                throw new apollo_server_express_1.AuthenticationError('Admin not logged in.');
+            }
+            const experience = yield mongodb_models_1.Experience.findById(id);
+            if (!experience) {
+                throw new apollo_server_express_1.ApolloError('Experience not found.');
+            }
+            if (decision === 'approved' || decision === 'rejected') {
+                experience.status = decision;
+                yield experience.save();
+            }
+            else {
+                throw new apollo_server_express_1.ApolloError('Invalid decision status.');
+            }
+            return data_reducers_1.experienceReducer(experience);
         })
     }
 };

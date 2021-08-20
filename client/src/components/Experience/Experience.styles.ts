@@ -4,6 +4,22 @@ import type { Theme } from '@material-ui/core/styles';
 import type { ExperienceStyleProps } from './Experience';
 
 const styles = (theme: Theme) => createStyles({
+    container: {
+        height: '100vh',
+        width: '100vw',
+        padding: '70px 6vw 0',
+        backgroundColor: '#000',
+        color: '#FFF',
+        display: 'flex',
+
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: 70,
+            height: 'auto'
+        }
+    },
+
     carousel: {
         maxWidth: 480,
         margin: '20px 15px 0 30px',
@@ -70,7 +86,7 @@ const styles = (theme: Theme) => createStyles({
         marginBottom: 5,
         display: 'flex',
         alignItems: 'center',
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
         textTransform: 'uppercase',
         fontWeight: theme.typography.fontWeightBold,
         [theme.breakpoints.down('xs')]: {

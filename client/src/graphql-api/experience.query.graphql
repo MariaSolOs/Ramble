@@ -17,13 +17,13 @@ query getExperience($id: ID!) {
         isOnlineExperience
         pricePerPerson
         privatePrice
+        currency
         creator {
             bio
             governmentIds
             user {
                 _id
                 firstName
-                lastName
                 photo
                 email
             }

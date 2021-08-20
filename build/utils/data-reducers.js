@@ -39,7 +39,7 @@ const userReducer = (user) => ({
     _id: (user === null || user === void 0 ? void 0 : user._id) || '',
     firstName: (user === null || user === void 0 ? void 0 : user.fstName) || '',
     lastName: (user === null || user === void 0 ? void 0 : user.lstName) || '',
-    email: (user === null || user === void 0 ? void 0 : user.email.address) || '',
+    email: (user === null || user === void 0 ? void 0 : user.emailAddress) || '',
     phoneNumber: (user === null || user === void 0 ? void 0 : user.phoneNumber) || null,
     photo: (user === null || user === void 0 ? void 0 : user.photo) || null,
     city: (user === null || user === void 0 ? void 0 : user.city) || null,

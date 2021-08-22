@@ -1,7 +1,0 @@
-query getPendingExperiences {
-    unapprovedExperiences {
-        _id
-        title
-        images
-    }
-}

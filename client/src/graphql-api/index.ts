@@ -64,11 +64,19 @@ export enum ExperienceCategory {
   Move = 'move'
 }
 
+export enum ExperienceStatus {
+  Pending = 'pending',
+  Approved = 'approved',
+  Rejected = 'rejected'
+}
+
 export type Mutation = {
   /** Admin authentication */
   logIn: Admin;
   /** Decide/reject experience */
   approveExperience: Experience;
+  /** Delete an experience */
+  deleteExperience: Experience;
 };
 
 
@@ -83,11 +91,21 @@ export type MutationApproveExperienceArgs = {
   decision: Scalars['String'];
 };
 
+
+export type MutationDeleteExperienceArgs = {
+  id: Scalars['ID'];
+};
+
 export type Query = {
-  /** Experiences that require approval */
-  unapprovedExperiences: Array<Experience>;
+  /** Get experiences by their status */
+  experiencesByStatus: Array<Experience>;
   /** Get the full information of the specified experience */
   experience: Experience;
+};
+
+
+export type QueryExperiencesByStatusArgs = {
+  status: Array<ExperienceStatus>;
 };
 
 
@@ -115,6 +133,13 @@ export type DecideExperienceMutationVariables = Exact<{
 
 export type DecideExperienceMutation = { approveExperience: Pick<Experience, '_id'> };
 
+export type DeleteExperienceMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteExperienceMutation = { deleteExperience: Pick<Experience, '_id'> };
+
 export type GetExperienceQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -123,10 +148,17 @@ export type GetExperienceQueryVariables = Exact<{
 export type GetExperienceQuery = { experience: (
     Pick<Experience, '_id' | 'title' | 'description' | 'images' | 'location' | 'latitude' | 'longitude' | 'categories' | 'ageRestriction' | 'duration' | 'languages' | 'includedItems' | 'toBringItems' | 'capacity' | 'isOnlineExperience' | 'pricePerPerson' | 'privatePrice' | 'currency'>
     & { creator: (
-      Pick<Creator, 'bio' | 'governmentIds'>
+      Pick<Creator, '_id' | 'bio' | 'governmentIds'>
       & { user: Pick<User, '_id' | 'firstName' | 'photo' | 'email'> }
     ) }
   ) };
+
+export type GetExperiencesByStatusQueryVariables = Exact<{
+  status: Array<ExperienceStatus> | ExperienceStatus;
+}>;
+
+
+export type GetExperiencesByStatusQuery = { experiencesByStatus: Array<Pick<Experience, '_id' | 'title' | 'images'>> };
 
 export type LogInMutationVariables = Exact<{
   userName: Scalars['String'];
@@ -135,11 +167,6 @@ export type LogInMutationVariables = Exact<{
 
 
 export type LogInMutation = { logIn: Pick<Admin, '_id' | 'token'> };
-
-export type GetPendingExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetPendingExperiencesQuery = { unapprovedExperiences: Array<Pick<Experience, '_id' | 'title' | 'images'>> };
 
 
 export const DecideExperienceDocument = gql`
@@ -176,6 +203,39 @@ export function useDecideExperienceMutation(baseOptions?: ApolloReactHooks.Mutat
 export type DecideExperienceMutationHookResult = ReturnType<typeof useDecideExperienceMutation>;
 export type DecideExperienceMutationResult = Apollo.MutationResult<DecideExperienceMutation>;
 export type DecideExperienceMutationOptions = Apollo.BaseMutationOptions<DecideExperienceMutation, DecideExperienceMutationVariables>;
+export const DeleteExperienceDocument = gql`
+    mutation deleteExperience($id: ID!) {
+  deleteExperience(id: $id) {
+    _id
+  }
+}
+    `;
+export type DeleteExperienceMutationFn = Apollo.MutationFunction<DeleteExperienceMutation, DeleteExperienceMutationVariables>;
+
+/**
+ * __useDeleteExperienceMutation__
+ *
+ * To run a mutation, you first call `useDeleteExperienceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteExperienceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteExperienceMutation, { data, loading, error }] = useDeleteExperienceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteExperienceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteExperienceMutation, DeleteExperienceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DeleteExperienceMutation, DeleteExperienceMutationVariables>(DeleteExperienceDocument, options);
+      }
+export type DeleteExperienceMutationHookResult = ReturnType<typeof useDeleteExperienceMutation>;
+export type DeleteExperienceMutationResult = Apollo.MutationResult<DeleteExperienceMutation>;
+export type DeleteExperienceMutationOptions = Apollo.BaseMutationOptions<DeleteExperienceMutation, DeleteExperienceMutationVariables>;
 export const GetExperienceDocument = gql`
     query getExperience($id: ID!) {
   experience(id: $id) {
@@ -198,6 +258,7 @@ export const GetExperienceDocument = gql`
     privatePrice
     currency
     creator {
+      _id
       bio
       governmentIds
       user {
@@ -238,6 +299,43 @@ export function useGetExperienceLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetExperienceQueryHookResult = ReturnType<typeof useGetExperienceQuery>;
 export type GetExperienceLazyQueryHookResult = ReturnType<typeof useGetExperienceLazyQuery>;
 export type GetExperienceQueryResult = Apollo.QueryResult<GetExperienceQuery, GetExperienceQueryVariables>;
+export const GetExperiencesByStatusDocument = gql`
+    query getExperiencesByStatus($status: [ExperienceStatus!]!) {
+  experiencesByStatus(status: $status) {
+    _id
+    title
+    images
+  }
+}
+    `;
+
+/**
+ * __useGetExperiencesByStatusQuery__
+ *
+ * To run a query within a React component, call `useGetExperiencesByStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExperiencesByStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExperiencesByStatusQuery({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useGetExperiencesByStatusQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetExperiencesByStatusQuery, GetExperiencesByStatusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetExperiencesByStatusQuery, GetExperiencesByStatusQueryVariables>(GetExperiencesByStatusDocument, options);
+      }
+export function useGetExperiencesByStatusLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetExperiencesByStatusQuery, GetExperiencesByStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetExperiencesByStatusQuery, GetExperiencesByStatusQueryVariables>(GetExperiencesByStatusDocument, options);
+        }
+export type GetExperiencesByStatusQueryHookResult = ReturnType<typeof useGetExperiencesByStatusQuery>;
+export type GetExperiencesByStatusLazyQueryHookResult = ReturnType<typeof useGetExperiencesByStatusLazyQuery>;
+export type GetExperiencesByStatusQueryResult = Apollo.QueryResult<GetExperiencesByStatusQuery, GetExperiencesByStatusQueryVariables>;
 export const LogInDocument = gql`
     mutation logIn($userName: String!, $password: String!) {
   logIn(userName: $userName, password: $password) {
@@ -273,39 +371,3 @@ export function useLogInMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
 export type LogInMutationResult = Apollo.MutationResult<LogInMutation>;
 export type LogInMutationOptions = Apollo.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
-export const GetPendingExperiencesDocument = gql`
-    query getPendingExperiences {
-  unapprovedExperiences {
-    _id
-    title
-    images
-  }
-}
-    `;
-
-/**
- * __useGetPendingExperiencesQuery__
- *
- * To run a query within a React component, call `useGetPendingExperiencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPendingExperiencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPendingExperiencesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetPendingExperiencesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPendingExperiencesQuery, GetPendingExperiencesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetPendingExperiencesQuery, GetPendingExperiencesQueryVariables>(GetPendingExperiencesDocument, options);
-      }
-export function useGetPendingExperiencesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPendingExperiencesQuery, GetPendingExperiencesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetPendingExperiencesQuery, GetPendingExperiencesQueryVariables>(GetPendingExperiencesDocument, options);
-        }
-export type GetPendingExperiencesQueryHookResult = ReturnType<typeof useGetPendingExperiencesQuery>;
-export type GetPendingExperiencesLazyQueryHookResult = ReturnType<typeof useGetPendingExperiencesLazyQuery>;
-export type GetPendingExperiencesQueryResult = Apollo.QueryResult<GetPendingExperiencesQuery, GetPendingExperiencesQueryVariables>;

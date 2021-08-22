@@ -15,6 +15,7 @@ const Navbar = () => {
         <AppBar color="default" position="absolute">
             <Toolbar className={classes.navBar}>
                 <NavLink to="/approve">Approve experiences</NavLink>
+                <NavLink to="/delete">Delete experiences</NavLink>
                 <NavLink to="/" onClick={resetCache}>Logout</NavLink>
             </Toolbar>
         </AppBar>

@@ -19,6 +19,7 @@ query getExperience($id: ID!) {
         privatePrice
         currency
         creator {
+            _id
             bio
             governmentIds
             user {

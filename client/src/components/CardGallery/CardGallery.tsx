@@ -1,35 +1,31 @@
-import { useHistory } from 'react-router-dom';
-
-import { useGetPendingExperiencesQuery } from 'graphql-api';
+import type { GetExperiencesByStatusQuery } from 'graphql-api';
 
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import Spinner from 'components/Spinner/Spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
-import styles from './ApprovalGallery.styles';
+import styles from './CardGallery.styles';
 const useStyles = makeStyles(styles);
 
-const ApprovalGallery = () => {
-    const history = useHistory();
+type Props = {
+    title: string;
+    experiences?: GetExperiencesByStatusQuery['experiencesByStatus'];
+    onCardClick: (id: string) => void;
+}
+
+const CardGallery = (props: Props) => {
     const classes = useStyles();
-
-    const { data, loading } = useGetPendingExperiencesQuery();
-
-    if (loading) {
-        return <Spinner />;
-    }
 
     return (
         <div className={classes.root}>
-            <h1>Unapproved Experiences</h1>
+            <h1>{props.title}</h1>
             <div className={classes.cards}>
-                {data?.unapprovedExperiences.map(exp =>
+                {props.experiences?.map(exp =>
                     <Card 
                     key={exp._id} 
                     className={classes.card} 
-                    onClick={() => history.push(`/view/${exp._id}`)}>
+                    onClick={() => props.onCardClick(exp._id)}>
                         <CardMedia
                         image={exp.images[0]}
                         title={exp.title}
@@ -44,4 +40,4 @@ const ApprovalGallery = () => {
     );
 }
 
-export default ApprovalGallery;
+export default CardGallery;

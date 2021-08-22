@@ -12,6 +12,9 @@ export const cache = new InMemoryCache({
                     read() {
                         return isLoggedInVar();
                     }
+                },
+                experiencesByStatus: {
+                    merge: false
                 }
             }
         }

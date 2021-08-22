@@ -14,6 +14,7 @@ const styles = () => createStyles({
 
     card: {
         maxWidth: 300,
+        minWidth: 200,
         margin: '0 20px 20px 0',
         cursor: 'pointer'
     },

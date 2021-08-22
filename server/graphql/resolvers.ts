@@ -7,12 +7,14 @@ import {
     experienceReducer
 } from '../utils/data-reducers';
 import { generateToken } from '../utils/jwt';
+import { deleteExperiencePictures } from '../utils/cloudinary';
 import { LEAN_DEFAULTS } from '../server-types';
 import { 
     Creator, 
     User, 
     Admin,
-    Experience
+    Experience,
+    Occurrence
 } from '../mongodb-models';
 import type { Resolvers } from './resolvers-types';
 
@@ -30,12 +32,12 @@ export const resolvers: Resolvers = {
     },
 
     Query: {
-        unapprovedExperiences: async (_, __, { adminId }) => {
+        experiencesByStatus: async (_, { status }, { adminId }) => {
             if (!adminId) {
                 throw new AuthenticationError('Admin not logged in.');
             }
 
-            const exps = await Experience.find({ status: 'pending' });
+            const exps = await Experience.find({ status: { $in: status } });
             return exps.map(experienceReducer);
         },
 
@@ -85,6 +87,28 @@ export const resolvers: Resolvers = {
             }
 
             return experienceReducer(experience);
+        },
+
+        deleteExperience: async (_, { id }, { adminId }) => {
+            if (!adminId) {
+                throw new AuthenticationError('Admin not logged in.');
+            }
+
+            // Only delete if there are no occurrences
+            const occurrencesExist = await Occurrence.exists({ experience: id });
+            if (occurrencesExist) {
+                throw new ApolloError('Experience still has existing occurrences.');
+            }
+            
+            // Delete experience
+            const exp = await Experience.findByIdAndDelete(id);
+
+            // Delete images
+            if (exp) {
+                deleteExperiencePictures(exp.images);
+            }
+
+            return experienceReducer(exp);
         }
     }
 }

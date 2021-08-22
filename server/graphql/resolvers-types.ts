@@ -66,12 +66,20 @@ export enum ExperienceCategory {
   Move = 'move'
 }
 
+export enum ExperienceStatus {
+  Pending = 'pending',
+  Approved = 'approved',
+  Rejected = 'rejected'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Admin authentication */
   logIn: Admin;
   /** Decide/reject experience */
   approveExperience: Experience;
+  /** Delete an experience */
+  deleteExperience: Experience;
 };
 
 
@@ -86,12 +94,22 @@ export type MutationApproveExperienceArgs = {
   decision: Scalars['String'];
 };
 
+
+export type MutationDeleteExperienceArgs = {
+  id: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  /** Experiences that require approval */
-  unapprovedExperiences: Array<Experience>;
+  /** Get experiences by their status */
+  experiencesByStatus: Array<Experience>;
   /** Get the full information of the specified experience */
   experience: Experience;
+};
+
+
+export type QueryExperiencesByStatusArgs = {
+  status: Array<ExperienceStatus>;
 };
 
 
@@ -205,6 +223,7 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ExperienceCategory: ExperienceCategory;
+  ExperienceStatus: ExperienceStatus;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<UserType>;
@@ -268,10 +287,11 @@ export type ExperienceResolvers<ContextType = Context, ParentType extends Resolv
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   logIn?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationLogInArgs, 'userName' | 'password'>>;
   approveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationApproveExperienceArgs, 'id' | 'decision'>>;
+  deleteExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationDeleteExperienceArgs, 'id'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  unapprovedExperiences?: Resolver<Array<ResolversTypes['Experience']>, ParentType, ContextType>;
+  experiencesByStatus?: Resolver<Array<ResolversTypes['Experience']>, ParentType, ContextType, RequireFields<QueryExperiencesByStatusArgs, 'status'>>;
   experience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<QueryExperienceArgs, 'id'>>;
 }>;
 

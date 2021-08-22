@@ -48,6 +48,12 @@ export const typeDefs = gql`
         move
     }
 
+    enum ExperienceStatus {
+        pending
+        approved
+        rejected
+    }
+
     """
     Experience creators.
     """
@@ -74,9 +80,9 @@ export const typeDefs = gql`
 
     type Query {
         """
-        Experiences that require approval
+        Get experiences by their status
         """
-        unapprovedExperiences: [Experience!]!
+        experiencesByStatus(status: [ExperienceStatus!]!): [Experience!]!
 
         """
         Get the full information of the specified experience
@@ -94,5 +100,10 @@ export const typeDefs = gql`
         Decide/reject experience
         """
         approveExperience(id: ID!, decision: String!): Experience!
+
+        """
+        Delete an experience
+        """
+        deleteExperience(id: ID!): Experience!
     }
 `;

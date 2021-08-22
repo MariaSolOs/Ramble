@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { 
     useGetExperienceQuery, 
-    useDecideExperienceMutation 
+    useDecideExperienceMutation
 } from 'graphql-api';
 
 import Button from '@material-ui/core/Button';

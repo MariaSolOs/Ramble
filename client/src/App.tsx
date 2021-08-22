@@ -7,8 +7,9 @@ import { SnackbarContextProvider } from 'context/snackbarContext';
 import Navbar from 'components/Navbar/Navbar';
 import Snackbar from 'components/Snackbar';
 import LogInForm from 'pages/LogInForm/LogInForm';
-import ApprovalGallery from 'pages/ApprovalGallery/ApprovalGallery';
+import ApprovalGallery from 'pages/ApprovalGallery';
 import ViewExperience from 'pages/ViewExperience/ViewExperience';
+import DeleteGallery from 'pages/DeleteGallery';
 import GlobalStyles from './GlobalStyles';
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
                     <>
                         <Route path="/view/:experienceId" component={ViewExperience} />
                         <Route path="/approve" component={ApprovalGallery} />
+                        <Route path="/delete" component={DeleteGallery} />
                     </>}
                     <Route path="/" component={LogInForm} />
                 </Switch>

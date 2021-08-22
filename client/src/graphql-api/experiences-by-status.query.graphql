@@ -1,0 +1,7 @@
+query getExperiencesByStatus($status: [ExperienceStatus!]!) {
+    experiencesByStatus(status: $status) {
+        _id
+        title
+        images
+    }
+}

@@ -1,6 +1,7 @@
-import { Schema, Model, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
 import bcrypt from 'bcrypt';
+import type { Model, Types, SchemaDefinitionProperty } from 'mongoose';
 
 export interface Admin {
     _id: Types.ObjectId;
@@ -13,7 +14,7 @@ interface AdminModel extends Model<Admin> {
     isValidPassword(password: string, passwordHash: string): boolean;
 }
 
-const adminSchemaFields: Record<keyof Omit<Admin, '_id'>, any> = {
+const adminSchemaFields: Record<keyof Omit<Admin, '_id'>, SchemaDefinitionProperty> = {
     userName: String,
     passwordHash: String
 }

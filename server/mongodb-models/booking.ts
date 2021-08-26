@@ -1,5 +1,6 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
+import type { Types, SchemaDefinitionProperty } from 'mongoose';
 import type { Occurrence } from './occurrence';
 import type { User } from './user';
 
@@ -18,7 +19,7 @@ export interface Booking {
     updatedAt: Date;
 }
 
-const bookingSchemaFields: Record<keyof Omit<Booking, '_id' | 'createdAt' | 'updatedAt'>, any> = {
+const bookingSchemaFields: Record<keyof Omit<Booking, '_id' | 'createdAt' | 'updatedAt'>, SchemaDefinitionProperty> = {
     occurrence: {
         type: Schema.Types.ObjectId,
         ref: 'Occurrence',

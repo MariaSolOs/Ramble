@@ -78,6 +78,17 @@ export const typeDefs = gql`
         creator: Creator
     }
 
+    """
+    Experience reviews
+    """
+    type Review {
+        _id: ID!
+        experienceId: ID!
+        writtenBy: String!
+        text: String!
+        value: Int!
+    }
+
     type Query {
         """
         Get experiences by their status

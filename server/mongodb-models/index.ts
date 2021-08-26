@@ -4,6 +4,7 @@ import Creator from './creator';
 import Experience from './experience';
 import Occurrence from './occurrence';
 import User from './user';
+import Review from './review';
 
 export {
     Admin,
@@ -11,5 +12,6 @@ export {
     Creator,
     Experience,
     Occurrence,
-    User
+    User,
+    Review
 }

@@ -26,6 +26,7 @@ generates:
         User: server-types#UserType
         Creator: server-types#CreatorType
         Admin: server-types#AdminType
+        Review: server-types#ReviewType
   ./graphql/intro-schema.json:
     plugins:
       - introspection

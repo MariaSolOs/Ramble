@@ -14,7 +14,8 @@ import {
     User, 
     Admin,
     Experience,
-    Occurrence
+    Occurrence,
+    Review
 } from '../mongodb-models';
 import type { Resolvers } from './resolvers-types';
 
@@ -74,11 +75,13 @@ export const resolvers: Resolvers = {
                 throw new AuthenticationError('Admin not logged in.');
             }
 
+            // Find experience
             const experience = await Experience.findById(id);
             if (!experience) {
                 throw new ApolloError('Experience not found.');
             }
 
+            // Update status
             if (decision === 'approved' || decision === 'rejected') {
                 experience.status = decision;
                 await experience.save();
@@ -102,11 +105,25 @@ export const resolvers: Resolvers = {
             
             // Delete experience
             const exp = await Experience.findByIdAndDelete(id);
+            if (!exp) {
+                throw new ApolloError('Experience not found');
+            }
 
             // Delete images
-            if (exp) {
-                deleteExperiencePictures(exp.images);
-            }
+            deleteExperiencePictures(exp.images);
+
+            // Delete reviews
+            await Review.deleteMany({ experience: exp._id });
+
+            // Remove from users' saved and booked experiences
+            await User.updateMany(
+                { savedExperiences: exp._id },
+                { $pull: { savedExperiences: exp._id } }
+            );
+            await User.updateMany(
+                { bookedExperiences: exp._id },
+                { $pull: { bookedExperiences: exp._id } }
+            );
 
             return experienceReducer(exp);
         }

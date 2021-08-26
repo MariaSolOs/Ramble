@@ -1,5 +1,6 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
+import type { Types, SchemaDefinitionProperty } from 'mongoose';
 import type { Experience } from './experience';
 import type { Booking } from './booking';
 
@@ -13,7 +14,7 @@ export interface Occurrence {
     bookings: (Types.ObjectId | Booking)[];
 }
 
-const occurrenceSchemaFields: Record<keyof Omit<Occurrence, '_id'>, any> = {
+const occurrenceSchemaFields: Record<keyof Omit<Occurrence, '_id'>, SchemaDefinitionProperty> = {
     experience: {
         type: Schema.Types.ObjectId,
         ref: 'Experience',

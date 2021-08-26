@@ -2,6 +2,7 @@ import type { Admin } from '../mongodb-models/admin';
 import type { Experience } from '../mongodb-models/experience';
 import type { User } from '../mongodb-models/user';
 import type { Creator } from '../mongodb-models/creator';
+import type { Review } from '../mongodb-models/review';
 
 export const adminReducer = (admin: Admin | null) => ({
     _id: admin?._id || '',
@@ -54,4 +55,12 @@ export const creatorReducer = (creator: Creator | null) => ({
         onboarded: creator?.stripe ? creator.stripe.onboarded : false,
         accountId: creator?.stripe ? creator.stripe.accountId : ''
     }
+});
+
+export const reviewReducer = (review: Review | null) => ({
+    _id: review?._id || '',
+    experienceId: review?.experience || '',
+    writtenBy: review?.reviewerName || '',
+    text: review?.text || '',
+    value: review?.value || 5
 });

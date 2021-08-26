@@ -2,7 +2,8 @@ import {
     experienceReducer,
     userReducer,
     creatorReducer,
-    adminReducer 
+    adminReducer,
+    reviewReducer
 } from './utils/data-reducers';
 
 // Configuration for MongoDB lean()
@@ -19,3 +20,5 @@ export type UserType = ReturnType<typeof userReducer>;
 export type CreatorType = ReturnType<typeof creatorReducer>;
 
 export type AdminType = ReturnType<typeof adminReducer>;
+
+export type ReviewType = ReturnType<typeof reviewReducer>;

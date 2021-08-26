@@ -1,0 +1,15 @@
+query getUnapprovedReviews {
+    unapprovedReviews {
+        _id
+        text
+        value
+        experience {
+            _id
+            title
+        }
+        writtenBy {
+            _id
+            email
+        }
+    }
+}

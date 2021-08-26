@@ -10,7 +10,7 @@ import {
 export const LEAN_DEFAULTS = { defaults: true } as const;
 
 // GraphQL context
-export type Context = { adminId: string; }
+export type Context = { alias: string; }
 
 // Mappers
 export type ExperienceType = ReturnType<typeof experienceReducer>;

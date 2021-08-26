@@ -30,6 +30,11 @@ export type Creator = {
   governmentIds: Array<Scalars['String']>;
 };
 
+export enum Decision {
+  Approved = 'approved',
+  Rejected = 'rejected'
+}
+
 /** Experience */
 export type Experience = {
   _id: Scalars['ID'];
@@ -73,10 +78,12 @@ export enum ExperienceStatus {
 export type Mutation = {
   /** Admin authentication */
   logIn: Admin;
-  /** Decide/reject experience */
+  /** Approve/reject experience */
   approveExperience: Experience;
   /** Delete an experience */
   deleteExperience: Experience;
+  /** Approve/reject review */
+  approveReview: Review;
 };
 
 
@@ -88,7 +95,7 @@ export type MutationLogInArgs = {
 
 export type MutationApproveExperienceArgs = {
   id: Scalars['ID'];
-  decision: Scalars['String'];
+  decision: Decision;
 };
 
 
@@ -96,11 +103,19 @@ export type MutationDeleteExperienceArgs = {
   id: Scalars['ID'];
 };
 
+
+export type MutationApproveReviewArgs = {
+  id: Scalars['ID'];
+  decision: Decision;
+};
+
 export type Query = {
   /** Get experiences by their status */
   experiencesByStatus: Array<Experience>;
   /** Get the full information of the specified experience */
   experience: Experience;
+  /** Get reviews that need approval. */
+  unapprovedReviews: Array<Review>;
 };
 
 
@@ -111,6 +126,15 @@ export type QueryExperiencesByStatusArgs = {
 
 export type QueryExperienceArgs = {
   id: Scalars['ID'];
+};
+
+/** Experience reviews */
+export type Review = {
+  _id: Scalars['ID'];
+  experience: Experience;
+  writtenBy: User;
+  text: Scalars['String'];
+  value: Scalars['Int'];
 };
 
 /** Application's users. */
@@ -127,11 +151,19 @@ export type User = {
 
 export type DecideExperienceMutationVariables = Exact<{
   expId: Scalars['ID'];
-  decision: Scalars['String'];
+  decision: Decision;
 }>;
 
 
 export type DecideExperienceMutation = { approveExperience: Pick<Experience, '_id'> };
+
+export type DecideReviewMutationVariables = Exact<{
+  id: Scalars['ID'];
+  decision: Decision;
+}>;
+
+
+export type DecideReviewMutation = { approveReview: Pick<Review, '_id'> };
 
 export type DeleteExperienceMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -168,9 +200,17 @@ export type LogInMutationVariables = Exact<{
 
 export type LogInMutation = { logIn: Pick<Admin, '_id' | 'token'> };
 
+export type GetUnapprovedReviewsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUnapprovedReviewsQuery = { unapprovedReviews: Array<(
+    Pick<Review, '_id' | 'text' | 'value'>
+    & { experience: Pick<Experience, '_id' | 'title'>, writtenBy: Pick<User, '_id' | 'email'> }
+  )> };
+
 
 export const DecideExperienceDocument = gql`
-    mutation decideExperience($expId: ID!, $decision: String!) {
+    mutation decideExperience($expId: ID!, $decision: Decision!) {
   approveExperience(id: $expId, decision: $decision) {
     _id
   }
@@ -203,6 +243,40 @@ export function useDecideExperienceMutation(baseOptions?: ApolloReactHooks.Mutat
 export type DecideExperienceMutationHookResult = ReturnType<typeof useDecideExperienceMutation>;
 export type DecideExperienceMutationResult = Apollo.MutationResult<DecideExperienceMutation>;
 export type DecideExperienceMutationOptions = Apollo.BaseMutationOptions<DecideExperienceMutation, DecideExperienceMutationVariables>;
+export const DecideReviewDocument = gql`
+    mutation decideReview($id: ID!, $decision: Decision!) {
+  approveReview(id: $id, decision: $decision) {
+    _id
+  }
+}
+    `;
+export type DecideReviewMutationFn = Apollo.MutationFunction<DecideReviewMutation, DecideReviewMutationVariables>;
+
+/**
+ * __useDecideReviewMutation__
+ *
+ * To run a mutation, you first call `useDecideReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDecideReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [decideReviewMutation, { data, loading, error }] = useDecideReviewMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      decision: // value for 'decision'
+ *   },
+ * });
+ */
+export function useDecideReviewMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DecideReviewMutation, DecideReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DecideReviewMutation, DecideReviewMutationVariables>(DecideReviewDocument, options);
+      }
+export type DecideReviewMutationHookResult = ReturnType<typeof useDecideReviewMutation>;
+export type DecideReviewMutationResult = Apollo.MutationResult<DecideReviewMutation>;
+export type DecideReviewMutationOptions = Apollo.BaseMutationOptions<DecideReviewMutation, DecideReviewMutationVariables>;
 export const DeleteExperienceDocument = gql`
     mutation deleteExperience($id: ID!) {
   deleteExperience(id: $id) {
@@ -371,3 +445,47 @@ export function useLogInMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
 export type LogInMutationResult = Apollo.MutationResult<LogInMutation>;
 export type LogInMutationOptions = Apollo.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
+export const GetUnapprovedReviewsDocument = gql`
+    query getUnapprovedReviews {
+  unapprovedReviews {
+    _id
+    text
+    value
+    experience {
+      _id
+      title
+    }
+    writtenBy {
+      _id
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUnapprovedReviewsQuery__
+ *
+ * To run a query within a React component, call `useGetUnapprovedReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnapprovedReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnapprovedReviewsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUnapprovedReviewsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUnapprovedReviewsQuery, GetUnapprovedReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetUnapprovedReviewsQuery, GetUnapprovedReviewsQueryVariables>(GetUnapprovedReviewsDocument, options);
+      }
+export function useGetUnapprovedReviewsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUnapprovedReviewsQuery, GetUnapprovedReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetUnapprovedReviewsQuery, GetUnapprovedReviewsQueryVariables>(GetUnapprovedReviewsDocument, options);
+        }
+export type GetUnapprovedReviewsQueryHookResult = ReturnType<typeof useGetUnapprovedReviewsQuery>;
+export type GetUnapprovedReviewsLazyQueryHookResult = ReturnType<typeof useGetUnapprovedReviewsLazyQuery>;
+export type GetUnapprovedReviewsQueryResult = Apollo.QueryResult<GetUnapprovedReviewsQuery, GetUnapprovedReviewsQueryVariables>;

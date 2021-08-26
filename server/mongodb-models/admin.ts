@@ -15,7 +15,10 @@ interface AdminModel extends Model<Admin> {
 }
 
 const adminSchemaFields: Record<keyof Omit<Admin, '_id'>, SchemaDefinitionProperty> = {
-    userName: String,
+    userName: {
+        type: String,
+        unique: true
+    },
     passwordHash: String
 }
 

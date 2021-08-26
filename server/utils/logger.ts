@@ -1,11 +1,10 @@
 import type { Request } from 'express';
-import type { Context } from '../server-types';
 
-const logger = (req: Request, context: Context | null) => {
+const logger = (req: Request, alias: string) => {
     console.log(`[ ${new Date().toISOString()} ]`, 
     `[ ${req.body.operationName?.toUpperCase()} ]`, 
     '[ VARIABLES:', req.body.variables, ']',
-    `[ ADMIN: ${context ? context.adminId : 'UNKNOWN'} ]`);
+    `[ ADMIN: ${alias || 'UNKNOWN'} ]`);
 }
 
 export default logger;

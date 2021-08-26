@@ -1,4 +1,4 @@
-mutation decideExperience($expId: ID!, $decision: String!) {
+mutation decideExperience($expId: ID!, $decision: Decision!) {
     approveExperience(id: $expId, decision: $decision) {
         _id
     }

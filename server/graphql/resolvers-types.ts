@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { ExperienceType, UserType, CreatorType, AdminType, Context } from 'server-types';
+import { ExperienceType, UserType, CreatorType, AdminType, ReviewType } from 'server-types';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -30,6 +30,11 @@ export type Creator = {
   bio: Scalars['String'];
   governmentIds: Array<Scalars['String']>;
 };
+
+export enum Decision {
+  Approved = 'approved',
+  Rejected = 'rejected'
+}
 
 /** Experience */
 export type Experience = {
@@ -76,10 +81,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Admin authentication */
   logIn: Admin;
-  /** Decide/reject experience */
+  /** Approve/reject experience */
   approveExperience: Experience;
   /** Delete an experience */
   deleteExperience: Experience;
+  /** Approve/reject review */
+  approveReview: Review;
 };
 
 
@@ -91,12 +98,18 @@ export type MutationLogInArgs = {
 
 export type MutationApproveExperienceArgs = {
   id: Scalars['ID'];
-  decision: Scalars['String'];
+  decision: Decision;
 };
 
 
 export type MutationDeleteExperienceArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationApproveReviewArgs = {
+  id: Scalars['ID'];
+  decision: Decision;
 };
 
 export type Query = {
@@ -105,6 +118,8 @@ export type Query = {
   experiencesByStatus: Array<Experience>;
   /** Get the full information of the specified experience */
   experience: Experience;
+  /** Get reviews that need approval. */
+  unapprovedReviews: Array<Review>;
 };
 
 
@@ -115,6 +130,16 @@ export type QueryExperiencesByStatusArgs = {
 
 export type QueryExperienceArgs = {
   id: Scalars['ID'];
+};
+
+/** Experience reviews */
+export type Review = {
+  __typename?: 'Review';
+  _id: Scalars['ID'];
+  experience: Experience;
+  writtenBy: User;
+  text: Scalars['String'];
+  value: Scalars['Int'];
 };
 
 /** Application's users. */
@@ -218,6 +243,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Creator: ResolverTypeWrapper<CreatorType>;
+  Decision: Decision;
   Experience: ResolverTypeWrapper<ExperienceType>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -226,6 +252,7 @@ export type ResolversTypes = ResolversObject<{
   ExperienceStatus: ExperienceStatus;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Review: ResolverTypeWrapper<ReviewType>;
   User: ResolverTypeWrapper<UserType>;
 }>;
 
@@ -241,17 +268,18 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   Mutation: {};
   Query: {};
+  Review: ReviewType;
   User: UserType;
 }>;
 
-export type AdminResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Admin'] = ResolversParentTypes['Admin']> = ResolversObject<{
+export type AdminResolvers<ContextType = any, ParentType extends ResolversParentTypes['Admin'] = ResolversParentTypes['Admin']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CreatorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Creator'] = ResolversParentTypes['Creator']> = ResolversObject<{
+export type CreatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Creator'] = ResolversParentTypes['Creator']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -259,7 +287,7 @@ export type CreatorResolvers<ContextType = Context, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ExperienceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Experience'] = ResolversParentTypes['Experience']> = ResolversObject<{
+export type ExperienceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Experience'] = ResolversParentTypes['Experience']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -284,18 +312,29 @@ export type ExperienceResolvers<ContextType = Context, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   logIn?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationLogInArgs, 'userName' | 'password'>>;
   approveExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationApproveExperienceArgs, 'id' | 'decision'>>;
   deleteExperience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<MutationDeleteExperienceArgs, 'id'>>;
+  approveReview?: Resolver<ResolversTypes['Review'], ParentType, ContextType, RequireFields<MutationApproveReviewArgs, 'id' | 'decision'>>;
 }>;
 
-export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   experiencesByStatus?: Resolver<Array<ResolversTypes['Experience']>, ParentType, ContextType, RequireFields<QueryExperiencesByStatusArgs, 'status'>>;
   experience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType, RequireFields<QueryExperienceArgs, 'id'>>;
+  unapprovedReviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>;
 }>;
 
-export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type ReviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['Review'] = ResolversParentTypes['Review']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  experience?: Resolver<ResolversTypes['Experience'], ParentType, ContextType>;
+  writtenBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -307,12 +346,13 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = Context> = ResolversObject<{
+export type Resolvers<ContextType = any> = ResolversObject<{
   Admin?: AdminResolvers<ContextType>;
   Creator?: CreatorResolvers<ContextType>;
   Experience?: ExperienceResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Review?: ReviewResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
 
@@ -321,4 +361,4 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = Context> = Resolvers<ContextType>;
+export type IResolvers<ContextType = any> = Resolvers<ContextType>;

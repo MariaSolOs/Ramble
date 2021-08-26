@@ -1,6 +1,6 @@
 import './dotenv.config';
 import './mongoDB.config';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { typeDefs } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
 import { verifyToken } from './utils/jwt';
@@ -22,9 +22,13 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 const server = new ApolloServer({
     context: ({ req }) => {
         const token = req.headers.authorization || '';
-        const adminId = verifyToken(token);
-        logger(req, adminId);
-        return adminId;
+        const { alias } = verifyToken(token);
+        logger(req, alias);
+
+        // Authentication check
+        if (!alias && req.body.operationName !== 'logIn') {
+            throw new AuthenticationError('Admin is not logged in.');
+        }
     },
     typeDefs,
     resolvers

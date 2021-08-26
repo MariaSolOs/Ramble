@@ -10,6 +10,7 @@ import LogInForm from 'pages/LogInForm/LogInForm';
 import ApprovalGallery from 'pages/ApprovalGallery';
 import ViewExperience from 'pages/ViewExperience/ViewExperience';
 import DeleteGallery from 'pages/DeleteGallery';
+import ReviewsGallery from 'pages/ReviewsGallery/ReviewsGallery';
 import GlobalStyles from './GlobalStyles';
 
 const App = () => {
@@ -24,8 +25,9 @@ const App = () => {
                     {isLoggedIn && 
                     <>
                         <Route path="/view/:experienceId" component={ViewExperience} />
-                        <Route path="/approve" component={ApprovalGallery} />
-                        <Route path="/delete" component={DeleteGallery} />
+                        <Route path="/approve-exp" component={ApprovalGallery} />
+                        <Route path="/delete-exp" component={DeleteGallery} />
+                        <Route path="/reviews" component={ReviewsGallery} />
                     </>}
                     <Route path="/" component={LogInForm} />
                 </Switch>

@@ -1,0 +1,5 @@
+mutation decideReview($id: ID!, $decision: Decision!) {
+    approveReview(id: $id, decision: $decision) {
+        _id
+    }
+}

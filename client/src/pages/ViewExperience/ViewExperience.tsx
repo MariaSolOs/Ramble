@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { 
     useGetExperienceQuery, 
-    useDecideExperienceMutation
+    useDecideExperienceMutation,
+    Decision
 } from 'graphql-api';
 
 import Button from '@material-ui/core/Button';
@@ -27,7 +28,7 @@ const ViewExperience = () => {
         }
     });
 
-    const handleDecision = (decision: 'approved' | 'rejected') => {
+    const handleDecision = (decision: Decision) => {
         decide({
             variables: { expId: experienceId, decision }
         });
@@ -39,23 +40,21 @@ const ViewExperience = () => {
             {data && <Experience experience={data.experience} />}
             <footer className={classes.footer}>
                 {showEmailButton ?
-                <Button variant="contained">
-                    <a href={`mailto:${data?.experience.creator.user.email}`}>
-                        Email creator
-                    </a>
+                <Button variant="contained" href={`mailto:${data?.experience.creator.user.email}`}>
+                    Email creator
                 </Button> :
                 <>
                     <Button 
                     variant="contained" 
                     color="primary" 
                     className={classes.approveButton}
-                    onClick={() => handleDecision('approved')}>
+                    onClick={() => handleDecision(Decision.Approved)}>
                         Approve
                     </Button>
                     <Button 
                     variant="contained" 
                     color="secondary"
-                    onClick={() => handleDecision('rejected')}>
+                    onClick={() => handleDecision(Decision.Rejected)}>
                         Reject
                     </Button>
                 </>}

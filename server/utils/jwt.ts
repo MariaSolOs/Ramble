@@ -7,11 +7,11 @@ const ISSUER = 'rambleAdminAPI';
 /**
  * Generates a JSON web token for communicating with the client.
  * 
- * @param adminId - Mongo ID of the admin
+ * @param alias - Username of the admin
  * @returns The generated token
  */
-export const generateToken = (adminId: string) => (
-    jwt.sign({ adminId }, process.env.JWT_SECRET!, {
+export const generateToken = (alias: string) => (
+    jwt.sign({ alias }, process.env.JWT_SECRET!, {
         expiresIn: '1h',
         issuer: ISSUER
     })
@@ -28,7 +28,7 @@ export const verifyToken = (token: string): Context => {
         }) as Context; 
     } catch (err) {
         return {
-            adminId: ''
-        }
+            alias: ''
+        } as Context;
     }
 }

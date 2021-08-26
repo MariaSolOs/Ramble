@@ -26,7 +26,7 @@ const LogInForm = () => {
     const [logIn] = useLogInMutation({
         onCompleted: ({ logIn }) => {
             initCache(logIn.token);
-            history.push('/approve');
+            history.push('/approve-exp');
         },
         onError: ({ graphQLErrors }) => {
             const message = graphQLErrors[0].message || "We can't log you in...";

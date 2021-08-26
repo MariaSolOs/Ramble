@@ -25,7 +25,7 @@ const ApprovalGallery = () => {
 
     return (
         <CardGallery
-        title="Unapproved Experiences"
+        title="Unapproved experiences"
         experiences={data?.experiencesByStatus}
         onCardClick={id => history.push(`/view/${id}`)} />
     );

@@ -119,6 +119,23 @@ export const resolvers: Resolvers = {
             const review = await Review.findByIdAndUpdate(id, {
                 approved: decision === Decision.Approved
             });
+            if (!review) {
+                throw new ApolloError('Review not found.');
+            }
+
+            // Update the experience's rating
+            const experience = await Experience.findById(review.experience, 'rating');
+            if (!experience) {
+                throw new ApolloError('Experience not found.');
+            }
+
+            /* New rating value = value/numRatings + newValue
+                                = (value + (numRatings * newValue)) / (numRatings + 1) */
+            const ratingNumerator = experience.rating.value + (review.value * experience.rating.numRatings);
+            const ratingDenominator = experience.rating.numRatings + 1;
+            experience.rating.value = ratingNumerator / ratingDenominator;
+            experience.rating.numRatings += 1;
+            await experience.save();
 
             return reviewReducer(review);
         }

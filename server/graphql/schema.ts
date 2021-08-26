@@ -116,5 +116,7 @@ export const typeDefs = gql`
         Delete an experience
         """
         deleteExperience(id: ID!): Experience!
+
+        approveReview(id: ID!, decision: String!): Review!
     }
 `;

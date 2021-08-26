@@ -1,6 +1,6 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import mongooseLeanDefaults from 'mongoose-lean-defaults';
-import type { Types, Model, SchemaDefinitionProperty } from 'mongoose';
+import type { Types, SchemaDefinitionProperty } from 'mongoose';
 
 export interface Review {
     _id: Types.ObjectId;
